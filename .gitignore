@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Archivos locales con datos personales o derivados de documentos privados
+Propuesta_CubeSat_Aguilar_extraida.txt
+*.pdf
+
+# Salidas regenerables de simulacion
+resultados_simulacion/*.bin
+frames_STRAND1_bits.bin
+frames_STRAND1_gnuradio.bin
+frames_STRAND1_bpsk_iq_complex64.bin
+
+# Archivos de sistema/editor
+.DS_Store
+Thumbs.db
+.vscode/

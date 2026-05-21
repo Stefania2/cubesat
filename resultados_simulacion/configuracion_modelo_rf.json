@@ -1,0 +1,18 @@
+{
+  "input_file": "C:\\CubeSat\\frames_STRAND1_gnuradio.bin",
+  "symbol_rate_bps": 9600,
+  "sample_rate_sps": 76800,
+  "samples_per_symbol": 8,
+  "fsk_deviation_hz": 2400,
+  "snr_db_values": [
+    -2,
+    0,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12
+  ],
+  "random_seed": 20260521
+}
