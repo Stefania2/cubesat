@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Avances del proyecto CubeSat RF</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17202a;
+        --muted: #5a6673;
+        --line: #d9e0e7;
+        --paper: #f7f9fb;
+        --panel: #ffffff;
+        --navy: #12355b;
+        --teal: #0f766e;
+        --amber: #b45309;
+        --rose: #be123c;
+        --green: #15803d;
+        --shadow: 0 18px 40px rgba(23, 32, 42, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid var(--line);
+        background: rgba(247, 249, 251, 0.94);
+        backdrop-filter: blur(12px);
+      }
+
+      .topbar {
+        min-height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .mark {
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #9fb3c8;
+        background: #e8f2f8;
+        color: var(--navy);
+        font-weight: 800;
+        border-radius: 8px;
+      }
+
+      .brand strong,
+      .brand span {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .brand span {
+        color: var(--muted);
+        font-size: 0.86rem;
+        margin-top: 2px;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      nav a {
+        color: var(--muted);
+        font-size: 0.92rem;
+        padding: 8px 10px;
+        border-radius: 6px;
+      }
+
+      nav a:hover {
+        color: var(--ink);
+        background: #edf2f7;
+      }
+
+      main {
+        padding: 34px 0 56px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+        gap: 28px;
+        align-items: stretch;
+        margin-bottom: 26px;
+      }
+
+      .intro,
+      .chart-panel,
+      .section,
+      .metric,
+      .phase,
+      .result-row,
+      .file-link {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+
+      .intro {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .eyebrow {
+        width: fit-content;
+        color: var(--teal);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        border: 1px solid #99d6cc;
+        background: #e8f7f4;
+        border-radius: 999px;
+        padding: 6px 10px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        margin-top: 18px;
+        font-size: clamp(2.1rem, 6vw, 4.45rem);
+        line-height: 0.96;
+        letter-spacing: 0;
+        max-width: 760px;
+      }
+
+      .lead {
+        margin-top: 18px;
+        max-width: 720px;
+        color: var(--muted);
+        font-size: 1.04rem;
+        line-height: 1.7;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 14px;
+        border-radius: 7px;
+        border: 1px solid var(--navy);
+        background: var(--navy);
+        color: #ffffff;
+        font-weight: 750;
+        font-size: 0.94rem;
+      }
+
+      .button.secondary {
+        color: var(--navy);
+        background: #ffffff;
+      }
+
+      .chart-panel {
+        padding: 18px;
+        min-height: 440px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+      }
+
+      .chart-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 4px 4px 14px;
+      }
+
+      .chart-head h2 {
+        font-size: 1.15rem;
+      }
+
+      .status {
+        color: var(--green);
+        background: #eaf7ee;
+        border: 1px solid #a7d9b7;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .chart-panel img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 360px;
+        object-fit: contain;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #ffffff;
+      }
+
+      .caption {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+        padding: 12px 4px 0;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 26px;
+      }
+
+      .metric {
+        padding: 18px;
+        min-height: 126px;
+      }
+
+      .metric span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 750;
+        text-transform: uppercase;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 12px;
+        font-size: 2rem;
+        line-height: 1;
+      }
+
+      .metric small {
+        display: block;
+        margin-top: 10px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(330px, 0.72fr);
+        gap: 22px;
+        align-items: start;
+      }
+
+      .section {
+        padding: 24px;
+        margin-bottom: 22px;
+      }
+
+      .section h2 {
+        font-size: 1.28rem;
+        margin-bottom: 16px;
+      }
+
+      .section p {
+        color: var(--muted);
+        line-height: 1.68;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .flow div {
+        min-height: 88px;
+        border: 1px solid var(--line);
+        border-top: 4px solid var(--teal);
+        border-radius: 7px;
+        padding: 12px;
+        background: #fbfdff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: var(--ink);
+        font-weight: 750;
+        line-height: 1.35;
+      }
+
+      .phase-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .phase {
+        padding: 16px;
+        box-shadow: none;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+      }
+
+      .phase-num {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        color: #ffffff;
+        background: var(--navy);
+        border-radius: 7px;
+        font-weight: 850;
+      }
+
+      .phase h3 {
+        font-size: 1rem;
+        margin-bottom: 4px;
+      }
+
+      .phase p {
+        font-size: 0.94rem;
+      }
+
+      .results {
+        display: grid;
+        gap: 10px;
+      }
+
+      .result-row {
+        box-shadow: none;
+        padding: 14px 16px;
+        display: grid;
+        grid-template-columns: 100px 1fr 120px;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .pill {
+        width: fit-content;
+        min-width: 72px;
+        text-align: center;
+        border-radius: 999px;
+        padding: 6px 10px;
+        color: #ffffff;
+        font-weight: 850;
+      }
+
+      .pill.bpsk {
+        background: var(--teal);
+      }
+
+      .pill.fsk {
+        background: var(--amber);
+      }
+
+      .result-row p {
+        font-size: 0.95rem;
+      }
+
+      .ber {
+        font-weight: 850;
+        color: var(--navy);
+        text-align: right;
+      }
+
+      .file-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .file-link {
+        box-shadow: none;
+        padding: 14px 15px;
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .file-link span {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .next-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .next-list li {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 24px 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      @media (max-width: 920px) {
+        .topbar {
+          align-items: flex-start;
+          padding: 12px 0;
+          flex-direction: column;
+        }
+
+        nav {
+          justify-content: flex-start;
+        }
+
+        .hero,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .metrics {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .flow {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .shell {
+          width: min(100% - 20px, 1180px);
+        }
+
+        main {
+          padding-top: 18px;
+        }
+
+        .intro,
+        .section {
+          padding: 18px;
+        }
+
+        .chart-panel {
+          min-height: auto;
+        }
+
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+
+        .result-row {
+          grid-template-columns: 1fr;
+        }
+
+        .ber {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="shell topbar">
+        <a class="brand" href="#inicio" aria-label="Inicio del proyecto">
+          <span class="mark">RF</span>
+          <span>
+            <strong>CubeSat COMMS</strong>
+            <span>Simulacion FSK/BPSK</span>
+          </span>
+        </a>
+        <nav aria-label="Navegacion principal">
+          <a href="#modelo">Modelo</a>
+          <a href="#resultados">Resultados</a>
+          <a href="#fases">Fases</a>
+          <a href="#archivos">Archivos</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="inicio" class="shell">
+      <section class="hero" aria-label="Resumen del proyecto">
+        <div class="intro">
+          <div>
+            <div class="eyebrow">Avance documentado - Fase 2</div>
+            <h1>Enlace RF CubeSat con telemetria real</h1>
+            <p class="lead">
+              Desarrollo de un modelo reproducible para caracterizar el
+              subsistema de comunicaciones de un CubeSat mediante transmision,
+              canal, recepcion y medicion de BER en BPSK y FSK.
+            </p>
+          </div>
+          <div class="actions">
+            <a class="button" href="docs/DISENO_MODELO_SIMULACION_ENLACE_RF.md">
+              Ver documento tecnico
+            </a>
+            <a class="button secondary" href="README.md">Abrir README</a>
+          </div>
+        </div>
+
+        <aside class="chart-panel" aria-label="Grafica BER">
+          <div class="chart-head">
+            <div>
+              <h2>Curva BER vs SNR</h2>
+              <p class="caption">
+                Comparacion del desempeno de BPSK y FSK usando 18776 bits de
+                telemetria STRaND-1 y canal AWGN.
+              </p>
+            </div>
+            <span class="status">Verificado</span>
+          </div>
+          <img
+            src="resultados_simulacion/curva_ber_fsk_bpsk.png"
+            alt="Curva BER de modulaciones BPSK y FSK frente a SNR"
+          />
+        </aside>
+      </section>
+
+      <section class="metrics" aria-label="Metricas principales">
+        <article class="metric">
+          <span>Frames procesados</span>
+          <strong>100</strong>
+          <small>Telemetria real de STRaND-1 desde SatNOGS DB.</small>
+        </article>
+        <article class="metric">
+          <span>Bits evaluados</span>
+          <strong>18 776</strong>
+          <small>Payload convertido a flujo binario para simulacion.</small>
+        </article>
+        <article class="metric">
+          <span>Tasa simbolica</span>
+          <strong>9.6 kbps</strong>
+          <small>Configuracion base del enlace digital modelado.</small>
+        </article>
+        <article class="metric">
+          <span>Banda de referencia</span>
+          <strong>UHF</strong>
+          <small>Frecuencia documentada: 437.568 MHz.</small>
+        </article>
+      </section>
+
+      <div class="grid">
+        <div>
+          <section id="modelo" class="section">
+            <h2>Modelo de simulacion</h2>
+            <p>
+              El sistema se implemento como una cadena baseband equivalente.
+              Esto permite estudiar el comportamiento de la modulacion y del
+              canal sin depender todavia de hardware SDR ni de una portadora RF
+              fisica.
+            </p>
+            <div class="flow" aria-label="Flujo del modelo RF">
+              <div>Frames de telemetria</div>
+              <div>Bytes a bits</div>
+              <div>BPSK / FSK</div>
+              <div>Canal AWGN</div>
+              <div>BER y archivos IQ</div>
+            </div>
+          </section>
+
+          <section id="resultados" class="section">
+            <h2>Hallazgos principales</h2>
+            <div class="results">
+              <article class="result-row">
+                <span class="pill bpsk">BPSK</span>
+                <p>
+                  Recuperacion sin errores desde 2 dB SNR en el modelo ideal
+                  ejecutado.
+                </p>
+                <span class="ber">BER 0.000000</span>
+              </article>
+              <article class="result-row">
+                <span class="pill fsk">FSK</span>
+                <p>
+                  Mayor sensibilidad al ruido; BER cero desde 8 dB SNR en esta
+                  corrida.
+                </p>
+                <span class="ber">BER 0.000000</span>
+              </article>
+            </div>
+          </section>
+
+          <section id="fases" class="section">
+            <h2>Avance por fases</h2>
+            <div class="phase-list">
+              <article class="phase">
+                <span class="phase-num">1</span>
+                <div>
+                  <h3>Caracterizacion inicial</h3>
+                  <p>
+                    Se organizaron frames de telemetria, parametros de senal,
+                    resumen estadistico y archivos base para GNU Radio.
+                  </p>
+                </div>
+              </article>
+              <article class="phase">
+                <span class="phase-num">2</span>
+                <div>
+                  <h3>Modelo RF FSK/BPSK</h3>
+                  <p>
+                    Se diseno la cadena de transmision, canal AWGN, recepcion,
+                    medicion de BER y exportacion de senales IQ.
+                  </p>
+                </div>
+              </article>
+              <article class="phase">
+                <span class="phase-num">3</span>
+                <div>
+                  <h3>Simulaciones extendidas</h3>
+                  <p>
+                    Siguiente paso: ampliar barridos de SNR, registrar capturas
+                    de GNU Radio e integrar analisis de espectro.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <aside>
+          <section id="archivos" class="section">
+            <h2>Archivos de consulta</h2>
+            <div class="file-grid">
+              <a class="file-link" href="README.md">
+                <strong>README</strong>
+                <span>Resumen del proyecto</span>
+              </a>
+              <a
+                class="file-link"
+                href="docs/DISENO_MODELO_SIMULACION_ENLACE_RF.md"
+              >
+                <strong>Diseno RF</strong>
+                <span>Documento de Fase 2</span>
+              </a>
+              <a class="file-link" href="GUIA_GNURADIO.md">
+                <strong>GNU Radio</strong>
+                <span>Guia de uso local</span>
+              </a>
+              <a
+                class="file-link"
+                href="resultados_simulacion/resultados_ber_fsk_bpsk.csv"
+              >
+                <strong>BER CSV</strong>
+                <span>Resultados por SNR</span>
+              </a>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Siguientes mejoras</h2>
+            <ul class="next-list">
+              <li>Agregar presupuesto de enlace completo para UHF.</li>
+              <li>Simular Doppler y offsets de frecuencia.</li>
+              <li>Documentar capturas de GNU Radio.</li>
+              <li>Comparar resultados con CubeSats documentados.</li>
+              <li>Incorporar tramas AX.25 y validacion de CRC.</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <div class="shell">
+        Proyecto de grado - Ingenieria Electronica, UNAD. Desarrollo local en
+        Python, GNU Radio y documentacion tecnica reproducible.
+      </div>
+    </footer>
+  </body>
+</html>

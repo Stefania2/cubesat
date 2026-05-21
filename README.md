@@ -190,6 +190,12 @@ Mas detalles en `GUIA_GNURADIO.md`.
 
 ## Documentacion tecnica
 
+Pagina de avances del proyecto:
+
+```text
+index.html
+```
+
 El documento principal de la Fase 2 esta en:
 
 ```text
