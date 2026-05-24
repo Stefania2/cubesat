@@ -118,7 +118,7 @@ Grafica generada:
 Instalacion basica de dependencias:
 
 ```powershell
-pip install numpy pandas matplotlib requests
+pip install -r requirements.txt
 ```
 
 ## Uso
