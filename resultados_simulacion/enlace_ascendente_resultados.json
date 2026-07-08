@@ -1,0 +1,182 @@
+[
+  {
+    "elevacion_deg": 5,
+    "distancia_km": 2328.0,
+    "fspl_db": 152.56,
+    "p_rx_sat_dbm": -102.56,
+    "c_n0_db_hz": 67.42,
+    "eb_n0_db": 36.63,
+    "margen_db": 24.63,
+    "capacidad_max_bps": 57.0
+  },
+  {
+    "elevacion_deg": 10,
+    "distancia_km": 1931.6,
+    "fspl_db": 150.94,
+    "p_rx_sat_dbm": -100.94,
+    "c_n0_db_hz": 69.04,
+    "eb_n0_db": 38.25,
+    "margen_db": 26.25,
+    "capacidad_max_bps": 59.0
+  },
+  {
+    "elevacion_deg": 15,
+    "distancia_km": 1625.8,
+    "fspl_db": 149.44,
+    "p_rx_sat_dbm": -99.44,
+    "c_n0_db_hz": 70.54,
+    "eb_n0_db": 39.74,
+    "margen_db": 27.74,
+    "capacidad_max_bps": 61.0
+  },
+  {
+    "elevacion_deg": 20,
+    "distancia_km": 1392.2,
+    "fspl_db": 148.09,
+    "p_rx_sat_dbm": -98.09,
+    "c_n0_db_hz": 71.88,
+    "eb_n0_db": 41.09,
+    "margen_db": 29.09,
+    "capacidad_max_bps": 62.0
+  },
+  {
+    "elevacion_deg": 25,
+    "distancia_km": 1213.2,
+    "fspl_db": 146.9,
+    "p_rx_sat_dbm": -96.9,
+    "c_n0_db_hz": 73.08,
+    "eb_n0_db": 42.29,
+    "margen_db": 30.29,
+    "capacidad_max_bps": 63.0
+  },
+  {
+    "elevacion_deg": 30,
+    "distancia_km": 1075.1,
+    "fspl_db": 145.85,
+    "p_rx_sat_dbm": -95.85,
+    "c_n0_db_hz": 74.13,
+    "eb_n0_db": 43.34,
+    "margen_db": 31.34,
+    "capacidad_max_bps": 64.0
+  },
+  {
+    "elevacion_deg": 35,
+    "distancia_km": 967.3,
+    "fspl_db": 144.93,
+    "p_rx_sat_dbm": -94.93,
+    "c_n0_db_hz": 75.05,
+    "eb_n0_db": 44.25,
+    "margen_db": 32.25,
+    "capacidad_max_bps": 65.0
+  },
+  {
+    "elevacion_deg": 40,
+    "distancia_km": 882.3,
+    "fspl_db": 144.13,
+    "p_rx_sat_dbm": -94.13,
+    "c_n0_db_hz": 75.84,
+    "eb_n0_db": 45.05,
+    "margen_db": 33.05,
+    "capacidad_max_bps": 66.0
+  },
+  {
+    "elevacion_deg": 45,
+    "distancia_km": 814.8,
+    "fspl_db": 143.44,
+    "p_rx_sat_dbm": -93.44,
+    "c_n0_db_hz": 76.54,
+    "eb_n0_db": 45.74,
+    "margen_db": 33.74,
+    "capacidad_max_bps": 67.0
+  },
+  {
+    "elevacion_deg": 50,
+    "distancia_km": 760.8,
+    "fspl_db": 142.84,
+    "p_rx_sat_dbm": -92.84,
+    "c_n0_db_hz": 77.13,
+    "eb_n0_db": 46.34,
+    "margen_db": 34.34,
+    "capacidad_max_bps": 67.0
+  },
+  {
+    "elevacion_deg": 55,
+    "distancia_km": 717.6,
+    "fspl_db": 142.34,
+    "p_rx_sat_dbm": -92.34,
+    "c_n0_db_hz": 77.64,
+    "eb_n0_db": 46.85,
+    "margen_db": 34.85,
+    "capacidad_max_bps": 68.0
+  },
+  {
+    "elevacion_deg": 60,
+    "distancia_km": 683.2,
+    "fspl_db": 141.91,
+    "p_rx_sat_dbm": -91.91,
+    "c_n0_db_hz": 78.07,
+    "eb_n0_db": 47.28,
+    "margen_db": 35.28,
+    "capacidad_max_bps": 68.0
+  },
+  {
+    "elevacion_deg": 65,
+    "distancia_km": 655.9,
+    "fspl_db": 141.55,
+    "p_rx_sat_dbm": -91.55,
+    "c_n0_db_hz": 78.42,
+    "eb_n0_db": 47.63,
+    "margen_db": 35.63,
+    "capacidad_max_bps": 68.0
+  },
+  {
+    "elevacion_deg": 70,
+    "distancia_km": 634.9,
+    "fspl_db": 141.27,
+    "p_rx_sat_dbm": -91.27,
+    "c_n0_db_hz": 78.7,
+    "eb_n0_db": 47.91,
+    "margen_db": 35.91,
+    "capacidad_max_bps": 69.0
+  },
+  {
+    "elevacion_deg": 75,
+    "distancia_km": 619.3,
+    "fspl_db": 141.06,
+    "p_rx_sat_dbm": -91.06,
+    "c_n0_db_hz": 78.92,
+    "eb_n0_db": 48.13,
+    "margen_db": 36.13,
+    "capacidad_max_bps": 69.0
+  },
+  {
+    "elevacion_deg": 80,
+    "distancia_km": 608.4,
+    "fspl_db": 140.9,
+    "p_rx_sat_dbm": -90.9,
+    "c_n0_db_hz": 79.07,
+    "eb_n0_db": 48.28,
+    "margen_db": 36.28,
+    "capacidad_max_bps": 69.0
+  },
+  {
+    "elevacion_deg": 85,
+    "distancia_km": 602.1,
+    "fspl_db": 140.81,
+    "p_rx_sat_dbm": -90.81,
+    "c_n0_db_hz": 79.16,
+    "eb_n0_db": 48.37,
+    "margen_db": 36.37,
+    "capacidad_max_bps": 69.0
+  },
+  {
+    "elevacion_deg": 90,
+    "distancia_km": 600.0,
+    "fspl_db": 140.78,
+    "p_rx_sat_dbm": -90.78,
+    "c_n0_db_hz": 79.19,
+    "eb_n0_db": 48.4,
+    "margen_db": 36.4,
+    "capacidad_max_bps": 69.0
+  }
+]

@@ -231,12 +231,12 @@
             <span>Simulación y caracterización</span>
           </span>
         </a>
-        <nav aria-label="Navegacion principal">
+          <nav aria-label="Navegacion principal">
           <a href="#modelo">Modelo</a>
           <a href="#resultados">Resultados</a>
-          <a href="#gnuradio">GNU Radio</a>
-          <a href="#linkbudget">Link Budget</a>
-          <a href="#documentos">Documentos</a>
+          <a href="#avanzado">Avanzado</a>
+          <a href="#estacion">Estación</a>
+          <a href="#documentos">Docs</a>
         </nav>
       </div>
     </header>
@@ -311,6 +311,11 @@
           <span>Flujogramas GRC</span>
           <strong>2</strong>
           <small>Visualización IQ + cadena BPSK completa.</small>
+        </article>
+        <article class="metric">
+          <span>Configuraciones evaluadas</span>
+          <strong>112</strong>
+          <small>RRC, fading, Doppler, FEC, AX.25 combinadas.</small>
         </article>
       </section>
 
@@ -397,6 +402,34 @@
               style="width: 100%; max-width: 560px; height: auto; margin-top: 14px; border: 1px solid var(--line); border-radius: 6px;"
             />
           </section>
+
+          <section id="avanzado" class="section">
+            <h2>Simulación avanzada (RRC + FEC + fading + AX.25)</h2>
+            <p>
+              El modelo avanzado incorpora filtrado conformador RRC (α=0.35) que reduce
+              el ancho de banda de ~77 kHz a ~12 kHz, codificación convolutional (r=1/2, K=7)
+              que alcanza BER cero desde 4 dB SNR, desvanecimiento Rice con perfil Jakes,
+              y tramas AX.25 completas con CRC-16-CCITT.
+            </p>
+            <div class="img-grid">
+              <img src="resultados_simulacion/simulacion_avanzada_resultados.png" alt="Resultados simulacion avanzada" />
+              <img src="resultados_simulacion/espectro_rrc_comparacion.png" alt="Espectro RRC" />
+            </div>
+          </section>
+
+          <section id="estacion" class="section">
+            <h2>Estación terrena + enlace ascendente</h2>
+            <p>
+              Modelo de estación terrena en Bogotá con seguimiento automático de antena
+              (Yagi 15 dBi, velocidad 5°/s az, 3°/s el). C/N0 promedio: 60.4 dB-Hz durante
+              el paso. Enlace ascendente a 435 MHz para comandos a 1200 bps con margen
+              de 24.6 dB (5°) a 36.4 dB (90°) usando 10W de potencia TX.
+            </p>
+            <div class="img-grid">
+              <img src="resultados_simulacion/estacion_terrena_seguimiento.png" alt="Seguimiento estacion terrena" />
+              <img src="resultados_simulacion/enlace_ascendente_resultados.png" alt="Enlace ascendente" />
+            </div>
+          </section>
         </div>
 
         <aside>
@@ -453,6 +486,18 @@
                 <strong>generar_iq_bpsk_desde_bin.py</strong>
                 <span class="tag py">PY</span>
               </a>
+              <a class="file-link" href="simular_enlace_rf_bpsk_avanzado.py">
+                <strong>simular_enlace_rf_bpsk_avanzado.py</strong>
+                <span class="tag py">PY</span>
+              </a>
+              <a class="file-link" href="modelo_estacion_terrena.py">
+                <strong>modelo_estacion_terrena.py</strong>
+                <span class="tag py">PY</span>
+              </a>
+              <a class="file-link" href="simular_enlace_ascendente.py">
+                <strong>simular_enlace_ascendente.py</strong>
+                <span class="tag py">PY</span>
+              </a>
             </div>
           </section>
 
@@ -503,6 +548,34 @@
               </a>
               <a class="file-link" href="resultados_simulacion/cubesats_reales_referencia.json">
                 <strong>CubeSats referencia</strong>
+                <span class="tag json">JSON</span>
+              </a>
+              <a class="file-link" href="resultados_simulacion/resultados_simulacion_avanzada.png">
+                <strong>Simulación avanzada</strong>
+                <span class="tag png">PNG</span>
+              </a>
+              <a class="file-link" href="resultados_simulacion/espectro_rrc_comparacion.png">
+                <strong>Espectro RRC</strong>
+                <span class="tag png">PNG</span>
+              </a>
+              <a class="file-link" href="resultados_simulacion/estacion_terrena_seguimiento.png">
+                <strong>Estación terrena</strong>
+                <span class="tag png">PNG</span>
+              </a>
+              <a class="file-link" href="resultados_simulacion/enlace_ascendente_resultados.png">
+                <strong>Enlace ascendente</strong>
+                <span class="tag png">PNG</span>
+              </a>
+              <a class="file-link" href="resultados_simulacion/resultados_simulacion_avanzada.csv">
+                <strong>Resultados avanzados CSV</strong>
+                <span class="tag csv">CSV</span>
+              </a>
+              <a class="file-link" href="resultados_simulacion/enlace_ascendente_resultados.json">
+                <strong>Uplink JSON</strong>
+                <span class="tag json">JSON</span>
+              </a>
+              <a class="file-link" href="resultados_simulacion/estacion_terrena_seguimiento.json">
+                <strong>Tracking JSON</strong>
                 <span class="tag json">JSON</span>
               </a>
             </div>
