@@ -1,0 +1,102 @@
+{
+  "cubesats_reales": [
+    {
+      "nombre": "STRaND-1",
+      "pais": "Reino Unido",
+      "ano_lanzamiento": 2013,
+      "formato": "1U",
+      "frecuencia_mhz": 437.568,
+      "banda": "UHF",
+      "modulacion": "BPSK",
+      "tasa_bps": 9600,
+      "potencia_tx_dbm": 30.0,
+      "tipo_antena": "Monopolo",
+      "ganancia_antena_dbi": 0.0,
+      "referencia": "Surrey Space Centre / Clyde Space"
+    },
+    {
+      "nombre": "Libertad 1",
+      "pais": "Colombia",
+      "ano_lanzamiento": 2007,
+      "formato": "1U",
+      "frecuencia_mhz": 437.405,
+      "banda": "UHF",
+      "modulacion": "AFSK",
+      "tasa_bps": 1200,
+      "potencia_tx_dbm": 27.0,
+      "tipo_antena": "Dipolo",
+      "ganancia_antena_dbi": 2.0,
+      "referencia": "Universidad Sergio Arboleda / ESA"
+    },
+    {
+      "nombre": "FACSAT-1",
+      "pais": "Colombia",
+      "ano_lanzamiento": 2018,
+      "formato": "3U",
+      "frecuencia_mhz": 437.375,
+      "banda": "UHF",
+      "modulacion": "BPSK",
+      "tasa_bps": 9600,
+      "potencia_tx_dbm": 30.0,
+      "tipo_antena": "Monopolo",
+      "ganancia_antena_dbi": 0.0,
+      "referencia": "FAC / GomSpace"
+    },
+    {
+      "nombre": "Delfi-C3",
+      "pais": "Paises Bajos",
+      "ano_lanzamiento": 2008,
+      "formato": "3U",
+      "frecuencia_mhz": 145.87,
+      "banda": "VHF",
+      "modulacion": "BPSK",
+      "tasa_bps": 1200,
+      "potencia_tx_dbm": 28.0,
+      "tipo_antena": "Dipolo desplegable",
+      "ganancia_antena_dbi": 2.0,
+      "referencia": "TU Delft"
+    },
+    {
+      "nombre": "ESTCube-1",
+      "pais": "Estonia",
+      "ano_lanzamiento": 2013,
+      "formato": "1U",
+      "frecuencia_mhz": 437.25,
+      "banda": "UHF",
+      "modulacion": "BPSK",
+      "tasa_bps": 9600,
+      "potencia_tx_dbm": 30.0,
+      "tipo_antena": "Monopolo",
+      "ganancia_antena_dbi": 0.0,
+      "referencia": "Universidad de Tartu"
+    },
+    {
+      "nombre": "AAUSAT-II",
+      "pais": "Dinamarca",
+      "ano_lanzamiento": 2008,
+      "formato": "1U",
+      "frecuencia_mhz": 437.425,
+      "banda": "UHF",
+      "modulacion": "AFSK",
+      "tasa_bps": 1200,
+      "potencia_tx_dbm": 28.0,
+      "tipo_antena": "Monopolo",
+      "ganancia_antena_dbi": 0.0,
+      "referencia": "Universidad de Aalborg"
+    },
+    {
+      "nombre": "ITUPSAT 1",
+      "pais": "Turquia",
+      "ano_lanzamiento": 2009,
+      "formato": "1U",
+      "frecuencia_mhz": 437.325,
+      "banda": "UHF",
+      "modulacion": "BPSK",
+      "tasa_bps": 9600,
+      "potencia_tx_dbm": 30.0,
+      "tipo_antena": "Monopolo",
+      "ganancia_antena_dbi": 0.0,
+      "referencia": "Universidad de Estambul"
+    }
+  ]
+}
