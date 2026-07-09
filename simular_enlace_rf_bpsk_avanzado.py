@@ -218,6 +218,19 @@ def apply_doppler(
     return (samples * np.exp(1j * phase)).astype(np.complex128)
 
 
+def compensate_doppler(
+    samples: np.ndarray,
+    doppler_hz: float,
+    sample_rate: float,
+) -> np.ndarray:
+    """Derrota el corrimiento Doppler asumiendo doppler_hz conocido (p. ej.
+    por seguimiento orbital), como haria un lazo de seguimiento de portadora
+    perfectamente enclavado."""
+    t = np.arange(len(samples), dtype=np.float64) / sample_rate
+    phase = 2.0 * np.pi * doppler_hz * t
+    return (samples * np.exp(-1j * phase)).astype(np.complex128)
+
+
 # ─── Codificacion convolutional (r=1/2, K=7) ───────────────────────────────
 
 def _poly_to_mask(poly: int, length: int) -> np.ndarray:
@@ -404,6 +417,7 @@ def run_advanced_simulation(
 
                     if doppler_hz > 0:
                         noisy = apply_doppler(noisy, doppler_hz, SAMPLE_RATE)
+                        noisy = compensate_doppler(noisy, doppler_hz, SAMPLE_RATE)
 
                     # Demodulacion
                     if use_rrc:

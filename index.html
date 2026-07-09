@@ -415,6 +415,23 @@
               <img src="resultados_simulacion/simulacion_avanzada_resultados.png" alt="Resultados simulacion avanzada" />
               <img src="resultados_simulacion/espectro_rrc_comparacion.png" alt="Espectro RRC" />
             </div>
+            <div class="result-row" style="grid-template-columns: 1fr; border: none; padding: 16px 0 0; box-shadow: none;">
+              <div>
+                <strong>Análisis: corrección de la compensación Doppler</strong>
+                <p style="font-size: 0.88rem; color: var(--muted); margin-top: 6px;">
+                  Se detectó que todas las configuraciones con desplazamiento Doppler orbital
+                  colapsaban a BER ≈ 0.5 (piso de ruido) en todo el barrido de SNR, sin mejorar con
+                  mayor SNR. Causa raíz: el receptor aplicaba el corrimiento Doppler al canal pero no
+                  lo revertía antes de demodular; en los 1.96 s que dura la trama, la fase acumulada
+                  llega a girar hasta ~293 ciclos completos (Doppler máximo, 150 Hz), dejando al detector
+                  coherente sin referencia de fase válida. Se implementó una etapa de compensación
+                  (<code>compensate_doppler</code>) que revierte la fase Doppler conocida antes de
+                  demodular, equivalente a un lazo de seguimiento de portadora perfectamente enclavado.
+                  Tras la corrección, las curvas BER con Doppler siguen de cerca a las curvas sin Doppler
+                  (BPSK a 0 dB SNR: 0.494 → 0.081, frente a 0.077 sin Doppler).
+                </p>
+              </div>
+            </div>
           </section>
 
           <section id="estacion" class="section">
