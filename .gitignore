@@ -16,3 +16,6 @@ frames_STRAND1_bpsk_iq_complex64.bin
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Instrucciones locales para asistentes de codigo
+CLAUDE.md

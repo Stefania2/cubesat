@@ -299,13 +299,13 @@
         </article>
         <article class="metric">
           <span>Margen de enlace</span>
-          <strong>9.1–19.3 dB</strong>
+          <strong>8.5–20.3 dB</strong>
           <small>Barrido 5°–90° de elevación. Mínimo a 5°.</small>
         </article>
         <article class="metric">
           <span>CubeSats comparados</span>
           <strong>7</strong>
-          <small>Concordancia alta en 6/7 parámetros.</small>
+          <small>Concordancia alta en los 7 parámetros.</small>
         </article>
         <article class="metric">
           <span>Flujogramas GRC</span>
@@ -353,7 +353,7 @@
               </article>
               <article class="result-row">
                 <span class="pill link">Link Budget</span>
-                <p>Margen mínimo 9.1 dB a 5° elevación. Supera los 3–6 dB recomendados.</p>
+                <p>Margen mínimo 8.5 dB a 5° elevación. Supera los 3–6 dB recomendados.</p>
                 <span class="ber">Enlace viable</span>
               </article>
               <article class="result-row">
@@ -393,8 +393,8 @@
             <h2>Link budget descendente UHF</h2>
             <p>
               Cálculo del margen de enlace para STRaND-1 a 437.568 MHz (9600 bps BPSK)
-              usando parámetros típicos de CubeSat 1U y estación terrena con Yagi de 15 dBi.
-              Resultado: margen de 9.1 dB a 5° de elevación, aumentando a 19.3 dB en cenit.
+              usando parámetros típicos de CubeSat y estación terrena con Yagi de 15 dBi.
+              Resultado: margen de 8.5 dB a 5° de elevación, aumentando a 20.3 dB en cenit. La temperatura de sistema incluye el ruido que aporta el cable entre la antena y el LNA.
             </p>
             <img
               src="resultados_simulacion/link_budget_margen_enlace.png"
@@ -407,9 +407,10 @@
             <h2>Simulación avanzada (RRC + FEC + fading + AX.25)</h2>
             <p>
               El modelo avanzado incorpora filtrado conformador RRC (α=0.35) que reduce
-              el ancho de banda de ~77 kHz a ~12 kHz, codificación convolutional (r=1/2, K=7)
-              que alcanza BER cero desde 4 dB SNR, desvanecimiento Rice con perfil Jakes,
-              y tramas AX.25 completas con CRC-16-CCITT.
+              el ancho de banda ocupado al 99 % de ~66 kHz a ~11 kHz <em>sin coste en BER</em>,
+              codificación convolutional (r=1/2, K=7) con ~4 dB de ganancia de codificación,
+              desvanecimiento Rice con perfil Jakes, y tramas AX.25 2.2 verificadas con
+              FCS CRC-16/X-25 real. Son 18 configuraciones × 8 puntos de SNR = 144 corridas.
             </p>
             <div class="img-grid">
               <img src="resultados_simulacion/simulacion_avanzada_resultados.png" alt="Resultados simulacion avanzada" />
@@ -417,18 +418,18 @@
             </div>
             <div class="result-row" style="grid-template-columns: 1fr; border: none; padding: 16px 0 0; box-shadow: none;">
               <div>
-                <strong>Análisis: corrección de la compensación Doppler</strong>
+                <strong>Análisis: sensibilidad al Doppler residual</strong>
                 <p style="font-size: 0.88rem; color: var(--muted); margin-top: 6px;">
-                  Se detectó que todas las configuraciones con desplazamiento Doppler orbital
-                  colapsaban a BER ≈ 0.5 (piso de ruido) en todo el barrido de SNR, sin mejorar con
-                  mayor SNR. Causa raíz: el receptor aplicaba el corrimiento Doppler al canal pero no
-                  lo revertía antes de demodular; en los 1.96 s que dura la trama, la fase acumulada
-                  llega a girar hasta ~293 ciclos completos (Doppler máximo, 150 Hz), dejando al detector
-                  coherente sin referencia de fase válida. Se implementó una etapa de compensación
-                  (<code>compensate_doppler</code>) que revierte la fase Doppler conocida antes de
-                  demodular, equivalente a un lazo de seguimiento de portadora perfectamente enclavado.
-                  Tras la corrección, las curvas BER con Doppler siguen de cerca a las curvas sin Doppler
-                  (BPSK a 0 dB SNR: 0.494 → 0.081, frente a 0.077 sin Doppler).
+                  Una versión anterior del modelo aplicaba el desplazamiento Doppler al canal y
+                  acto seguido lo compensaba con el mismo valor exacto, lo que dejaba el canal
+                  intacto: las tres configuraciones de Doppler daban resultados idénticos y el
+                  eje no medía nada. El modelo actual reproduce lo que ocurre en un enlace real:
+                  la estación terrena pre-compensa el Doppler a partir de la predicción TLE y lo
+                  que llega al demodulador es el <em>error</em> de esa predicción. El resultado es
+                  exigente: sobre un registro de 1.96 s y sin recuperación de portadora, un residual
+                  de 0.1 Hz eleva la BER a 9.1e−3 a 0 dB de SNR, y uno de 0.2 Hz introduce un piso
+                  irreducible en torno a 3.6e−01. Es la justificación cuantitativa de por qué un
+                  receptor real necesita un lazo de Costas.
                 </p>
               </div>
             </div>
@@ -438,9 +439,13 @@
             <h2>Estación terrena + enlace ascendente</h2>
             <p>
               Modelo de estación terrena en Bogotá con seguimiento automático de antena
-              (Yagi 15 dBi, velocidad 5°/s az, 3°/s el). C/N0 promedio: 60.4 dB-Hz durante
-              el paso. Enlace ascendente a 435 MHz para comandos a 1200 bps con margen
-              de 24.6 dB (5°) a 36.4 dB (90°) usando 10W de potencia TX.
+              (Yagi 15 dBi, velocidad 5°/s az, 3°/s el) sobre un paso completo de 12.8 min
+              horizonte a horizonte, con culminación a 85°. C/N0 promedio: 68.4 dB-Hz
+              (62.2 a 74.8 dB-Hz). En la culminación el satélite exige 8.23 °/s de azimut
+              frente a los 5 °/s del rotor, pero a 82.5° de elevación ese retraso equivale
+              a solo 2.62° fuera de boresight y 0.09 dB de pérdida. Enlace ascendente a
+              435 MHz para comandos a 1200 bps con margen de 24.6 dB (5°) a 36.4 dB (90°)
+              usando 10W de potencia TX.
             </p>
             <div class="img-grid">
               <img src="resultados_simulacion/estacion_terrena_seguimiento.png" alt="Seguimiento estacion terrena" />

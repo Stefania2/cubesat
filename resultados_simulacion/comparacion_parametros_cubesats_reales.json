@@ -28,21 +28,21 @@
     },
     {
       "parametro": "BER vs SNR - BPSK",
-      "simulado": "BER ~5.3e-5 a SNR=0 dB\nBER ~0 a SNR >= 2 dB (con 18776 bits)",
+      "simulado": "BER ~5.3e-05 a SNR=0 dB\nBER ~0 a SNR >= 2 dB (con 18776 bits)",
       "real_referencia": "BPSK teorica: BER ~3.9e-4 a Eb/N0=4 dB\nBPSK tipica en CubeSats requiere Eb/N0 ~10 dB\npara BER < 1e-5 con margen de implementacion",
-      "concordancia": "Esperada dentro del modelo. La simulacion muestra\ncomportamiento coherente con la teoria. La BER cero\na partir de 2 dB se debe al numero finito de bits\nevaluados (18776). Con mas bits se observarian\nerrores a SNR mayores."
+      "concordancia": "Esperada dentro del modelo. La simulacion muestra\ncomportamiento coherente con la teoria. La BER cero\na partir de 2 dB se debe al numero finito de\nbits evaluados (18776). Con mas bits se observarian\nerrores a SNR mayores."
     },
     {
       "parametro": "Margen de enlace (link budget)",
-      "simulado": "9.1 dB a elev=5 deg\n15.8 dB a elev=30 deg\n20.9 dB a elev=90 deg",
+      "simulado": "8.5 dB a elev=5 deg\n20.2 dB a elev=90 deg",
       "real_referencia": "Margen tipico requerido: 3-6 dB\nCubeSats universitarios: 5-15 dB tipico\nFACSAT-1 reporta ~8 dB margen minimo\nLibertad 1 reporto ~6 dB",
       "concordancia": "Alta. El margen simulado supera el minimo recomendado\nde 3 dB incluso a elevacion de 5 grados. Los valores\nson consistentes con lo reportado en literatura para\nCubeSats con estaciones terrenas de radioaficionado."
     },
     {
       "parametro": "Ancho de banda estimado",
-      "simulado": "BPSK: ~27.0 kHz (-20 dB)\nFSK: ~11.8 kHz (-20 dB)",
-      "real_referencia": "BPSK 9600 bps: ancho de banda nulo ~19.2 kHz\nFSK con desviacion 2400 Hz: BW ~14.4 kHz\nCarson rule: BW_BPSK = 2*R = 19.2 kHz\nCarson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz",
-      "concordancia": "Moderada. Los valores simulados se aproximan a las\nreglas de Carson. La diferencia en BPSK (~8 kHz extra)\nse debe al pulso rectangular (sin filtrado conformador)\nque genera lobulos laterales mas anchos."
+      "simulado": "BPSK rectangular: ~27.0 kHz (-20 dB)\nFSK: ~11.8 kHz (-20 dB)\nBPSK + RRC (α=0.35): ~11.2 kHz (99 % ocupado)",
+      "real_referencia": "BPSK 9600 bps: ancho de banda nulo ~19.2 kHz\nFSK con desviacion 2400 Hz: BW ~14.4 kHz\nCarson rule: BW_BPSK = 2*R = 19.2 kHz\nCarson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz\nCon RRC: BW = R*(1+α) = 12.96 kHz",
+      "concordancia": "Alta con conformado de pulso. El pulso rectangular\nexcede la regla de Carson por los lobulos laterales\ndel sinc²; al aplicar el filtro RRC del modelo\navanzado el ancho de banda converge al valor teorico\nR*(1+α) y cabe en la canalizacion UHF de 25 kHz."
     }
   ]
 }

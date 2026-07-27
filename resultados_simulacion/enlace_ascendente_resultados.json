@@ -7,7 +7,8 @@
     "c_n0_db_hz": 67.42,
     "eb_n0_db": 36.63,
     "margen_db": 24.63,
-    "capacidad_max_bps": 57.0
+    "capacidad_max_bps": 348159.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 10,
@@ -17,7 +18,8 @@
     "c_n0_db_hz": 69.04,
     "eb_n0_db": 38.25,
     "margen_db": 26.25,
-    "capacidad_max_bps": 59.0
+    "capacidad_max_bps": 505722.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 15,
@@ -27,7 +29,8 @@
     "c_n0_db_hz": 70.54,
     "eb_n0_db": 39.74,
     "margen_db": 27.74,
-    "capacidad_max_bps": 61.0
+    "capacidad_max_bps": 713845.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 20,
@@ -37,7 +40,8 @@
     "c_n0_db_hz": 71.88,
     "eb_n0_db": 41.09,
     "margen_db": 29.09,
-    "capacidad_max_bps": 62.0
+    "capacidad_max_bps": 973601.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 25,
@@ -47,7 +51,8 @@
     "c_n0_db_hz": 73.08,
     "eb_n0_db": 42.29,
     "margen_db": 30.29,
-    "capacidad_max_bps": 63.0
+    "capacidad_max_bps": 1281956.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 30,
@@ -57,7 +62,8 @@
     "c_n0_db_hz": 74.13,
     "eb_n0_db": 43.34,
     "margen_db": 31.34,
-    "capacidad_max_bps": 64.0
+    "capacidad_max_bps": 1632578.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 35,
@@ -67,7 +73,8 @@
     "c_n0_db_hz": 75.05,
     "eb_n0_db": 44.25,
     "margen_db": 32.25,
-    "capacidad_max_bps": 65.0
+    "capacidad_max_bps": 2016688.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 40,
@@ -77,7 +84,8 @@
     "c_n0_db_hz": 75.84,
     "eb_n0_db": 45.05,
     "margen_db": 33.05,
-    "capacidad_max_bps": 66.0
+    "capacidad_max_bps": 2423785.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 45,
@@ -87,7 +95,8 @@
     "c_n0_db_hz": 76.54,
     "eb_n0_db": 45.74,
     "margen_db": 33.74,
-    "capacidad_max_bps": 67.0
+    "capacidad_max_bps": 2842241.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 50,
@@ -97,7 +106,8 @@
     "c_n0_db_hz": 77.13,
     "eb_n0_db": 46.34,
     "margen_db": 34.34,
-    "capacidad_max_bps": 67.0
+    "capacidad_max_bps": 3259826.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 55,
@@ -107,7 +117,8 @@
     "c_n0_db_hz": 77.64,
     "eb_n0_db": 46.85,
     "margen_db": 34.85,
-    "capacidad_max_bps": 68.0
+    "capacidad_max_bps": 3664176.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 60,
@@ -117,7 +128,8 @@
     "c_n0_db_hz": 78.07,
     "eb_n0_db": 47.28,
     "margen_db": 35.28,
-    "capacidad_max_bps": 68.0
+    "capacidad_max_bps": 4043226.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 65,
@@ -127,7 +139,8 @@
     "c_n0_db_hz": 78.42,
     "eb_n0_db": 47.63,
     "margen_db": 35.63,
-    "capacidad_max_bps": 68.0
+    "capacidad_max_bps": 4385612.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 70,
@@ -137,7 +150,8 @@
     "c_n0_db_hz": 78.7,
     "eb_n0_db": 47.91,
     "margen_db": 35.91,
-    "capacidad_max_bps": 69.0
+    "capacidad_max_bps": 4681039.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 75,
@@ -147,7 +161,8 @@
     "c_n0_db_hz": 78.92,
     "eb_n0_db": 48.13,
     "margen_db": 36.13,
-    "capacidad_max_bps": 69.0
+    "capacidad_max_bps": 4920607.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 80,
@@ -157,7 +172,8 @@
     "c_n0_db_hz": 79.07,
     "eb_n0_db": 48.28,
     "margen_db": 36.28,
-    "capacidad_max_bps": 69.0
+    "capacidad_max_bps": 5097089.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 85,
@@ -167,7 +183,8 @@
     "c_n0_db_hz": 79.16,
     "eb_n0_db": 48.37,
     "margen_db": 36.37,
-    "capacidad_max_bps": 69.0
+    "capacidad_max_bps": 5205157.0,
+    "t_sys_k": 728.4
   },
   {
     "elevacion_deg": 90,
@@ -177,6 +194,7 @@
     "c_n0_db_hz": 79.19,
     "eb_n0_db": 48.4,
     "margen_db": 36.4,
-    "capacidad_max_bps": 69.0
+    "capacidad_max_bps": 5241546.0,
+    "t_sys_k": 728.4
   }
 ]

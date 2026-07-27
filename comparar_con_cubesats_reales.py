@@ -69,7 +69,7 @@ CUBESATS_REALES = [
         nombre="STRaND-1",
         pais="Reino Unido",
         ano_lanzamiento=2013,
-        formato="1U",
+        formato="3U",
         frecuencia_mhz=437.568,
         banda="UHF",
         modulacion="BPSK",
@@ -294,9 +294,87 @@ def graficar_comparacion_ber(
     plt.close()
 
 
+# ─── Lectura de los resultados ya generados ────────────────────────────
+
+@dataclass(frozen=True)
+class ResumenSimulado:
+    """Cifras leidas de los archivos de resultados.
+
+    La tabla comparativa se construye a partir de estos valores en lugar de
+    llevarlos escritos a mano: transcribirlos hacia que la tabla se
+    desincronizara de las simulaciones en cuanto se reejecutaba el pipeline.
+    """
+    ber_bpsk_0db: float
+    snr_bpsk_ber_cero: float | None
+    ber_fsk_0db: float
+    snr_fsk_ber_cero: float | None
+    bw_bpsk_hz: float
+    bw_fsk_hz: float
+    bw_rrc_hz: float | None
+    margen_min_db: float
+    margen_min_elev: float
+    margen_max_db: float
+    margen_max_elev: float
+
+
+def _primer_snr_sin_errores(datos: list[dict]) -> float | None:
+    con_cero = [d["snr_db"] for d in datos if d["errores"] == 0]
+    return min(con_cero) if con_cero else None
+
+
+def _ber_en(datos: list[dict], snr_db: float) -> float:
+    return next(d["ber"] for d in datos if d["snr_db"] == snr_db)
+
+
+def cargar_resumen_simulado(
+    resultados: dict[str, list[dict]],
+    output_dir: Path,
+) -> ResumenSimulado:
+    bpsk, fsk = resultados["BPSK"], resultados["FSK"]
+
+    with (output_dir / "resultados_ber_fsk_bpsk.csv").open(newline="", encoding="utf-8") as f:
+        anchos = {r["modulacion"]: float(r["ancho_banda_estimado_hz"]) for r in csv.DictReader(f)}
+
+    # El ancho de banda con conformado RRC viene del modelo avanzado, si se ha
+    # ejecutado; es opcional para que este script siga corriendo sin el.
+    bw_rrc = None
+    avanzado = output_dir / "resultados_simulacion_avanzada.csv"
+    if avanzado.exists():
+        with avanzado.open(newline="", encoding="utf-8") as f:
+            rrc = [float(r["ancho_banda_hz"]) for r in csv.DictReader(f) if r["rrc"] == "True"]
+        if rrc:
+            bw_rrc = min(rrc)
+
+    with (output_dir / "link_budget_resultados.csv").open(newline="", encoding="utf-8") as f:
+        lb = [(float(r["margen_db"]), float(r["elevacion_deg"])) for r in csv.DictReader(f)]
+
+    return ResumenSimulado(
+        ber_bpsk_0db=_ber_en(bpsk, 0.0),
+        snr_bpsk_ber_cero=_primer_snr_sin_errores(bpsk),
+        ber_fsk_0db=_ber_en(fsk, 0.0),
+        snr_fsk_ber_cero=_primer_snr_sin_errores(fsk),
+        bw_bpsk_hz=anchos["BPSK"],
+        bw_fsk_hz=anchos["FSK"],
+        bw_rrc_hz=bw_rrc,
+        margen_min_db=min(lb)[0],
+        margen_min_elev=min(lb)[1],
+        margen_max_db=max(lb)[0],
+        margen_max_elev=max(lb)[1],
+    )
+
+
 # ─── Tabla comparativa de parametros ────────────────────────────────────
 
-def generar_tabla_comparativa(output_dir: Path) -> list[ComparisonMetric]:
+def generar_tabla_comparativa(
+    output_dir: Path,
+    sim: ResumenSimulado,
+) -> list[ComparisonMetric]:
+    bits = "18776"
+    bw_rrc_txt = (
+        f"\nBPSK + RRC (α=0.35): ~{sim.bw_rrc_hz / 1000:.1f} kHz (99 % ocupado)"
+        if sim.bw_rrc_hz
+        else ""
+    )
     metricas = [
         ComparisonMetric(
             parametro="Frecuencia de operacion",
@@ -350,22 +428,21 @@ def generar_tabla_comparativa(output_dir: Path) -> list[ComparisonMetric]:
         ),
         ComparisonMetric(
             parametro="BER vs SNR - BPSK",
-            simulado="BER ~5.3e-5 a SNR=0 dB\n"
-                     "BER ~0 a SNR >= 2 dB (con 18776 bits)",
+            simulado=f"BER ~{sim.ber_bpsk_0db:.1e} a SNR=0 dB\n"
+                     f"BER ~0 a SNR >= {sim.snr_bpsk_ber_cero:.0f} dB (con {bits} bits)",
             real_referencia="BPSK teorica: BER ~3.9e-4 a Eb/N0=4 dB\n"
                             "BPSK tipica en CubeSats requiere Eb/N0 ~10 dB\n"
                             "para BER < 1e-5 con margen de implementacion",
             concordancia="Esperada dentro del modelo. La simulacion muestra\n"
                           "comportamiento coherente con la teoria. La BER cero\n"
-                          "a partir de 2 dB se debe al numero finito de bits\n"
-                          "evaluados (18776). Con mas bits se observarian\n"
+                          f"a partir de {sim.snr_bpsk_ber_cero:.0f} dB se debe al numero finito de\n"
+                          f"bits evaluados ({bits}). Con mas bits se observarian\n"
                           "errores a SNR mayores.",
         ),
         ComparisonMetric(
             parametro="Margen de enlace (link budget)",
-            simulado="9.1 dB a elev=5 deg\n"
-                     "15.8 dB a elev=30 deg\n"
-                     "20.9 dB a elev=90 deg",
+            simulado=f"{sim.margen_min_db:.1f} dB a elev={sim.margen_min_elev:.0f} deg\n"
+                     f"{sim.margen_max_db:.1f} dB a elev={sim.margen_max_elev:.0f} deg",
             real_referencia="Margen tipico requerido: 3-6 dB\n"
                             "CubeSats universitarios: 5-15 dB tipico\n"
                             "FACSAT-1 reporta ~8 dB margen minimo\n"
@@ -377,16 +454,19 @@ def generar_tabla_comparativa(output_dir: Path) -> list[ComparisonMetric]:
         ),
         ComparisonMetric(
             parametro="Ancho de banda estimado",
-            simulado="BPSK: ~27.0 kHz (-20 dB)\n"
-                     "FSK: ~11.8 kHz (-20 dB)",
+            simulado=f"BPSK rectangular: ~{sim.bw_bpsk_hz / 1000:.1f} kHz (-20 dB)\n"
+                     f"FSK: ~{sim.bw_fsk_hz / 1000:.1f} kHz (-20 dB)"
+                     + bw_rrc_txt,
             real_referencia="BPSK 9600 bps: ancho de banda nulo ~19.2 kHz\n"
                             "FSK con desviacion 2400 Hz: BW ~14.4 kHz\n"
                             "Carson rule: BW_BPSK = 2*R = 19.2 kHz\n"
-                            "Carson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz",
-            concordancia="Moderada. Los valores simulados se aproximan a las\n"
-                          "reglas de Carson. La diferencia en BPSK (~8 kHz extra)\n"
-                          "se debe al pulso rectangular (sin filtrado conformador)\n"
-                          "que genera lobulos laterales mas anchos.",
+                            "Carson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz\n"
+                            "Con RRC: BW = R*(1+α) = 12.96 kHz",
+            concordancia="Alta con conformado de pulso. El pulso rectangular\n"
+                          "excede la regla de Carson por los lobulos laterales\n"
+                          "del sinc²; al aplicar el filtro RRC del modelo\n"
+                          "avanzado el ancho de banda converge al valor teorico\n"
+                          "R*(1+α) y cabe en la canalizacion UHF de 25 kHz.",
         ),
     ]
 
@@ -459,6 +539,7 @@ def main() -> None:
         return
 
     resultados = cargar_resultados_ber(ber_path)
+    sim = cargar_resumen_simulado(resultados, output_dir)
 
     # Grafica comparacion BER teorica vs simulada
     print("Generando grafica de comparacion BER...")
@@ -466,7 +547,7 @@ def main() -> None:
 
     # Tabla de parametros comparativos
     print("Generando tabla comparativa con CubeSats reales...")
-    metricas = generar_tabla_comparativa(output_dir)
+    metricas = generar_tabla_comparativa(output_dir, sim)
 
     # Tabla de CubeSats de referencia
     print("Exportando base de datos de CubeSats de referencia...")

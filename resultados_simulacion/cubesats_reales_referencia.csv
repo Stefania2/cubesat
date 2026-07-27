@@ -1,5 +1,5 @@
 Satelite,Pais,Ano,Formato,Freq (MHz),Banda,Modulacion,Tasa (bps),P_tx (dBm),Antena,G_ant (dBi),Referencia
-STRaND-1,Reino Unido,2013,1U,437.568,UHF,BPSK,9600,30.0,Monopolo,0.0,Surrey Space Centre / Clyde Space
+STRaND-1,Reino Unido,2013,3U,437.568,UHF,BPSK,9600,30.0,Monopolo,0.0,Surrey Space Centre / Clyde Space
 Libertad 1,Colombia,2007,1U,437.405,UHF,AFSK,1200,27.0,Dipolo,2.0,Universidad Sergio Arboleda / ESA
 FACSAT-1,Colombia,2018,3U,437.375,UHF,BPSK,9600,30.0,Monopolo,0.0,FAC / GomSpace
 Delfi-C3,Paises Bajos,2008,3U,145.87,VHF,BPSK,1200,28.0,Dipolo desplegable,2.0,TU Delft

@@ -27,6 +27,16 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
+from geometria_orbital import (
+    C_LIGHT,
+    EARTH_RADIUS_KM,
+    K_BOLTZ,
+    densidad_ruido_dbm_hz,
+    distancia_satelite,
+    fspl_db,
+    temperatura_sistema,
+)
+
 
 # ─── Parametros del satelite ────────────────────────────────────────────
 
@@ -34,9 +44,6 @@ FREQ_HZ = 437.568e6        # Frecuencia UHF del STRaND-1 (Hz)
 SYM_RATE = 9_600            # Tasa de simbolos (baudios)
 MODULATION = "BPSK"         # Esquema de modulacion
 ORBIT_HEIGHT_KM = 600.0     # Altura orbital tipica (km)
-EARTH_RADIUS_KM = 6_371.0   # Radio terrestre medio (km)
-K_BOLTZ = 1.380649e-23      # Constante de Boltzmann (J/K)
-C_LIGHT = 299_792_458       # Velocidad de la luz (m/s)
 
 # Parametros del transmisor (CubeSat)
 P_TX_DBM = 30.0             # Potencia transmitida: 1 W = 30 dBm
@@ -48,7 +55,6 @@ G_RX_DBI = 15.0             # Ganancia antena receptora (Yagi UHF de 11-13 el)
 L_RX_DB = 2.0               # Perdida en cableado estacion terrena (dB)
 NF_RX_DB = 2.0              # Figura de ruido del receptor (dB)
 T_ANT_K = 150.0             # Temperatura de ruido de antena (K)
-T_RX_K = None               # Se calcula desde NF
 
 # Perdidas adicionales
 L_ATM_DB = 0.5              # Perdida atmosferica (dB)
@@ -95,6 +101,7 @@ class LinkBudgetResult:
     margen_db: float
     snr_requerida_db: float
     perdida_total_db: float
+    t_sys_k: float
 
 
 # ─── Funciones auxiliares ───────────────────────────────────────────────
@@ -107,37 +114,13 @@ def watt_to_dbm(watt: float) -> float:
     return 10.0 * math.log10(watt * 1e3)
 
 
-def distancia_satelite(elev_deg: float, h_km: float, r_km: float) -> float:
-    """Distancia oblicua desde la estacion terrena al satelite (km).
-
-    Para elev=90 deg (cenit) la distancia es simplemente la altura orbital.
-    Para otros angulos se usa la geometria basica satelite-estacion.
-    """
-    if elev_deg >= 89.9:
-        return h_km
-    elev_rad = math.radians(elev_deg)
-    gamma = math.asin(r_km / (r_km + h_km) * math.cos(elev_rad))
-    theta = math.pi / 2.0 - elev_rad - gamma
-    return math.sqrt((r_km + h_km) ** 2 + r_km ** 2 - 2.0 * (r_km + h_km) * r_km * math.cos(theta))
-
-
-def fspl_db(dist_m: float, freq_hz: float) -> float:
-    """Free Space Path Loss (dB)."""
-    return 20.0 * math.log10(dist_m) + 20.0 * math.log10(freq_hz) + 20.0 * math.log10(4.0 * math.pi / C_LIGHT)
-
-
-def noise_figure_to_temperature(nf_db: float) -> float:
-    """Convierte figura de ruido (dB) a temperatura de ruido (K)."""
-    return (10.0 ** (nf_db / 10.0) - 1.0) * 290.0
-
-
 def calcular_link_budget(
     elev_deg: float,
     params: LinkBudgetParams,
 ) -> LinkBudgetResult:
     """Calcula el link budget para una elevacion dada."""
     # Distancia oblicua
-    dist_km = distancia_satelite(elev_deg, params.orbit_height_km, EARTH_RADIUS_KM)
+    dist_km = distancia_satelite(elev_deg, params.orbit_height_km)
     dist_m = dist_km * 1e3
 
     # Free Space Path Loss
@@ -156,12 +139,12 @@ def calcular_link_budget(
         - perdida_total
     )
 
-    # Temperatura de ruido del sistema
-    t_rx = noise_figure_to_temperature(params.nf_rx_db)
-    t_sys = params.t_ant_k + t_rx
+    # Temperatura de ruido del sistema referida a la entrada del receptor,
+    # incluyendo el ruido que aportan los cables entre la antena y el LNA.
+    t_sys = temperatura_sistema(params.t_ant_k, params.l_rx_db, params.nf_rx_db)
 
     # Densidad espectral de ruido (dBm/Hz)
-    n0_dbm_hz = 10.0 * math.log10(K_BOLTZ * t_sys) + 30.0
+    n0_dbm_hz = densidad_ruido_dbm_hz(t_sys)
 
     # C/N0 (dB-Hz)
     c_n0_db_hz = p_rx_dbm - n0_dbm_hz
@@ -185,6 +168,7 @@ def calcular_link_budget(
         margen_db=round(margen_db, 2),
         snr_requerida_db=round(snr_req_db, 2),
         perdida_total_db=round(perdida_total, 2),
+        t_sys_k=round(t_sys, 1),
     )
 
 

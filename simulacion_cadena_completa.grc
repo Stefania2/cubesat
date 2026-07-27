@@ -318,6 +318,36 @@ blocks:
     coordinate: [576, 256.0]
     rotation: 0
     state: enabled
+- name: iio_fmcomms2_sink_0
+  id: iio_fmcomms2_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    attenuation1: '10.0'
+    attenuation2: '10.0'
+    bandwidth: '20000000'
+    buffer_size: '32768'
+    comment: ''
+    cyclic: 'False'
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: '2400000000'
+    fstop: '0'
+    len_tag_key: ''
+    rf_port_select: '''A'''
+    samplerate: samp_rate
+    tx1_en: 'True'
+    tx2_en: 'True'
+    type: fc32
+    uri: 'local:'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [992, 380.0]
+    rotation: 0
+    state: enabled
 - name: qtgui_const_sink_x_0
   id: qtgui_const_sink_x
   parameters:

@@ -99,12 +99,11 @@ Para FSK se usa comparacion de energia por correlacion: cada simbolo recibido se
 
 ## 4. Procedimiento reproducible
 
-Desde `C:\CubeSat`, ejecutar:
+Desde el directorio del proyecto, ejecutar:
 
-```powershell
-$env:PYTHONIOENCODING='utf-8'
-python .\decodificar_frames_STRAND1.py
-python .\simular_enlace_rf_fsk_bpsk.py
+```bash
+python decodificar_frames_STRAND1.py
+python simular_enlace_rf_fsk_bpsk.py
 ```
 
 El primer comando genera o actualiza `frames_STRAND1_gnuradio.bin`. El segundo comando ejecuta el modelo FSK/BPSK y produce:
@@ -117,7 +116,7 @@ El primer comando genera o actualiza `frames_STRAND1_gnuradio.bin`. El segundo c
 
 Para inspeccion en GNU Radio:
 
-1. Abrir `C:\CubeSat\abrir_gnuradio.bat`.
+1. Abrir GNU Radio Companion (en Windows, `abrir_gnuradio.bat`).
 2. Agregar un bloque `File Source` con salida `Complex`.
 3. Cargar `strand1_bpsk_iq_clean_complex64.bin` o `strand1_fsk_iq_clean_complex64.bin`.
 4. Configurar `Sample Rate = 76800`.

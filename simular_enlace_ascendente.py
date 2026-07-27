@@ -19,16 +19,20 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
+from geometria_orbital import (
+    densidad_ruido_dbm_hz,
+    distancia_satelite,
+    fspl_db,
+    temperatura_sistema,
+)
+
 
 # ─── Constantes ────────────────────────────────────────────────────────────
 
 FREQ_UPLINK_HZ = 435.0e6   # Frecuencia uplink UHF (banda de 435 MHz)
 SYM_RATE_UPLINK = 1_200     # Tasa tipica para comandos (bps)
 
-EARTH_RADIUS_KM = 6_371.0
 ORBIT_HEIGHT_KM = 600.0
-C_LIGHT = 299_792_458
-K_BOLTZ = 1.380649e-23
 
 # Parametros estacion terrena (TX)
 P_TX_GS_DBM = 40.0          # 10 W = 40 dBm (potencia legal tipica)
@@ -62,31 +66,11 @@ class UplinkResult:
     eb_n0_db: float
     margen_db: float
     capacidad_max_bps: float
-
-
-def distancia_satelite(elev_deg: float) -> float:
-    if elev_deg >= 89.9:
-        return ORBIT_HEIGHT_KM
-    elev_rad = math.radians(elev_deg)
-    gamma = math.asin(EARTH_RADIUS_KM / (EARTH_RADIUS_KM + ORBIT_HEIGHT_KM) * math.cos(elev_rad))
-    theta = math.pi / 2.0 - elev_rad - gamma
-    return math.sqrt(
-        (EARTH_RADIUS_KM + ORBIT_HEIGHT_KM) ** 2
-        + EARTH_RADIUS_KM ** 2
-        - 2.0 * (EARTH_RADIUS_KM + ORBIT_HEIGHT_KM) * EARTH_RADIUS_KM * math.cos(theta)
-    )
-
-
-def fspl_db(dist_m: float, freq_hz: float) -> float:
-    return 20.0 * math.log10(dist_m) + 20.0 * math.log10(freq_hz) + 20.0 * math.log10(4.0 * math.pi / C_LIGHT)
-
-
-def noise_figure_to_temperature(nf_db: float) -> float:
-    return (10.0 ** (nf_db / 10.0) - 1.0) * 290.0
+    t_sys_k: float
 
 
 def calcular_uplink(elev_deg: float) -> UplinkResult:
-    dist_km = distancia_satelite(elev_deg)
+    dist_km = distancia_satelite(elev_deg, ORBIT_HEIGHT_KM)
     dist_m = dist_km * 1e3
 
     fspl = fspl_db(dist_m, FREQ_UPLINK_HZ)
@@ -102,12 +86,11 @@ def calcular_uplink(elev_deg: float) -> UplinkResult:
         - perdida_total
     )
 
-    # Temperatura de ruido del satelite
-    t_rx = noise_figure_to_temperature(NF_RX_SAT_DB)
-    t_sys = T_ANT_SAT_K + t_rx
+    # Temperatura de ruido del satelite (incluye el ruido del cable de a bordo)
+    t_sys = temperatura_sistema(T_ANT_SAT_K, L_RX_SAT_DB, NF_RX_SAT_DB)
 
     # Densidad espectral de ruido
-    n0_dbm_hz = 10.0 * math.log10(K_BOLTZ * t_sys) + 30.0
+    n0_dbm_hz = densidad_ruido_dbm_hz(t_sys)
 
     # C/N0
     c_n0_db_hz = p_rx_dbm - n0_dbm_hz
@@ -121,8 +104,13 @@ def calcular_uplink(elev_deg: float) -> UplinkResult:
     # Margen
     margen_db = eb_n0_db - snr_req_db
 
-    # Capacidad maxima (Shannon)
-    capacity_bps = c_n0_db_hz - 10.0 * math.log10(EBN0_REQ_DB)
+    # Tasa maxima sostenible con la misma calidad de enlace: la que agota el
+    # margen dejando justo la Eb/N0 requerida.
+    #     Rb_max = 10^((C/N0 - Eb/N0_req - L_impl) / 10)
+    # La version anterior restaba 10*log10(Eb/N0_req_dB) --- tomaba el logaritmo
+    # de un valor que ya estaba en dB --- y devolvia decibelios rotulados como
+    # bps, de ahi que reportara ~57 bps para un enlace con 24 dB de margen.
+    capacity_bps = 10.0 ** ((c_n0_db_hz - snr_req_db) / 10.0)
 
     return UplinkResult(
         elevacion_deg=round(elev_deg, 1),
@@ -133,6 +121,7 @@ def calcular_uplink(elev_deg: float) -> UplinkResult:
         eb_n0_db=round(eb_n0_db, 2),
         margen_db=round(margen_db, 2),
         capacidad_max_bps=round(capacity_bps, 0),
+        t_sys_k=round(t_sys, 1),
     )
 
 
@@ -167,11 +156,12 @@ def plot_uplink(results: list[UplinkResult], output_dir: Path) -> None:
     ax.invert_xaxis()
 
     ax = axes[1, 1]
-    ax.plot(elevs, [r.capacidad_max_bps for r in results], "g-", linewidth=1.5)
+    ax.semilogy(elevs, [r.capacidad_max_bps for r in results], "g-", linewidth=1.5,
+                label="Tasa maxima sostenible")
     ax.axhline(y=SYM_RATE_UPLINK, color="b", linestyle="--", alpha=0.5, label=f"Tasa requerida ({SYM_RATE_UPLINK} bps)")
-    ax.set_title("Capacidad maxima del enlace")
-    ax.set_xlabel("Elevacion (deg)"); ax.set_ylabel("Capacidad (bps)")
-    ax.grid(True, linestyle=":"); ax.legend(fontsize=8)
+    ax.set_title("Tasa maxima con la Eb/N0 requerida")
+    ax.set_xlabel("Elevacion (deg)"); ax.set_ylabel("Tasa (bps)")
+    ax.grid(True, which="both", linestyle=":"); ax.legend(fontsize=8)
     ax.invert_xaxis()
 
     plt.tight_layout()

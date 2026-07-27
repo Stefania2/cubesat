@@ -11,7 +11,7 @@
 # GNU Radio version: 3.10.12.0
 
 from PyQt5 import Qt
-from gnuradio import qtgui
+import gnuradio.qtgui
 from PyQt5 import QtCore
 from gnuradio import analog
 from gnuradio import blocks
@@ -36,7 +36,7 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
         gr.top_block.__init__(self, "Visualización de Señal IQ - CubeSat STRaND-1", catch_exceptions=True)
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Visualización de Señal IQ - CubeSat STRaND-1")
-        qtgui.util.check_set_qss()
+        gnuradio.qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
         except BaseException as exc:
@@ -75,14 +75,14 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self._noise_amplitude_range = qtgui.Range(0.0, 0.5, 0.005, 0.02, 200)
-        self._noise_amplitude_win = qtgui.RangeWidget(self._noise_amplitude_range, self.set_noise_amplitude, "Amplitud de ruido", "counter_slider", float, QtCore.Qt.Horizontal)
+        self._noise_amplitude_range = gnuradio.qtgui.Range(0.0, 0.5, 0.005, 0.02, 200)
+        self._noise_amplitude_win = gnuradio.qtgui.RangeWidget(self._noise_amplitude_range, self.set_noise_amplitude, "Amplitud de ruido", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._noise_amplitude_win, 0, 0, 1, 1)
         for r in range(0, 1):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
+        self.qtgui_time_sink_x_0 = gnuradio.qtgui.time_sink_c(
             1024, #size
             samp_rate, #samp_rate
             'Tiempo', #name
@@ -95,7 +95,7 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
         self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
 
         self.qtgui_time_sink_x_0.enable_tags(True)
-        self.qtgui_time_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
+        self.qtgui_time_sink_x_0.set_trigger_mode(gnuradio.qtgui.TRIG_MODE_FREE, gnuradio.qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
         self.qtgui_time_sink_x_0.enable_autoscale(False)
         self.qtgui_time_sink_x_0.enable_grid(True)
         self.qtgui_time_sink_x_0.enable_axis_labels(True)
@@ -137,7 +137,7 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
+        self.qtgui_freq_sink_x_0 = gnuradio.qtgui.freq_sink_c(
             1024, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
             0, #fc
@@ -149,7 +149,7 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0.set_update_time(0.05)
         self.qtgui_freq_sink_x_0.set_y_axis((-60), 10)
         self.qtgui_freq_sink_x_0.set_y_label('Frecuencia', 'dB')
-        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
+        self.qtgui_freq_sink_x_0.set_trigger_mode(gnuradio.qtgui.TRIG_MODE_FREE, 0.0, 0, "")
         self.qtgui_freq_sink_x_0.enable_autoscale(False)
         self.qtgui_freq_sink_x_0.enable_grid(True)
         self.qtgui_freq_sink_x_0.set_fft_average(1.0)
@@ -183,7 +183,7 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
+        self.qtgui_const_sink_x_0 = gnuradio.qtgui.const_sink_c(
             1024, #size
             'Constelacion', #name
             1, #number of inputs
@@ -192,7 +192,7 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
         self.qtgui_const_sink_x_0.set_update_time(0.05)
         self.qtgui_const_sink_x_0.set_y_axis((-1.5), 1.5)
         self.qtgui_const_sink_x_0.set_x_axis((-1.5), 1.5)
-        self.qtgui_const_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
+        self.qtgui_const_sink_x_0.set_trigger_mode(gnuradio.qtgui.TRIG_MODE_FREE, gnuradio.qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
         self.qtgui_const_sink_x_0.enable_autoscale(False)
         self.qtgui_const_sink_x_0.enable_grid(True)
         self.qtgui_const_sink_x_0.enable_axis_labels(True)

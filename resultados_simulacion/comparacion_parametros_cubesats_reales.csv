@@ -29,28 +29,30 @@ ITUPSAT 1: 1 W
 Libertad 1: 0.5 W
 Rango tipico CubeSat 1U: 0.5-2 W","Alta. 1 W es la potencia de transmision estandar
 para CubeSats 1U/3U en banda UHF."
-BER vs SNR - BPSK,"BER ~5.3e-5 a SNR=0 dB
+BER vs SNR - BPSK,"BER ~5.3e-05 a SNR=0 dB
 BER ~0 a SNR >= 2 dB (con 18776 bits)","BPSK teorica: BER ~3.9e-4 a Eb/N0=4 dB
 BPSK tipica en CubeSats requiere Eb/N0 ~10 dB
 para BER < 1e-5 con margen de implementacion","Esperada dentro del modelo. La simulacion muestra
 comportamiento coherente con la teoria. La BER cero
-a partir de 2 dB se debe al numero finito de bits
-evaluados (18776). Con mas bits se observarian
+a partir de 2 dB se debe al numero finito de
+bits evaluados (18776). Con mas bits se observarian
 errores a SNR mayores."
-Margen de enlace (link budget),"9.1 dB a elev=5 deg
-15.8 dB a elev=30 deg
-20.9 dB a elev=90 deg","Margen tipico requerido: 3-6 dB
+Margen de enlace (link budget),"8.5 dB a elev=5 deg
+20.2 dB a elev=90 deg","Margen tipico requerido: 3-6 dB
 CubeSats universitarios: 5-15 dB tipico
 FACSAT-1 reporta ~8 dB margen minimo
 Libertad 1 reporto ~6 dB","Alta. El margen simulado supera el minimo recomendado
 de 3 dB incluso a elevacion de 5 grados. Los valores
 son consistentes con lo reportado en literatura para
 CubeSats con estaciones terrenas de radioaficionado."
-Ancho de banda estimado,"BPSK: ~27.0 kHz (-20 dB)
-FSK: ~11.8 kHz (-20 dB)","BPSK 9600 bps: ancho de banda nulo ~19.2 kHz
+Ancho de banda estimado,"BPSK rectangular: ~27.0 kHz (-20 dB)
+FSK: ~11.8 kHz (-20 dB)
+BPSK + RRC (α=0.35): ~11.2 kHz (99 % ocupado)","BPSK 9600 bps: ancho de banda nulo ~19.2 kHz
 FSK con desviacion 2400 Hz: BW ~14.4 kHz
 Carson rule: BW_BPSK = 2*R = 19.2 kHz
-Carson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz","Moderada. Los valores simulados se aproximan a las
-reglas de Carson. La diferencia en BPSK (~8 kHz extra)
-se debe al pulso rectangular (sin filtrado conformador)
-que genera lobulos laterales mas anchos."
+Carson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz
+Con RRC: BW = R*(1+α) = 12.96 kHz","Alta con conformado de pulso. El pulso rectangular
+excede la regla de Carson por los lobulos laterales
+del sinc²; al aplicar el filtro RRC del modelo
+avanzado el ancho de banda converge al valor teorico
+R*(1+α) y cabe en la canalizacion UHF de 25 kHz."

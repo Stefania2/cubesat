@@ -20,13 +20,13 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 - Demodulacion coherente (BPSK) y por correlacion (FSK).
 - Calculo de BER y exportacion de senales IQ para GNU Radio.
 
-### Modelo avanzado (nuevo)
-- Filtrado conformador RRC (Root Raised Cosine, α=0.35) que reduce el ancho de banda de ~77 kHz a ~12 kHz.
+### Modelo avanzado
+- Filtrado conformador RRC (Root Raised Cosine, α=0.35): reduce el ancho de banda ocupado al 99 % de ~66 kHz a ~11 kHz **sin coste en BER**, acercandose al limite teorico R(1+α)=12.96 kHz.
 - Desvanecimiento Rice (K=10 dB) con perfil Jakes para canal con componente LOS.
-- Desplazamiento Doppler orbital variable (hasta 150 Hz a 437 MHz).
-- Codificacion convolutional (r=1/2, K=7, polinomios 171,133) con decodificacion Viterbi.
-- Construccion y validacion de tramas AX.25 completas con CRC-16-CCITT.
-- 112 configuraciones evaluadas combinando RRC, fading, Doppler y FEC.
+- Sensibilidad al error residual de Doppler tras la pre-compensacion por TLE (0 a 0.2 Hz).
+- Codificacion convolutional (r=1/2, K=7, polinomios 171,133) con decodificacion Viterbi: ~4 dB de ganancia de codificacion, con el umbral caracteristico por debajo de -8 dB.
+- Construccion y verificacion de tramas AX.25 2.2 con FCS CRC-16/X-25 real.
+- 18 configuraciones x 8 puntos de SNR = 144 corridas.
 
 ### Flujogramas GNU Radio
 - `simulacion_visualizar_iq.grc`: visualizacion IQ con control interactivo de ruido AWGN (time/freq/constellation sinks).
@@ -35,22 +35,25 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 ### Link budget
 - Calculo de margen de enlace descendente UHF (437.568 MHz, 9600 bps BPSK).
 - Barrido 5°-90° de elevacion con orbita LEO de 600 km.
-- Resultados: margen de 9.1 dB (5°) a 19.3 dB (90°), superando los 3-6 dB recomendados.
+- Temperatura de sistema referida a la entrada del receptor, incluyendo el ruido del cable de antena.
+- Resultados: margen de 8.5 dB (5°) a 20.3 dB (90°), superando los 3-6 dB recomendados.
 
-### Enlace ascendente (nuevo)
+### Enlace ascendente
 - Simulacion de uplink para comandos a 1200 bps en 435 MHz.
 - Potencia TX de 10W desde estacion terrena con Yagi de 15 dBi.
 - Margen de enlace: 24.6 dB (5°) a 36.4 dB (90°).
+- Tasa maxima sostenible con la Eb/N0 requerida: 348 kbps (5°) a 5.2 Mbps (cenit).
 
-### Modelo de estacion terrena (nuevo)
+### Modelo de estacion terrena
+- Paso orbital completo sobre traza de circulo maximo: 12.8 min de horizonte a horizonte, 10.4 min utiles sobre 5°.
 - Seguimiento automatico de antena con velocidad limitada (5°/s az, 3°/s el).
-- Perdidas por apuntamiento dinamico y temperatura de ruido variable con elevacion.
-- Modelado de paso orbital completo (~96.5 min).
+- Error de apuntamiento calculado fuera de boresight y perdida acotada al nivel de lobulo lateral.
+- Hallazgo: la culminacion exige 8.23 °/s de azimut frente a los 5 °/s del rotor, pero a 82.5° de elevacion eso son solo 2.62° fuera de boresight y 0.09 dB de perdida.
 
 ### Comparacion con CubeSats reales
 - Evaluacion de 7 CubeSats documentados: STRaND-1, Libertad 1, FACSAT-1, Delfi-C3, ESTCube-1, AAUSAT-II, ITUPSAT 1.
-- Concordancia alta en 6/7 parametros (frecuencia, modulacion, tasa, potencia, margen, BER teorica).
-- Concordancia moderada en ancho de banda (pulsos sin conformacion en modelo basico).
+- Concordancia alta en los 7 parametros evaluados (frecuencia, modulacion, tasa, potencia, margen, BER teorica y ancho de banda con conformado RRC).
+- La tabla comparativa se construye leyendo los CSV de resultados, no con valores transcritos.
 
 ### Documentacion tecnica
 - `docs/INFORME_TECNICO_FINAL.md`: informe integrador con metodologia, resultados, limitaciones y conclusiones.
@@ -65,6 +68,7 @@ cubesat/
 |-- index.html                    (pagina web del proyecto)
 |-- GUIA_GNURADIO.md
 |
+|-- geometria_orbital.py          (geometria orbital y ruido: modulo comun)
 |-- load_data.py                  (descarga de telemetria de SatNOGS)
 |-- decodificar_frames_STRAND1.py (decodificacion de frames)
 |-- generar_iq_bpsk_desde_bin.py (generacion IQ simple)
@@ -74,6 +78,7 @@ cubesat/
 |-- comparar_con_cubesats_reales.py (comparacion con 7 CubeSats reales)
 |-- modelo_estacion_terrena.py    (seguimiento automatico de antena)
 |-- simular_enlace_ascendente.py  (enlace ascendente de comandos)
+|-- generar_tablas_informe.py     (regenera las tablas del informe desde los datos)
 |
 |-- simulacion_visualizar_iq.grc  (GNU Radio: visualizacion IQ + AWGN)
 |-- simulacion_cadena_completa.grc (GNU Radio: cadena BPSK completa)
@@ -160,18 +165,31 @@ Configuracion usada:
 | BPSK | 2 dB | 5.3e-5 | 0.0 | ~27.0 kHz |
 | FSK | 8 dB | 5.3e-2 | 3.9e-3 | ~11.8 kHz |
 
-### Modelo avanzado (RRC + FEC)
+### Modelo avanzado (RRC + fading + FEC)
 
-| Configuracion | BER a 0 dB | BER a 2 dB | BER a 4 dB | Ancho banda |
+El barrido de SNR de este modelo (-10 a 4 dB) es mas bajo que el del modelo basico porque con el conformado de pulso correcto el enlace deja de cometer errores a partir de 0 dB.
+
+| Configuracion | BER a -8 dB | BER a -6 dB | BER a -4 dB | Ancho banda (99 %) |
 | --- | ---: | ---: | ---: | ---: |
-| BPSK (rectangular) | 7.7e-2 | 3.7e-2 | 1.4e-2 | ~76.8 kHz |
-| BPSK + RRC (α=0.35) | 1.7e-1 | 1.5e-1 | 1.4e-1 | **~11.7 kHz** |
-| BPSK + FEC conv. (r=1/2) | 2.6e-2 | **8.5e-4** | **0.0** | ~76.8 kHz |
-| BPSK + Rice fading (K=10 dB) | 8.1e-2 | 3.9e-2 | 1.2e-2 | ~76.8 kHz |
+| BPSK rectangular (NRZ) | 5.3e-2 | 2.4e-2 | 6.0e-3 | ~66.1 kHz |
+| BPSK + RRC (α=0.35) | 5.7e-2 | 2.3e-2 | 6.6e-3 | **~11.2 kHz** |
+| BPSK + Rice fading (K=10 dB) | 6.8e-2 | 2.9e-2 | 1.1e-2 | ~66.1 kHz |
+| BPSK + FEC conv. (r=1/2) | **3.8e-3** | **2.1e-4** | **0.0** | ~66.0 kHz |
+
+Sensibilidad al residual de Doppler tras la pre-compensacion, sobre un registro de 1.96 s sin recuperacion de portadora:
+
+| Residual | BER a -4 dB | BER a 0 dB | BER a 4 dB |
+| --- | ---: | ---: | ---: |
+| 0 Hz | 6.0e-3 | 0.0 | 0.0 |
+| 0.05 Hz | 1.0e-2 | 2.7e-4 | 0.0 |
+| 0.1 Hz | 4.3e-2 | 9.1e-3 | 5.9e-4 |
+| 0.2 Hz | 3.7e-1 | 3.6e-1 | 3.6e-1 |
+
+Tramas AX.25 validadas por FCS: 0 tramas a -6 dB, 15 a -2 dB, las 37 a partir de 0 dB.
 
 ### Link budget descendente
 
-Margen de enlace: **9.1 dB** a 5° elevacion → **19.3 dB** en cenit.
+Margen de enlace: **8.5 dB** a 5° elevacion → **20.3 dB** en cenit.
 
 ### Link budget ascendente (comandos 1200 bps)
 
@@ -179,11 +197,11 @@ Margen de enlace: **24.6 dB** a 5° elevacion → **36.4 dB** en cenit (10W TX, 
 
 ### Estacion terrena
 
-C/N0 promedio durante paso: **60.4 dB-Hz** con seguimiento automatico de antena.
+Paso de 12.8 min horizonte a horizonte con culminacion a 85°. C/N0 promedio **68.4 dB-Hz** (62.2 a 74.8 dB-Hz), perdida por apuntamiento maxima 0.09 dB.
 
 ### Comparacion con CubeSats reales
 
-Concordancia alta en 6/7 parametros evaluados entre la simulacion y 7 CubeSats documentados.
+Concordancia alta en los 7 parametros evaluados entre la simulacion y 7 CubeSats documentados.
 
 Graficas generadas:
 
@@ -205,62 +223,37 @@ Graficas generadas:
 
 Instalacion basica de dependencias:
 
-```powershell
+```bash
 pip install -r requirements.txt
 ```
 
 ## Uso
 
-### 1. Descargar frames desde SatNOGS
+Cada script es independiente y escribe sus salidas en `resultados_simulacion/`. El pipeline completo, en orden:
 
-Opcional si ya existen `frames_STRAND1.csv` y `frames_STRAND1.json`.
-
-```powershell
-python .\load_data.py
+```bash
+python load_data.py                      # 1. Descarga telemetria de SatNOGS
+python decodificar_frames_STRAND1.py     # 2. Decodifica a bytes -> frames_STRAND1_gnuradio.bin
+python generar_iq_bpsk_desde_bin.py      # 3. IQ BPSK sintetica para pruebas en GNU Radio
+python simular_enlace_rf_fsk_bpsk.py     # 4. Modelo basico BPSK/FSK + BER
+python simular_enlace_rf_bpsk_avanzado.py # 5. Modelo avanzado (tarda unos minutos por el Viterbi)
+python calcular_link_budget.py           # 6. Link budget descendente
+python simular_enlace_ascendente.py      # 7. Link budget ascendente
+python modelo_estacion_terrena.py        # 8. Paso orbital con seguimiento
+python comparar_con_cubesats_reales.py   # 9. Comparacion con 7 CubeSats
+python generar_tablas_informe.py         # 10. Regenera las tablas del informe tecnico
 ```
 
-Si se requiere autenticacion de SatNOGS, definir primero:
+El paso 1 es opcional si ya existen `frames_STRAND1.csv` y `frames_STRAND1.json`. Si SatNOGS pide autenticacion:
 
-```powershell
-$env:SATNOGS_API_TOKEN="TU_TOKEN"
-python .\load_data.py
+```bash
+export SATNOGS_API_TOKEN="TU_TOKEN"   # en PowerShell: $env:SATNOGS_API_TOKEN="TU_TOKEN"
+python load_data.py
 ```
 
-### 2. Decodificar y exportar datos para GNU Radio
+Los pasos 6 a 8 importan `geometria_orbital.py`, asi que deben ejecutarse desde el directorio del proyecto. El paso 10 debe correrse siempre que se cambie cualquier modelo: reescribe las tablas de `docs/INFORME_TECNICO_FINAL.md` a partir de los archivos de resultados.
 
-```powershell
-$env:PYTHONIOENCODING='utf-8'
-python .\decodificar_frames_STRAND1.py
-```
-
-Este paso genera:
-
-- `frames_STRAND1_gnuradio.bin`
-- `resumen_telemetria_STRAND1.json`
-
-### 3. Generar IQ BPSK simple
-
-```powershell
-python .\generar_iq_bpsk_desde_bin.py
-```
-
-Este paso genera una senal BPSK sintetica para pruebas rapidas en GNU Radio.
-
-### 4. Ejecutar modelo FSK/BPSK completo
-
-```powershell
-python .\simular_enlace_rf_fsk_bpsk.py
-```
-
-Salidas esperadas:
-
-- `resultados_simulacion/configuracion_modelo_rf.json`
-- `resultados_simulacion/resultados_ber_fsk_bpsk.csv`
-- `resultados_simulacion/curva_ber_fsk_bpsk.png`
-- `resultados_simulacion/strand1_bpsk_iq_clean_complex64.bin`
-- `resultados_simulacion/strand1_fsk_iq_clean_complex64.bin`
-
-### 5. Abrir GNU Radio
+### Abrir GNU Radio
 
 En Windows, usar:
 
@@ -303,21 +296,22 @@ Incluye:
 
 ## Limitaciones del modelo
 
-- **Sincronizacion ideal:** No hay recuperacion de portadora ni temporizacion de simbolo.
-- **Canal puramente AWGN en modelo basico:** El desvanecimiento Rice y Doppler se agregaron en el modelo avanzado, pero no multitrayecto completo.
-- **FEC limitado a convolutional:** No se implemento LDPC ni turbo codigos.
-- **AX.25 simplificado:** Las tramas se construyen correctamente con CRC-16, pero no se implemento el decodificador de capa de enlace completo.
-- **Modelo orbital simplificado:** La trayectoria del satelite es una aproximacion; no se usa propagador TLE.
-- **El RRC sin normalizacion de ganancia** presenta BER elevada; la reduccion de ancho de banda es correcta pero requiere ajuste de ganancia para uso practico.
+- **Sincronizacion ideal:** No hay recuperacion de portadora ni temporizacion de simbolo. Es la limitacion de mayor impacto: la tabla de Doppler residual muestra que basta un error de 0.2 Hz para producir un piso de error irreducible.
+- **Sincronizacion de trama ideal:** El verificador AX.25 calcula el FCS real sobre los bytes recibidos, pero localiza las tramas por desplazamiento conocido; no hay busqueda de banderas ni bit stuffing.
+- **Canal sin multitrayecto completo:** Se modelan Rice y Doppler, pero no reflexiones multiples ni rotacion de Faraday.
+- **FEC limitado a convolutional con decision dura:** No se implemento LDPC, turbo codigos ni decision blanda en el Viterbi.
+- **Modelo orbital simplificado:** Orbita circular y Tierra esferica; no se usa propagador SGP4 con TLE reales.
+- **FSK con tonos no ortogonales** para el detector de energia empleado (Δf·T = 0.5), lo que penaliza su curva frente a la teorica.
+- **Amplificador ideal:** No se modelan compresion AM-AM, AM-PM ni distorsion armonica del PA.
 
 ## Trabajo futuro
 
-- Implementar receptor con lazo de Costas para recuperacion de portadora.
-- Agregar PLL para sincronizacion de simbolo.
-- Implementar LDPC o turbo codigos para mejor eficiencia de codificacion.
-- Usar propagador orbital (SGP4) para trayectorias realistas.
-- Simular multiples estaciones terrenas en red.
-- Validar con datos experimentales de SDR.
+- Implementar receptor con lazo de Costas para recuperacion de portadora y cuantificar la mejora en tolerancia al Doppler residual.
+- Agregar sincronizacion de simbolo (Gardner o Mueller-Muller).
+- Incorporar decision blanda en el Viterbi (~2 dB adicionales) y evaluar LDPC.
+- Implementar el decodificador AX.25 completo con busqueda de banderas y bit stuffing.
+- Usar propagador orbital (SGP4) con TLE reales de STRaND-1.
+- Validar con capturas IQ reales de un SDR sobre un paso del satelite.
 
 ## Autora
 
