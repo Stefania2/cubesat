@@ -1,0 +1,20 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# Base de datos local (fallback SQLite)
+*.db
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+
+# Artefactos de compilacion de TypeScript
+*.tsbuildinfo

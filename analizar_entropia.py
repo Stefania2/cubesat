@@ -25,9 +25,9 @@ contenido.
 Fuente de datos
 ---------------
 El conjunto completo --- las 36 641 tramas que respaldan el capitulo 3 --- vive
-en la tabla `frames` de PostgreSQL que alimenta la plataforma de telemetria, en
-el repositorio hermano `telemetria_strand1`. Este script la consulta; no la
-incluye, porque son medio millon de bytes de tramas crudas.
+en la tabla `frames` de PostgreSQL que alimenta la plataforma de telemetria del
+subdirectorio `telemetria_strand1/`. Este script la consulta; no la incluye,
+porque son medio millon de bytes de tramas crudas.
 
 La cadena de conexion se toma de la variable de entorno `DATABASE_URL` o, si no
 esta definida, del `.env` de esa plataforma (`--env-file` lo reubica). Aqui no
@@ -44,7 +44,7 @@ ingesta.
 Uso
 ---
     python analizar_entropia.py
-    python analizar_entropia.py --csv ../telemetria_strand1/telemetria_satnogs.csv
+    python analizar_entropia.py --csv telemetria_strand1/telemetria_satnogs.csv
 
 Requiere `psycopg` para el modo PostgreSQL (no para `--csv`).
 """
@@ -59,8 +59,8 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-# El .env de la plataforma de telemetria, que vive fuera de este repositorio.
-ENV_POR_DEFECTO = Path(__file__).resolve().parent.parent / "telemetria_strand1" / "backend" / ".env"
+# El .env de la plataforma de telemetria, que no se versiona.
+ENV_POR_DEFECTO = Path(__file__).resolve().parent / "telemetria_strand1" / "backend" / ".env"
 
 # Tramos de longitud en bytes. El primero aisla las tramas demasiado cortas
 # para que la entropia signifique nada; el ultimo, las que superan la baliza.

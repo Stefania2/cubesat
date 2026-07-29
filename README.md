@@ -101,6 +101,12 @@ cubesat/
 |   |-- ANALISIS_TELEMETRIA_SALUD_CUBESAT.md
 |   `-- INFORME_TECNICO_FINAL.md
 |
+|-- telemetria_strand1/           (plataforma web de telemetria: FastAPI + React + PostgreSQL)
+|   |-- backend/app/              (ingesta, decodificador AMSAT-UK, API)
+|   |-- frontend/src/             (interfaz de consulta)
+|   |-- tools/                    (descarga del historico y analisis de series por canal)
+|   `-- telemetria_*.csv          (exportaciones de tramas, parciales)
+|
 `-- resultados_simulacion/
     |-- configuracion_modelo_rf.json
     |-- resultados_ber_fsk_bpsk.csv / .png
