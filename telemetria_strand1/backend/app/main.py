@@ -27,7 +27,7 @@ from .ingest import (
     registrar_protocolo_strand,
 )
 from .models import Frame, Observation, ProtocolDefinition
-from .routers import anomalies, decoder, export, frames, observations, telemetry
+from .routers import anomalies, decoder, export, frames, gemelo, observations, telemetry
 from .schemas import IngestResultOut, StatusOut
 from .services.satnogs import SatnogsError
 
@@ -74,6 +74,7 @@ app.include_router(telemetry.router)
 app.include_router(decoder.router)
 app.include_router(anomalies.router)
 app.include_router(export.router)
+app.include_router(gemelo.router)
 
 sistema = APIRouter(prefix="/api", tags=["sistema"])
 

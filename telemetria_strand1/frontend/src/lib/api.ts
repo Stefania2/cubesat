@@ -197,6 +197,85 @@ export interface Estacion {
   ultimo: string | null
 }
 
+// --- Gemelo digital (fases 5-7) -------------------------------------------
+
+export type EtiquetaAnomalia =
+  | 'normal' | 'advertencia' | 'anomalia' | 'canal_enrielado' | 'sin_referencia'
+
+export type EstadoCubeSat =
+  | 'NOMINAL' | 'ADVERTENCIA' | 'CRITICO' | 'INSTRUMENTACION_PERDIDA' | 'SIN_REFERENCIA'
+
+export interface GemeloResumen {
+  eventos: number
+  pases: number
+  inicio: string
+  fin: string
+  duracion_real_dias: number
+  duracion_virtual_s: number
+  velocidades: number[]
+  campo_por_defecto: string
+  magnitudes: { campo: string; unidad: string }[]
+}
+
+export interface LecturaGemelo {
+  campo: string
+  valor: number
+  unidad: string
+  medida_en: string
+  edad_s: number
+  frescura: 'fresca' | 'vieja' | 'obsoleta'
+}
+
+export interface EstadoGemelo {
+  indice: number
+  total: number
+  momento: string
+  pase: number
+  campo_gobernante: string
+  etiqueta: EtiquetaAnomalia
+  estado_cubesat: EstadoCubeSat
+  lecturas: LecturaGemelo[]
+}
+
+export interface PuntoSerie {
+  t: string
+  valor: number | null
+  mediana: number | null
+  z: number | null
+  etiqueta: EtiquetaAnomalia
+}
+
+export interface SerieGemelo {
+  campo: string
+  unidad: string
+  n_total: number
+  n_enviados: number
+  submuestreo: number
+  estadisticas: { media: number; minimo: number; maximo: number }
+  puntos: PuntoSerie[]
+}
+
+export interface EventoGemelo {
+  campo: string
+  etiqueta: EtiquetaAnomalia
+  inicio: string
+  fin: string
+  duracion_s: number
+  n_lecturas: number
+  valor_esperado: number
+  valor_registrado: number
+  diferencia: number
+  z_max: number
+  estado_cubesat: EstadoCubeSat
+}
+
+export interface EventosGemelo {
+  campo: string
+  unidad: string
+  n_total: number
+  eventos: EventoGemelo[]
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, {
     ...init,
@@ -237,6 +316,13 @@ export const api = {
   decode: (hex: string) =>
     request<DecodeResult>('/api/decoder', { method: 'POST', body: JSON.stringify({ hex }) }),
   decodeFrame: (id: number) => request<DecodeResult>(`/api/decoder/frame/${id}`),
+  gemeloResumen: () => request<GemeloResumen>('/api/gemelo/resumen'),
+  gemeloEstado: (indice: number, campo: string) =>
+    request<EstadoGemelo>(`/api/gemelo/estado?indice=${indice}&campo=${encodeURIComponent(campo)}`),
+  gemeloSerie: (campo: string) =>
+    request<SerieGemelo>(`/api/gemelo/serie/${encodeURIComponent(campo)}`),
+  gemeloEventos: (campo: string) =>
+    request<EventosGemelo>(`/api/gemelo/eventos/${encodeURIComponent(campo)}`),
   anomalies: () => request<AnomalyReport>('/api/anomalies'),
   updateRule: (key: string, cambios: Partial<AnomalyRule>) =>
     request<AnomalyRule>(`/api/anomalies/rules/${key}`, {

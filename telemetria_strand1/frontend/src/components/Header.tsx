@@ -10,6 +10,7 @@ const NAV = [
   { to: '/simulacion', label: 'Simulación RF' },
   { to: '/analytics', label: 'Analytics' },
   { to: '/advanced', label: 'Advanced' },
+  { to: '/gemelo', label: 'Gemelo digital' },
   { to: '/docs', label: 'Docs' },
 ]
 

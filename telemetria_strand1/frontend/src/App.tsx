@@ -7,6 +7,7 @@ import { Simulacion } from './pages/Simulacion'
 import { Analytics } from './pages/Analytics'
 import { Advanced } from './pages/Advanced'
 import { Docs } from './pages/Docs'
+import { GemeloDigital } from './pages/GemeloDigital'
 import { api, useApi } from './lib/api'
 
 function Footer() {
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/simulacion" element={<Simulacion />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/advanced" element={<Advanced />} />
+            <Route path="/gemelo" element={<GemeloDigital />} />
             <Route path="/docs" element={<Docs />} />
           </Routes>
         </main>
