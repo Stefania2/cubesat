@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Header } from './components/Header'
 import { Dashboard } from './pages/Dashboard'
@@ -7,8 +8,21 @@ import { Simulacion } from './pages/Simulacion'
 import { Analytics } from './pages/Analytics'
 import { Advanced } from './pages/Advanced'
 import { Docs } from './pages/Docs'
-import { GemeloDigital } from './pages/GemeloDigital'
+import { Skeleton } from './components/ui'
 import { api, useApi } from './lib/api'
+
+/**
+ * El gemelo digital se carga de forma diferida porque arrastra Three.js y la
+ * pila de WebXR --- mas de la mitad del peso de la aplicacion --- y solo hacen
+ * falta en esa pagina. Quien entre a consultar tramas o el link budget no
+ * descarga el motor 3D.
+ *
+ * `lazy` exige exportacion por defecto, y esta pagina exporta con nombre; de
+ * ahi el remapeo en el `then`.
+ */
+const GemeloDigital = lazy(() =>
+  import('./pages/GemeloDigital').then((m) => ({ default: m.GemeloDigital })),
+)
 
 function Footer() {
   return (
@@ -40,7 +54,14 @@ export default function App() {
             <Route path="/simulacion" element={<Simulacion />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/advanced" element={<Advanced />} />
-            <Route path="/gemelo" element={<GemeloDigital />} />
+            <Route
+              path="/gemelo"
+              element={
+                <Suspense fallback={<Skeleton className="h-96" />}>
+                  <GemeloDigital />
+                </Suspense>
+              }
+            />
             <Route path="/docs" element={<Docs />} />
           </Routes>
         </main>
