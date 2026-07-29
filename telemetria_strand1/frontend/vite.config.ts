@@ -1,6 +1,27 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import basicSsl from '@vitejs/plugin-basic-ssl'
+
+/**
+ * Modo visor: `VR=1 npm run dev -- --host`.
+ *
+ * WebXR solo se expone en **contexto seguro**. `localhost` cuenta como tal, asi
+ * que en el equipo de desarrollo basta con HTTP; pero un visor conectado por la
+ * red local abre `http://<ip>:5173`, que no lo es, y entonces `navigator.xr`
+ * simplemente no existe --- el boton de entrar en VR se deshabilita y no hay
+ * nada que depurar en el codigo, porque el navegador ni siquiera ofrece la API.
+ *
+ * Con VR=1 se sirve por HTTPS con un certificado autofirmado. El navegador del
+ * visor avisara de que no es de confianza: hay que aceptarlo una vez. No se
+ * activa por defecto porque `--host` publica el servidor en la red local y eso
+ * debe ser una decision explicita, no un efecto secundario.
+ *
+ * La alternativa sin certificados es un tunel USB, que en un Quest se monta con
+ * `adb reverse tcp:5173 tcp:5173`: el visor ve `localhost:5173`, que si es
+ * contexto seguro. Requiere adb instalado, que en este equipo no lo esta.
+ */
+const modoVisor = process.env.VR === '1'
 
 /**
  * Reparto de dependencias en chunks.
@@ -42,7 +63,7 @@ function repartir(id: string): string | undefined {
 }
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), ...(modoVisor ? [basicSsl()] : [])],
   build: {
     rollupOptions: { output: { manualChunks: repartir } },
     // Con el reparto hecho, el aviso por defecto de 500 kB solo delata el
