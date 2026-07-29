@@ -38,7 +38,9 @@ from geometria_orbital import (
 # ─── Constantes ────────────────────────────────────────────────────────────
 
 FREQ_HZ = 437.568e6
-ORBIT_HEIGHT_KM = 600.0
+# Altura real de STRaND-1 segun su TLE (ver calcular_link_budget.py). Con ella
+# el periodo del paso sale de 100.2 min, no de los 96.5 que daban los 600 km.
+ORBIT_HEIGHT_KM = 775.0
 ORBIT_PERIOD_S = periodo_orbital_s(ORBIT_HEIGHT_KM)
 
 # Parametros de estacion terrena

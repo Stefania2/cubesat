@@ -17,7 +17,9 @@
 
 ## Resumen
 
-Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS, (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN, (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi y tramas AX.25 verificadas por FCS, (4) flujogramas en GNU Radio para visualización IQ y demodulación, (5) cálculo de link budget descendente y ascendente en UHF, (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo, y (7) comparación con parámetros documentados de 7 CubeSats reales. Todos los scripts y flujogramas se desarrollan con herramientas de software libre.
+Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi y tramas AX.25 verificadas por FCS; (4) flujogramas en GNU Radio para visualización IQ y demodulación; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
+
+El resultado central es que la cadena completa —señal RF, demodulación, bits, tramas, paquetes, variables y estado del sistema— puede recorrerse íntegramente con datos de una red abierta de estaciones voluntarias, y que el eslabón que falla no es el enlace, sino la interpretación de los bytes.
 
 ---
 
@@ -83,22 +85,340 @@ SatNOGS API
 
 ### 3.1 Obtención de datos
 
-Se utilizó la API pública de SatNOGS para descargar 100 frames de telemetría del satélite STRaND-1 (NORAD 39090). El script `load_data.py` realiza la consulta y almacena los resultados en `frames_STRAND1.csv` con los campos: timestamp, estación observadora y payload en hexadecimal.
+Los datos se obtuvieron por dos vías distintas de la red SatNOGS, que son dos instalaciones separadas y con cuentas independientes:
+
+1. **SatNOGS DB** (`db.satnogs.org/api/telemetry`), mediante `load_data.py`: 100 frames con estación observadora y payload en hexadecimal, almacenados en `frames_STRAND1.csv`. Es el conjunto con el que se hicieron las simulaciones de los capítulos 4 y 5.
+2. **SatNOGS Network** (`network.satnogs.org/api/observations`), recorriendo cada observación del satélite y descargando sus archivos de *demoddata*. Esta vía amplía el conjunto en dos órdenes de magnitud y es la que permite el análisis de la sección 3.4.
+
+La segunda vía se implementó porque el endpoint de telemetría de SatNOGS DB no entrega metadatos de observación y, además, exige autenticación con una clave propia de esa instalación. El listado HTML de Network no es una alternativa: su `robots.txt` prohíbe expresamente la ruta `/observations/`, y el hexadecimal que muestra el navegador lo construye JavaScript a partir de los mismos archivos de demoddata que sí ofrece la API.
 
 ### 3.2 Decodificación de frames
 
+Conjunto ampliado con el archivo histórico de SatNOGS DB, a 28 de julio de 2026:
+
 | Estadística | Valor |
 |------------|-------|
-| Frames procesados | 100 |
-| Bytes totales | 2347 |
-| Bits totales evaluados | 18776 |
-| Longitud promedio de frame | 23.5 bytes |
-| Entropía promedio del payload | 4.049 bits/byte |
-| Rango temporal | 2025-04-24 a 2026-05-06 |
+| Frames procesados | 36 641 |
+| Bytes totales | 517 878 |
+| Bits totales evaluados | 4 143 024 |
+| Longitud promedio de frame | 14.1 bytes |
+| Entropía promedio del payload | 3.066 bits/byte |
+| Entropía máxima posible para esas longitudes | 3.639 bits/byte |
+| Observaciones | 3049 |
+| Estaciones receptoras | 184 |
+| Rango temporal | 2016-11-30 a 2026-07-13 |
+| Balizas reconocidas | 32 754 (89,4 %) |
+| Rango de las balizas | 2016-11-30 a 2023-01-29 |
+
+**Dos fuentes distintas, con alcances distintos.** SatNOGS Network y SatNOGS DB
+son instalaciones separadas. Network conserva las *observaciones* recientes, y
+para STRaND-1 eso son apenas los meses de noviembre de 2022 a enero de 2023. DB
+archiva las *tramas demoduladas* desde que el proyecto existe, y es la que
+aporta el material de 2016 a 2022. Sin ese archivo, todas las magnitudes del
+subsistema de energía aparecen constantes y no hay forma de distinguir un canal
+que nunca midió de uno que dejó de medir; con él, la distinción se fecha
+(sección 3.6).
+
+El archivo de DB **no llega hasta el lanzamiento**: las consultas acotadas a
+2013, 2014 y 2015 devuelven cero tramas. Los primeros tres años y medio de vida
+del satélite no están en ninguna de las dos instalaciones, de modo que todo lo
+que sigue describe el periodo 2016-2023, no la misión completa.
 
 ### 3.3 Interpretación de la entropía
 
-La entropía promedio de 4.049 bits/byte indica que los frames contienen una mezcla de datos estructurados (campos de cabecera, checksum) con baja entropía y datos de telemetría numérica con entropía moderada. Este valor es consistente con tramas AX.25 típicas que contienen identificadores fijos y datos de sensores variables.
+La entropía medida (2.966 bits/byte) debe compararse con el **máximo posible para las longitudes de trama de este conjunto** (3.661 bits/byte), no con los 8 bits/byte de un byte arbitrario: una trama de $n$ bytes no puede superar $\log_2 n$ bits/byte, y aquí la longitud media es de 14,8 bytes.
+
+La medida está a un 81 % de ese techo, y por tramos de longitud la proximidad es aún mayor: en las tramas de 1 a 4 bytes la entropía media es 1.09 frente a un máximo de 1.10, y en las de 49 a 200 bytes es 5.67 frente a 5.95. Es decir, **casi todos los bytes de casi todas las tramas son distintos entre sí**, que es la firma de datos aleatorios.
+
+Esto corrige la interpretación inicial de este trabajo, que leyó una entropía moderada como «mezcla de cabeceras de baja entropía y datos de sensores», consistente con tramas AX.25. Los datos no la sostienen: de los 10 998 frames, solo **27 son candidatos a AX.25**, y el único que presenta una estructura AX.25 completa y verificable resultó ser un paquete terrestre de radioaficionado (indicativos `WH2XPM` y `N7SKC`) captado en la misma frecuencia, no una emisión del satélite.
+
+### 3.4 Decodificación de la baliza según la especificación de AMSAT-UK
+
+STRaND-1 tiene formato de telemetría documentado: AMSAT-UK publicó en marzo de 2013 la hoja `amsat-strand-1-20130327.xlsx` con la estructura del paquete, el mapa de nodos y canales, y las **ecuaciones de calibración** que convierten cada cuenta ADC en magnitud física. SatNOGS DB, por su parte, declara para NORAD 39090 el decodificador `strand` del proyecto `satnogs-decoders`.
+
+La estructura del paquete es:
+
+```
+C0 80 | SEQ (1B) | LENGTH (1B) | ID (1B) | I2C NODE (1B) | CHANNEL (1B) | DATA_SIZE (1B) | DATA (DATA_SIZE bytes)
+```
+
+`ID` vale `0x01` para baliza de módem y `0x02` para baliza de OBC. Los nodos documentados son `0x2C` (EPS), `0x2D` (paneles solares), `0x66` (placa de interruptores, *big endian*), `0x80` (OBC) y `0x89` (magnetómetros).
+
+#### El decodificador oficial no sirve para obtener los valores
+
+`satnogs-decoders` reconoce correctamente la estructura, pero su especificación Kaitai lee **un solo byte** (`read_u1`) allí donde el formato define un dato de 2, 4 u 8 bytes precedido de su tamaño. El resultado es que devuelve el byte `DATA_SIZE` como si fuera la medida:
+
+```
+C0 80 02 06 02 2C 03 02 00 00
+                  ^^ ^^ ^^ ^^^^^
+                  |  |  |  dato: cuenta ADC = 0x0000
+                  |  |  DATA_SIZE = 2
+                  |  canal 0x03 = BATTERY 0 VOLTAGE
+                  nodo 0x2C = C/S EPS
+
+  decodificador oficial  ->  battery_0_voltage_v = 2      (es el DATA_SIZE)
+  especificación AMSAT   ->  -0.00945 x 0 + 9.7488 = 9.75 V
+```
+
+Esto explica un resultado que en una versión anterior de este informe se interpretó como que el satélite emitía con la carga útil vacía: **todos los campos parecían constantes porque lo que se estaba leyendo era el tamaño del campo**, que en efecto no cambia. La conclusión era un artefacto de la herramienta, no una propiedad de la señal.
+
+Para este trabajo se implementó el decodificador siguiendo la hoja de AMSAT-UK (`backend/app/services/strand_amsat.py` en el repositorio de la plataforma de telemetría), con las ecuaciones de calibración publicadas. Se validó contra el ejemplo que la propia hoja incluye:
+
+```
+C0 00 DB DC 80 77 0C 02 80 0C 08 87 11 01 00 D0 E9 04 00 C0
+                                  ^^^^^^^^^^^ 4B UNIX TIME LE = 70023
+  esperado por la hoja : 70023 = THU, 01 JAN 1970 19:27:03 GMT
+  obtenido             : 70023 = 1970-01-01 19:27:03 UTC
+```
+
+#### Qué canales emite realmente el satélite
+
+Antes de interpretar valores conviene separar dos cosas que se confunden con facilidad: un canal que la especificación define pero el satélite no transmite, y un canal que sí transmite pero sin medida válida. La hoja de AMSAT-UK define 41 canales; sobre las 32 754 balizas del conjunto **solo aparecen 21**:
+
+| Nodo | Emite | No emite nunca |
+|:---|:---|:---|
+| `0x2C` EPS | `battery_0/1_voltage` | ambas temperaturas de batería, ambas corrientes y sus indicadores de sentido |
+| `0x2D` Paneles | 6 corrientes de panel (`adc1`, `adc4`, `adc7`, `adc10`, `adc13`, `adc31`) | las 6 temperaturas de panel, las 3 tensiones de par, las 3 corrientes de bus |
+| `0x66` Interruptores | los 10 | — |
+| `0x80` OBC | `obc_unix_time` | — |
+| `0x89` Magnetómetros | los 3 ejes | — |
+
+**Ninguna baliza de STRaND-1 transmite temperatura.** No es una limitación del decodificador ni del mapeo: el canal no viaja en la señal. Lo mismo ocurre con las tensiones de par de paneles y las corrientes de bus. Esto explica por qué el parámetro «Temperature» de la plataforma de telemetría no puede rellenarse nunca, y por qué se retiró de su catálogo en lugar de dejarlo mostrando permanentemente «Not available».
+
+#### Resultados sobre las balizas reales
+
+Aplicado a las 32 754 balizas del conjunto, el decodificador extrae **53 magnitudes distintas, de las cuales 42 varían**:
+
+| Magnitud | Lecturas | Valores distintos | Rango |
+|:---|---:|---:|:---|
+| `magnetometer_z` | 523 | 245 | −386 923 a 426 153 cuentas |
+| `magnetometer_x` | 533 | 241 | −420 000 a 706 153 cuentas |
+| `magnetometer_y` | 533 | 232 | −450 000 a 366 153 cuentas |
+| `switch_1_ppt_1_2` corriente | 186 | 72 | 240 a 265 mA |
+| `battery_voltage` | 1647 | 68 | **6,31 a 9,75 V** |
+| `obc_unix_time` | 4760 | 37 | **2 a 3043 s** |
+
+Tres lecturas de estos datos:
+
+1. **Los magnetómetros funcionan.** Son la telemetría con más variación del conjunto: más de doscientos valores distintos por eje, con signo y en rango simétrico, como corresponde a un sensor de campo magnético en órbita. La hoja de AMSAT-UK no publica ecuación de calibración para ellos —solo especifica «4B por eje, entero con signo, little endian»—, de modo que se reportan en cuentas y **no** en µT: escalarlos sin la constante del fabricante sería inventar la unidad.
+2. **El reloj del OBC llega a marcar hasta 3043 s, y se degrada.** El campo de tiempo UNIX, que debería contar los segundos transcurridos desde 1970, no pasa de unos miles: el ordenador se reinicia continuamente y nunca sincroniza la hora. Pero el valor máximo que alcanza entre reinicios **cae a lo largo de la misión**, y esa evolución se detalla en la sección 3.6.
+3. **Los convertidores ADC del EPS y de los paneles dejaron de leer en febrero de 2021.** Desde esa fecha su cuenta vale 0 en todas las balizas, y la ecuación de calibración convierte ese cero en el extremo de la escala —9,75 V para las baterías—, de modo que un canal muerto se presenta como una batería sana. Antes de esa fecha los mismos canales entregan medidas que varían. El fechado está en la sección 3.6.
+
+En conjunto, el satélite **sí transmitió telemetría con contenido variable** en todos sus subsistemas instrumentados, y fue perdiéndolos por etapas. Es coherente con que SatNOGS marque hoy su transmisor como `inactive`.
+
+#### Por qué una trama suelta no prueba nada
+
+Durante este trabajo se identificó una baliza de 2018 con la cuenta ADC a 1023 y se tomó inicialmente como prueba de que los convertidores funcionaban en esa fecha. **El argumento no se sostiene, y conviene dejar constancia porque el error es instructivo:**
+
+```
+C0 80 06 06 02 2D 01 02 FF 03      2018-12-31
+                        ^^^^^ cuenta ADC = 0x03FF = 1023
+```
+
+- Es **una sola lectura**. El criterio que sostiene todo este diagnóstico es la dispersión, y con $n = 1$ no hay dispersión que medir.
+- 1023 es el **tope de escala** de un convertidor de 10 bits, es decir, el valor de riel. Es el número menos indicado para citarlo como evidencia de salud: `adc7_mx_array_current` aparece clavado justo en 1023 en los meses de 2016 y 2020 con muestra escasa.
+- La cuenta cae **fuera del rango que ese mismo canal recorre en todos los demás años** (958–970 en 2016, 637–967 en 2017, 705–967 en 2020).
+
+Lo que sí demuestra que la instrumentación funcionaba es la dispersión sobre muestras suficientes: en noviembre de 2020, `battery_0_voltage` da 9 lecturas con 9 valores distintos, y `adc10_pz_array_current` otras 9 con 9 valores distintos. Ese es el patrón de un convertidor midiendo.
+
+Se comprobó además que las tramas no reconocidas no son balizas mal alineadas: el patrón `C0 80` no aparece en ninguno de los ocho desplazamientos de bit posibles. Sobre 2762 tramas se encontró en 9, cuando el azar predice unas 6 para un patrón de 16 bits en ese volumen de datos.
+
+### 3.5 Contraste con el estado de la observación
+
+SatNOGS asigna a cada observación un estado de calidad (`good`, `bad`, `failed`, `unknown`) que se decide en la red, con criterios de recepción, y es por tanto independiente del análisis de bytes de las secciones 3.3 y 3.4. Cruzar ambas cosas permite validar el diagnóstico sin razonamiento circular.
+
+Se sincronizaron los metadatos de 2362 de las 2660 observaciones que referenciaban los frames en el momento de hacer este cruce, pidiendo cada una por su identificador a la API de SatNOGS Network. El conjunto creció después con el archivo histórico de SatNOGS DB hasta las 3049 observaciones de la sección 3.2; las cifras de este apartado corresponden por tanto al subconjunto sincronizado, que es el de la ventana 2022-2023:
+
+| Estado de la observación | Observaciones | Frames | Balizas reconocidas | % de balizas |
+|:---|---:|---:|---:|---:|
+| `good` | 488 | 6225 | 5929 | **95.2 %** |
+| `bad` | 1873 | 2415 | 6 | 0.2 % |
+| sin sincronizar | 298 | 2301 | 2065 | 89.7 % |
+| `unknown` | 1 | 1 | 0 | 0.0 % |
+
+Las 298 observaciones «sin sincronizar» son las que aportó el último barrido y cuyos metadatos aún no se han completado desde SatNOGS Network. Su 89,7 % de balizas las sitúa junto a las `good`, lo que anticipa cuál será su estado.
+
+La separación es prácticamente total y sostiene tres afirmaciones:
+
+1. **Las observaciones `good` contienen señal auténtica del satélite.** El 95,2 % de sus frames son balizas que el decodificador oficial reconoce, con su flag HDLC y su estructura completa.
+2. **Las observaciones `bad` no contienen telemetría.** Solo 6 de 2415 frames son balizas. El resto son los bytes de alta entropía analizados en la sección 3.3: falsos positivos que el demodulador FSK produce sobre ruido cuando no hay portadora. La trama de 23 bytes de la observación 7049034 —22 bytes distintos de 23— es un ejemplo típico.
+3. **El criterio de calidad de la red y el análisis de bytes de este trabajo coinciden**, habiéndose obtenido por caminos independientes. Ninguno de los dos se apoya en el otro.
+
+Esto delimita además el alcance de la sección 3.4: las magnitudes que allí se decodifican provienen de balizas recibidas en observaciones que la propia red califica de buenas, de modo que las anomalías detectadas —reinicios continuos del OBC, cuentas ADC del EPS a cero— no pueden atribuirse a una recepción deficiente en la estación terrena. Son lo que el satélite transmite.
+
+El fechado de la sección 3.6 se apoya en el mismo argumento por otra vía: la transición de cuentas ADC válidas a cero ocurre entre dos meses consecutivos y se mantiene después durante veinticuatro meses seguidos, recibida por decenas de estaciones distintas. Un defecto de recepción no se comporta así.
+
+### 3.6 Monitoreo de salud del satélite
+
+Decodificar las variables permite pasar de la trama al **estado del sistema**, que es el objeto último de la telemetría. El criterio que sostiene este análisis es que **una variable que no varía no está midiendo**: un voltaje de batería idéntico en 578 balizas repartidas en dos meses no describe una batería estable, sino un canal muerto.
+
+La distinción entre comportamiento normal y anómalo se apoya en tres hechos objetivos, sin necesidad de conocer los límites operativos que fijó el fabricante:
+
+1. **Dispersión.** Los magnetómetros presentan desviación estándar de cientos de miles de cuentas (σ = 227 681 en el eje X); los convertidores del EPS y de los paneles, cero.
+2. **Posición en la escala.** Una cuenta ADC de 0 produce, por la recta de calibración, el extremo del rango (9,75 V para las baterías). Un valor pegado al extremo indica saturación o ausencia de lectura, no una medida.
+3. **Coherencia física.** Los magnetómetros entregan valores con signo y rango simétrico, como corresponde a un sensor de campo magnético en órbita.
+
+| Indicador | Valor observado | Lectura |
+|:---|:---|:---|
+| Reloj UNIX del OBC | 2 – 3043 s, decreciente en el tiempo | El ordenador se reinicia continuamente y cada vez antes |
+| Cuentas ADC del EPS y paneles | válidas hasta 2021-01, cero desde 2021-02 | Los convertidores dejaron de entregar lectura |
+| Estado de los diez interruptores | `OFF` en todos | Cargas útiles y subsistemas apagados |
+| Magnetómetros X / Y / Z | 241 / 232 / 245 valores distintos | Único subsistema sano hasta el final |
+
+#### Fechado del fallo de la instrumentación de energía
+
+El archivo histórico de SatNOGS DB permite lo que la ventana de 2022 por sí sola no permitía: distinguir un canal que nunca midió de uno que dejó de medir. El criterio es la cuenta ADC cruda, antes de calibrar, sobre todas las balizas disponibles:
+
+Para acotar la fecha, la ventana de noviembre de 2020 a marzo de 2021 se descargó **día a día** en lugar de por muestreo, con 18 049 tramas adicionales. El resultado son tres fases netas:
+
+| Fase | Periodo | Lecturas ADC | Con cuenta 0 | Proporción |
+|:---|:---|---:|---:|---:|
+| Instrumentación sana | 2016-11 a 2020-10 | 753 | 0 | **0,0 %** |
+| Fallo intermitente | 2020-11 a 2021-01 | 5674 | 101 | **1,8 %** |
+| Fallo permanente | 2021-02 a 2023-01 | 8501 | 8501 | **100,0 %** |
+
+Ni una sola cuenta a cero en los primeros cuatro años de archivo; el 100 % en los veinticuatro meses finales, sin una sola excepción, hasta el cese de las balizas.
+
+**La transición tiene tres fechas comprobables:**
+
+- **27 de noviembre de 2020, 13:54:03 UTC** — primera lectura a cero de toda la serie, en `battery_0_voltage`.
+- **31 de enero de 2021, 23:57:52 UTC** — última lectura válida jamás recibida de cualquiera de los ocho canales.
+- **24 de febrero de 2021** — primer día de la muestra en que el 100 % de las lecturas son cero, condición que ya no se revierte.
+
+El fallo definitivo cae por tanto entre el 1 y el 24 de febrero de 2021. El muestreo no permite estrecharlo más: entre esas dos fechas no hay balizas descargadas.
+
+La fase intermitente se aprecia día a día y también dentro de un mismo pase. El 31 de enero de 2021, entre las 23:55:53 y las 23:57:52 UTC, `adc13_px_array_current` alterna entre cuenta 0 y cuenta 956:
+
+| Día | Lecturas | A cero |
+|:---|---:|---:|
+| 2020-11-27 | 526 | 0,2 % |
+| 2020-12-28 | 643 | 1,4 % |
+| 2020-12-30 | 473 | **7,0 %** |
+| 2021-01-29 | 750 | 6,0 % |
+| 2021-01-31 | 791 | 1,5 % |
+| 2021-02-24 | 201 | **100 %** |
+
+Los ocho canales se ven afectados en proporción semejante durante la fase intermitente —entre el 0,9 % y el 2,7 %—, sin que ninguno se adelante a los demás:
+
+| Canal | Lecturas a cero / total (2020-11 a 2021-01) |
+|:---|---:|
+| `adc10_pz_array_current` | 13 / 480 (2,7 %) |
+| `adc31_mz_array_current` | 12 / 448 (2,7 %) |
+| `adc4_my_array_current` | 13 / 498 (2,6 %) |
+| `adc1_py_array_current` | 12 / 516 (2,3 %) |
+| `adc13_px_array_current` | 16 / 800 (2,0 %) |
+| `adc7_mx_array_current` | 13 / 646 (2,0 %) |
+| `battery_1_voltage` | 10 / 987 (1,0 %) |
+| `battery_0_voltage` | 12 / 1299 (0,9 %) |
+
+Que los ocho fallen a la vez, con tasas del mismo orden y en la misma ventana de tres meses, apunta a una causa común aguas arriba —el bloque convertidor o su alimentación— y no a ocho sensores degradándose por separado. Las dos décimas de diferencia entre paneles y baterías no bastan para afirmar un orden de fallo entre ellos.
+
+**Evolución del reloj de a bordo.** La misma serie histórica convierte el diagnóstico del OBC de una foto en una trayectoria:
+
+| Periodo | Máximo del reloj |
+|:---|---:|
+| 2016-11 | 1139 s |
+| 2017-11 | 1815 s |
+| 2018-11 | 831 s |
+| 2019-11 | **3043 s** |
+| 2020-11 | 586 s |
+| 2021-11 | 856 s |
+| 2022-07 | 866 s |
+| 2022-08 | 279 s |
+| 2022-10 | 167 s |
+| 2022-11 y 12 | 177 s |
+| 2023-01 | **2 s** (constante) |
+
+El ordenador llegaba a sostener casi cincuenta minutos entre reinicios en 2019 y termina reiniciándose cada dos segundos en enero de 2023. La lectura de 866 s de julio de 2022 la recibieron **dos estaciones independientes** —UX5UL en KO50ei y LX2MT en JN39br— en el mismo segundo y con idéntico hexadecimal, lo que descarta que sea un artefacto de recepción.
+
+El último dato es la ventana de emisión: las balizas se extienden del **30 de noviembre de 2016 al 29 de enero de 2023**, pese a que el conjunto de frames abarca hasta julio de 2026. Después de esa fecha no aparece ni una sola baliza reconocible en 3049 observaciones.
+
+**Diagnóstico:** STRaND-1 perdió sus subsistemas por etapas. La instrumentación de energía se degradó desde noviembre de 2020 —con fallos intermitentes en los ocho canales por igual— y quedó definitivamente a cero en febrero de 2021, dejando al satélite emitiendo durante dos años más un voltaje de batería que era en realidad la ordenada al origen de una recta de calibración. El ordenador de a bordo se degradó en paralelo, de casi cincuenta minutos entre reinicios a dos segundos. Los magnetómetros siguieron entregando datos coherentes hasta el final. Las emisiones interpretables cesaron el 29 de enero de 2023.
+
+#### Limitación conocida del conjunto
+
+Un subconjunto de tramas presenta el **último byte alterado**. Se detecta porque produce valores imposibles: cuentas ADC por encima de 1023, que no caben en un convertidor de 10 bits y que extrapoladas por la recta de calibración dan −19 V de batería; y lecturas de magnetómetro de tres órdenes de magnitud por encima del resto, donde el eje termina en `57` en lugar del `FF` de extensión de signo que traen los otros.
+
+**El defecto es de la estación receptora, no del satélite.** Sobre la ventana densa de noviembre de 2020 a enero de 2021, con 5674 lecturas repartidas entre doce estaciones que aportan al menos treinta cada una:
+
+| Estación | Lecturas | Fuera de dominio |
+|:---|---:|---:|
+| W7KKE-CN75xa | 1810 | 92 (**5,1 %**) |
+| UX5UL-KO50ei | 685 | 35 (**5,1 %**) |
+| N2ACQ-FM07ag | 1826 | 73 (**4,0 %**) |
+| YC9DCK-OI71oh | 32 | 1 (3,1 %) |
+| EU1XX-KO33ru | 486 | **0** |
+| SA2KNG Alt/Az-KP03cu | 395 | **0** |
+| UY0LL-KN79xx | 227 | **0** |
+| JA0CAW-PM97nw | 183 | **0** |
+
+Cuatro estaciones producen cuentas fuera de dominio a tasas del 3 al 5 %; las otras ocho, ninguna, incluidas varias con muestras de cientos de lecturas. Si el satélite emitiera esos bytes, todas las estaciones los recibirían por igual. La conclusión es que se trata de un artefacto de demodulación de determinadas cadenas de recepción.
+
+Esto obliga además a una cautela sobre el muestreo. En los meses cubiertos por una sola jornada —noviembre de 2019, agosto y octubre de 2020— la tasa aparente de lecturas fuera de dominio llega al 37,6 %, 22,4 % y 50,6 %, pero esas cifras describen qué estación observó ese día concreto, no el estado del satélite. En los meses con cobertura densa la tasa real baja al 4,6-6,1 %. **Las tasas por mes solo son comparables entre sí dentro de la ventana descargada día a día**, y por eso el fechado de la sección anterior se apoya en ella y no en el muestreo disperso.
+
+Estas tramas **no llevan CRC** —su longitud es exactamente `8 + DATA_SIZE`, sin bytes sobrantes—, de modo que no hay forma estructural de detectarlas una a una. El decodificador de este trabajo conserva la cuenta cruda pero **no publica valor físico** cuando la cuenta sale del dominio de la recta de calibración, que es el único criterio objetivo disponible: no se descarta por inverosímil, se descarta por estar fuera del intervalo en el que la ecuación publicada está definida.
+
+### 3.7 Indicadores de desempeño del enlace
+
+| Indicador | Valor | Procedencia |
+|:---|:---|:---|
+| Integridad de la telemetría | 89,4 % (32 754 balizas de 36 641 frames) | Medido |
+| Balizas por pase | media 14,7 · mediana 6 · máx 411 | Medido |
+| Tiempo entre paquetes | mediana 2,0 s · p90 17,0 s | Medido |
+| **Packet Error Rate** | **64,2 %** (10 411 paquetes perdidos de 16 221 emitidos) | Medido |
+| **PER en horizonte / cenit** | **79,1 % a 0-14° · 52,1 % a 75-89°** | Medido |
+| **Pureza de trama en horizonte / cenit** | **82,2 % a 0-14° · 96,9 % en cenit** | Medido |
+| Observaciones con balizas | 775 de 3049 (25,4 %) | Medido |
+| Estaciones que recibieron balizas | 114 | Medido |
+| BER BPSK / FSK | 0 para SNR ≥ 2 dB / ≥ 8 dB | Simulado (§4) |
+| Margen descendente | 7,1 dB a 5° · 18,0 dB en cenit | Modelo (§7) |
+| C/N₀ en un paso completo | 60,9 – 72,6 dB-Hz | Modelo (§8) |
+
+#### Packet Error Rate medida sobre el número de secuencia
+
+La baliza de STRaND-1 lleva un contador de secuencia de 8 bits que el satélite incrementa **en cada paquete emitido**. Entre dos balizas recibidas consecutivamente en un mismo pase, la diferencia de contadores dice cuántos paquetes emitió el satélite en ese intervalo, y por tanto cuántos no llegaron. Eso permite una PER genuina, no una cota:
+
+$$\text{PER} = \frac{\sum (\Delta_i - 1)}{\sum \Delta_i}, \qquad \Delta_i = (s_{i+1} - s_i) \bmod 256$$
+
+Se descartan las transiciones con $\Delta = 0$ —paquete repetido, recibido por dos estaciones— y con $\Delta > 32$, que corresponden a huecos entre pases y no a pérdidas dentro de uno. Sobre 775 pases y 5810 transiciones útiles:
+
+| Elevación máxima del pase | Transiciones | Emitidos | Perdidos | PER |
+|:---|---:|---:|---:|---:|
+| 0 – 14° | 85 | 407 | 322 | **79,1 %** |
+| 15 – 29° | 325 | 1086 | 761 | 70,1 % |
+| 30 – 44° | 904 | 1738 | 834 | 48,0 % |
+| 45 – 59° | 402 | 935 | 533 | 57,0 % |
+| 60 – 74° | 530 | 1187 | 657 | 55,3 % |
+| 75 – 89° | 645 | 1346 | 701 | **52,1 %** |
+| **Global** | **5810** | **16 221** | **10 411** | **64,2 %** |
+
+La PER cae 27 puntos del horizonte al cenit, que es la forma que predice el modelo de link budget de la sección 7: el margen pasa de 7,1 dB a 5° a 18,0 dB en cenit. La corrección de esta medida frente a la versión anterior de este informe está en que antes se contaban como pérdidas todos los huecos de secuencia, incluidos los que separan pases distintos; acotando $\Delta$ el resultado baja del 72,6 % declarado entonces al 64,2 % real.
+
+#### Un observable en lugar de RSSI
+
+SatNOGS no publica potencia recibida por trama, de modo que el RSSI del enlace real no es accesible. Sí lo es el efecto que el RSSI produce: **la proporción de frames demodulados que resultan ser balizas válidas**. Cuando la señal es débil, el demodulador FSK de la estación entrega bytes de ruido que no llevan el flag HDLC; cuanto mejor es la relación señal-ruido, mayor es la fracción de frames que sí son balizas.
+
+| Elevación máxima del pase | Observaciones | Con balizas | Frames que son balizas |
+|:---|---:|---:|---:|
+| 0 – 14° | 76 | 51,3 % | **82,2 %** |
+| 15 – 29° | 103 | 49,5 % | 89,5 % |
+| 30 – 44° | 140 | 50,0 % | 93,6 % |
+| 45 – 59° | 116 | 45,7 % | 89,9 % |
+| 60 – 74° | 101 | 51,5 % | 92,8 % |
+| 75 – 89° | 147 | 57,1 % | 91,9 % |
+| 90° | 3 | 66,7 % | **96,9 %** |
+
+*(restringido a la ventana en que el satélite emitía balizas, hasta el 29 de enero de 2023)*
+
+La pureza sube de 82,2 % a 96,9 % del horizonte al cenit. Es una medida indirecta y no sustituye a un vatímetro, pero se obtiene del mismo dato que ya se tiene y va en la dirección que exige la física del enlace.
+
+Dos indicadores siguen **sin poder medirse** con esta fuente, y conviene declararlo:
+
+- **RSSI y SNR absolutos del enlace real.** La API de SatNOGS no entrega potencia recibida por trama. Los valores de SNR en dB de este trabajo son de simulación; lo medido es el observable indirecto de la tabla anterior. Cerrar este hueco exige una estación terrena propia que registre potencia por paquete, no más trabajo sobre SatNOGS.
+- **BER del enlace real.** Exigiría conocer los bits transmitidos, que es justamente lo que se desconoce. La BER de este trabajo es de simulación sobre bits reales usados como fuente.
+- **Latencia extremo a extremo.** No hay marca de tiempo de generación utilizable a bordo: el reloj del OBC está averiado, que es uno de los hallazgos de la sección 3.6.
+
+El desarrollo completo de esta cadena —de la señal RF al estado del satélite, con el detalle de procesamiento de señal, sincronización y comparación de protocolos— está en `docs/ANALISIS_TELEMETRIA_SALUD_CUBESAT.md`.
 
 ---
 
@@ -238,14 +558,14 @@ Cadena de transmisión BPSK completa desde los bytes de telemetría real hasta l
 
 ### 7.1 Enlace descendente
 
-`calcular_link_budget.py` modela el enlace descendente UHF a 437.568 MHz desde el CubeSat (LEO 600 km) hasta una estación terrena típica de radioaficionado.
+`calcular_link_budget.py` modela el enlace descendente UHF a 437.568 MHz desde el CubeSat (LEO 775 km) hasta una estación terrena típica de radioaficionado.
 
 <!-- TABLA:link_budget_parametros -->
 | Parametro | Valor | Unidad |
 |:---|---:|---:|
 | Frecuencia | 437.568 | MHz |
 | Tasa de datos | 9600 | bps |
-| Altura orbital | 600 | km |
+| Altura orbital | 775 | km |
 | Potencia TX (satelite) | 30.0 | dBm |
 | Ganancia antena TX | 0.0 | dBi |
 | Perdida cables TX | 0.5 | dB |
@@ -271,21 +591,21 @@ donde $L$ es la pérdida del cable entre la antena y el LNA. Los cables no solo 
 <!-- TABLA:link_budget -->
 | Elevacion (deg) | Distancia (km) | FSPL (dB) | C/N0 (dB-Hz) | Eb/N0 (dB) | Margen (dB) |
 |:---|---:|---:|---:|---:|---:|
-| 5 | 2328.0 | 152.61 | 60.29 | 20.47 | 8.47 |
-| 15 | 1625.8 | 149.49 | 63.41 | 23.59 | 11.59 |
-| 25 | 1213.2 | 146.95 | 65.95 | 26.13 | 14.13 |
-| 30 | 1075.1 | 145.9 | 67.0 | 27.18 | 15.18 |
-| 35 | 967.3 | 144.98 | 67.92 | 28.1 | 16.1 |
-| 45 | 814.8 | 143.49 | 69.41 | 29.59 | 17.59 |
-| 55 | 717.6 | 142.39 | 70.52 | 30.69 | 18.69 |
-| 60 | 683.2 | 141.96 | 70.94 | 31.12 | 19.12 |
-| 65 | 655.9 | 141.61 | 71.3 | 31.47 | 19.47 |
-| 75 | 619.3 | 141.11 | 71.8 | 31.97 | 19.97 |
-| 85 | 602.1 | 140.86 | 72.04 | 32.22 | 20.22 |
-| 90 | 600.0 | 140.83 | 72.07 | 32.25 | 20.25 |
+| 5 | 2728.6 | 153.99 | 58.91 | 19.09 | 7.09 |
+| 15 | 1983.5 | 151.22 | 61.68 | 21.86 | 9.86 |
+| 25 | 1517.6 | 148.89 | 64.01 | 24.19 | 12.19 |
+| 30 | 1355.8 | 147.91 | 64.99 | 25.17 | 13.17 |
+| 35 | 1227.3 | 147.05 | 65.85 | 26.03 | 14.03 |
+| 45 | 1042.1 | 145.63 | 67.27 | 27.45 | 15.45 |
+| 55 | 922.2 | 144.56 | 68.34 | 28.51 | 16.51 |
+| 60 | 879.3 | 144.15 | 68.75 | 28.93 | 16.93 |
+| 65 | 845.3 | 143.81 | 69.09 | 29.27 | 17.27 |
+| 75 | 799.2 | 143.32 | 69.58 | 29.76 | 17.76 |
+| 85 | 777.6 | 143.08 | 69.82 | 30.0 | 18.0 |
+| 90 | 775.0 | 143.05 | 69.85 | 30.02 | 18.02 |
 <!-- /TABLA:link_budget -->
 
-El margen mínimo, **8,5 dB a 5° de elevación**, supera el margen recomendado de 3-6 dB para comunicaciones por satélite (Larson & Wertz), lo que confirma la viabilidad del enlace a 9600 bps incluso cerca del horizonte. En cenit el margen alcanza 20,3 dB.
+El margen mínimo, **7,1 dB a 5° de elevación**, supera el margen recomendado de 3-6 dB para comunicaciones por satélite (Larson & Wertz), lo que confirma la viabilidad del enlace a 9600 bps incluso cerca del horizonte. En cenit el margen alcanza 18,0 dB.
 
 ### 7.2 Enlace ascendente
 
@@ -294,21 +614,21 @@ El margen mínimo, **8,5 dB a 5° de elevación**, supera el margen recomendado 
 <!-- TABLA:uplink -->
 | Elevacion (deg) | Distancia (km) | FSPL (dB) | C/N0 (dB-Hz) | Eb/N0 (dB) | Margen (dB) | Tasa max (kbps) |
 |:---|---:|---:|---:|---:|---:|---:|
-| 5 | 2328.0 | 152.56 | 67.42 | 36.63 | 24.63 | 348 |
-| 15 | 1625.8 | 149.44 | 70.54 | 39.74 | 27.74 | 714 |
-| 25 | 1213.2 | 146.90 | 73.08 | 42.29 | 30.29 | 1282 |
-| 30 | 1075.1 | 145.85 | 74.13 | 43.34 | 31.34 | 1633 |
-| 35 | 967.3 | 144.93 | 75.05 | 44.25 | 32.25 | 2017 |
-| 45 | 814.8 | 143.44 | 76.54 | 45.74 | 33.74 | 2842 |
-| 55 | 717.6 | 142.34 | 77.64 | 46.85 | 34.85 | 3664 |
-| 60 | 683.2 | 141.91 | 78.07 | 47.28 | 35.28 | 4043 |
-| 65 | 655.9 | 141.55 | 78.42 | 47.63 | 35.63 | 4386 |
-| 75 | 619.3 | 141.06 | 78.92 | 48.13 | 36.13 | 4921 |
-| 85 | 602.1 | 140.81 | 79.16 | 48.37 | 36.37 | 5205 |
-| 90 | 600.0 | 140.78 | 79.19 | 48.40 | 36.40 | 5242 |
+| 5 | 2728.6 | 153.94 | 66.04 | 35.25 | 23.25 | 253 |
+| 15 | 1983.5 | 151.17 | 68.81 | 38.02 | 26.02 | 480 |
+| 25 | 1517.6 | 148.84 | 71.13 | 40.34 | 28.34 | 819 |
+| 30 | 1355.8 | 147.86 | 72.11 | 41.32 | 29.32 | 1027 |
+| 35 | 1227.3 | 147.00 | 72.98 | 42.19 | 30.19 | 1253 |
+| 45 | 1042.1 | 145.58 | 74.40 | 43.61 | 31.61 | 1737 |
+| 55 | 922.2 | 144.51 | 75.46 | 44.67 | 32.67 | 2219 |
+| 60 | 879.3 | 144.10 | 75.88 | 45.08 | 33.08 | 2441 |
+| 65 | 845.3 | 143.76 | 76.22 | 45.43 | 33.43 | 2641 |
+| 75 | 799.2 | 143.27 | 76.70 | 45.91 | 33.91 | 2954 |
+| 85 | 777.6 | 143.03 | 76.94 | 46.15 | 34.15 | 3120 |
+| 90 | 775.0 | 143.00 | 76.97 | 46.18 | 34.18 | 3142 |
 <!-- /TABLA:uplink -->
 
-El uplink dispone de mucho más margen que el downlink (24,6 dB frente a 8,5 dB en el peor caso) por la combinación de mayor potencia transmitida (10 W frente a 1 W), antena directiva en el extremo transmisor y una tasa ocho veces menor. La columna de tasa máxima indica la velocidad que agotaría ese margen manteniendo la Eb/N0 requerida: entre 348 kbps y 5,2 Mbps. No es una capacidad de Shannon, sino la tasa límite del enlace con el esquema de modulación y el objetivo de BER fijados.
+El uplink dispone de mucho más margen que el downlink (23,3 dB frente a 7,1 dB en el peor caso) por la combinación de mayor potencia transmitida (10 W frente a 1 W), antena directiva en el extremo transmisor y una tasa ocho veces menor. La columna de tasa máxima indica la velocidad que agotaría ese margen manteniendo la Eb/N0 requerida: entre 253 kbps y 3,1 Mbps. No es una capacidad de Shannon, sino la tasa límite del enlace con el esquema de modulación y el objetivo de BER fijados.
 
 ---
 
@@ -319,15 +639,15 @@ El uplink dispone de mucho más margen que el downlink (24,6 dB frente a 8,5 dB 
 <!-- TABLA:estacion_terrena -->
 | Magnitud | Valor |
 |:---|:---|
-| Duracion del paso (horizonte a horizonte) | 12.8 min |
-| Duracion util (elevacion > 5°) | 10.4 min |
+| Duracion del paso (horizonte a horizonte) | 15.0 min |
+| Duracion util (elevacion > 5°) | 12.4 min |
 | Elevacion de culminacion | 85.0° |
-| Distancia oblicua | 602 - 2326 km |
+| Distancia oblicua | 778 - 2725 km |
 | Temperatura de sistema | 308 - 376 K |
-| C/N0 promedio | 68.4 dB-Hz |
-| C/N0 minimo / maximo | 62.2 / 74.8 dB-Hz |
-| Error de apuntamiento maximo | 2.62° |
-| Perdida por apuntamiento maxima | 0.09 dB |
+| C/N0 promedio | 66.8 dB-Hz |
+| C/N0 minimo / maximo | 60.9 / 72.6 dB-Hz |
+| Error de apuntamiento maximo | 0.77° |
+| Perdida por apuntamiento maxima | 0.01 dB |
 <!-- /TABLA:estacion_terrena -->
 
 El hallazgo relevante es dinámico. En la culminación del paso el satélite exige una velocidad de barrido en azimut de **8,23 °/s**, mientras que el rotor modelado alcanza 5 °/s. El resultado es un retraso de hasta 20° en azimut. Sin embargo, como ese retraso ocurre a 82,5° de elevación —donde un grado de azimut abarca mucho menos arco sobre el cielo—, el error real fuera de boresight es de solo 2,62°, que con un haz de 30° cuesta 0,09 dB. La conclusión práctica es que una Yagi de haz ancho tolera sin problema el límite de velocidad del rotor; una antena más directiva no lo haría, y ahí el cálculo del error angular verdadero (y no la resta directa de azimutes) resulta imprescindible.
@@ -360,27 +680,115 @@ El hallazgo relevante es dinámico. En la culminación del paso el satélite exi
 | Tasa de simbolos (baudios) | 9600 bps | STRaND-1: 9600 bps | Alta |
 | Potencia de transmision | 1 W (30 dBm) | STRaND-1: 1 W | Alta |
 | BER vs SNR - BPSK | BER ~5.3e-05 a SNR=0 dB<br>BER ~0 a SNR >= 2 dB (con 18776 bits) | BPSK teorica: BER ~3.9e-4 a Eb/N0=4 dB | Esperada dentro del modelo |
-| Margen de enlace (link budget) | 8.5 dB a elev=5 deg<br>20.2 dB a elev=90 deg | Margen tipico requerido: 3-6 dB | Alta |
+| Margen de enlace (link budget) | 7.1 dB a elev=5 deg<br>18.0 dB a elev=90 deg | Margen tipico requerido: 3-6 dB | Alta |
 | Ancho de banda estimado | BPSK rectangular: ~27.0 kHz (-20 dB)<br>FSK: ~11.8 kHz (-20 dB)<br>BPSK + RRC (α=0.35): ~11.2 kHz (99 % ocupado) | BPSK 9600 bps: ancho de banda nulo ~19.2 kHz | Alta con conformado de pulso |
 <!-- /TABLA:concordancia -->
 
 La concordancia es alta en los siete parámetros evaluados. El ancho de banda, que en versiones anteriores del modelo quedaba en concordancia moderada por el uso de pulsos rectangulares, converge al valor teórico $R_b(1+\alpha)$ una vez incorporado el conformado RRC.
 
+### 9.3 Comparación de protocolos
+
+La elección de esquema de modulación y de protocolo de enlace condiciona el presupuesto de potencia, el ancho de banda ocupado y la complejidad del receptor. La comparación sitúa las decisiones de STRaND-1 en su contexto.
+
+**Capa física:**
+
+| Esquema | Eficiencia espectral | Eb/N0 para BER 10⁻⁵ | Complejidad de receptor | Uso en CubeSats |
+|:---|:---|:---|:---|:---|
+| BPSK | 1 bit/símbolo | ~9,6 dB (coherente) | Alta: recuperación de portadora | Muy extendido a 9600 bps |
+| FSK | 1 bit/símbolo | ~13,4 dB (no coherente) | Baja: detección de energía | Extendido a 1200–9600 bps |
+| GFSK | 1 bit/símbolo | ~12,5 dB | Baja-media | Habitual en transceptores comerciales |
+| GMSK | 1 bit/símbolo | ~9,6 dB | Media-alta | AX.25 a 9600 bps |
+
+Los resultados de la sección 4 cuantifican esa diferencia sobre el mismo flujo de bits reales: BPSK alcanza BER nula desde 2 dB de SNR por muestra y FSK necesita 8 dB. BPSK y GMSK comparten eficiencia en potencia, pero GMSK añade envolvente constante, lo que permite saturar el amplificador —una ventaja apreciable con el presupuesto de energía de un 3U—. La contrapartida de BPSK es espectral, y el conformado RRC la resuelve: baja de 66,1 kHz a 11,2 kHz, por debajo del ancho de banda de FSK.
+
+**Capa de enlace y aplicación:**
+
+| Protocolo | Ámbito | Overhead | Detección de errores | Adecuación |
+|:---|:---|:---|:---|:---|
+| AX.25 | Enlace, radioaficionado | 16+ B por trama | FCS CRC-16/X-25 | Estándar de facto universitario; ineficiente en tramas cortas |
+| CCSDS | Enlace y espacio profundo | Variable, mayor | Reed-Solomon, turbo, LDPC | Estándar de agencias; complejo para un 3U |
+| CSP | Red, interno del satélite | 4 B de cabecera | Delegada a capa inferior | Diseñado para CubeSats; ligero, direccionamiento tipo IP |
+| Baliza STRaND-1 | Enlace | 6 B de cabecera | CRC-ITT declarado | Overhead mínimo; sin interoperabilidad |
+
+La baliza de STRaND-1 emplea 6 bytes de cabecera sobre datos de 2 a 8 bytes: entre un 43 % y un 75 % de overhead. AX.25 resultaría peor para cargas tan cortas, ya que su cabecera mínima supera los 16 bytes, lo que explica la decisión de diseño. El coste es la falta de interoperabilidad: cada decodificador debe implementarse a medida y, como se documenta en la sección 3.4, incluso la implementación de referencia puede contener errores.
+
 ---
 
-## 10. Discusión
+## 10. Plataforma de visualización e interpretación
 
-### 10.1 Hallazgos principales
+Las secciones anteriores producen resultados en forma de tablas y figuras estáticas. Para que la cadena completa —de la señal RF al estado del satélite— pueda recorrerse y cuestionarse sin ejecutar los scripts, se desarrolló una aplicación web que ingiere la telemetría, la decodifica y la muestra con su procedencia a la vista. Está en el directorio `telemetria_strand1/` del proyecto.
+
+### 10.1 Arquitectura
+
+| Capa | Tecnología | Función |
+|:---|:---|:---|
+| Almacenamiento | PostgreSQL | Persistencia de frames, observaciones, campos decodificados y reglas |
+| API | FastAPI (Python 3.14) | 17 endpoints REST, documentación OpenAPI automática en `/docs` |
+| Interfaz | React + TypeScript + Vite | Ocho pantallas, sin dependencias de servicios externos |
+| Ingesta | `tools/` | Descarga de SatNOGS Network y del archivo histórico de SatNOGS DB |
+
+Los routers de la API separan las responsabilidades por dominio: `frames` (datos crudos y sus métricas), `observations` (metadatos de la red), `telemetry` (parámetros decodificados), `decoder` (decodificación bajo demanda de un hexadecimal arbitrario), `anomalies` (reglas configurables de umbral), `export` (descarga en CSV y JSON de cada conjunto) y `analytics`.
+
+### 10.2 El modelo de datos como garantía metodológica
+
+La decisión de diseño central de la plataforma no es tecnológica sino epistemológica: **el modelo de datos hace estructuralmente imposible presentar una interpretación como si fuera una medida.** Los datos viven en cuatro capas explícitas:
+
+| Capa | Contenido | Depende de |
+|:---|:---|:---|
+| `RAW` | `Frame.raw_hex`, tal como lo entrega SatNOGS. Nunca se altera | Nada |
+| `PROCESSED` | Longitud, entropía, ratio de imprimibles, bytes distintos | Solo de los bytes |
+| `DECODED` | `DecodedField`, magnitudes físicas con su unidad | De un `ProtocolDefinition` **validado** |
+| `UNKNOWN` | Estado por defecto: `unclassified` | — |
+
+Un frame sin protocolo identificado permanece en `unclassified` y **no recibe interpretación alguna**. Mientras la tabla `protocol_definitions` esté vacía, ningún parámetro puede pasar a `decoded`: es el mecanismo que impide que la aplicación invente el significado de los bytes. La instalación por defecto no trae ninguna definición, y la de STRaND-1 se registra explícitamente con su referencia bibliográfica —la hoja de AMSAT-UK— y la marca `validated`.
+
+Esta separación es la que permitió detectar el error de la sección 3.4. Cuando el decodificador oficial devolvía el campo `DATA_SIZE` en lugar de la medida, la interfaz mostraba valores constantes; al conservarse la capa `PROCESSED` intacta junto a la `DECODED`, pudo comprobarse que los bytes sí variaban y que el fallo estaba en la interpretación, no en la señal.
+
+### 10.3 Lo que la interfaz muestra, y lo que declara no saber
+
+La pantalla de parámetros de telemetría distingue tres estados, cada uno con su motivo escrito:
+
+- **`Decoded`** — el valor procede de una baliza decodificada con una definición validada.
+- **`Medido`** — la magnitud se mide sobre los bytes sin suponer ningún formato. Es el caso de la entropía del payload, que tiene valor incluso cuando no hay protocolo con el que decodificar nada. Se distingue en color de `Decoded` porque pertenece a otra capa.
+- **`Not decoded` / `Not available`** — el parámetro no se rellena, y se explica por qué: o no hay definición de protocolo validada, o el canal no aparece en las balizas recibidas.
+
+Ese último estado es el que documenta el hallazgo de que STRaND-1 no transmite ningún canal de temperatura. Un parámetro que el satélite nunca envía no se muestra estimado ni interpolado: se muestra vacío, con el motivo al lado.
+
+La tabla de campos decodificados añade dos columnas que un panel convencional omitiría y que aquí son parte del argumento:
+
+- **Valores distintos.** Un campo que nunca cambia no está midiendo nada. La interfaz lo etiqueta `Constante` en lugar de presentarlo como una lectura estable, que es exactamente la confusión que produjo el «9,75 V de batería» de la sección 3.6.
+- **Rango típico (percentiles 5 y 95)** junto al mínimo y el máximo. Cuando el máximo queda más de un orden de magnitud por encima del percentil 95, se marca con un aviso que explica el caso concreto: en los campos `*_adc` el criterio es objetivo —una cuenta por encima de 1023 no cabe en un convertidor de 10 bits—, y en el resto se declara que puede tratarse de una cola larga real o de una trama con bytes alterados, sin zanjar cuál, porque estas balizas no llevan CRC con el que distinguirlas.
+
+### 10.4 Uso docente
+
+El interés didáctico de la plataforma no está en mostrar telemetría, sino en **hacer visible el razonamiento que la valida**. Un estudiante puede:
+
+1. Tomar un hexadecimal cualquiera de la pantalla de frames y pegarlo en el decodificador, que responde con la estructura del paquete campo a campo —nodo I2C, canal, tamaño del dato, cuenta ADC— y la ecuación de calibración aplicada.
+2. Comprobar por sí mismo que una magnitud constante no es una medida, contrastando la columna de valores distintos con el estado del canal.
+3. Exportar cualquier conjunto en CSV o JSON y rehacer el análisis con sus propias herramientas, que es la condición para que el resultado sea verificable y no haya que creerlo.
+
+Frente a un panel que muestre «Batería: 9,75 V» sin más, la plataforma obliga a preguntarse de dónde sale ese número. En este caso la respuesta resultó ser que no salía de ninguna medida, sino de la ordenada al origen de una recta de calibración aplicada a un convertidor averiado —y esa pregunta, no el número, es lo que el proyecto pretende enseñar a hacer.
+
+---
+
+## 11. Discusión
+
+### 11.1 Hallazgos principales
 
 1. **BPSK supera a FSK** en el canal AWGN evaluado, consistente con la teoría de modulaciones binarias.
 2. **El conformado RRC reduce el ancho de banda ocupado en un factor de 5,9 sin coste en BER**, llevando la señal dentro de la canalización UHF de 25 kHz.
 3. **El código convolucional aporta ~4 dB de ganancia** en la región de BER $10^{-3}$, y exhibe el umbral característico del decodificador Viterbi por debajo de −8 dB.
 4. **La tolerancia al error residual de Doppler es de décimas de hercio** sin recuperación de portadora, lo que cuantifica la necesidad de un lazo de Costas en un receptor real.
-5. **El enlace descendente UHF a 9600 bps es viable** con margen mínimo de 8,5 dB a 5° de elevación.
+5. **El enlace descendente UHF a 9600 bps es viable** con margen mínimo de 7,1 dB a 5° de elevación.
 6. **El límite de velocidad del rotor de azimut es tolerable** con antenas de haz ancho: 0,09 dB de pérdida en el peor instante de un paso casi cenital.
-7. **La telemetría real de STRaND-1** presenta entropía moderada (4,049 bits/byte), compatible con tramas que mezclan campos fijos y datos variables.
+7. **Se decodificó telemetría real de STRaND-1 con la especificación de AMSAT-UK**: 32 754 balizas y 53 magnitudes, de las que 42 varían. Los magnetómetros están operativos (más de doscientos valores distintos por eje) y la batería fue medida de verdad entre 2016 y 2020, con el voltaje oscilando entre **6,31 y 8,94 V** como corresponde a ciclos de carga y descarga en órbita. El decodificador oficial de `satnogs-decoders` no sirve para este fin: lee un solo byte por canal y devuelve el campo `DATA_SIZE` en lugar de la medida.
+8. **El estado de calidad que asigna SatNOGS y el análisis de bytes de este trabajo coinciden**, obtenidos por caminos independientes: el 95,2 % de los frames de observaciones `good` son balizas reconocibles, frente al 0,2 % de las `bad`. Que las anomalías del satélite —reloj del OBC degradándose, cuentas ADC del EPS a cero— aparezcan precisamente en las balizas de observaciones `good` descarta que sean un defecto de recepción.
+9. **La telemetría fecha el fallo del subsistema de energía en febrero de 2021, tras tres meses de degradación.** El archivo histórico de SatNOGS DB no contiene ni una sola cuenta ADC a cero en las 753 lecturas de 2016 a octubre de 2020. La primera aparece el **27 de noviembre de 2020**, y durante tres meses el fallo es intermitente: 101 ceros en 5674 lecturas (1,8 %), repartidos por igual entre los ocho canales. La última lectura válida es del **31 de enero de 2021 a las 23:57:52 UTC**; desde el 24 de febrero de 2021 son cero las 8501 lecturas siguientes, sin una sola excepción, durante veinticuatro meses. En paralelo, el reloj del OBC pasa de sostener 3043 s entre reinicios en 2019 a quedarse fijo en 2 s en enero de 2023, cuando las balizas cesan pese a que las observaciones continúan hasta julio de 2026. El único subsistema coherente hasta el final fue el magnetómetro.
+10. **El eslabón débil de la cadena no está en la radio, sino en la interpretación.** El enlace tiene 7,1 dB de margen en el peor caso, las estaciones reciben correctamente el 95,2 % de las balizas en observaciones buenas y el formato está publicado desde 2013; aun así la telemetría llevaba años sin interpretarse porque la implementación de referencia leía mal un campo del paquete.
+11. **Una magnitud constante puede ser un canal muerto disfrazado de sistema sano.** Los 9,75 V de batería que STRaND-1 emitió durante sus dos últimos años no son una medida: son la ordenada al origen de la recta de calibración de AMSAT-UK, el valor que la ecuación devuelve cuando la cuenta ADC vale 0. Como las rectas son decrecientes, una cuenta nula no produce «cero» sino el extremo superior de la escala. Detectarlo exigió comparar con el archivo histórico; sin él, la lectura natural del dato habría sido «batería estable a 9,75 V».
+12. **Una sola trama no demuestra el estado de un canal.** Durante el trabajo se tomó una baliza de 2018 con cuenta ADC 1023 como prueba de que los convertidores funcionaban. No lo era: es una única lectura, 1023 es el tope de escala de un convertidor de 10 bits —el valor de riel— y cae fuera del rango que ese canal recorre en todos los demás años. El diagnóstico solo se sostiene sobre la dispersión de muestras suficientes, no sobre ejemplares escogidos.
 
-### 10.2 Limitaciones del modelo
+### 11.2 Limitaciones del modelo
 
 - **Sincronización ideal:** no hay recuperación de portadora ni de temporización de símbolo. Es la limitación de mayor impacto y la que explica la sensibilidad extrema al Doppler residual de la sección 5.2.
 - **Sincronización de trama ideal:** el verificador de AX.25 comprueba el FCS sobre bytes recibidos reales, pero localiza las tramas por desplazamiento conocido; no hay búsqueda de banderas ni *bit stuffing*.
@@ -391,7 +799,7 @@ La concordancia es alta en los siete parámetros evaluados. El ancho de banda, q
 - **FSK con tonos no ortogonales** para el detector de energía empleado ($\Delta f\cdot T = 0{,}5$), lo que penaliza su curva frente a la teórica.
 - **Un solo satélite:** los resultados corresponden a STRaND-1; generalizar requiere verificación independiente.
 
-### 10.3 Trabajo futuro
+### 11.3 Trabajo futuro
 
 1. Implementar un lazo de Costas para recuperación de portadora y cuantificar la mejora en la tolerancia al Doppler residual.
 2. Añadir sincronización de símbolo (Gardner o Mueller-Müller).
@@ -402,15 +810,15 @@ La concordancia es alta en los siete parámetros evaluados. El ancho de banda, q
 
 ---
 
-## 11. Conclusiones
+## 12. Conclusiones
 
-1. Se caracterizó el subsistema de comunicaciones del CubeSat STRaND-1 en sus cuatro componentes: antena (monopolo λ/4, 0 dBi, UHF), transceptor (1 W a 437.568 MHz), módem (BPSK coherente y FSK a 9600 bps) y TT&C (tramas AX.25 con telemetría de 23,5 bytes promedio).
+1. Se caracterizó el subsistema de comunicaciones del CubeSat STRaND-1 en sus cuatro componentes: antena (monopolo λ/4, 0 dBi, UHF), transceptor (1 W a 437.568 MHz), módem (BPSK coherente y FSK a 9600 bps) y TT&C (balizas de 15,0 bytes de media, con la estructura HDLC que define la especificación de AMSAT-UK).
 
 2. El modelo en banda base reproduce los resultados esperados de la teoría de comunicaciones digitales, y la coincidencia entre el modelo básico y el avanzado en la región de SNR común valida ambas implementaciones de forma cruzada.
 
 3. El modelo avanzado demuestra tres efectos cuantificados: reducción de ancho de banda de 5,9× por conformado RRC sin coste en BER, ~4 dB de ganancia por codificación convolucional con su umbral de Viterbi, y una tolerancia al Doppler residual de décimas de hercio que justifica la necesidad de recuperación de portadora.
 
-4. El link budget descendente muestra un margen mínimo de 8,5 dB a 5° de elevación y el ascendente de 24,6 dB, ambos por encima de los 3-6 dB recomendados por la literatura.
+4. El link budget descendente muestra un margen mínimo de 7,1 dB a 5° de elevación y el ascendente de 23,3 dB, ambos por encima de los 3-6 dB recomendados por la literatura.
 
 5. El modelo de estación terrena sobre un paso completo de 12,8 minutos muestra que el límite de velocidad del rotor en azimut, aun siendo insuficiente en la culminación (8,23 °/s requeridos frente a 5 °/s disponibles), solo cuesta 0,09 dB con una antena de 30° de haz.
 
@@ -420,27 +828,27 @@ La concordancia es alta en los siete parámetros evaluados. El ancho de banda, q
 
 ---
 
-## 12. Referencias
+## 13. Referencias
 
-1. Bouwmeester, J., & Guo, J. (2010). Survey of worldwide pico- and nanosatellite missions, distributions and subsystem technology. *Acta Astronautica*, 67(7–8), 854–862.
-2. Cal Poly SLO. (2022). *CubeSat Design Specification (CDS) Rev. 14*. California Polytechnic State University.
-3. Fortescue, P., Swinerd, G., & Stark, J. (2011). *Spacecraft systems engineering* (4th ed.). John Wiley & Sons.
-4. Larson, W. J., & Wertz, J. R. (Eds.). (1999). *Space mission analysis and design* (3rd ed.). Microcosm Press.
-5. Maral, G., Bousquet, M., & Sun, Z. (2020). *Satellite communications systems* (6th ed.). John Wiley & Sons.
-6. Pratt, T., Bostian, C., & Allnutt, J. (2003). *Satellite communications* (2nd ed.). John Wiley & Sons.
-7. Proakis, J. G., & Salehi, M. (2008). *Digital communications* (5th ed.). McGraw-Hill.
-8. Sklar, B. (2001). *Digital communications: Fundamentals and applications* (2nd ed.). Prentice Hall.
-9. TAPR / ARRL. (1998). *AX.25 Link Access Protocol for Amateur Packet Radio, Version 2.2*.
-10. UIT-R. (2012). *Recomendación SM.328-11: Espectros y anchuras de banda de las emisiones*.
-11. GNU Radio Project. (2024). *GNU Radio Manual and C++ API Reference*.
-12. SatNOGS. (2026). *SatNOGS DB — STRaND-1 telemetry data*. https://db.satnogs.org/
-13. ISIS — Innovative Solutions in Space. *TRXUV Transceiver datasheet*.
-14. GomSpace. *NanoCom TRX Transceiver datasheet*.
-15. Álvarez, R., & Restrepo, C. (2020). Desarrollo de tecnología espacial en Colombia: retos y perspectivas para la ingeniería nacional. *Revista Colombiana de Tecnología Avanzada*, 1(35), 1–10.
-16. Gómez, J. A., & Llano, G. (2018). Introducción al diseño de sistemas de comunicación para pequeños satélites. *Ingeniería y Ciencia*, 14(27), 123–148.
+1. AMSAT-UK. (2013). *STRAND-1 Packet Format* [hoja de cálculo]. Recuperado de https://ukamsat.files.wordpress.com/2013/03/amsat-strand-1-20130327.xlsx — especificación de la baliza: estructura del paquete, mapa de nodos I2C y canales, y ecuaciones de calibración de cada magnitud.
+2. Bouwmeester, J., & Guo, J. (2010). Survey of worldwide pico- and nanosatellite missions, distributions and subsystem technology. *Acta Astronautica*, 67(7–8), 854–862.
+3. Cal Poly SLO. (2022). *CubeSat Design Specification (CDS) Rev. 14*. California Polytechnic State University.
+4. Fortescue, P., Swinerd, G., & Stark, J. (2011). *Spacecraft systems engineering* (4th ed.). John Wiley & Sons.
+5. Larson, W. J., & Wertz, J. R. (Eds.). (1999). *Space mission analysis and design* (3rd ed.). Microcosm Press.
+6. Maral, G., Bousquet, M., & Sun, Z. (2020). *Satellite communications systems* (6th ed.). John Wiley & Sons.
+7. Pratt, T., Bostian, C., & Allnutt, J. (2003). *Satellite communications* (2nd ed.). John Wiley & Sons.
+8. Proakis, J. G., & Salehi, M. (2008). *Digital communications* (5th ed.). McGraw-Hill.
+9. Sklar, B. (2001). *Digital communications: Fundamentals and applications* (2nd ed.). Prentice Hall.
+10. TAPR / ARRL. (1998). *AX.25 Link Access Protocol for Amateur Packet Radio, Version 2.2*.
+11. UIT-R. (2012). *Recomendación SM.328-11: Espectros y anchuras de banda de las emisiones*.
+12. GNU Radio Project. (2024). *GNU Radio Manual and C++ API Reference*.
+13. SatNOGS. (2026). *SatNOGS DB — STRaND-1 telemetry data*. https://db.satnogs.org/
+14. ISIS — Innovative Solutions in Space. *TRXUV Transceiver datasheet*.
+15. GomSpace. *NanoCom TRX Transceiver datasheet*.
+16. Álvarez, R., & Restrepo, C. (2020). Desarrollo de tecnología espacial en Colombia: retos y perspectivas para la ingeniería nacional. *Revista Colombiana de Tecnología Avanzada*, 1(35), 1–10.
+17. Gómez, J. A., & Llano, G. (2018). Introducción al diseño de sistemas de comunicación para pequeños satélites. *Ingeniería y Ciencia*, 14(27), 123–148.
 
 ---
-
 ## Apéndice A: Estructura del proyecto
 
 ```text
@@ -466,6 +874,7 @@ cubesat/
 ├── docs/
 │   ├── DISENO_MODELO_SIMULACION_ENLACE_RF.md
 │   ├── CARACTERIZACION_COMPONENTES_COMMS.md
+│   ├── ANALISIS_TELEMETRIA_SALUD_CUBESAT.md   # Cadena RF -> estado del satelite
 │   └── INFORME_TECNICO_FINAL.md
 └── resultados_simulacion/
     ├── configuracion_modelo_rf.json

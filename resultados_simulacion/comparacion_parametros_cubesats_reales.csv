@@ -37,8 +37,8 @@ comportamiento coherente con la teoria. La BER cero
 a partir de 2 dB se debe al numero finito de
 bits evaluados (18776). Con mas bits se observarian
 errores a SNR mayores."
-Margen de enlace (link budget),"8.5 dB a elev=5 deg
-20.2 dB a elev=90 deg","Margen tipico requerido: 3-6 dB
+Margen de enlace (link budget),"7.1 dB a elev=5 deg
+18.0 dB a elev=90 deg","Margen tipico requerido: 3-6 dB
 CubeSats universitarios: 5-15 dB tipico
 FACSAT-1 reporta ~8 dB margen minimo
 Libertad 1 reporto ~6 dB","Alta. El margen simulado supera el minimo recomendado

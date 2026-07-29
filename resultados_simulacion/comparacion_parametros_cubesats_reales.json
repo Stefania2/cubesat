@@ -34,7 +34,7 @@
     },
     {
       "parametro": "Margen de enlace (link budget)",
-      "simulado": "8.5 dB a elev=5 deg\n20.2 dB a elev=90 deg",
+      "simulado": "7.1 dB a elev=5 deg\n18.0 dB a elev=90 deg",
       "real_referencia": "Margen tipico requerido: 3-6 dB\nCubeSats universitarios: 5-15 dB tipico\nFACSAT-1 reporta ~8 dB margen minimo\nLibertad 1 reporto ~6 dB",
       "concordancia": "Alta. El margen simulado supera el minimo recomendado\nde 3 dB incluso a elevacion de 5 grados. Los valores\nson consistentes con lo reportado en literatura para\nCubeSats con estaciones terrenas de radioaficionado."
     },

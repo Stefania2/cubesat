@@ -43,7 +43,11 @@ from geometria_orbital import (
 FREQ_HZ = 437.568e6        # Frecuencia UHF del STRaND-1 (Hz)
 SYM_RATE = 9_600            # Tasa de simbolos (baudios)
 MODULATION = "BPSK"         # Esquema de modulacion
-ORBIT_HEIGHT_KM = 600.0     # Altura orbital tipica (km)
+# Altura real de STRaND-1, no un valor tipico de LEO: se deduce del TLE
+# (movimiento medio 14.37185087 rev/dia -> semieje mayor 7146 km). La orbita es
+# heliosincrona, i = 98.394°, con excentricidad 0.00098: la aproximacion
+# circular que usan estos modelos es valida, la altura de 600 km no lo era.
+ORBIT_HEIGHT_KM = 775.0     # Altura orbital de STRaND-1 (km)
 
 # Parametros del transmisor (CubeSat)
 P_TX_DBM = 30.0             # Potencia transmitida: 1 W = 30 dBm

@@ -13,7 +13,9 @@ Caracterizar y simular el subsistema electronico de comunicaciones de un CubeSat
 Este repositorio contiene el desarrollo completo del proyecto de caracterizacion:
 
 ### Modelo de simulacion RF
-- Descarga y organizacion de 100 frames de telemetria real del satelite STRaND-1 via SatNOGS.
+- Descarga y organizacion de telemetria real del satelite STRaND-1 via SatNOGS: 36641 frames,
+  combinando el archivo historico de SatNOGS DB (2016-2022) con las observaciones de SatNOGS
+  Network (2022-2026), con la ventana de la transicion de 2020-2021 descargada dia a dia.
 - Decodificacion de payloads hexadecimales a bytes/binario (2347 bytes, 18776 bits).
 - Modulacion BPSK y FSK en banda base con 8 muestras/simbolo a 9600 bps.
 - Canal AWGN con barrido de SNR (-2 a 12 dB).
@@ -34,15 +36,15 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 
 ### Link budget
 - Calculo de margen de enlace descendente UHF (437.568 MHz, 9600 bps BPSK).
-- Barrido 5°-90° de elevacion con orbita LEO de 600 km.
+- Barrido 5°-90° de elevacion con orbita LEO de 775 km (altura real de STRaND-1 segun TLE).
 - Temperatura de sistema referida a la entrada del receptor, incluyendo el ruido del cable de antena.
-- Resultados: margen de 8.5 dB (5°) a 20.3 dB (90°), superando los 3-6 dB recomendados.
+- Resultados: margen de 7.1 dB (5°) a 18.0 dB (90°), superando los 3-6 dB recomendados.
 
 ### Enlace ascendente
 - Simulacion de uplink para comandos a 1200 bps en 435 MHz.
 - Potencia TX de 10W desde estacion terrena con Yagi de 15 dBi.
-- Margen de enlace: 24.6 dB (5°) a 36.4 dB (90°).
-- Tasa maxima sostenible con la Eb/N0 requerida: 348 kbps (5°) a 5.2 Mbps (cenit).
+- Margen de enlace: 23.3 dB (5°) a 34.2 dB (90°).
+- Tasa maxima sostenible con la Eb/N0 requerida: 253 kbps (5°) a 3.1 Mbps (cenit).
 
 ### Modelo de estacion terrena
 - Paso orbital completo sobre traza de circulo maximo: 12.8 min de horizonte a horizonte, 10.4 min utiles sobre 5°.
@@ -59,6 +61,9 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 - `docs/INFORME_TECNICO_FINAL.md`: informe integrador con metodologia, resultados, limitaciones y conclusiones.
 - `docs/CARACTERIZACION_COMPONENTES_COMMS.md`: descripcion detallada de antena, transceptor, modem y TT&C.
 - `docs/DISENO_MODELO_SIMULACION_ENLACE_RF.md`: diseno del modelo de simulacion Fase 2.
+- `docs/ANALISIS_TELEMETRIA_SALUD_CUBESAT.md`: cadena completa senal RF -> estado del satelite,
+  con procesamiento de senal, sincronizacion, estructura de paquetes, monitoreo de salud,
+  indicadores de desempeno y comparacion de protocolos.
 
 ## Estructura del proyecto
 
@@ -92,6 +97,7 @@ cubesat/
 |-- docs/
 |   |-- DISENO_MODELO_SIMULACION_ENLACE_RF.md
 |   |-- CARACTERIZACION_COMPONENTES_COMMS.md
+|   |-- ANALISIS_TELEMETRIA_SALUD_CUBESAT.md
 |   `-- INFORME_TECNICO_FINAL.md
 |
 `-- resultados_simulacion/
@@ -124,10 +130,30 @@ Parametros principales del conjunto procesado:
 | Banda | UHF |
 | Modulacion de referencia | BPSK |
 | Tasa usada en simulacion | 9600 bps |
-| Frames procesados | 100 |
+| Frames procesados (conjunto base, SatNOGS DB) | 100 |
 | Bytes exportados | 2347 |
 | Bits evaluados | 18776 |
 | Entropia promedio | 4.049 bits/byte |
+
+Conjunto ampliado desde las observaciones de SatNOGS Network (ver seccion 3 del informe
+tecnico), a 28-07-2026:
+
+| Parametro | Valor |
+|---|---|
+| Frames | 36641 |
+| Bytes totales | 517878 |
+| Entropia promedio | 3.066 bits/byte (maximo posible 3.639 para estas longitudes) |
+| Balizas de STRaND-1 reconocidas | 32754 |
+| Campos decodificados | 53, de los cuales 42 varian |
+| Rango temporal | 2022-11-16 a 2026-07-13 |
+
+Separacion por estado de la observacion (criterio de SatNOGS, independiente del
+analisis de bytes de este trabajo):
+
+| Estado | Observaciones | Frames | Balizas | % balizas |
+|---|---|---|---|---|
+| good | 488 | 6225 | 5929 | 95.2% |
+| bad | 1873 | 2415 | 6 | 0.2% |
 
 ## Modelo de simulacion
 
@@ -189,11 +215,11 @@ Tramas AX.25 validadas por FCS: 0 tramas a -6 dB, 15 a -2 dB, las 37 a partir de
 
 ### Link budget descendente
 
-Margen de enlace: **8.5 dB** a 5° elevacion → **20.3 dB** en cenit.
+Margen de enlace: **7.1 dB** a 5° elevacion → **18.0 dB** en cenit.
 
 ### Link budget ascendente (comandos 1200 bps)
 
-Margen de enlace: **24.6 dB** a 5° elevacion → **36.4 dB** en cenit (10W TX, 435 MHz).
+Margen de enlace: **23.3 dB** a 5° elevacion → **34.2 dB** en cenit (10W TX, 435 MHz).
 
 ### Estacion terrena
 

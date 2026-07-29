@@ -32,7 +32,8 @@ from geometria_orbital import (
 FREQ_UPLINK_HZ = 435.0e6   # Frecuencia uplink UHF (banda de 435 MHz)
 SYM_RATE_UPLINK = 1_200     # Tasa tipica para comandos (bps)
 
-ORBIT_HEIGHT_KM = 600.0
+# Altura real de STRaND-1 segun su TLE (ver calcular_link_budget.py).
+ORBIT_HEIGHT_KM = 775.0
 
 # Parametros estacion terrena (TX)
 P_TX_GS_DBM = 40.0          # 10 W = 40 dBm (potencia legal tipica)

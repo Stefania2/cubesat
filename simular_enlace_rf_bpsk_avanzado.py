@@ -52,7 +52,8 @@ DOPPLER_MAX_HZ = 150.0    # Max Doppler a 437 MHz para LEO
 DOPPLER_RESIDUAL_HZ_VALUES = [0.0, 0.05, 0.1, 0.2]
 
 # Orbita
-ORBIT_HEIGHT_KM = 600.0
+# Altura real de STRaND-1 segun su TLE (ver calcular_link_budget.py).
+ORBIT_HEIGHT_KM = 775.0
 EARTH_RADIUS_KM = 6_371.0
 
 # Convolutional code (r=1/2, K=7, polinomios 171, 133 octal)
