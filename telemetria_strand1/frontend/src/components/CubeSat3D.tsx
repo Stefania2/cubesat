@@ -23,7 +23,7 @@
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Html, OrbitControls, Stars, Text } from '@react-three/drei'
 import { XR, createXRStore } from '@react-three/xr'
-import { useMemo, useRef } from 'react'
+import { Suspense, useMemo, useRef } from 'react'
 import type { Group } from 'three'
 import type { EstadoCubeSat, LecturaGemelo } from '../lib/api'
 
@@ -245,12 +245,28 @@ export function CubeSat3D({ estado, lecturas, girando, momento = '' }: Props) {
     <Canvas camera={{ position: [5, 2.5, 5], fov: 45 }} dpr={[1, 2]}>
       <XR store={xrStore}>
         <color attach="background" args={['#070b14']} />
+        {/*
+          El satelite y las luces van FUERA de cualquier frontera de suspension:
+          son geometria pura, sin recursos que cargar, y son lo que el usuario
+          ha venido a ver.
+
+          El panel inmersivo si suspende, porque `Text` de drei resuelve la
+          fuente contra `cdn.jsdelivr.net` a traves de unicode-font-resolver.
+          Sin salida a internet --- una demostracion sin red, una politica de
+          CSP --- esa promesa no resuelve nunca. Con el panel dentro de su
+          propia frontera, eso solo cuesta el panel; fuera de ella se llevaba
+          por delante la escena entera, y sin una frontera de lienzo, la pagina
+          entera: React oculta lo ya renderizado con `display:none !important`
+          mientras espera, y el usuario ve un esqueleto indefinido.
+        */}
         <ambientLight intensity={0.35} />
         <directionalLight position={[6, 5, 4]} intensity={1.6} />
         <directionalLight position={[-5, -3, -4]} intensity={0.3} color="#60a5fa" />
         <Stars radius={60} depth={30} count={1200} factor={3} fade />
         <Satelite estado={estado} lecturas={lecturas} girando={girando} />
-        <PanelInmersivo estado={estado} lecturas={lecturas} momento={momento} />
+        <Suspense fallback={null}>
+          <PanelInmersivo estado={estado} lecturas={lecturas} momento={momento} />
+        </Suspense>
         <OrbitControls enablePan={false} minDistance={3.5} maxDistance={14} />
       </XR>
     </Canvas>

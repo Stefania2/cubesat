@@ -119,7 +119,14 @@ export function GemeloDigital() {
   if (!resumen) return null
 
   const anomalos = serie?.puntos.filter((p) => p.etiqueta !== 'normal' && p.valor !== null) ?? []
-  const evento = eventos?.eventos[0]
+  // La API los devuelve del mas largo al mas corto, pero el que ilustra el
+  // fallo es el **primero** enrielado: en los tramos posteriores la linea base
+  // previa ya esta dentro del fallo y la diferencia sale cero, que es el dato
+  // menos informativo posible.
+  const muertos = eventos?.eventos.filter((e) => e.etiqueta === 'canal_enrielado') ?? []
+  const evento = muertos.length
+    ? muertos.reduce((a, b) => (a.inicio <= b.inicio ? a : b))
+    : eventos?.eventos[0]
 
   return (
     <Section
@@ -165,28 +172,28 @@ export function GemeloDigital() {
             </Badge>}
           />
           <dl className="mb-3 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-            <dt className="text-slate-400">Satélite</dt><dd>STRaND-1 (39090)</dd>
-            <dt className="text-slate-400">Instante</dt>
+            <dt className="text-ink-soft">Satélite</dt><dd>STRaND-1 (39090)</dd>
+            <dt className="text-ink-soft">Instante</dt>
             <dd className="font-mono text-xs">{estado?.momento.replace('T', ' ').slice(0, 19) ?? '—'}</dd>
-            <dt className="text-slate-400">Pase</dt><dd>#{estado?.pase ?? '—'}</dd>
-            <dt className="text-slate-400">Evento</dt>
+            <dt className="text-ink-soft">Pase</dt><dd>#{estado?.pase ?? '—'}</dd>
+            <dt className="text-ink-soft">Evento</dt>
             <dd>{indice.toLocaleString('es')} / {resumen.eventos.toLocaleString('es')}</dd>
           </dl>
 
-          <div className="max-h-56 overflow-y-auto rounded border border-slate-700">
+          <div className="max-h-56 overflow-y-auto rounded-lg border border-line">
             <table className="w-full text-left text-xs">
-              <thead className="sticky top-0 bg-slate-800 text-slate-300">
+              <thead className="sticky top-0 bg-blue-lighter text-ink-soft">
                 <tr><th className="p-1.5">Variable</th><th className="p-1.5 text-right">Valor</th><th className="p-1.5 text-right">Edad</th></tr>
               </thead>
               <tbody>
                 {(estado?.lecturas ?? []).map((l) => (
                   <tr key={l.campo}
-                      className={`border-t border-slate-800 ${l.frescura === 'obsoleta' ? 'opacity-40' : l.frescura === 'vieja' ? 'opacity-70' : ''}`}>
+                      className={`border-t border-line ${l.frescura === 'obsoleta' ? 'opacity-40' : l.frescura === 'vieja' ? 'opacity-70' : ''}`}>
                     <td className="p-1.5 font-mono">{l.campo}</td>
                     <td className="p-1.5 text-right tabular-nums">
-                      {l.valor.toFixed(2)} <span className="text-slate-500">{l.unidad}</span>
+                      {l.valor.toFixed(2)} <span className="text-ink-soft">{l.unidad}</span>
                     </td>
-                    <td className="p-1.5 text-right tabular-nums text-slate-400">{edadLegible(l.edad_s)}</td>
+                    <td className="p-1.5 text-right tabular-nums text-ink-soft">{edadLegible(l.edad_s)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -204,14 +211,14 @@ export function GemeloDigital() {
           <Button onClick={() => setIndice((i) => Math.max(0, i - 10))}>◀◀</Button>
           <Button onClick={() => setIndice((i) => Math.min(resumen.eventos - 1, i + 10))}>▶▶</Button>
           <select
-            className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
+            className="rounded-lg border border-line bg-white px-2 py-1.5 text-sm text-ink"
             value={velocidad}
             onChange={(e) => setVelocidad(Number(e.target.value))}
           >
             {VELOCIDADES.map((v) => <option key={v} value={v}>{v} eventos/s</option>)}
           </select>
           <select
-            className="rounded border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
+            className="rounded-lg border border-line bg-white px-2 py-1.5 text-sm text-ink"
             value={campo}
             onChange={(e) => setCampo(e.target.value)}
           >
@@ -277,18 +284,18 @@ export function GemeloDigital() {
             }
           />
           <dl className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm md:grid-cols-4">
-            <dt className="text-slate-400">Variable</dt><dd className="font-mono text-xs">{evento.campo}</dd>
-            <dt className="text-slate-400">Inicio</dt>
+            <dt className="text-ink-soft">Variable</dt><dd className="font-mono text-xs">{evento.campo}</dd>
+            <dt className="text-ink-soft">Inicio</dt>
             <dd className="font-mono text-xs">{evento.inicio.replace('T', ' ').slice(0, 19)}</dd>
-            <dt className="text-slate-400">Duración</dt><dd>{(evento.duracion_s / 86400).toFixed(1)} d ({evento.n_lecturas} lecturas)</dd>
-            <dt className="text-slate-400">Estado</dt><dd>{evento.estado_cubesat.replace(/_/g, ' ')}</dd>
-            <dt className="text-slate-400">Valor esperado</dt><dd>{evento.valor_esperado} {eventos?.unidad}</dd>
-            <dt className="text-slate-400">Valor registrado</dt><dd>{evento.valor_registrado} {eventos?.unidad}</dd>
-            <dt className="text-slate-400">Diferencia</dt>
+            <dt className="text-ink-soft">Duración</dt><dd>{(evento.duracion_s / 86400).toFixed(1)} d ({evento.n_lecturas} lecturas)</dd>
+            <dt className="text-ink-soft">Estado</dt><dd>{evento.estado_cubesat.replace(/_/g, ' ')}</dd>
+            <dt className="text-ink-soft">Valor esperado</dt><dd>{evento.valor_esperado} {eventos?.unidad}</dd>
+            <dt className="text-ink-soft">Valor registrado</dt><dd>{evento.valor_registrado} {eventos?.unidad}</dd>
+            <dt className="text-ink-soft">Diferencia</dt>
             <dd className={evento.diferencia >= 0 ? 'text-amber-400' : 'text-sky-400'}>
               {evento.diferencia > 0 ? '+' : ''}{evento.diferencia} {eventos?.unidad}
             </dd>
-            <dt className="text-slate-400">|z| máximo</dt><dd>{Number.isFinite(evento.z_max) ? evento.z_max : '—'}</dd>
+            <dt className="text-ink-soft">|z| máximo</dt><dd>{Number.isFinite(evento.z_max) ? evento.z_max : '—'}</dd>
           </dl>
         </Card>
       )}
