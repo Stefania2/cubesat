@@ -21,10 +21,29 @@
  */
 
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Html, OrbitControls, Stars } from '@react-three/drei'
+import { Html, OrbitControls, Stars, Text } from '@react-three/drei'
+import { XR, createXRStore } from '@react-three/xr'
 import { useMemo, useRef } from 'react'
 import type { Group } from 'three'
 import type { EstadoCubeSat, LecturaGemelo } from '../lib/api'
+
+/**
+ * FASE 8 --- Entorno de realidad virtual.
+ *
+ * El almacen de XR se crea a nivel de modulo, no dentro del componente: la
+ * sesion inmersiva sobrevive a los re-renderizados de React, y recrearlo en
+ * cada cuadro la cerraria. La pagina lo importa para dibujar el boton de
+ * entrada, que es lo unico que WebXR exige que dispare un gesto del usuario.
+ *
+ * En VR no vale `Html` de drei --- que proyecta un div del DOM sobre la escena
+ * y desaparece dentro del visor ---, asi que el panel inmersivo se dibuja con
+ * geometria y texto reales.
+ */
+// `emulate` solo en desarrollo. Por defecto la biblioteca emula un visor
+// cuando corre en localhost sin WebXR, lo que es comodo para desarrollar pero
+// arrastra cinco megas de salas de ejemplo (music_room, living_room...) al
+// build de produccion. Con `import.meta.env.DEV` esos chunks no se generan.
+export const xrStore = createXRStore({ emulate: import.meta.env.DEV })
 
 /** Color del cuerpo segun el diagnostico vigente. */
 const COLOR_ESTADO: Record<EstadoCubeSat, string> = {
@@ -53,6 +72,7 @@ interface Props {
   estado: EstadoCubeSat
   lecturas: LecturaGemelo[]
   girando: boolean
+  momento?: string
 }
 
 /** Indexa las lecturas por campo para no recorrer el array en cada malla. */
@@ -182,16 +202,57 @@ function Satelite({ estado, lecturas, girando }: Props) {
   )
 }
 
-export function CubeSat3D({ estado, lecturas, girando }: Props) {
+/** Panel de telemetria dibujado en la escena, legible dentro del visor. */
+function PanelInmersivo({ estado, lecturas, momento }: {
+  estado: EstadoCubeSat
+  lecturas: LecturaGemelo[]
+  momento: string
+}) {
+  // Solo las lecturas frescas: dentro del visor no hay sitio para matices, y
+  // ensenar un fosil sin poder rotularlo como tal seria peor que no ensenarlo.
+  const frescas = lecturas.filter((l) => l.frescura === 'fresca').slice(0, 8)
+
+  return (
+    <group position={[3.2, 0.6, 0]} rotation={[0, -0.5, 0]}>
+      <mesh position={[0, 0, -0.02]}>
+        <planeGeometry args={[2.9, 2.4]} />
+        <meshBasicMaterial color="#0b1220" transparent opacity={0.88} />
+      </mesh>
+      <Text position={[-1.3, 1.0, 0]} fontSize={0.15} color={COLOR_ESTADO[estado] ?? SIN_DATO}
+            anchorX="left" maxWidth={2.7}>
+        {estado.replace(/_/g, ' ')}
+      </Text>
+      <Text position={[-1.3, 0.78, 0]} fontSize={0.088} color="#94a3b8" anchorX="left">
+        {momento.replace('T', ' ').slice(0, 19)}
+      </Text>
+      {frescas.map((l, i) => (
+        <Text key={l.campo} position={[-1.3, 0.5 - i * 0.15, 0]} fontSize={0.082}
+              color="#e2e8f0" anchorX="left" maxWidth={2.7}>
+          {`${l.campo.slice(0, 26)}  ${l.valor.toFixed(2)} ${l.unidad}`}
+        </Text>
+      ))}
+      {frescas.length === 0 && (
+        <Text position={[-1.3, 0.5, 0]} fontSize={0.082} color="#64748b" anchorX="left">
+          sin lecturas frescas en este instante
+        </Text>
+      )}
+    </group>
+  )
+}
+
+export function CubeSat3D({ estado, lecturas, girando, momento = '' }: Props) {
   return (
     <Canvas camera={{ position: [5, 2.5, 5], fov: 45 }} dpr={[1, 2]}>
-      <color attach="background" args={['#070b14']} />
-      <ambientLight intensity={0.35} />
-      <directionalLight position={[6, 5, 4]} intensity={1.6} />
-      <directionalLight position={[-5, -3, -4]} intensity={0.3} color="#60a5fa" />
-      <Stars radius={60} depth={30} count={1200} factor={3} fade />
-      <Satelite estado={estado} lecturas={lecturas} girando={girando} />
-      <OrbitControls enablePan={false} minDistance={3.5} maxDistance={14} />
+      <XR store={xrStore}>
+        <color attach="background" args={['#070b14']} />
+        <ambientLight intensity={0.35} />
+        <directionalLight position={[6, 5, 4]} intensity={1.6} />
+        <directionalLight position={[-5, -3, -4]} intensity={0.3} color="#60a5fa" />
+        <Stars radius={60} depth={30} count={1200} factor={3} fade />
+        <Satelite estado={estado} lecturas={lecturas} girando={girando} />
+        <PanelInmersivo estado={estado} lecturas={lecturas} momento={momento} />
+        <OrbitControls enablePan={false} minDistance={3.5} maxDistance={14} />
+      </XR>
     </Canvas>
   )
 }
