@@ -132,7 +132,7 @@ La medida está a un 84 % de ese techo, y por tramos de longitud la proximidad v
 
 Esto corrige la interpretación inicial de este trabajo, que leyó una entropía moderada como «mezcla de cabeceras de baja entropía y datos de sensores», consistente con tramas AX.25. Los datos no la sostienen: de las 36 641 tramas, solo **30 son candidatas a AX.25** por presentar un campo de direcciones plausible, y las 30 decodifican el mismo par de indicativos —`N7SKC` a `WH2XPM`—, que es tráfico terrestre de radioaficionado captado en la misma frecuencia, no una emisión del satélite. Ninguna trama del conjunto supera además la verificación de FCS de AX.25.
 
-Las cifras de esta sección se reproducen con `telemetria_strand1/tools/analizar_entropia.py`, que recalcula la entropía desde el hexadecimal crudo de las 36 641 tramas ingeridas.
+Las cifras de esta sección se reproducen con `analizar_entropia.py`, que recalcula la entropía desde el hexadecimal crudo de las 36 641 tramas ingeridas.
 
 ### 3.4 Decodificación de la baliza según la especificación de AMSAT-UK
 

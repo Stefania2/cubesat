@@ -83,6 +83,7 @@ cubesat/
 |-- comparar_con_cubesats_reales.py (comparacion con 7 CubeSats reales)
 |-- modelo_estacion_terrena.py    (seguimiento automatico de antena)
 |-- simular_enlace_ascendente.py  (enlace ascendente de comandos)
+|-- analizar_entropia.py          (entropia de las tramas contra el techo log2(n))
 |-- generar_tablas_informe.py     (regenera las tablas del informe desde los datos)
 |
 |-- simulacion_visualizar_iq.grc  (GNU Radio: visualizacion IQ + AWGN)
