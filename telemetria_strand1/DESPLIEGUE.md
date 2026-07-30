@@ -47,8 +47,10 @@ postgresql+psycopg://usuario:clave@host:5432/base
 
 ## 2. Backend
 
-Con Render, el `render.yaml` de este directorio lo describe todo; basta apuntar
-el servicio al repositorio. Las variables marcadas `sync: false` se rellenan a
+Con Render, el `render.yaml` de la **raiz del repositorio** lo describe todo;
+basta crear un Blueprint apuntando al repositorio. Tiene que estar en la raiz:
+Render no busca blueprints en subdirectorios, y `rootDir` ya situa el servicio
+en `telemetria_strand1/backend`. Las variables marcadas `sync: false` se rellenan a
 mano:
 
 | Variable | Valor |
