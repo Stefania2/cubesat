@@ -1,0 +1,48 @@
+# Backend de telemetria de STRaND-1 en Render.
+#
+# Por que no en Vercel: sus funciones Python son sin estado y con un tope de
+# 250 MB descomprimidos. Las dependencias de aqui suman unos 190 MB --- pandas
+# y numpy son 144 de ellos --- y el motor del gemelo digital reconstruye un
+# DataFrame de 21 833 x 77 que tarda 4,1 s y se guarda en una cache de modulo.
+# En serverless cada arranque en frio vuelve a pagar esos 4 segundos; con un
+# proceso persistente se paga una sola vez.
+#
+# Requiere ademas una base PostgreSQL con los datos ya restaurados: el volcado
+# y su script estan en `db/`.
+
+services:
+  - type: web
+    name: strand1-api
+    runtime: python
+    # El backend es un subdirectorio del repositorio, no la raiz.
+    rootDir: telemetria_strand1/backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      # El codigo solo usa sintaxis de 3.10 en adelante (uniones PEP 604 y
+      # genericos nativos), asi que no hace falta la 3.14 del equipo de
+      # desarrollo. Se fija una version que Render ofrezca de forma estable.
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      # Cadena de conexion de la base gestionada. En Render se enlaza sola si se
+      # crea la base en el mismo proyecto; con Neon o Supabase se pega la suya.
+      # Debe llevar el dialecto explicito: sin `+psycopg`, SQLAlchemy asume
+      # psycopg2, que no esta en requirements.
+      - key: DATABASE_URL
+        sync: false
+      # Sin esto la aplicacion cae a SQLite en silencio si PostgreSQL no
+      # responde, y se acabaria sirviendo una base vacia sin darse cuenta.
+      - key: REQUIRE_POSTGRES
+        value: "true"
+      # Dominio del frontend en Vercel. Sin el, el navegador rechaza las
+      # respuestas por CORS. Acepta varios separados por comas.
+      - key: CORS_ORIGINS
+        sync: false
+      # Tokens de SatNOGS. Solo hacen falta para volver a descargar datos; con
+      # la base ya restaurada, la API funciona sin ellos.
+      - key: SATNOGS_DB_TOKEN
+        sync: false
+      - key: SATNOGS_NETWORK_TOKEN
+        sync: false

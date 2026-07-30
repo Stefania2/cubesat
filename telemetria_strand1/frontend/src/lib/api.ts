@@ -276,8 +276,22 @@ export interface EventosGemelo {
   eventos: EventoGemelo[]
 }
 
+/**
+ * Base de la API.
+ *
+ * Vacia por omision, que es lo correcto en desarrollo: las rutas quedan
+ * relativas y las sirve el proxy de Vite, sin CORS de por medio.
+ *
+ * En un despliegue donde el frontend y el backend viven en dominios distintos
+ * --- el SPA en Vercel, FastAPI en Render o Railway --- hay que definir
+ * `VITE_API_URL` con la raiz del backend, sin barra final. Ese dominio tiene
+ * que figurar ademas en `cors_origins` del backend, o el navegador rechazara
+ * las respuestas.
+ */
+const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(path, {
+  const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
   })

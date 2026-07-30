@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Annotated
 
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 # El CSV de telemetria real vive en la raiz del repositorio, dos niveles arriba.
@@ -57,10 +59,29 @@ class Settings(BaseSettings):
     # observaciones de SatNOGS Network.
     extraccion_csv_path: Path = BASE_DIR.parent / "telemetria_satnogs.csv"
 
-    cors_origins: list[str] = [
+    # `NoDecode` impide que la fuente de entorno intente leer esto como JSON.
+    # Sin el, `CORS_ORIGINS=https://algo.vercel.app` aborta el arranque durante
+    # la lectura de la variable --- antes de que ningun validador se ejecute ---
+    # con un error que no menciona el formato esperado. Pegar JSON con corchetes
+    # y comillas en el panel de un proveedor es facil de equivocar, asi que se
+    # admiten las dos formas.
+    cors_origins: Annotated[list[str], NoDecode] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
     ]
+
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def _origenes(cls, v: object) -> object:
+        """Admite JSON, lista separada por comas o un solo origen."""
+        if isinstance(v, str):
+            texto = v.strip()
+            if texto.startswith("["):
+                import json
+
+                return json.loads(texto)
+            return [o.strip() for o in texto.split(",") if o.strip()]
+        return v
 
 
 settings = Settings()
