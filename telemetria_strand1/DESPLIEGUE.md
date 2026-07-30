@@ -38,7 +38,10 @@ El volcado y su guion estan en el repositorio privado `strand-1`, rama `main`
 | **Render** | 1 GB | **Caduca a los 30 dias** y se borra |
 
 La base ocupa 85 MB, asi que cabe en los tres. Para algo que debe seguir en pie
-durante la evaluacion, Neon es el que menos vigilancia pide.
+durante la evaluacion, **Neon** es el que menos vigilancia pide: se suspende
+sola por inactividad, pero la primera consulta la despierta en cosa de un
+segundo, sin intervencion. Es ademas el unico de los tres que no publica una API
+REST sobre el esquema, asi que no hay que revisar politicas de acceso.
 
 En un gestionado la base viene creada y no se pueden crear otras, asi que hay
 que pedir el segundo modo:
@@ -48,6 +51,22 @@ cd telemetria_strand1/db
 PGHOST=<host> PGPORT=5432 PGUSER=<usuario> PGPASSWORD=<clave> PGDATABASE=postgres \
   ./restaurar.sh --base-existente
 ```
+
+**Copia la cadena del panel, no la construyas a mano.** Los tres proveedores
+generan nombres de servidor largos y cambiantes, y dos de ellos ofrecen ademas
+un extremo de *pooling* que no sirve para restaurar.
+
+**Con Neon:** usa el extremo **sin** `-pooler` en el nombre para la
+restauracion, exige TLS y la base por omision se llama `neondb`, no `postgres`:
+
+```bash
+PGHOST=ep-xxx-123456.<region>.aws.neon.tech PGPORT=5432 \
+PGUSER=neondb_owner PGPASSWORD='<clave>' PGDATABASE=neondb \
+PGSSLMODE=require ./restaurar.sh --base-existente
+```
+
+En `DATABASE_URL` hay que conservar el `?sslmode=require` que trae la cadena, o
+la conexion sera rechazada.
 
 **Con Supabase, usa el puerto 5432 y no el 6543.** El 6543 es el pooler de
 transacciones: no admite todas las sentencias de un volcado y la restauracion
