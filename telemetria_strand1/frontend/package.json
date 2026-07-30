@@ -6,14 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "dev:vr": "VR=1 vite --host",
-    "preview:vr": "VR=1 vite preview --host"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
-    "@react-three/xr": "^6.6.30",
     "@types/three": "^0.185.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -25,7 +22,6 @@
     "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
-    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "@vitejs/plugin-react": "^5.1.0",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",

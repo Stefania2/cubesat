@@ -17,7 +17,7 @@ import {
   CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer,
   Tooltip, XAxis, YAxis,
 } from 'recharts'
-import { CubeSat3D, xrStore } from '../components/CubeSat3D'
+import { CubeSat3D } from '../components/CubeSat3D'
 import { Badge, Button, Card, CardHeader, ErrorState, Nota, Section, Skeleton } from '../components/ui'
 import { api, useApi } from '../lib/api'
 import type { EstadoGemelo, EtiquetaAnomalia } from '../lib/api'
@@ -54,16 +54,8 @@ export function GemeloDigital() {
   const [reproduciendo, setReproduciendo] = useState(false)
   const [velocidad, setVelocidad] = useState(10)
   const [estado, setEstado] = useState<EstadoGemelo | null>(null)
-  const [soportaVR, setSoportaVR] = useState(false)
-  const [guion, setGuion] = useState<string | null>(null)
   const enVuelo = useRef(false)
 
-  // WebXR solo existe en contexto seguro (https o localhost) y con visor.
-  // Se comprueba una vez: sin esto el boton prometeria algo que no puede dar.
-  useEffect(() => {
-    const xr = (navigator as Navigator & { xr?: { isSessionSupported(m: string): Promise<boolean> } }).xr
-    xr?.isSessionSupported('immersive-vr').then(setSoportaVR).catch(() => setSoportaVR(false))
-  }, [])
 
   const { data: serie } = useApi(() => api.gemeloSerie(campo), [campo])
   const { data: eventos } = useApi(() => api.gemeloEventos(campo), [campo])
@@ -103,7 +95,6 @@ export function GemeloDigital() {
     setIndice(Math.max(0, centro - 40))
     setVelocidad(2)
     setReproduciendo(true)
-    setGuion(ev.inicio)
   }, [serie, resumen])
 
   const saltarA = useCallback((iso: string) => {
@@ -137,28 +128,17 @@ export function GemeloDigital() {
         La rotación del modelo es <strong>sintética</strong>: STRaND-1 no transmite actitud. La
         inclinación sí procede de los magnetómetros, que fijan dos de los tres grados de libertad.
         Los elementos en gris no tienen lectura asociada, y las lecturas viejas se atenúan según su
-        edad.
+        edad. Arrastra para orbitar el modelo.
       </Nota>
 
       <div className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
         {/* --- Modelo 3D ------------------------------------------------ */}
-        <Card className="relative min-h-[26rem] overflow-hidden p-0">
-          <div className="absolute top-3 right-3 z-10 flex gap-2">
-            <Button
-              variante={soportaVR ? 'primary' : 'secondary'}
-              disabled={!soportaVR}
-              title={soportaVR ? 'Entrar en realidad virtual' : 'Este navegador o equipo no expone un visor WebXR'}
-              onClick={() => xrStore.enterVR()}
-            >
-              🥽 {soportaVR ? 'Entrar en VR' : 'VR no disponible'}
-            </Button>
-          </div>
+        <Card className="min-h-[26rem] overflow-hidden p-0">
           <div className="h-[26rem] w-full">
             <CubeSat3D
               estado={estado?.estado_cubesat ?? 'SIN_REFERENCIA'}
               lecturas={estado?.lecturas ?? []}
               girando={reproduciendo}
-              momento={estado?.momento ?? ''}
             />
           </div>
         </Card>

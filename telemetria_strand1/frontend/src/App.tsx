@@ -12,10 +12,9 @@ import { Skeleton } from './components/ui'
 import { api, useApi } from './lib/api'
 
 /**
- * El gemelo digital se carga de forma diferida porque arrastra Three.js y la
- * pila de WebXR --- mas de la mitad del peso de la aplicacion --- y solo hacen
- * falta en esa pagina. Quien entre a consultar tramas o el link budget no
- * descarga el motor 3D.
+ * El gemelo digital se carga de forma diferida porque arrastra Three.js --- mas
+ * de la mitad del peso de la aplicacion --- y solo hace falta en esa pagina.
+ * Quien entre a consultar tramas o el link budget no descarga el motor 3D.
  *
  * `lazy` exige exportacion por defecto, y esta pagina exporta con nombre; de
  * ahi el remapeo en el `then`.
