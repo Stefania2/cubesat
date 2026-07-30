@@ -46,3 +46,11 @@ services:
         sync: false
       - key: SATNOGS_NETWORK_TOKEN
         sync: false
+      # Cache opcional del estado del gemelo entre reinicios. Sin ella, la
+      # primera peticion tras cada despertar del servicio vuelve a pagar los
+      # diez segundos de cargar y reconstruir; con ella, siete centesimas.
+      # Se pega la direccion interna del Key Value (`redis://red-...:6379`).
+      # No se enlaza con `fromService` a proposito: si el servicio no existe,
+      # un blueprint con esa referencia falla entero, y esta cache es opcional.
+      - key: REDIS_URL
+        sync: false

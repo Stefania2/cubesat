@@ -7,6 +7,9 @@ pydantic-settings==2.13.0
 httpx==0.28.1
 pandas==3.0.3
 python-multipart==0.0.20
+# Cache opcional del estado del gemelo entre reinicios. Sin REDIS_URL definida,
+# la aplicacion no lo importa siquiera.
+redis==6.4.0
 
 # Decodificador oficial de la baliza de STRaND-1 (AMSAT-UK).
 # setuptools<81 porque satnogsdecoders importa pkg_resources, que Python 3.14 ya no trae.

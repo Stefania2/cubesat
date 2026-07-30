@@ -99,6 +99,21 @@ mano:
 | `REQUIRE_POSTGRES` | `true` |
 | `CORS_ORIGINS` | el dominio del frontend, sin barra final |
 | `SATNOGS_DB_TOKEN` | solo si vas a descargar datos nuevos |
+| `REDIS_URL` | opcional, muy recomendable en plan gratuito (ver abajo) |
+
+**Sobre `REDIS_URL`:** el estado del gemelo son 71 631 lecturas traidas de la
+base y un DataFrame de 21 833 x 77 que tarda 4 s en construirse. La primera
+peticion de cada instancia paga unos diez segundos, y en plan gratuito el
+servicio se duerme, de modo que eso se repite tras cada despertar.
+
+Con un Key Value de Render --- crealo y pega su direccion interna,
+`redis://red-...:6379` --- el estado se guarda comprimido en 1,4 MB y se
+recupera en **0,07 s**: 242 veces mas rapido, medido.
+
+La cache es opcional y no critica: sin la variable, sin la biblioteca o con el
+servidor caido, se recalcula y la API responde igual. La clave incluye la
+version de pandas, porque lo que se guarda es un pickle de un DataFrame y su
+formato no es estable entre versiones.
 
 En otro proveedor, la configuracion equivalente es:
 

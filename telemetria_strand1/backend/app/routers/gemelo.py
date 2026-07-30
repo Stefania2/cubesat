@@ -4,20 +4,35 @@ Expone el motor de `gemelo_digital/` --- que vive en la raiz del repositorio,
 junto al informe --- para que el frontend 3D lo consuma. La capa es delgada a
 proposito: aqui no hay logica de analisis, solo cache y serializacion.
 
-Cache
------
-Reconstruir el estado cuesta unos 4 s sobre las 71 631 lecturas, y no depende
-de la peticion: es el mismo DataFrame para todos. Se calcula una vez, de forma
-perezosa, en la primera peticion que lo necesite. La clasificacion de anomalias
-cuesta 0,2 s por magnitud y se memoiza por nombre de campo.
+Cache en dos niveles
+--------------------
+Reconstruir el estado cuesta unos 4 s de calculo mas otros 6 de traer las 71 631
+lecturas desde una base remota, y no depende de la peticion: es el mismo
+DataFrame para todos.
 
-Sin la cache, cada movimiento del cursor de reproduccion recalcularia el
-DataFrame entero y la interfaz iria a un cuadro cada cinco segundos.
+**En el proceso**, un `lru_cache` lo mantiene mientras la instancia viva. Sin
+el, cada movimiento del cursor de reproduccion recalcularia el DataFrame entero
+y la interfaz iria a un cuadro cada cinco segundos.
+
+**Entre procesos**, si hay `REDIS_URL`, el estado se guarda serializado y
+comprimido. Eso importa donde las instancias se reinician o se duermen --- un
+plan gratuito de Render, por ejemplo ---, porque la primera peticion tras cada
+despertar volveria a pagar los diez segundos. Comprimido ocupa 1,4 MB y se
+recupera en unas centesimas.
+
+Redis es **opcional y no critico**: si falta la variable, si la biblioteca no
+esta instalada o si el servidor no responde, se recalcula sin mas. Una cache
+caida no puede tumbar la API.
 """
 
 from __future__ import annotations
 
+import io
+import logging
+import os
+import pickle
 import sys
+import zlib
 from functools import lru_cache
 from pathlib import Path
 
@@ -42,14 +57,84 @@ CAMPO_POR_DEFECTO = "battery_voltage"
 MAX_PUNTOS_SERIE = 4000
 
 
+log = logging.getLogger(__name__)
+
+# Nivel 6 de zlib: deja el estado en 1,4 MB frente a 13,8 sin comprimir, y lo
+# descomprime en 0,03 s. El nivel 1 baja el tiempo de compresion pero sube a
+# 1,9 MB, y comprimir se hace una vez mientras que descomprimir se hace en cada
+# arranque.
+NIVEL_COMPRESION = 6
+
+# La clave lleva la version de pandas porque lo que se guarda es un pickle de un
+# DataFrame, cuyo formato no es estable entre versiones. Sin esto, un despliegue
+# que actualice pandas leeria una cache incompatible y fallaria al deserializar
+# en lugar de simplemente recalcularla.
+CLAVE_ESTADO = f"gemelo:estado:v1:pandas-{pd.__version__}"
+
+# A los siete dias la cache caduca sola. Es una red de seguridad por si los datos
+# de la base cambian y nadie se acuerda de invalidarla.
+TTL_ESTADO_S = 7 * 24 * 3600
+
+
+@lru_cache(maxsize=1)
+def _redis():
+    """Cliente de Redis, o None si no hay cache entre procesos configurada."""
+    url = os.environ.get("REDIS_URL", "").strip()
+    if not url:
+        return None
+    try:
+        import redis
+
+        cliente = redis.from_url(url, socket_timeout=5, socket_connect_timeout=5)
+        cliente.ping()
+        return cliente
+    except Exception as exc:  # noqa: BLE001 - cualquier fallo degrada, no rompe
+        log.warning("Redis no disponible (%s); se seguira sin cache compartida", exc)
+        return None
+
+
 @lru_cache(maxsize=1)
 def _campos() -> pd.DataFrame:
     return datos.cargar_campos()
 
 
+def _estado_desde_redis(cliente) -> pd.DataFrame | None:
+    crudo = cliente.get(CLAVE_ESTADO)
+    if not crudo:
+        return None
+    # Se deserializa un pickle que solo escribe esta misma aplicacion, en un
+    # servicio de red privada sin exposicion externa. Si algun dia Redis pasara a
+    # ser accesible desde fuera, esto habria que cambiarlo por un formato que no
+    # ejecute codigo al leerse.
+    return pd.read_pickle(io.BytesIO(zlib.decompress(crudo)))
+
+
 @lru_cache(maxsize=1)
 def _estado() -> pd.DataFrame:
-    return estado.reconstruir(_campos())
+    cliente = _redis()
+
+    if cliente is not None:
+        try:
+            recuperado = _estado_desde_redis(cliente)
+            if recuperado is not None:
+                log.info("Estado del gemelo recuperado de Redis")
+                return recuperado
+        except Exception as exc:  # noqa: BLE001
+            log.warning("No se pudo leer la cache de Redis (%s); se recalcula", exc)
+
+    calculado = estado.reconstruir(_campos())
+
+    if cliente is not None:
+        try:
+            buffer = io.BytesIO()
+            calculado.to_pickle(buffer)
+            cliente.setex(CLAVE_ESTADO, TTL_ESTADO_S,
+                          zlib.compress(buffer.getvalue(), NIVEL_COMPRESION))
+            log.info("Estado del gemelo guardado en Redis")
+        except Exception as exc:  # noqa: BLE001
+            log.warning("No se pudo escribir la cache de Redis (%s)", exc)
+
+    return calculado
 
 
 @lru_cache(maxsize=1)
