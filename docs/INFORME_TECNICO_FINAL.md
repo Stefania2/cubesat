@@ -17,7 +17,7 @@
 
 ## Resumen
 
-Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi y tramas AX.25 verificadas por FCS; (4) flujogramas en GNU Radio para visualización IQ y demodulación; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
+Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi y tramas AX.25 verificadas por FCS; (4) flujogramas en GNU Radio para visualización IQ y demodulación; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida; y (9) un gemelo digital que reconstruye el estado del satélite a partir de esos registros, lo reproduce en un eje temporal comprimido y lo representa en tres dimensiones, con detección de anomalías que fecha por sí sola el fallo de la instrumentación de energía y con la edad de cada lectura siempre a la vista. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
 
 El resultado central es que la cadena completa —señal RF, demodulación, bits, tramas, paquetes, variables y estado del sistema— puede recorrerse íntegramente con datos de una red abierta de estaciones voluntarias, y que el eslabón que falla no es el enlace, sino la interpretación de los bytes.
 
@@ -773,9 +773,116 @@ Frente a un panel que muestre «Batería: 9,75 V» sin más, la plataforma oblig
 
 ---
 
-## 11. Discusión
+## 11. Gemelo digital: del registro al estado visible
 
-### 11.1 Hallazgos principales
+Las secciones anteriores presentan la telemetría como series y tablas. Esta última construye sobre la misma base de datos un **gemelo digital**: una representación tridimensional del satélite cuyo estado visual lo gobiernan los registros, con reproducción temporal y detección de anomalías. El código vive en `gemelo_digital/` y se expone al frontend por la API descrita en §10.1.
+
+### 11.1 Lo que los datos permiten y lo que no
+
+El diseño no se eligió: lo impusieron tres propiedades del conjunto, medidas antes de escribir la primera línea de visualización con `gemelo_digital/analisis_estructura.py`.
+
+**Ningún instante contiene el estado completo.** De las 21 833 marcas temporales con al menos una medida, ninguna trae más de **tres** magnitudes físicas: 24 170 tramas aportan dos, 5 269 aportan tres y 1 786 aportan una. La baliza rota entre canales, de modo que un pivote a formato ancho produce una matriz casi vacía.
+
+**No es una serie regular.** Hay tramas en 657 días de un intervalo de 3 511, el **18,7 %**. La separación mediana entre tramas consecutivas es de 1 segundo —son ráfagas dentro de un pase— y la máxima de 365 días.
+
+**Casi todas las magnitudes están muertas en el tramo reciente.** Desde 2022, `battery_voltage` solo toma dos valores separados por 4 mV. La ventana con variación real es 2020-2021.
+
+De ahí que el gemelo declare **38 magnitudes** disponibles, de las que el clasificador considera aprovechables 32 y con variación insuficiente 6 —las corrientes de los interruptores, con 10 a 12 valores distintos en todo el archivo.
+
+### 11.2 Reconstrucción de estado, con la edad a la vista
+
+Como no existe un instante con el estado completo, el gemelo lo reconstruye arrastrando la última lectura conocida de cada magnitud. Eso es una **inferencia, no una medida**, y por tanto cada valor viaja con su **edad**: los segundos transcurridos desde que se midió de verdad.
+
+| Frescura de la lectura | Umbral | Presentación |
+|---|---|---|
+| Fresca | ≤ 600 s (un pase) | opacidad plena |
+| Vieja | ≤ 86 400 s (un día) | atenuada |
+| Obsoleta | > 1 día | muy atenuada |
+
+Sobre `battery_voltage`, la reconstrucción es fresca en el **82,1 %** de los eventos, vieja en 3 155 y obsoleta en 754. Ese último número es el que justifica la decisión: en 754 instantes el panel muestra un voltaje cuya medida tiene más de un día, y sin declararlo estaría afirmando algo que no sabe.
+
+### 11.3 Reproducción sobre un eje comprimido
+
+Reproducir el archivo contra el reloj real no funciona: con el 81,3 % del intervalo sin datos y huecos de hasta un año, la proyección pasaría casi todo el tiempo en negro. El motor agrupa los eventos en **588 pases** —sesiones separadas por más de 30 minutos— y construye un eje en el que el tiempo corre real dentro del pase y el hueco entre pases se recorta a 2 segundos.
+
+Así, **2 250 días de archivo caben en 46,1 horas de eje virtual**: 164 838 s de duración acumulada de los pases más 587 saltos de 2 s. Se conserva lo que tiene significado físico —la cadencia de las balizas dentro de un pase— y se descarta el silencio.
+
+### 11.4 Detección de anomalías: por qué basta lo simple
+
+Se evaluaron Z-score, IQR, umbral dinámico, Isolation Forest y métodos de series temporales. Los tres últimos presuponen muestreo regular y un vector de estado, y aquí no hay ninguno de los dos. Se adoptaron dos reglas:
+
+**Z-score robusto (mediana + MAD).** La media y la desviación típica se contaminan con los propios valores atípicos que se buscan; la mediana y la desviación absoluta mediana no. El factor 1,4826 devuelve la MAD a escala de desviación típica bajo normalidad.
+
+**Canal enrielado.** Si la amplitud de la ventana no llega a una milésima de su propia escala, el convertidor no se está moviendo. Esta regla es imprescindible porque **en el fallo real la MAD vale cero y el z-score queda indefinido**: un canal muerto tiene dispersión nula, que es lo contrario de lo que un detector de atípicos persigue.
+
+La ventana es de 51 lecturas, no de un intervalo fijo, porque el muestreo es irregular. Cuando esas 51 lecturas abarcan más de 30 días la referencia no es comparable y el punto se marca `sin_referencia` en lugar de contrastarse con un pasado ajeno.
+
+Sobre `battery_voltage`, las 5 269 lecturas se reparten en 2 818 con el canal enrielado, 1 875 normales, 247 anomalías, 210 sin referencia y 119 advertencias. Cada etiqueta gobierna un estado del modelo 3D: `NOMINAL`, `ADVERTENCIA`, `CRITICO`, `INSTRUMENTACION_PERDIDA` y `SIN_REFERENCIA`.
+
+### 11.5 El modelo 3D y la regla que lo gobierna
+
+El modelo es un 3U a escala con cuerpo, cuatro paneles, dos antenas de latiguillo y tres testigos de subsistema, en React Three Fiber. La regla que lo rige es una sola: **ningún elemento visual se mueve si no hay una lectura que lo mueva.**
+
+| Elemento | Lo gobierna | Sin dato |
+|---|---|---|
+| Color del cuerpo | etiqueta de anomalía | gris de «sin referencia» |
+| Brillo de cada panel | corriente del panel, en mA | **gris**, no verde |
+| Testigos de subsistema | corriente del interruptor | apagado |
+| Opacidad | edad de la lectura | 25 % |
+| Inclinación | magnetómetros (dato real) | sin inclinar |
+| Giro | **sintético**, rotulado en la interfaz | — |
+
+El gris de «sin dato» tiene que ser visible, porque la mayor parte del tiempo el satélite no está diciendo nada. Un panel pintado de verde por omisión convertiría el gemelo en una animación decorativa.
+
+La rotación es el único elemento sintético, y la interfaz lo declara: **STRaND-1 no transmite actitud**. La inclinación sí procede de los magnetómetros, que fijan dos de los tres grados de libertad; el giro restante es un barrido constante. Conviene además filtrar `magnetometer_y`, cuyo **15,3 %** de lecturas desborda los ±10⁶ y llega a ±2,1 · 10⁹, cifras que no caben en el sensor.
+
+### 11.6 Demostración: el fallo de febrero de 2021
+
+El suceso que el gemelo reproduce no se inyectó: **está en los datos**. El detector lo sitúa por su cuenta.
+
+| Magnitud del evento | Valor |
+|---|---|
+| Variable afectada | `battery_voltage` |
+| Inicio | 2021-02-24 11:14:57 UTC |
+| Valor esperado | 7,1795 V |
+| Valor registrado | 9,7488 V |
+| Diferencia | **+2,5693 V** |
+| Estado resultante | `INSTRUMENTACION_PERDIDA` |
+
+La fecha coincide con el primer día íntegramente a cero establecido en §3.6 por una vía independiente. El contraste entre ventanas explica por qué el fallo pasó desapercibido:
+
+| | Sano (nov 2020 – ene 2021) | Muerto (desde mar 2021) |
+|---|---:|---:|
+| Lecturas | 1 896 | 2 363 |
+| Recorrido | 0,148 – 9,753 V | 9,749 – 9,753 V |
+| Desviación típica | **1,618** | **0,002** |
+| Valores distintos | 520 | 2 |
+
+**El valor sube, no baja.** Ninguna alarma por batería descargada se dispararía nunca. Lo que delata el fallo no es el nivel, es que la dispersión se desploma tres órdenes de magnitud —y esa es precisamente la magnitud que la regla de canal enrielado vigila.
+
+Para validar la otra mitad del detector, `gemelo_digital/demo_pico.py --sintetico` inyecta sobre la ventana sana un transitorio de una sola lectura, **rotulado como artificial**: 9,049 V alterados a 18,756 V. El z-score robusto devuelve |z| = 34,3 y lo clasifica como anomalía. Ninguna de las dos reglas es suficiente por separado: el z-score caza el transitorio, el enrielamiento caza el fallo permanente.
+
+### 11.7 Realidad virtual: alcance no cubierto
+
+La arquitectura se eligió pensando en un visor —WebGL permite WebXR sobre la misma escena, sin segunda cadena de herramientas—, y se llegó a integrar. **Se retiró después por no disponer de hardware con el que verificarla**, y no se presenta como funcional.
+
+Queda constancia de dos obstáculos, útiles para quien la reintegre. El primero es que WebXR solo se expone en **contexto seguro**: `localhost` lo es, pero un visor que acceda por la red local a `http://<ip>:5173` no, y entonces `navigator.xr` no existe siquiera. La vía limpia es un túnel USB —en un Quest, `adb reverse tcp:5173 tcp:5173`—, que deja al visor viendo `localhost`. El segundo es que el texto tridimensional de la biblioteca empleada resuelve sus fuentes contra un CDN externo, de modo que sin conexión la escena queda esperando indefinidamente; retirarla eliminó la última dependencia de red externa de la aplicación.
+
+### 11.8 Reproducibilidad
+
+| Comando | Qué produce |
+|---|---|
+| `python -m gemelo_digital.analisis_estructura` | Inventario de columnas, tipos y veredicto por magnitud |
+| `python -m gemelo_digital.demo_fases_2_4` | Reconstrucción de estado, reproducción y detección |
+| `python -m gemelo_digital.demo_pico --sintetico` | Demostración completa del fallo y del pico artificial |
+
+El motor es independiente de la interfaz: no importa nada de la web y se gobierna desde consola, de modo que las cifras de esta sección se comprueban sin levantar el frontend.
+
+---
+
+## 12. Discusión
+
+### 12.1 Hallazgos principales
 
 1. **BPSK supera a FSK** en el canal AWGN evaluado, consistente con la teoría de modulaciones binarias.
 2. **El conformado RRC reduce el ancho de banda ocupado en un factor de 5,9 sin coste en BER**, llevando la señal dentro de la canalización UHF de 25 kHz.
@@ -790,7 +897,7 @@ Frente a un panel que muestre «Batería: 9,75 V» sin más, la plataforma oblig
 11. **Una magnitud constante puede ser un canal muerto disfrazado de sistema sano.** Los 9,75 V de batería que STRaND-1 emitió durante sus dos últimos años no son una medida: son la ordenada al origen de la recta de calibración de AMSAT-UK, el valor que la ecuación devuelve cuando la cuenta ADC vale 0. Como las rectas son decrecientes, una cuenta nula no produce «cero» sino el extremo superior de la escala. Detectarlo exigió comparar con el archivo histórico; sin él, la lectura natural del dato habría sido «batería estable a 9,75 V».
 12. **Una sola trama no demuestra el estado de un canal.** Durante el trabajo se tomó una baliza de 2018 con cuenta ADC 1023 como prueba de que los convertidores funcionaban. No lo era: es una única lectura, 1023 es el tope de escala de un convertidor de 10 bits —el valor de riel— y cae fuera del rango que ese canal recorre en todos los demás años. El diagnóstico solo se sostiene sobre la dispersión de muestras suficientes, no sobre ejemplares escogidos.
 
-### 11.2 Limitaciones del modelo
+### 12.2 Limitaciones del modelo
 
 - **Sincronización ideal:** no hay recuperación de portadora ni de temporización de símbolo. Es la limitación de mayor impacto y la que explica la sensibilidad extrema al Doppler residual de la sección 5.2.
 - **Sincronización de trama ideal:** el verificador de AX.25 comprueba el FCS sobre bytes recibidos reales, pero localiza las tramas por desplazamiento conocido; no hay búsqueda de banderas ni *bit stuffing*.
@@ -801,7 +908,7 @@ Frente a un panel que muestre «Batería: 9,75 V» sin más, la plataforma oblig
 - **FSK con tonos no ortogonales** para el detector de energía empleado ($\Delta f\cdot T = 0{,}5$), lo que penaliza su curva frente a la teórica.
 - **Un solo satélite:** los resultados corresponden a STRaND-1; generalizar requiere verificación independiente.
 
-### 11.3 Trabajo futuro
+### 12.3 Trabajo futuro
 
 1. Implementar un lazo de Costas para recuperación de portadora y cuantificar la mejora en la tolerancia al Doppler residual.
 2. Añadir sincronización de símbolo (Gardner o Mueller-Müller).
@@ -812,7 +919,7 @@ Frente a un panel que muestre «Batería: 9,75 V» sin más, la plataforma oblig
 
 ---
 
-## 12. Conclusiones
+## 13. Conclusiones
 
 1. Se caracterizó el subsistema de comunicaciones del CubeSat STRaND-1 en sus cuatro componentes: antena (monopolo λ/4, 0 dBi, UHF), transceptor (1 W a 437.568 MHz), módem (BPSK coherente y FSK a 9600 bps) y TT&C (balizas de 15,0 bytes de media, con la estructura HDLC que define la especificación de AMSAT-UK).
 
@@ -830,7 +937,7 @@ Frente a un panel que muestre «Batería: 9,75 V» sin más, la plataforma oblig
 
 ---
 
-## 13. Referencias
+## 14. Referencias
 
 1. AMSAT-UK. (2013). *STRAND-1 Packet Format* [hoja de cálculo]. Recuperado de https://ukamsat.files.wordpress.com/2013/03/amsat-strand-1-20130327.xlsx — especificación de la baliza: estructura del paquete, mapa de nodos I2C y canales, y ecuaciones de calibración de cada magnitud.
 2. Bouwmeester, J., & Guo, J. (2010). Survey of worldwide pico- and nanosatellite missions, distributions and subsystem technology. *Acta Astronautica*, 67(7–8), 854–862.
@@ -867,7 +974,17 @@ cubesat/
 ├── simular_enlace_ascendente.py          # Link budget ascendente
 ├── modelo_estacion_terrena.py            # Estacion terrena con seguimiento
 ├── comparar_con_cubesats_reales.py       # Comparacion con 7 CubeSats
+├── analizar_entropia.py                  # Entropia de las tramas contra el techo log2(n)
 ├── generar_tablas_informe.py             # Regenera las tablas de este informe
+│
+├── gemelo_digital/                       # Motor del gemelo digital (seccion 11)
+│   ├── datos.py                          # Carga desde PostgreSQL a DataFrames
+│   ├── analisis_estructura.py            # Inventario de columnas y veredicto por magnitud
+│   ├── estado.py                         # Reconstruccion por ultimo valor conocido, con edad
+│   ├── reproduccion.py                   # Reproduccion temporal sobre eje comprimido
+│   ├── anomalias.py                      # Z-score robusto y regla de canal enrielado
+│   ├── demo_fases_2_4.py                 # Demostracion del motor de datos
+│   └── demo_pico.py                      # Demostracion del fallo de febrero de 2021
 ├── simulacion_visualizar_iq.grc / .py    # GNU Radio: visualizacion IQ
 ├── simulacion_cadena_completa.grc / .py  # GNU Radio: cadena BPSK completa
 ├── frames_STRAND1.csv / .json            # Telemetria descargada

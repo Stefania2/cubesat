@@ -34,6 +34,13 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 - `simulacion_visualizar_iq.grc`: visualizacion IQ con control interactivo de ruido AWGN (time/freq/constellation sinks).
 - `simulacion_cadena_completa.grc`: cadena BPSK completa desde bytes de telemetria hasta demodulacion con 5 sinks visuales.
 
+### Gemelo digital
+- Reconstruccion del estado del satelite por ultimo valor conocido, con la **edad** de cada lectura a la vista.
+- Reproduccion temporal sobre eje comprimido: 2250 dias de archivo en 46,1 h, con 588 pases identificados.
+- Deteccion de anomalias con z-score robusto (mediana + MAD) y regla de canal enrielado.
+- Modelo 3D del CubeSat en React Three Fiber, gobernado por los datos: ningun elemento se mueve sin una lectura que lo mueva.
+- Fecha por si solo el fallo de la instrumentacion de energia el 2021-02-24, con un salto de +2,57 V sobre una linea base de 7,18 V.
+
 ### Link budget
 - Calculo de margen de enlace descendente UHF (437.568 MHz, 9600 bps BPSK).
 - Barrido 5°-90° de elevacion con orbita LEO de 775 km (altura real de STRaND-1 segun TLE).
@@ -85,6 +92,14 @@ cubesat/
 |-- simular_enlace_ascendente.py  (enlace ascendente de comandos)
 |-- analizar_entropia.py          (entropia de las tramas contra el techo log2(n))
 |-- generar_tablas_informe.py     (regenera las tablas del informe desde los datos)
+|
+|-- gemelo_digital/               (motor del gemelo digital, seccion 11 del informe)
+|   |-- datos.py                  (carga desde PostgreSQL a DataFrames)
+|   |-- analisis_estructura.py    (inventario de columnas y veredicto por magnitud)
+|   |-- estado.py                 (reconstruccion por ultimo valor conocido, con edad)
+|   |-- reproduccion.py           (reproduccion temporal sobre eje comprimido)
+|   |-- anomalias.py              (z-score robusto y regla de canal enrielado)
+|   `-- demo_pico.py              (demostracion del fallo de febrero de 2021)
 |
 |-- simulacion_visualizar_iq.grc  (GNU Radio: visualizacion IQ + AWGN)
 |-- simulacion_cadena_completa.grc (GNU Radio: cadena BPSK completa)
@@ -219,6 +234,13 @@ Sensibilidad al residual de Doppler tras la pre-compensacion, sobre un registro 
 | 0.2 Hz | 3.7e-1 | 3.6e-1 | 3.6e-1 |
 
 Tramas AX.25 validadas por FCS: 0 tramas a -6 dB, 15 a -2 dB, las 37 a partir de 0 dB.
+
+### Gemelo digital
+
+21833 eventos y 588 pases reconstruidos; 2250 dias de archivo comprimidos en 46,1 h de eje virtual.
+El detector fecha el fallo de la instrumentacion de energia el **2021-02-24 11:14:57**, con la
+desviacion tipica cayendo de 1,618 a 0,002 V: el valor **sube** a 9,7488 V, asi que ninguna alarma
+por bateria baja se disparara nunca.
 
 ### Link budget descendente
 
