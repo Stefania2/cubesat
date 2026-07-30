@@ -28,12 +28,33 @@ No es una preferencia, son tres topes concretos:
 
 ## 1. Base de datos
 
-Crea una base PostgreSQL gestionada y restaura el volcado:
+El volcado y su guion estan en el repositorio privado `strand-1`, rama `main`
+(en `cubesat` no se versionan). Elige proveedor:
+
+| | Plan gratuito | Aviso |
+|---|---|---|
+| **Supabase** | 500 MB, sin caducidad | El proyecto se **pausa a los 7 dias** sin actividad; se reanuda a mano |
+| **Neon** | 500 MB, sin caducidad | La rama se suspende al minuto de inactividad, pero despierta sola en segundos |
+| **Render** | 1 GB | **Caduca a los 30 dias** y se borra |
+
+La base ocupa 85 MB, asi que cabe en los tres. Para algo que debe seguir en pie
+durante la evaluacion, Neon es el que menos vigilancia pide.
+
+En un gestionado la base viene creada y no se pueden crear otras, asi que hay
+que pedir el segundo modo:
 
 ```bash
 cd telemetria_strand1/db
-PGHOST=<host> PGUSER=<usuario> PGDATABASE=<base> ./restaurar.sh
+PGHOST=<host> PGPORT=5432 PGUSER=<usuario> PGPASSWORD=<clave> PGDATABASE=postgres \
+  ./restaurar.sh --base-existente
 ```
+
+**Con Supabase, usa el puerto 5432 y no el 6543.** El 6543 es el pooler de
+transacciones: no admite todas las sentencias de un volcado y la restauracion
+falla a medias, dejando unas tablas si y otras no. Ese mismo pooler rompe
+despues la aplicacion, porque psycopg3 usa sentencias preparadas; si en
+produccion se conecta por el 6543 hay que anadir `?prepare_threshold=0` a
+`DATABASE_URL`.
 
 Comprueba que llegaron las cinco tablas; el script imprime los recuentos. Deben
 salir 36 641 tramas y 198 349 campos decodificados.
