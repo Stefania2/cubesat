@@ -17,6 +17,7 @@ from gnuradio import analog
 from gnuradio import blocks
 import pmt
 from gnuradio import digital
+import os
 import sip
 import threading
 from gnuradio import gr
@@ -70,6 +71,7 @@ class simulacion_cadena_completa(gr.top_block, Qt.QWidget):
         self.sym_rate = sym_rate = 9600
         self.sps = sps = 8
         self.samp_rate = samp_rate = 76800
+        self.ruta_base = ruta_base = os.path.dirname(os.path.realpath(globals().get('__file__', '.')))
         self.noise_amplitude = noise_amplitude = 0.05
 
         ##################################################
@@ -342,7 +344,7 @@ class simulacion_cadena_completa(gr.top_block, Qt.QWidget):
         self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_char*1)
         self.blocks_integrate_ff_0 = blocks.integrate_ff(sps, 1)
         self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, 'frames_STRAND1_gnuradio.bin', True, 0, 0)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, os.path.join(ruta_base, 'frames_STRAND1_gnuradio.bin'), True, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
         self.blocks_complex_to_real_0 = blocks.complex_to_real(1)
         self.blocks_add_xx_0 = blocks.add_vcc(1)
@@ -402,6 +404,13 @@ class simulacion_cadena_completa(gr.top_block, Qt.QWidget):
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
         self.qtgui_time_sink_x_1.set_samp_rate(self.samp_rate)
         self.qtgui_time_sink_x_2.set_samp_rate(self.samp_rate)
+
+    def get_ruta_base(self):
+        return self.ruta_base
+
+    def set_ruta_base(self, ruta_base):
+        self.ruta_base = ruta_base
+        self.blocks_file_source_0.open(os.path.join(self.ruta_base, 'frames_STRAND1_gnuradio.bin'), True)
 
     def get_noise_amplitude(self):
         return self.noise_amplitude

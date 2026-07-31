@@ -16,6 +16,7 @@ from PyQt5 import QtCore
 from gnuradio import analog
 from gnuradio import blocks
 import pmt
+import os
 import sip
 import threading
 from gnuradio import gr
@@ -69,6 +70,7 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
         self.sym_rate = sym_rate = 9600
         self.sps = sps = 8
         self.samp_rate = samp_rate = 76800
+        self.ruta_base = ruta_base = os.path.dirname(os.path.realpath(globals().get('__file__', '.')))
         self.noise_amplitude = noise_amplitude = 0.02
 
         ##################################################
@@ -229,7 +231,7 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.blocks_throttle_0 = blocks.throttle( gr.sizeof_gr_complex*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, 'resultados_simulacion/strand1_bpsk_iq_clean_complex64.bin', False, 0, 0)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, os.path.join(ruta_base, 'resultados_simulacion', 'strand1_bpsk_iq_clean_complex64.bin'), False, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
         self.blocks_add_xx_0 = blocks.add_vcc(1)
         self.analog_noise_source_x_0 = analog.noise_source_c(analog.GR_GAUSSIAN, noise_amplitude, 42)
@@ -274,6 +276,13 @@ class simulacion_visualizar_iq(gr.top_block, Qt.QWidget):
         self.blocks_throttle_0.set_sample_rate(self.samp_rate)
         self.qtgui_freq_sink_x_0.set_frequency_range(0, self.samp_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
+
+    def get_ruta_base(self):
+        return self.ruta_base
+
+    def set_ruta_base(self, ruta_base):
+        self.ruta_base = ruta_base
+        self.blocks_file_source_0.open(os.path.join(self.ruta_base, 'resultados_simulacion', 'strand1_bpsk_iq_clean_complex64.bin'), False)
 
     def get_noise_amplitude(self):
         return self.noise_amplitude

@@ -30,6 +30,31 @@ options:
     state: enabled
 
 blocks:
+- name: import_os
+  id: import
+  parameters:
+    alias: ''
+    comment: Para resolver la ruta del .bin sin depender del directorio de trabajo
+    imports: import os
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 128.0]
+    rotation: 0
+    state: enabled
+- name: ruta_base
+  id: variable
+  parameters:
+    comment: Carpeta donde vive este flowgraph
+    value: os.path.dirname(os.path.realpath(globals().get('__file__', '.')))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 128.0]
+    rotation: 0
+    state: enabled
 - name: noise_amplitude
   id: variable_qtgui_range
   parameters:
@@ -147,7 +172,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: Carga bytes de telemetria real STRaND-1
-    file: frames_STRAND1_gnuradio.bin
+    file: os.path.join(ruta_base, 'frames_STRAND1_gnuradio.bin')
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -347,7 +372,7 @@ blocks:
     bus_structure: null
     coordinate: [992, 380.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_const_sink_x_0
   id: qtgui_const_sink_x
   parameters:
