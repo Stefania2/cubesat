@@ -1,0 +1,17 @@
+{
+  "iq_path": "strand1_2026-08-09.c64",
+  "sample_format": "complex64_le",
+  "sample_rate_hz": 76800,
+  "center_frequency_hz": 437568000.0,
+  "timestamp_utc": "2026-08-09T10:55:44.461344Z",
+  "satellite_norad_id": 39090,
+  "receiver": "referencia sintetizada sin front-end RF (SDR real pendiente)",
+  "antenna": "referencia: misma cadena del modelo, BPSK RRC a=0.35 (antena real pendiente)",
+  "reference_bits_path": "strand1_bits_referencia.bin",
+  "doppler_offset_hz": 2877.406,
+  "tle": {
+    "name": "STRAND-1",
+    "source": "tle/strand1_2026-08-09.tle",
+    "epoch_utc": "2026-08-09T10:55:44.461344Z"
+  }
+}

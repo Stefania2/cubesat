@@ -17,7 +17,7 @@
 
 ## Resumen
 
-Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi y tramas AX.25 verificadas por FCS; (4) flujogramas en GNU Radio para visualización IQ y demodulación; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida; y (9) un gemelo digital que reconstruye el estado del satélite a partir de esos registros, lo reproduce en un eje temporal comprimido y lo representa en tres dimensiones, con detección de anomalías que fecha por sí sola el fallo de la instrumentación de energía y con la edad de cada lectura siempre a la vista. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
+Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi, tramas AX.25 verificadas por FCS y sincronización realista de portadora y símbolo con lazos de Costas y Gardner; (4) flujogramas en GNU Radio para visualización IQ y demodulación; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo, complementado con una ruta SGP4 con TLE real versionado y con el formato de validación para capturas IQ de un SDR; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida; y (9) un gemelo digital que reconstruye el estado del satélite a partir de esos registros, lo reproduce en un eje temporal comprimido y lo representa en tres dimensiones, con detección de anomalías que fecha por sí sola el fallo de la instrumentación de energía y con la edad de cada lectura siempre a la vista. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
 
 El resultado central es que la cadena completa —señal RF, demodulación, bits, tramas, paquetes, variables y estado del sistema— puede recorrerse íntegramente con datos de una red abierta de estaciones voluntarias, y que el eslabón que falla no es el enlace, sino la interpretación de los bytes.
 
@@ -42,7 +42,7 @@ Caracterizar y simular el subsistema electrónico de comunicaciones de un CubeSa
 
 ### 1.3 Alcance y trazabilidad
 
-El trabajo es una caracterización académica reproducible, no la construcción, operación ni reparación física de un satélite. La simulación RF es un modelo equivalente en banda base: no sustituye una captura UHF real ni certifica un receptor de vuelo. La recuperación de portadora, temporización y trama se asume ideal; la validación contra IQ recibido por SDR queda como trabajo futuro.
+El trabajo es una caracterización académica reproducible, no la construcción, operación ni reparación física de un satélite. La simulación RF es un modelo equivalente en banda base: no sustituye una captura UHF real ni certifica un receptor de vuelo. La recuperación de portadora y de temporización de símbolo se implementa con lazos de Costas y Gardner (sección 5.4); la de trama sigue localizando las tramas por desplazamiento conocido. La validación contra capturas IQ reales de un SDR queda como trabajo futuro, aunque se define el formato para conservarlas (sección 8.2).
 
 El presente informe es la fuente integrada de resultados. Cada valor numérico debe poder rastrearse a un script, a sus parámetros y a los archivos de `resultados_simulacion/`. El script `generar_tablas_informe.py` actualiza las tablas marcadas del informe desde esas salidas; si cambia un modelo, se deben regenerar sus resultados y las tablas antes de publicar una conclusión.
 
@@ -493,26 +493,26 @@ La FSK ocupa menos ancho de banda porque concentra la energía en dos componente
 
 ## 5. Modelo avanzado de enlace
 
-`simular_enlace_rf_bpsk_avanzado.py` añade, como etapas componibles sobre la misma cadena, conformado de pulso RRC ($\alpha = 0{,}35$), desvanecimiento Rice con perfil Jakes ($K = 10$ dB), error residual de Doppler, codificación convolucional $r=1/2$, $K=7$ con decodificación Viterbi, y construcción y verificación de tramas AX.25. Se evalúan 18 configuraciones en 8 puntos de SNR (144 corridas).
+`simular_enlace_rf_bpsk_avanzado.py` añade, como etapas componibles sobre la misma cadena, conformado de pulso RRC ($\alpha = 0{,}35$), desvanecimiento Rice con perfil Jakes ($K = 10$ dB), error residual de Doppler, codificación convolucional $r=1/2$, $K=7$ con decodificación Viterbi, construcción y verificación de tramas AX.25, y un receptor con **sincronización realista** (lazo de Costas para la portadora y lazo de Gardner para la temporización de símbolo, descritos en 5.4). Se evalúan 18 configuraciones en 8 puntos de SNR (144 corridas).
 
-El barrido de SNR de este modelo (−10 a 4 dB) es más bajo que el del modelo básico porque con el conformado de pulso correcto el enlace deja de cometer errores a partir de 0 dB, y la ganancia del código solo se aprecia por debajo de −2 dB. Los cuatro puntos superiores solapan con el modelo básico y permiten verificar que ambos coinciden.
+El barrido de SNR de este modelo (−10 a 4 dB) es más bajo que el del modelo básico porque el conformado de pulso correcto, el filtro adaptado y la recuperación de portadora permiten que la BPSK deje de cometer errores a partir de 2 dB. Los puntos superiores solapan con el modelo básico y permiten verificar que ambos coinciden: a 0 dB ambos dan BER $5{,}33\times10^{-5}$.
 
 ### 5.1 Resultados principales
 
 <!-- TABLA:avanzado_principal -->
 | Configuracion | BER a -8 dB | BER a -6 dB | BER a -4 dB | BER a -2 dB | Ancho de banda (99 %) |
 |:---|---:|---:|---:|---:|---:|
-| BPSK rectangular (NRZ) | 5.28e-02 | 2.43e-02 | 6.02e-03 | 7.46e-04 | 66.1 kHz |
-| BPSK + RRC (α=0.35) | 5.66e-02 | 2.28e-02 | 6.55e-03 | 6.39e-04 | 11.2 kHz |
-| BPSK rectangular (NRZ) + fading Rice | 6.77e-02 | 2.94e-02 | 1.12e-02 | 2.66e-03 | 66.1 kHz |
-| BPSK + FEC conv. (r=1/2, K=7) | 3.78e-03 | 2.13e-04 | 0 (sin errores) | 0 (sin errores) | 66.0 kHz |
+| BPSK rectangular (NRZ) | 5.71e-01 | 1.47e-01 | 8.99e-02 | 4.52e-02 | 66.1 kHz |
+| BPSK + RRC (α=0.35) | 6.18e-02 | 2.38e-02 | 6.76e-03 | 8.52e-04 | 11.2 kHz |
+| BPSK rectangular (NRZ) + fading Rice | 4.17e-01 | 4.99e-01 | 7.98e-01 | 5.51e-02 | 66.1 kHz |
+| BPSK + FEC conv. (r=1/2, K=7) | 4.92e-01 | 4.42e-01 | 5.85e-02 | 1.54e-03 | 66.0 kHz |
 <!-- /TABLA:avanzado_principal -->
 
-**Conformado RRC.** La BER con RRC es estadísticamente indistinguible de la del pulso rectangular, pero el ancho de banda ocupado al 99 % baja de ~66 kHz a ~11 kHz, un factor de 5,9. Es el resultado esperado: el filtro adaptado conserva la relación señal-ruido en el instante de decisión y solo reordena la energía en el tiempo. El valor medido se acerca al límite teórico $R_b(1+\alpha) = 12{,}96$ kHz, y sitúa la señal cómodamente dentro de la canalización UHF de 25 kHz.
+**Conformado RRC.** Con sincronización realista la ventaja del conformado deja de ser solo espectral. Con pulso rectangular sin filtro adaptado el receptor con sincronización trabaja sobre 9 dB más de ruido (todo el ancho de banda de muestreo de 76,8 kHz) y pierde el enganche: a −8 dB su BER es 5,7e−01. Con RRC y su filtro adaptado la BER a −8 dB es 6,2e−02 —prácticamente la misma que la del modelo de sincronización ideal— y además el ancho de banda ocupado al 99 % baja de ~66 kHz a ~11 kHz, un factor de 5,9, cerca del límite teórico $R_b(1+\alpha) = 12{,}96$ kHz y dentro de la canalización UHF de 25 kHz. El filtro adaptado no solo conserva la relación señal-ruido en el instante de decisión: es lo que da al lazo de temporización un espectro limpio donde engancharse.
 
-**Desvanecimiento Rice.** Con $K = 10$ dB la componente de línea de vista domina y la penalización es de aproximadamente 1 dB, coherente con un enlace LEO-tierra en visión directa sin obstrucciones.
+**Desvanecimiento Rice.** Con $K = 10$ dB la componente de línea de vista domina, pero en presencia de desvanecimiento los lazos de sincronización se ven forzados al mínimo. A −2 dB la penalización es de unos 3 dB (5,5e−02 frente a 4,5e−02 del NRZ sin desvanecer); por debajo, los desvanecimientos profundos hacen perder el enganche y la BER deja de ser interpretable como error de canal. Es la primera manifestación de un **umbral de sincronización**: la región útil del receptor empieza alrededor de −6 dB.
 
-**Codificación convolucional.** El código aporta unos 4 dB de ganancia de codificación en la región de BER $10^{-3}$. Por debajo de −8 dB de SNR el decodificador cruza su umbral y empeora respecto al enlace sin codificar (BER 1,19e−01 frente a 1,04e−01 a −10 dB): es el comportamiento clásico de un decodificador Viterbi de decisión dura cuando la tasa de error de entrada supera su capacidad de corrección.
+**Codificación convolucional.** El código aporta ganancia en cuanto el lazo de temporización sostiene la sincronización: a −2 dB reduce la BER de 4,5e−02 (sin codificar) a 1,5e−03, unas 29 veces (≈4 dB). Por debajo de −5 dB la BER de entrada al decodificador supera su umbral de decisión dura y la decodificación empeora el resultado, el comportamiento clásico del Viterbi cuando la tasa de error excede su capacidad de corrección.
 
 ### 5.2 Sensibilidad al error residual de Doppler
 
@@ -521,13 +521,13 @@ El desplazamiento Doppler para una órbita LEO a 437 MHz alcanza ±150 Hz (±10 
 <!-- TABLA:doppler_residual -->
 | Residual de Doppler | BER a -8 dB | BER a -4 dB | BER a 0 dB | BER a 4 dB |
 |:---|---:|---:|---:|---:|
-| 0 Hz | 5.28e-02 | 6.02e-03 | 0 (sin errores) | 0 (sin errores) |
-| 0.05 Hz | 6.58e-02 | 1.03e-02 | 2.66e-04 | 0 (sin errores) |
-| 0.1 Hz | 1.22e-01 | 4.33e-02 | 9.11e-03 | 5.86e-04 |
-| 0.2 Hz | 3.88e-01 | 3.65e-01 | 3.59e-01 | 3.61e-01 |
+| 0 Hz | 5.71e-01 | 8.99e-02 | 1.73e-02 | 3.20e-04 |
+| 0.05 Hz | 3.61e-01 | 9.49e-02 | 1.56e-02 | 7.46e-04 |
+| 0.1 Hz | 5.00e-01 | 9.33e-02 | 1.60e-02 | 3.73e-04 |
+| 0.2 Hz | 4.98e-01 | 5.04e-01 | 1.69e-02 | 4.79e-04 |
 <!-- /TABLA:doppler_residual -->
 
-El resultado es exigente y merece destacarse: sobre un registro de 1,96 s (los 18 776 bits a 9600 bps), un residual de solo 0,2 Hz introduce un piso de error irreducible en torno a 3,6e−01. La causa es que el modelo no incorpora recuperación de portadora: la fase acumulada $2\pi f_{res} T$ gira sin corrección durante todo el registro, y basta con que supere $\pi/2$ para que las decisiones se inviertan. **Esta es la justificación cuantitativa de por qué un receptor real necesita un lazo de Costas**, y es la primera recomendación de trabajo futuro.
+La tabla corresponde a la configuración NRZ sin filtro adaptado, la más exigente para los lazos. En el modelo de sincronización ideal (sin recuperación de portadora) un residual de 0,2 Hz bastaba para producir un piso de error irreducible de 3,6e−01 sobre el registro de 1,96 s, porque la fase acumulada $2\pi f_{res} T$ giraba sin corrección y bastaba superar $\pi/2$ para invertir las decisiones. **Con el lazo de Costas (ancho de banda de 80 Hz) ese residual se recupera**: en la región de enganche (0 dB) la BER es 1,7e−02 tanto con 0,2 Hz como con 0 Hz, y a 4 dB baja a 5e−04. La tabla muestra que la sensibilidad al Doppler residual dejó de ser el eslabón crítico: el límite operativo lo marca ahora el umbral de sincronización (deslizamientos de ciclo por debajo de ~−6 dB), no la deriva de portadora.
 
 ### 5.3 Tramas AX.25
 
@@ -536,17 +536,26 @@ Las tramas se construyen conforme a AX.25 2.2: campo de dirección de 7 bytes po
 <!-- TABLA:ax25 -->
 | SNR (dB) | BER | Tramas validas por FCS (de 37) |
 |:---|---:|---:|
-| -10 | 1.04e-01 | 0 |
-| -8 | 5.75e-02 | 0 |
-| -6 | 2.34e-02 | 0 |
-| -4 | 6.44e-03 | 1 |
-| -2 | 1.17e-03 | 15 |
+| -10 | 4.71e-01 | 0 |
+| -8 | 6.34e-01 | 0 |
+| -6 | 2.52e-02 | 0 |
+| -4 | 6.48e-03 | 0 |
+| -2 | 1.13e-03 | 17 |
 | 0 | 0 (sin errores) | 37 |
 | 2 | 0 (sin errores) | 37 |
 | 4 | 0 (sin errores) | 37 |
 <!-- /TABLA:ax25 -->
 
-La verificación es un cálculo real del FCS sobre los bytes recibidos, no una comparación con la trama transmitida. La transición es abrupta —de 1 trama válida a −4 dB a las 37 a 0 dB— porque el FCS es una comprobación de todo o nada: un solo bit erróneo invalida la trama completa. Con tramas de 40 a 104 bytes, una BER de $10^{-3}$ ya corrompe la mayoría.
+La verificación es un cálculo real del FCS sobre los bytes recibidos, no una comparación con la trama transmitida. La transición es abrupta —de 0 tramas válidas a −4 dB a 17 a −2 dB y las 37 a partir de 0 dB— porque el FCS es una comprobación de todo o nada: un solo bit erróneo invalida la trama completa. Con tramas de 40 a 104 bytes, una BER de $10^{-3}$ ya corrompe la mayoría; a −4 dB la BER de 6,5e−03 deja a todas las tramas con al menos un bit erróneo.
+
+### 5.4 Sincronización realista (Costas + Gardner)
+
+El modelo anterior concedía al demodulador fase y temporización exactas. Para retirar ese privilegio se introduce un desfase de temporización reproducible de $0{,}35$ muestras (definido en `TIMING_OFFSET_SAMPLES`) en el canal, y el receptor lo recupera con dos lazos que no conocen los bits transmitidos:
+
+- **Lazo de Costas de segundo orden** para la portadora: detector `signo(I)·Q` con ancho de banda de bucle de 80 Hz, implementado como PLL discreto con coeficientes deducidos de la frecuencia natural. Recupera la fase y la frecuencia residual sin necesitar una secuencia conocida.
+- **Recuperación de temporización de Gardner** no asistida por decisión: compara las muestras temprana y tardía (separadas medio símbolo) con la muestra central y ajusta el instante de muestreo símbolo a símbolo, con interpolación lineal y avance limitado para estabilidad bajo ruido.
+
+El costo es el esperado de quitar la sincronización ideal: a muy baja SNR los lazos pierden el enganche y la BER satura (deslizamientos de ciclo), de modo que la región útil del receptor empieza alrededor de −6 dB. El beneficio es doble: **se cuantifica el umbral de sincronización** de la cadena y **se elimina la sensibilidad al Doppler residual** de décimas de hercio que dominaba el modelo anterior (sección 5.2). La prueba automatizada `tests/test_sincronizacion.py` verifica que ambos lazos recuperan una BPSK RRC con desfase y Doppler residual sin errores.
 
 ---
 
@@ -569,7 +578,7 @@ Cadena de transmisión BPSK completa desde los bytes de telemetría real hasta l
 
 ### 6.3 Limitaciones de la implementación GNU Radio
 
-- No hay recuperación de portadora ni sincronización de símbolo: se asume temporización y fase ideales.
+- El flujograma de visualización asume temporización y fase ideales: no incluye los lazos de Costas y Gardner que sí implementa el modelo Python (sección 5.4). Sirve para inspeccionar la señal y la constelación, no para medir la robustez de la sincronización.
 - El bloque `Integrate` asume alineación perfecta de los límites de símbolo con la ventana de integración.
 - Los archivos `.py` versionados contienen un ajuste manual (`import gnuradio.qtgui` en lugar de `import gnuradio`) necesario para que se ejecuten fuera de GRC. Al regenerarlos desde el `.grc` hay que reaplicarlo.
 
@@ -672,6 +681,27 @@ El uplink dispone de mucho más margen que el downlink (23,3 dB frente a 7,1 dB 
 <!-- /TABLA:estacion_terrena -->
 
 El hallazgo relevante es dinámico. En la culminación del paso el satélite exige una velocidad de barrido en azimut de **8,23 °/s**, mientras que el rotor modelado alcanza 5 °/s. Con la antena preposicionada en el punto de adquisición, la salida vigente del modelo conserva un error máximo fuera de boresight de **0,77°** y una pérdida máxima de **0,01 dB** con un haz de 30°. La conclusión práctica es que la Yagi modelada tolera el límite de velocidad; una antena más directiva debe evaluarse de nuevo con el cálculo del error angular verdadero y no con una resta directa de azimutes.
+
+### 8.1 Paso orbital con SGP4 y TLE real
+
+El resto de los modelos usa una órbita circular para los barridos genéricos; `orbita_sgp4.py` añade una ruta reproducible con el propagador SGP4 (`sgp4`) para estudiar un paso concreto. El módulo lee el TLE de STRaND-1 conservado en `tle/` con su época, y calcula azimut, elevación, distancia, velocidad radial y Doppler con la conversión TEME→terrestre vía GMST.
+
+El TLE de referencia (`tle/strand1_2026-08-09.tle`, NORAD 39090, época 2026-08-09T10:55:44 UTC) se conserva versionado junto al código para que el Doppler sea reproducible. `simular_paso_sgp4.py` propaga la ventana indicada y escribe `resultados_simulacion/paso_sgp4_strand1.json` con el TLE y la estación utilizados:
+
+| Magnitud (estación Bogotá, 4.7110° N, 74.0721° O, 2600 m) | Valor |
+|:---|:---|
+| Ventana propagada | 6 h con paso de 10 s (2161 muestras) |
+| Muestras visibles sobre 5° | 40 |
+| Elevación máxima | 34.05° |
+| Doppler en la ventana visible | −9054.4 a +2877.4 Hz |
+
+El Doppler instantáneo en la época del TLE (+2877,4 Hz) se usa como desplazamiento de la captura IQ de referencia de la sección 8.2, encadenando la caracterización orbital con la validación SDR. La prueba `tests/test_orbita_sgp4.py` verifica la carga del TLE, su época UTC y la coherencia de la geometría resultante.
+
+### 8.2 Formato de validación de captura IQ
+
+La simulación no sustituye una recepción SDR. Para que una captura real pueda contrastarse contra el modelo sin ambigüedad, se define un par inmutable: el binario IQ y un manifiesto JSON con su contexto de adquisición (formato, tasa de muestreo, frecuencia central, fecha/hora UTC, satélite, receptor y antena). El script `validar_captura_iq.py` comprueba que esos metadatos existan, calcula duración, potencia, componente DC y pico espectral, y produce un informe que puede citarse junto al experimento (ver `docs/FORMATO_CAPTURA_SDR.md`).
+
+Como no se dispone aún de una recepción física, se genera una **captura de referencia** (`generar_captura_iq_referencia.py`) que conserva la misma cadena del modelo —telemetría real de STRaND-1, BPSK RRC a 9600 bps, 76 800 muestras/s— con el Doppler SGP4 de la sección 8.1 aplicado y su secuencia de bits de referencia. El manifiesto declara explícitamente que se trata de una referencia sintetizada, no de una recepción: los campos `receiver` y `antenna` quedarán vacíos de hardware real hasta que se sustituya por una captura SDR. El validador reporta el pico espectral en +2877,5 Hz, coincidente con el Doppler calculado, y la traza de la validación queda en `captura/strand1_2026-08-09_validacion.json`.
 
 ---
 
@@ -905,8 +935,8 @@ El motor es independiente de la interfaz: no importa nada de la web y se gobiern
 
 1. **BPSK supera a FSK** en el canal AWGN evaluado, consistente con la teoría de modulaciones binarias.
 2. **El conformado RRC reduce el ancho de banda ocupado en un factor de 5,9 sin coste en BER**, llevando la señal dentro de la canalización UHF de 25 kHz.
-3. **El código convolucional aporta ~4 dB de ganancia** en la región de BER $10^{-3}$, y exhibe el umbral característico del decodificador Viterbi por debajo de −8 dB.
-4. **La tolerancia al error residual de Doppler es de décimas de hercio** sin recuperación de portadora, lo que cuantifica la necesidad de un lazo de Costas en un receptor real.
+3. **El código convolucional aporta ~4 dB de ganancia** en cuanto la sincronización sostiene el enlace (a −2 dB reduce la BER 29 veces), y exhibe el umbral característico del decodificador Viterbi de decisión dura cuando la tasa de error de entrada supera su capacidad de corrección.
+4. **El lazo de Costas recupera el error residual de Doppler de décimas de hercio**: la sensibilidad extrema al residual que mostraba el modelo de sincronización ideal desaparece, y el límite operativo pasa a ser el umbral de sincronización (deslizamientos de ciclo por debajo de ~−6 dB).
 5. **El enlace descendente UHF a 9600 bps es viable** con margen mínimo de 7,1 dB a 5° de elevación.
 6. **El límite de velocidad del rotor de azimut es tolerable** con antenas de haz ancho: 0,09 dB de pérdida en el peor instante de un paso casi cenital.
 7. **Se decodificó telemetría real de STRaND-1 con la especificación de AMSAT-UK**: 32 754 balizas y 53 magnitudes, de las que 42 varían. Los magnetómetros están operativos (más de doscientos valores distintos por eje) y la batería fue medida de verdad entre 2016 y 2020, con el voltaje oscilando entre **6,31 y 8,94 V** como corresponde a ciclos de carga y descarga en órbita. El decodificador oficial de `satnogs-decoders` no sirve para este fin: lee un solo byte por canal y devuelve el campo `DATA_SIZE` en lugar de la medida.
@@ -918,23 +948,21 @@ El motor es independiente de la interfaz: no importa nada de la web y se gobiern
 
 ### 12.2 Limitaciones del modelo
 
-- **Sincronización ideal:** no hay recuperación de portadora ni de temporización de símbolo. Es la limitación de mayor impacto y la que explica la sensibilidad extrema al Doppler residual de la sección 5.2.
+- **Sincronización con umbral operativo:** la recuperación de portadora y temporización es real (Costas + Gardner, sección 5.4), pero por debajo de ~−6 dB los lazos pierden el enganche y la BER deja de ser interpretable como error de canal. Un receptor de vuelo añadiría una secuencia de adquisición (preámbulo) para bajar ese umbral; aquí el demodulador parte directamente de los datos.
 - **Sincronización de trama ideal:** el verificador de AX.25 comprueba el FCS sobre bytes recibidos reales, pero localiza las tramas por desplazamiento conocido; no hay búsqueda de banderas ni *bit stuffing*.
 - **FEC limitado a código convolucional:** no se implementaron LDPC ni turbo códigos, ni decisión blanda en el Viterbi.
 - **Canal sin multitrayecto completo:** se modelan Rice y Doppler, pero no reflexiones múltiples ni despolarización por rotación de Faraday.
-- **Modelo orbital simplificado:** órbita circular y Tierra esférica; no se usa un propagador SGP4 con TLE reales.
+- **Modelo orbital por barrido genérico con órbita circular:** los barridos de elevación (link budget, estación terrena) siguen usando órbita circular y Tierra esférica. El propagador SGP4 con TLE reales (sección 8.1) se usa para pasos concretos, no para los barridos.
 - **Amplificador ideal:** no se modelan compresión AM-AM, AM-PM ni distorsión armónica del PA.
 - **FSK con tonos no ortogonales** para el detector de energía empleado ($\Delta f\cdot T = 0{,}5$), lo que penaliza su curva frente a la teórica.
 - **Un solo satélite:** los resultados corresponden a STRaND-1; generalizar requiere verificación independiente.
 
 ### 12.3 Trabajo futuro
 
-1. Implementar un lazo de Costas para recuperación de portadora y cuantificar la mejora en la tolerancia al Doppler residual.
-2. Añadir sincronización de símbolo (Gardner o Mueller-Müller).
-3. Incorporar decisión blanda en el decodificador Viterbi (≈2 dB adicionales) y evaluar LDPC.
-4. Implementar el decodificador AX.25 completo con búsqueda de banderas y *bit stuffing*.
-5. Sustituir la órbita circular por un propagador SGP4 alimentado con TLE reales de STRaND-1.
-6. Validar el modelo contra capturas IQ reales de un SDR sobre un paso del satélite.
+1. Bajar el umbral de sincronización con una secuencia de adquisición (preámbulo) y cuantificar su efecto sobre la región de trabajo del receptor.
+2. Incorporar decisión blanda en el decodificador Viterbi (≈2 dB adicionales) y evaluar LDPC.
+3. Implementar el decodificador AX.25 completo con búsqueda de banderas y *bit stuffing*.
+4. Sustituir la captura de referencia sintetizada (sección 8.2) por una captura IQ real de un SDR sobre un paso de STRaND-1, conservando el manifiesto definido y completando la validación BER contra la secuencia de bits de referencia.
 
 ---
 
@@ -1006,6 +1034,16 @@ cubesat/
 │   └── demo_pico.py                      # Demostracion del fallo de febrero de 2021
 ├── simulacion_visualizar_iq.grc / .py    # GNU Radio: visualizacion IQ
 ├── simulacion_cadena_completa.grc / .py  # GNU Radio: cadena BPSK completa
+├── orbita_sgp4.py                        # Propagacion SGP4 + geometria estacion-satelite
+├── simular_paso_sgp4.py                  # Paso orbital con SGP4 y TLE versionado
+├── validar_captura_iq.py                 # Validacion de captura IQ + manifiesto
+├── generar_captura_iq_referencia.py      # Captura de referencia desde telemetria real
+├── tle/strand1_2026-08-09.tle            # TLE de STRaND-1 con su epoca
+├── captura/                              # Par inmutable: IQ de referencia + manifiesto
+├── tests/                                # Pruebas automatizadas (pytest)
+│   ├── test_orbita_sgp4.py
+│   ├── test_sincronizacion.py
+│   └── test_validar_captura_iq.py
 ├── frames_STRAND1.csv / .json            # Telemetria descargada
 ├── resumen_telemetria_STRAND1.json
 ├── frames_STRAND1_gnuradio.bin
@@ -1013,6 +1051,7 @@ cubesat/
 │   ├── DISENO_MODELO_SIMULACION_ENLACE_RF.md
 │   ├── CARACTERIZACION_COMPONENTES_COMMS.md
 │   ├── ANALISIS_TELEMETRIA_SALUD_CUBESAT.md   # Cadena RF -> estado del satelite
+│   ├── FORMATO_CAPTURA_SDR.md            # Formato de captura IQ + manifiesto
 │   └── INFORME_TECNICO_FINAL.md
 └── resultados_simulacion/
     ├── configuracion_modelo_rf.json
@@ -1020,6 +1059,7 @@ cubesat/
     ├── strand1_bpsk_iq_clean_complex64.bin / strand1_fsk_iq_clean_complex64.bin
     ├── resultados_simulacion_avanzada.csv / .json
     ├── simulacion_avanzada_resultados.png / espectro_rrc_comparacion.png
+    ├── paso_sgp4_strand1.json            # Geometria SGP4 del paso (seccion 8.1)
     ├── link_budget_resultados.csv / link_budget_completo.json / link_budget_margen_enlace.png
     ├── enlace_ascendente_resultados.json / .png
     ├── estacion_terrena_seguimiento.json / .png

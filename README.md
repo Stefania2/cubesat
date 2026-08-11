@@ -19,7 +19,7 @@ Caracterizar y simular el subsistema electronico de comunicaciones de un CubeSat
 
 ## Delimitacion del alcance
 
-El proyecto es una caracterizacion y simulacion academica reproducible; no construye ni opera un satelite, ni repara fisicamente STRaND-1. El enlace RF se modela como un equivalente digital en banda base: no se sintetiza ni se recibe una portadora UHF real. La sincronizacion de portadora, simbolo y trama es ideal, y la validacion con capturas IQ de un SDR en un paso real queda como trabajo futuro. Por tanto, los resultados validan el modelo y sus decisiones de diseño dentro de esas condiciones, no certifican por si solos un receptor de vuelo.
+El proyecto es una caracterizacion y simulacion academica reproducible; no construye ni opera un satelite, ni repara fisicamente STRaND-1. El enlace RF se modela como un equivalente digital en banda base: no se sintetiza ni se recibe una portadora UHF real. La sincronizacion de portadora y simbolo se recupera con lazos de Costas y Gardner (ver seccion 5.4 del informe), y la de trama se localiza por desplazamiento conocido. La validacion con capturas IQ de un SDR en un paso real queda como trabajo futuro; el repositorio define el formato para conservarlas y una captura de referencia sintetizada. Por tanto, los resultados validan el modelo y sus decisiones de diseño dentro de esas condiciones, no certifican por si solos un receptor de vuelo.
 
 ## Trazabilidad y fuente de resultados
 
@@ -44,11 +44,19 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 
 ### Modelo avanzado
 - Filtrado conformador RRC (Root Raised Cosine, α=0.35): reduce el ancho de banda ocupado al 99 % de ~66 kHz a ~11 kHz **sin coste en BER**, acercandose al limite teorico R(1+α)=12.96 kHz.
+- **Sincronizacion realista**: lazo de Costas (portadora, 80 Hz) y recuperacion Gardner (simbolo) con un desfase inicial de 0.35 muestras. Define un umbral de sincronizacion (~-6 dB) y elimina la sensibilidad al Doppler residual.
 - Desvanecimiento Rice (K=10 dB) con perfil Jakes para canal con componente LOS.
 - Sensibilidad al error residual de Doppler tras la pre-compensacion por TLE (0 a 0.2 Hz).
-- Codificacion convolutional (r=1/2, K=7, polinomios 171,133) con decodificacion Viterbi: ~4 dB de ganancia de codificacion, con el umbral caracteristico por debajo de -8 dB.
+- Codificacion convolutional (r=1/2, K=7, polinomios 171,133) con decodificacion Viterbi: ~4 dB de ganancia en cuanto la sincronizacion sostiene el enlace, con el umbral caracteristico del Viterbi de decision dura.
 - Construccion y verificacion de tramas AX.25 2.2 con FCS CRC-16/X-25 real.
 - 18 configuraciones x 8 puntos de SNR = 144 corridas.
+
+### SGP4 y validacion SDR
+- `orbita_sgp4.py` + `simular_paso_sgp4.py`: paso orbital con el propagador SGP4 y el TLE de STRaND-1 versionado en `tle/` con su epoca.
+- `validar_captura_iq.py` + `generar_captura_iq_referencia.py`: formato inmutable de captura IQ (binario + manifiesto JSON) y una captura de referencia sintetizada desde la telemetria real con el Doppler SGP4 aplicado.
+
+### Pruebas automatizadas
+- `pytest` con dependencias declaradas en `requirements.txt` (pytest, sgp4). Cubren sincronizacion, SGP4/TLE y validacion de captura IQ.
 
 ### Flujogramas GNU Radio
 - `simulacion_visualizar_iq.grc`: visualizacion IQ con control interactivo de ruido AWGN (time/freq/constellation sinks).
@@ -105,7 +113,11 @@ cubesat/
 |-- decodificar_frames_STRAND1.py (decodificacion de frames)
 |-- generar_iq_bpsk_desde_bin.py (generacion IQ simple)
 |-- simular_enlace_rf_fsk_bpsk.py (modelo RF basico BPSK/FSK)
-|-- simular_enlace_rf_bpsk_avanzado.py (modelo avanzado: RRC, fading, Doppler, FEC, AX.25)
+|-- simular_enlace_rf_bpsk_avanzado.py (modelo avanzado: RRC, fading, Doppler, FEC, AX.25, sincronizacion Costas+Gardner)
+|-- orbita_sgp4.py                (propagacion SGP4 + geometria estacion-satelite)
+|-- simular_paso_sgp4.py          (paso orbital con SGP4 y TLE versionado)
+|-- validar_captura_iq.py         (validacion de captura IQ + manifiesto)
+|-- generar_captura_iq_referencia.py (captura de referencia desde telemetria real)
 |-- calcular_link_budget.py       (link budget descendente UHF)
 |-- comparar_con_cubesats_reales.py (comparacion con 7 CubeSats reales)
 |-- modelo_estacion_terrena.py    (seguimiento automatico de antena)
@@ -130,10 +142,15 @@ cubesat/
 |-- resumen_telemetria_STRAND1.json
 |-- frames_STRAND1_gnuradio.bin
 |
+|-- tle/                          (TLE de STRaND-1 versionado con su epoca)
+|-- captura/                      (par inmutable: IQ de referencia + manifiesto)
+|-- tests/                        (pruebas automatizadas con pytest)
+|
 |-- docs/
 |   |-- DISENO_MODELO_SIMULACION_ENLACE_RF.md
 |   |-- CARACTERIZACION_COMPONENTES_COMMS.md
 |   |-- ANALISIS_TELEMETRIA_SALUD_CUBESAT.md
+|   |-- FORMATO_CAPTURA_SDR.md    (formato de captura IQ + manifiesto)
 |   `-- INFORME_TECNICO_FINAL.md
 |
 |-- telemetria_strand1/           (plataforma web de telemetria: FastAPI + React + PostgreSQL)
@@ -152,6 +169,7 @@ cubesat/
     |-- cubesats_reales_referencia.csv / .json
     |-- resultados_simulacion_avanzada.csv / .json / .png
     |-- espectro_rrc_comparacion.png
+    |-- paso_sgp4_strand1.json     (geometria SGP4 del paso)
     |-- estacion_terrena_seguimiento.json / .png
     |-- enlace_ascendente_resultados.json / .png
 ```
@@ -233,27 +251,29 @@ Configuracion usada:
 | BPSK | 2 dB | 5.3e-5 | 0.0 | ~27.0 kHz |
 | FSK | 8 dB | 5.3e-2 | 3.9e-3 | ~11.8 kHz |
 
-### Modelo avanzado (RRC + fading + FEC)
+### Modelo avanzado (sincronizacion Costas+Gardner + RRC + fading + FEC)
 
-El barrido de SNR de este modelo (-10 a 4 dB) es mas bajo que el del modelo basico porque con el conformado de pulso correcto el enlace deja de cometer errores a partir de 0 dB.
+El barrido de SNR de este modelo (-10 a 4 dB) es mas bajo que el del modelo basico. Con sincronizacion realista el receptor define un umbral operativo alrededor de -6 dB: por encima, la BPSK con RRC deja de cometer errores a partir de 2 dB y a 0 dB coincide con el modelo basico (5.3e-5).
 
 | Configuracion | BER a -8 dB | BER a -6 dB | BER a -4 dB | Ancho banda (99 %) |
 | --- | ---: | ---: | ---: | ---: |
-| BPSK rectangular (NRZ) | 5.3e-2 | 2.4e-2 | 6.0e-3 | ~66.1 kHz |
-| BPSK + RRC (α=0.35) | 5.7e-2 | 2.3e-2 | 6.6e-3 | **~11.2 kHz** |
-| BPSK + Rice fading (K=10 dB) | 6.8e-2 | 2.9e-2 | 1.1e-2 | ~66.1 kHz |
-| BPSK + FEC conv. (r=1/2) | **3.8e-3** | **2.1e-4** | **0.0** | ~66.0 kHz |
+| BPSK rectangular (NRZ) | 5.7e-1 | 1.5e-1 | 9.0e-2 | ~66.1 kHz |
+| BPSK + RRC (α=0.35) | **6.2e-2** | **2.4e-2** | **6.8e-3** | **~11.2 kHz** |
+| BPSK rectangular (NRZ) + fading Rice | 4.2e-1 | 5.0e-1 | 8.0e-1 | ~66.1 kHz |
+| BPSK + FEC conv. (r=1/2) | 4.9e-1 | 4.4e-1 | 5.8e-2 | ~66.0 kHz |
 
-Sensibilidad al residual de Doppler tras la pre-compensacion, sobre un registro de 1.96 s sin recuperacion de portadora:
+El NRZ sin filtro adaptado hace que los lazos de sincronizacion trabajen sobre ~9 dB mas de ruido y pierdan el enganche; el RRC con su filtro adaptado mantiene la BER del modelo de sincronizacion ideal y recupera los 11.2 kHz de ancho de banda. El FEC da su ganancia (~4 dB) en cuanto el lazo sostiene el enlace: a -2 dB reduce la BER de 4.5e-2 a 1.5e-3.
+
+Sensibilidad al residual de Doppler tras la pre-compensacion, sobre un registro de 1.96 s. **Con el lazo de Costas (80 Hz) el residual de 0.2 Hz se recupera** y deja de dominar la tabla; las filas se muestran para la configuracion NRZ, la mas exigente:
 
 | Residual | BER a -4 dB | BER a 0 dB | BER a 4 dB |
 | --- | ---: | ---: | ---: |
-| 0 Hz | 6.0e-3 | 0.0 | 0.0 |
-| 0.05 Hz | 1.0e-2 | 2.7e-4 | 0.0 |
-| 0.1 Hz | 4.3e-2 | 9.1e-3 | 5.9e-4 |
-| 0.2 Hz | 3.7e-1 | 3.6e-1 | 3.6e-1 |
+| 0 Hz | 9.0e-2 | 1.7e-2 | 3.2e-4 |
+| 0.05 Hz | 9.5e-2 | 1.6e-2 | 7.5e-4 |
+| 0.1 Hz | 9.3e-2 | 1.6e-2 | 3.7e-4 |
+| 0.2 Hz | 5.0e-1 | 1.7e-2 | 4.8e-4 |
 
-Tramas AX.25 validadas por FCS: 0 tramas a -6 dB, 15 a -2 dB, las 37 a partir de 0 dB.
+Tramas AX.25 validadas por FCS: 0 a -4 dB, 17 a -2 dB, las 37 a partir de 0 dB.
 
 ### Gemelo digital
 
@@ -315,8 +335,17 @@ python simular_enlace_rf_bpsk_avanzado.py # 5. Modelo avanzado (tarda unos minut
 python calcular_link_budget.py           # 6. Link budget descendente
 python simular_enlace_ascendente.py      # 7. Link budget ascendente
 python modelo_estacion_terrena.py        # 8. Paso orbital con seguimiento
-python comparar_con_cubesats_reales.py   # 9. Comparacion con 7 CubeSats
-python generar_tablas_informe.py         # 10. Regenera las tablas del informe tecnico
+python simular_paso_sgp4.py              # 9. Paso orbital con SGP4 y TLE versionado
+python generar_captura_iq_referencia.py  # 10. Captura IQ de referencia + manifiesto
+python validar_captura_iq.py captura/strand1_2026-08-09.json  # 11. Valida la captura
+python comparar_con_cubesats_reales.py   # 12. Comparacion con 7 CubeSats
+python generar_tablas_informe.py         # 13. Regenera las tablas del informe tecnico
+```
+
+Las pruebas automatizadas se ejecutan con:
+
+```bash
+python -m pytest
 ```
 
 El paso 1 es opcional si ya existen `frames_STRAND1.csv` y `frames_STRAND1.json`. Si SatNOGS pide autenticacion:
@@ -326,7 +355,7 @@ export SATNOGS_API_TOKEN="TU_TOKEN"   # en PowerShell: $env:SATNOGS_API_TOKEN="T
 python load_data.py
 ```
 
-Los pasos 6 a 8 importan `geometria_orbital.py`, asi que deben ejecutarse desde el directorio del proyecto. El paso 10 debe correrse siempre que se cambie cualquier modelo: reescribe las tablas de `docs/INFORME_TECNICO_FINAL.md` a partir de los archivos de resultados.
+Los pasos 6 a 12 importan `geometria_orbital.py` u `orbita_sgp4.py`, asi que deben ejecutarse desde el directorio del proyecto. El paso 13 debe correrse siempre que se cambie cualquier modelo: reescribe las tablas de `docs/INFORME_TECNICO_FINAL.md` a partir de los archivos de resultados.
 
 ### Abrir GNU Radio
 
@@ -371,22 +400,21 @@ Incluye:
 
 ## Limitaciones del modelo
 
-- **Sincronizacion ideal:** No hay recuperacion de portadora ni temporizacion de simbolo. Es la limitacion de mayor impacto: la tabla de Doppler residual muestra que basta un error de 0.2 Hz para producir un piso de error irreducible.
+- **Umbral de sincronizacion:** La recuperacion de portadora y simbolo es real (Costas + Gardner), pero por debajo de ~-6 dB los lazos pierden el enganche y la BER deja de ser interpretable como error de canal. Un receptor de vuelo usaria un preambulo de adquisicion que aqui no se modela.
 - **Sincronizacion de trama ideal:** El verificador AX.25 calcula el FCS real sobre los bytes recibidos, pero localiza las tramas por desplazamiento conocido; no hay busqueda de banderas ni bit stuffing.
 - **Canal sin multitrayecto completo:** Se modelan Rice y Doppler, pero no reflexiones multiples ni rotacion de Faraday.
 - **FEC limitado a convolutional con decision dura:** No se implemento LDPC, turbo codigos ni decision blanda en el Viterbi.
-- **Modelo orbital simplificado:** Orbita circular y Tierra esferica; no se usa propagador SGP4 con TLE reales.
+- **Barridos orbitales con orbita circular:** Los barridos de elevacion usan orbita circular y Tierra esferica; el propagador SGP4 con TLE reales se usa para pasos concretos (`orbita_sgp4.py`), no para los barridos.
 - **FSK con tonos no ortogonales** para el detector de energia empleado (Δf·T = 0.5), lo que penaliza su curva frente a la teorica.
 - **Amplificador ideal:** No se modelan compresion AM-AM, AM-PM ni distorsion armonica del PA.
+- **Captura SDR de referencia, no fisica:** La captura IQ del repositorio se sintetiza desde la telemetria real; la recepcion fisica con un SDR y su validacion BER quedan como trabajo futuro.
 
 ## Trabajo futuro
 
-- Implementar receptor con lazo de Costas para recuperacion de portadora y cuantificar la mejora en tolerancia al Doppler residual.
-- Agregar sincronizacion de simbolo (Gardner o Mueller-Muller).
+- Bajar el umbral de sincronizacion con una secuencia de adquisicion (preambulo) y cuantificar su efecto.
 - Incorporar decision blanda en el Viterbi (~2 dB adicionales) y evaluar LDPC.
 - Implementar el decodificador AX.25 completo con busqueda de banderas y bit stuffing.
-- Usar propagador orbital (SGP4) con TLE reales de STRaND-1.
-- Validar con capturas IQ reales de un SDR sobre un paso del satelite.
+- Sustituir la captura de referencia por una captura IQ real de un SDR sobre un paso de STRaND-1, con el manifiesto definido, y completar la validacion BER contra la secuencia de bits de referencia.
 
 ## Autora
 

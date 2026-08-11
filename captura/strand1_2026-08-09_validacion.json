@@ -1,0 +1,32 @@
+{
+  "manifest": {
+    "iq_path": "strand1_2026-08-09.c64",
+    "sample_format": "complex64_le",
+    "sample_rate_hz": 76800,
+    "center_frequency_hz": 437568000.0,
+    "timestamp_utc": "2026-08-09T10:55:44.461344Z",
+    "satellite_norad_id": 39090,
+    "receiver": "referencia sintetizada sin front-end RF (SDR real pendiente)",
+    "antenna": "referencia: misma cadena del modelo, BPSK RRC a=0.35 (antena real pendiente)",
+    "reference_bits_path": "strand1_bits_referencia.bin",
+    "doppler_offset_hz": 2877.406,
+    "tle": {
+      "name": "STRAND-1",
+      "source": "tle/strand1_2026-08-09.tle",
+      "epoch_utc": "2026-08-09T10:55:44.461344Z"
+    }
+  },
+  "iq_file": "/home/stefania/Documents/proyecto_grado/cubesat/captura/strand1_2026-08-09.c64",
+  "analysis": {
+    "samples": 150208,
+    "duration_s": 1.9558333333333333,
+    "mean_power": 0.12500657052472336,
+    "rms": 0.3535626825963444,
+    "dc_i": -0.0007987715167194877,
+    "dc_q": -9.433236649115275e-05,
+    "spectral_peak_offset_hz": 2877.5390625,
+    "spectral_peak_relative_db": -42.94587178781457
+  },
+  "reference_bits_declared": true,
+  "validation_scope": "integridad de archivo, metadatos y caracterización espectral; la validación BER requiere una secuencia de referencia y demodulación sincronizada"
+}

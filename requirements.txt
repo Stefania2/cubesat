@@ -16,4 +16,6 @@ python-dateutil==2.9.0.post0
 requests==2.34.2
 scipy==1.18.0
 six==1.17.0
+sgp4==2.27
+pytest==9.1.1
 urllib3==2.7.0

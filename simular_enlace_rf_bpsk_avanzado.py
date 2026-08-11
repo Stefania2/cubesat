@@ -51,6 +51,15 @@ DOPPLER_MAX_HZ = 150.0    # Max Doppler a 437 MHz para LEO
 # nada; lo que degrada el enlace es este error residual.
 DOPPLER_RESIDUAL_HZ_VALUES = [0.0, 0.05, 0.1, 0.2]
 
+# Sincronizacion de receptor. El modelo anterior suponia que los limites de
+# simbolo y la fase de portadora eran conocidos de forma exacta. Aqui se
+# introduce un desfase fraccional reproducible y se recuperan con un lazo de
+# Costas (portadora) y Gardner (temporizacion). El objetivo no es modelar un
+# SDR concreto, sino dejar de conceder sincronizacion ideal al demodulador.
+TIMING_OFFSET_SAMPLES = 0.35
+COSTAS_LOOP_BW_HZ = 80.0
+TIMING_LOOP_GAIN = 0.015
+
 # Orbita
 # Altura real de STRaND-1 segun su TLE (ver calcular_link_budget.py).
 ORBIT_HEIGHT_KM = 775.0
@@ -237,6 +246,109 @@ def demodulate_bpsk_rrc(samples: np.ndarray, pulse: np.ndarray) -> np.ndarray:
     matched = np.convolve(np.real(samples), pulse[::-1], mode="same")
     decisions = matched[::SAMPLES_PER_SYMBOL]
     return (decisions >= 0.0).astype(np.uint8)
+
+
+# ─── Sincronizacion de receptor ────────────────────────────────────────────
+
+def fractional_delay(samples: np.ndarray, delay_samples: float) -> np.ndarray:
+    """Desplaza una señal compleja una fracción de muestra mediante interpolación.
+
+    Un desplazamiento positivo retrasa la señal. Se usa para que el barrido no
+    parta de un instante de muestreo artificialmente perfecto; los extremos se
+    rellenan con cero para no introducir una condición periódica inexistente.
+    """
+    if abs(delay_samples) < 1e-12:
+        return samples.astype(np.complex128, copy=True)
+    indices = np.arange(len(samples), dtype=np.float64) - delay_samples
+    base = np.arange(len(samples), dtype=np.float64)
+    real = np.interp(indices, base, samples.real, left=0.0, right=0.0)
+    imag = np.interp(indices, base, samples.imag, left=0.0, right=0.0)
+    return (real + 1j * imag).astype(np.complex128)
+
+
+def costas_loop_bpsk(
+    samples: np.ndarray,
+    sample_rate: float,
+    loop_bandwidth_hz: float = COSTAS_LOOP_BW_HZ,
+    damping: float = 0.707,
+) -> np.ndarray:
+    """Recupera la fase y frecuencia de una señal BPSK con un lazo de Costas.
+
+    El detector `sign(I) * Q` no necesita conocer los bits transmitidos. Los
+    coeficientes se obtienen de un PLL discreto de segundo orden; el ancho de
+    banda se expresa en Hz para que el parámetro conserve significado al cambiar
+    la tasa de muestreo.
+    """
+    if len(samples) == 0:
+        return samples.astype(np.complex128, copy=True)
+    omega = 2.0 * np.pi * loop_bandwidth_hz / sample_rate
+    denom = 1.0 + 2.0 * damping * omega + omega * omega
+    alpha = 4.0 * damping * omega / denom
+    beta = 4.0 * omega * omega / denom
+
+    recovered = np.empty(len(samples), dtype=np.complex128)
+    phase = 0.0
+    frequency = 0.0
+    for i, sample in enumerate(samples):
+        rotated = sample * np.exp(-1j * phase)
+        recovered[i] = rotated
+        error = (1.0 if rotated.real >= 0.0 else -1.0) * rotated.imag
+        frequency += beta * error
+        phase += frequency + alpha * error
+        phase = (phase + np.pi) % (2.0 * np.pi) - np.pi
+    return recovered
+
+
+def _linear_sample(samples: np.ndarray, position: float) -> complex:
+    """Interpolación lineal compleja con cero fuera de la captura."""
+    left = int(np.floor(position))
+    if left < 0 or left + 1 >= len(samples):
+        return 0.0j
+    fraction = position - left
+    return complex((1.0 - fraction) * samples[left] + fraction * samples[left + 1])
+
+
+def gardner_timing_recovery(
+    samples: np.ndarray,
+    samples_per_symbol: int = SAMPLES_PER_SYMBOL,
+    loop_gain: float = TIMING_LOOP_GAIN,
+) -> np.ndarray:
+    """Extrae símbolos con detector Gardner no asistido por decisión.
+
+    El detector compara las muestras temprana y tardía, separadas medio símbolo,
+    con la muestra central. Funciona con señal compleja y no requiere conocer la
+    secuencia transmitida. Se limita el avance para mantener estable el lazo ante
+    ruido intenso.
+    """
+    if samples_per_symbol < 2:
+        raise ValueError("samples_per_symbol debe ser al menos 2")
+    position = 0.0
+    half = samples_per_symbol / 2.0
+    symbols: list[complex] = []
+    while position + half + 1 < len(samples):
+        mid = _linear_sample(samples, position)
+        early = _linear_sample(samples, position - half)
+        late = _linear_sample(samples, position + half)
+        symbols.append(mid)
+        error = float(np.real((late - early) * np.conj(mid)))
+        correction = float(np.clip(loop_gain * error, -0.25, 0.25))
+        position += samples_per_symbol + correction
+    return np.asarray(symbols, dtype=np.complex128)
+
+
+def demodulate_bpsk_rect_synced(samples: np.ndarray) -> np.ndarray:
+    """Demodulación BPSK rectangular con recuperación de portadora y reloj."""
+    recovered = costas_loop_bpsk(samples, SAMPLE_RATE)
+    symbols = gardner_timing_recovery(recovered)
+    return (symbols.real >= 0.0).astype(np.uint8)
+
+
+def demodulate_bpsk_rrc_synced(samples: np.ndarray, pulse: np.ndarray) -> np.ndarray:
+    """Filtro adaptado RRC seguido de Costas y recuperación Gardner."""
+    recovered = costas_loop_bpsk(samples, SAMPLE_RATE)
+    matched = np.convolve(np.real(recovered), pulse[::-1], mode="same")
+    symbols = gardner_timing_recovery(matched.astype(np.complex128))
+    return (symbols.real >= 0.0).astype(np.uint8)
 
 
 # ─── Fading Rice/Rayleigh + Doppler ────────────────────────────────────────
@@ -451,6 +563,7 @@ class SimResult:
     rrc: bool
     fading: bool
     fec: bool
+    sincronizacion: str
     doppler_residual_hz: float
     snr_db: float
     bits_evaluados: int
@@ -489,7 +602,8 @@ def run_advanced_simulation(
         rx = add_awgn(rx, snr_db, rng)
         # La estacion terrena pre-compensa el Doppler con su prediccion TLE;
         # lo que llega al demodulador es el error residual de esa prediccion.
-        return compensate_doppler(rx, DOPPLER_MAX_HZ - residual_hz, SAMPLE_RATE)
+        rx = compensate_doppler(rx, DOPPLER_MAX_HZ - residual_hz, SAMPLE_RATE)
+        return fractional_delay(rx, TIMING_OFFSET_SAMPLES)
 
     # Sin FEC
     for residual_hz in DOPPLER_RESIDUAL_HZ_VALUES:
@@ -505,9 +619,9 @@ def run_advanced_simulation(
                 for snr_db in SNR_DB_VALUES:
                     rx = canal(clean, snr_db, fading_enabled, residual_hz)
                     if use_rrc:
-                        recovered = demodulate_bpsk_rrc(rx, pulse)
+                        recovered = demodulate_bpsk_rrc_synced(rx, pulse)
                     else:
-                        recovered = demodulate_bpsk_rect(rx)
+                        recovered = demodulate_bpsk_rect_synced(rx)
 
                     errors, ber = bit_error_rate(bits, recovered)
                     results.append(SimResult(
@@ -515,6 +629,7 @@ def run_advanced_simulation(
                         rrc=use_rrc,
                         fading=fading_enabled,
                         fec=False,
+                        sincronizacion="Costas+Gardner",
                         doppler_residual_hz=residual_hz,
                         snr_db=snr_db,
                         bits_evaluados=min(len(bits), len(recovered)),
@@ -531,7 +646,7 @@ def run_advanced_simulation(
 
     for snr_db in SNR_DB_VALUES:
         rx = canal(clean_fec, snr_db, False, 0.0)
-        hard_bits = demodulate_bpsk_rect(rx).astype(np.float64)
+        hard_bits = demodulate_bpsk_rect_synced(rx).astype(np.float64)
         decoded = viterbi_decode(hard_bits)
         n_check = min(len(bits), len(decoded))
         errors = int(np.count_nonzero(bits[:n_check] != decoded[:n_check]))
@@ -540,6 +655,7 @@ def run_advanced_simulation(
             rrc=False,
             fading=False,
             fec=True,
+            sincronizacion="Costas+Gardner",
             doppler_residual_hz=0.0,
             snr_db=snr_db,
             bits_evaluados=n_check,
@@ -560,7 +676,7 @@ def run_advanced_simulation(
 
     for snr_db in SNR_DB_VALUES:
         rx = canal(clean_ax, snr_db, False, 0.0)
-        recv_bits = demodulate_bpsk_rrc(rx, pulse)
+        recv_bits = demodulate_bpsk_rrc_synced(rx, pulse)
         errors, ber = bit_error_rate(ax25_bits, recv_bits)
 
         recv_bytes = np.packbits(recv_bits).tobytes()
@@ -575,6 +691,7 @@ def run_advanced_simulation(
             rrc=True,
             fading=False,
             fec=False,
+            sincronizacion="Costas+Gardner",
             doppler_residual_hz=0.0,
             snr_db=snr_db,
             bits_evaluados=min(len(ax25_bits), len(recv_bits)),
@@ -705,6 +822,8 @@ def print_summary(results: list[SimResult]) -> None:
     print("=" * 80)
     print(f"Configuracion: RRC(α={RRC_ROLLOFF}), Rice(K={RICE_K_FACTOR_DB} dB), "
           f"Doppler fisico={DOPPLER_MAX_HZ} Hz")
+    print(f"Sincronizacion: Costas ({COSTAS_LOOP_BW_HZ:g} Hz) + Gardner "
+          f"(desfase inicial {TIMING_OFFSET_SAMPLES:g} muestras)")
     print(f"Residuales de Doppler evaluados: {DOPPLER_RESIDUAL_HZ_VALUES} Hz")
     print(f"FEC: Convolucional r=1/2 K=7 | AX.25: FCS CRC-16/X-25")
     n_config = len({(r.modulation, r.rrc, r.fading, r.fec, r.doppler_residual_hz) for r in results})

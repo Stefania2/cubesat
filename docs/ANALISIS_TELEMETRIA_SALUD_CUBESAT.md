@@ -104,9 +104,15 @@ de mejorarlo.
 
 ## 3. Sincronización
 
-Es el eslabón que el modelo de este proyecto **no** implementa, y conviene decirlo con
-precisión porque condiciona todo lo demás: las simulaciones asumen sincronización ideal de
-portadora y de temporización de símbolo.
+Es el eslabón más delicado de la cadena, y conviene decirlo con precisión porque condiciona
+todo lo demás. El modelo básico asume sincronización ideal de portadora y de temporización de
+símbolo; el modelo avanzado la hace real con dos lazos que no conocen la secuencia transmitida:
+un lazo de Costas de segundo orden (80 Hz de ancho de bucle) para la portadora y una
+recuperación de temporización de Gardner para el símbolo, evaluados frente a un desfase
+fraccional reproducible de 0,35 muestras (sección 5.4 del informe técnico). El costo de quitar
+la sincronización ideal es un umbral operativo alrededor de −6 dB: por debajo, los lazos
+pierden el enganche por deslizamientos de ciclo y la BER satura; por encima, la BPSK con RRC
+mantiene la BER del modelo ideal y recupera la portadora.
 
 La consecuencia se cuantifica en el modelo avanzado mediante el error residual de Doppler,
 que es lo que quedaría tras la precompensación que hace la estación terrena a partir del TLE:
@@ -114,16 +120,14 @@ que es lo que quedaría tras la precompensación que hace la estación terrena a
 | Error residual de Doppler | Efecto sobre la BER |
 |---|---|
 | 0,0 Hz | canal intacto, BER limitada solo por el ruido |
-| 0,05 – 0,1 Hz | degradación apreciable |
-| 0,2 Hz | suelo irreducible de BER sobre el registro de 1,96 s |
+| 0,05 – 0,1 Hz | degradación apreciable en la región de baja SNR |
+| 0,2 Hz | con el lazo de Costas se recupera; en el modelo de sincronización ideal producía un suelo irreducible de BER |
 
 Una tolerancia de décimas de hercio sobre una portadora de 437 MHz es exigente: equivale a
-una precisión relativa de 5 · 10⁻¹⁰. **Esto cuantifica la necesidad de un lazo de Costas** en
-un receptor real, en lugar de afirmarla cualitativamente.
-
-Para la recuperación de reloj, el receptor real necesitaría además un lazo de temporización
-(Gardner o Mueller-Müller son los habituales en este rango de tasas). El proyecto lo deja
-identificado como trabajo futuro; su ausencia es la limitación de mayor impacto del modelo.
+una precisión relativa de 5 · 10⁻¹⁰. El lazo de Costas implementado (80 Hz) la cumple con
+margen, y esa fue la motivación cuantitativa para dejar de asumir portadora ideal. La
+recuperación de reloj con Gardner también está implementada; su límite operativo (y no la
+deriva de portadora) es hoy el umbral de sincronización del receptor.
 
 ---
 
