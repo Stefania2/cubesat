@@ -270,9 +270,11 @@ export function Dashboard({ status }: { status: Status | null }) {
                       ]}
                     />
                     <p className="mt-3 text-xs text-ink-soft">
-                      «Procesados» son frames con bytes analizables y métricas calculadas.
-                      «Decodificados» requiere una definición de protocolo validada, por lo que hoy
-                      es cero en todo el histórico.
+                      «Procesados» son frames con bytes analizables y métricas calculadas; cuando
+                      todos los recibidos traen bytes, su línea queda superpuesta a la de
+                      «Recibidos». «Decodificados» son los que la definición de protocolo validada
+                      logró interpretar, entera o parcialmente; el resto quedó sin clasificar o dio
+                      error de decodificación.
                     </p>
                   </div>
                 </>

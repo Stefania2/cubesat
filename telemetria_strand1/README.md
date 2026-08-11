@@ -18,23 +18,23 @@ Los datos viven en cuatro capas que no se mezclan en ningún punto:
 | **DECODED TELEMETRY** | `decoded_fields` | Valores físicos. Solo existen si una fila de `protocol_definitions` con `validated = true` dice cómo extraerlos. |
 | **UNKNOWN DATA** | `frames.status = 'unclassified'` | El estado por defecto. Un frame sin estructura reconocida se queda aquí. |
 
-### Por qué la telemetría aparece sin decodificar
+### Cuándo la telemetría se decodifica
 
-Con el conjunto de datos actual, los ocho parámetros (Battery Voltage, Temperature,
-OBC Uptime, magnetómetros, System Status) se muestran como **«Not decoded»**. Es el
-resultado correcto, no un fallo:
+STRaND-1 **sí dispone de una especificación primaria publicada por AMSAT-UK**. El
+arranque registra su definición como validada y el servicio `strand_amsat.py` decodifica
+la estructura `C0 80`, el nodo I2C, el canal, el tamaño del dato y las ecuaciones de
+calibración publicadas. No se utiliza el valor físico entregado por
+`satnogs-decoders` para estos campos: su implementación lee `DATA_SIZE` como si fuese
+la medida y puede producir valores constantes incorrectos.
 
-- STRaND-1 no publica una especificación validada de su formato de telemetría de
-  baliza que permita mapear bytes a magnitudes físicas.
-- El propio SatNOGS DB entrega los 100 frames de este conjunto con el campo
-  `decoded` **vacío**, lo que es consistente con la ausencia de un decodificador
-  validado en la red.
-- Las tramas van de 1 a 64 bytes con longitudes muy dispares; sin cabecera
-  identificada no hay forma fiable de alinear campos.
+La interfaz muestra un valor como **`Decoded`** únicamente si la trama encaja en esa
+estructura validada y la conversión está definida. Mantiene **`Not decoded`** o
+**`Not available`** cuando la trama no es una baliza reconocida, el canal no fue emitido
+por el satélite o la especificación no define una conversión física. Por ejemplo, la
+ausencia de un canal de temperatura transmitido no se sustituye por una estimación.
 
-Para habilitar la decodificación, inserta una fila en `protocol_definitions` con
-`validated = true` y su `field_spec`. Solo entonces la interfaz rellenará los
-parámetros y las gráficas de Analytics.
+El mecanismo es general: para otro satélite se debe insertar una definición en
+`protocol_definitions` con `validated = true`, referencia bibliográfica y `field_spec`.
 
 ## Arquitectura
 
@@ -59,8 +59,10 @@ python3 -m venv .venv
 
 Arranca en `http://127.0.0.1:8000`; la documentación OpenAPI está en `/docs`.
 
-En el primer arranque crea las tablas, inserta las reglas de anomalías por defecto y
-siembra los 100 frames reales desde `../frames_STRAND1.csv`.
+En el primer arranque crea las tablas, inserta las reglas de anomalías por defecto,
+registra el protocolo validado de STRaND-1 y siembra el conjunto base de 100 frames
+desde `../frames_STRAND1.csv`. El conjunto base permite arrancar rápido; el análisis
+histórico ampliado se incorpora mediante las herramientas de ingesta.
 
 ### 2. Frontend
 
@@ -98,18 +100,20 @@ darte cuenta.
 La conexión fuerza `timezone=utc`, de modo que la API siempre emite marcas de tiempo en
 UTC con independencia de la zona del servidor.
 
-## Datos
+## Datos y trazabilidad
 
-| Parámetro | Valor |
-| --- | --- |
-| Satélite | STRaND-1 |
-| NORAD ID | 39090 |
-| Frecuencia | 437.5680 MHz (UHF) |
-| Modo | FSK 9600 |
-| Frames en el conjunto | 100 |
-| Estaciones observadoras | 24 |
-| Observaciones identificadas | 32 |
-| Rango temporal | 2025-04-24 – 2026-05-06 |
+| Conjunto | Uso | Contenido |
+| --- | --- | --- |
+| Base local | Siembra inicial de la aplicación | 100 frames de `frames_STRAND1.csv` |
+| Histórico ampliado | Análisis y gemelo digital | 36.641 frames de 3.049 observaciones, entre noviembre de 2016 y julio de 2026 |
+
+El satélite de referencia es STRaND-1 (NORAD 39090), en UHF a 437.568 MHz. El modelo
+de simulación evalúa BPSK a 9600 bps y FSK como alternativa; el modo concreto de una
+observación se conserva en sus metadatos SatNOGS y no debe inferirse de una tabla fija.
+
+El informe técnico final es la fuente de resultados integrados. Las cifras se trazan a
+los archivos de entrada, scripts y salidas versionadas del repositorio; las tablas del
+informe se regeneran con `../generar_tablas_informe.py`.
 
 Los frames se descargan de `db.satnogs.org/api/telemetry`. Los metadatos de observación
 (estación, ventana temporal, elevación máxima) no los devuelve ese endpoint: se
@@ -132,9 +136,11 @@ veces el mismo frame, así que se puede repetir sin ensuciar el conjunto.
 ## Detección de anomalías
 
 Las reglas operan sobre hechos verificables —duplicados, frames constantes, longitud,
-entropía, huecos temporales— y **no** sobre magnitudes físicas, que no existen sin
-protocolo validado. No hay límites físicos arbitrarios grabados en el código: los
-umbrales viven en la tabla `anomaly_rules` y se editan desde la pantalla **Advanced**.
+entropía, huecos temporales y, cuando el protocolo está validado, la dispersión de las
+magnitudes decodificadas—. No hay límites físicos arbitrarios grabados en el código:
+los umbrales viven en la tabla `anomaly_rules` y se editan desde la pantalla
+**Advanced**. Una magnitud constante se señala como posible canal enrielado; no se
+presenta automáticamente como una medida estable.
 
 ## API
 

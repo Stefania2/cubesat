@@ -8,6 +8,26 @@ El trabajo se desarrolla como referencia tecnica en espanol para apoyar futuros 
 
 Caracterizar y simular el subsistema electronico de comunicaciones de un CubeSat de observacion mediante herramientas de software libre, usando telemetria real y un modelo digital de enlace RF que permita analizar modulacion, canal, recepcion y tasa de error de bit.
 
+## Objetivos especificos
+
+1. Caracterizar los componentes de comunicaciones de STRaND-1 —antena, transceptor, modem y telemetria, seguimiento y comando (TT&C)— como caso de referencia para un CubeSat de observacion.
+2. Obtener, conservar y procesar telemetria real de SatNOGS, pasando de tramas hexadecimales a bytes, campos decodificados y diagnosticos verificables del estado del satelite.
+3. Implementar un modelo reproducible de enlace digital equivalente en banda base para comparar BPSK y FSK mediante BER, espectro y archivos IQ de apoyo para GNU Radio.
+4. Evaluar mejoras y restricciones del enlace mediante conformado RRC, desvanecimiento Rice, Doppler residual, codificacion convolucional, verificacion AX.25, presupuesto de enlace y seguimiento de estacion terrena.
+5. Validar la coherencia del modelo frente a parametros documentados de CubeSats reales y generar las tablas del informe directamente desde los resultados.
+6. Presentar la telemetria y el gemelo digital con trazabilidad: distinguir los datos crudos de sus interpretaciones y explicitar la edad y las anomalías de cada lectura.
+
+## Delimitacion del alcance
+
+El proyecto es una caracterizacion y simulacion academica reproducible; no construye ni opera un satelite, ni repara fisicamente STRaND-1. El enlace RF se modela como un equivalente digital en banda base: no se sintetiza ni se recibe una portadora UHF real. La sincronizacion de portadora, simbolo y trama es ideal, y la validacion con capturas IQ de un SDR en un paso real queda como trabajo futuro. Por tanto, los resultados validan el modelo y sus decisiones de diseño dentro de esas condiciones, no certifican por si solos un receptor de vuelo.
+
+## Trazabilidad y fuente de resultados
+
+- El informe integrador vigente es `docs/INFORME_TECNICO_FINAL.md`; este README resume sus resultados y no debe contradecirlo.
+- Los valores numericos se obtienen de los scripts y archivos de `resultados_simulacion/`; `generar_tablas_informe.py` actualiza las tablas marcadas del informe a partir de dichos archivos.
+- El pipeline reproducible, en el orden indicado en la seccion **Uso**, es la fuente de verdad de cualquier resultado regenerado. Si cambia un parametro o un script, se deben regenerar los archivos de resultados y el informe antes de actualizar este resumen.
+- La plataforma de telemetria conserva por separado los datos `RAW`, `PROCESSED`, `DECODED` y `UNKNOWN`; una magnitud fisica solo se publica cuando su protocolo y su conversion estan validados.
+
 ## Alcance del proyecto
 
 Este repositorio contiene el desarrollo completo del proyecto de caracterizacion:
@@ -54,10 +74,10 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 - Tasa maxima sostenible con la Eb/N0 requerida: 253 kbps (5°) a 3.1 Mbps (cenit).
 
 ### Modelo de estacion terrena
-- Paso orbital completo sobre traza de circulo maximo: 12.8 min de horizonte a horizonte, 10.4 min utiles sobre 5°.
+- Paso orbital completo sobre traza de circulo maximo: 15.0 min de horizonte a horizonte, 12.4 min utiles sobre 5°.
 - Seguimiento automatico de antena con velocidad limitada (5°/s az, 3°/s el).
 - Error de apuntamiento calculado fuera de boresight y perdida acotada al nivel de lobulo lateral.
-- Hallazgo: la culminacion exige 8.23 °/s de azimut frente a los 5 °/s del rotor, pero a 82.5° de elevacion eso son solo 2.62° fuera de boresight y 0.09 dB de perdida.
+- Resultado vigente: aunque la demanda instantanea de azimut alcanza 8.23 °/s frente a los 5 °/s del rotor, el seguimiento preposicionado produce un error maximo de 0.77° y una perdida maxima de 0.01 dB en la simulacion.
 
 ### Comparacion con CubeSats reales
 - Evaluacion de 7 CubeSats documentados: STRaND-1, Libertad 1, FACSAT-1, Delfi-C3, ESTCube-1, AAUSAT-II, ITUPSAT 1.
@@ -252,7 +272,7 @@ Margen de enlace: **23.3 dB** a 5° elevacion → **34.2 dB** en cenit (10W TX, 
 
 ### Estacion terrena
 
-Paso de 12.8 min horizonte a horizonte con culminacion a 85°. C/N0 promedio **68.4 dB-Hz** (62.2 a 74.8 dB-Hz), perdida por apuntamiento maxima 0.09 dB.
+El modelo vigente produce un paso de 15.0 min horizonte a horizonte, con 12.4 min utiles sobre 5° y culminacion a 85°. El C/N0 promedio es **66.8 dB-Hz** (60.9 a 72.6 dB-Hz); el error maximo de apuntamiento es 0.77° y la perdida maxima es 0.01 dB. Estos valores proceden de `modelo_estacion_terrena.py` y su salida `resultados_simulacion/estacion_terrena_seguimiento.json`.
 
 ### Comparacion con CubeSats reales
 

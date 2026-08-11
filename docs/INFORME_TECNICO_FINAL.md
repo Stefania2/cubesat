@@ -27,6 +27,25 @@ El resultado central es que la cadena completa —señal RF, demodulación, bits
 
 Los CubeSats se han consolidado como plataformas accesibles para misiones espaciales universitarias, pero el diseño de su subsistema de comunicaciones sigue siendo un desafío técnico que requiere validación mediante simulación antes de la implementación física. Este proyecto aborda la necesidad de contar con documentación técnica en español que describa, simule y caracterice cada componente del enlace de comunicaciones de un CubeSat, tomando como caso de estudio el satélite STRaND-1 y utilizando exclusivamente herramientas de software libre.
 
+### 1.1 Objetivo general
+
+Caracterizar y simular el subsistema electrónico de comunicaciones de un CubeSat de observación mediante herramientas de software libre, usando telemetría real y un modelo digital de enlace RF que permita analizar modulación, canal, recepción y tasa de error de bit.
+
+### 1.2 Objetivos específicos
+
+1. Caracterizar antena, transceptor, módem y TT&C de STRaND-1 como caso de referencia.
+2. Obtener, conservar y decodificar telemetría real de SatNOGS hasta campos físicos y diagnósticos verificables del estado del satélite.
+3. Implementar un modelo digital equivalente en banda base para comparar BPSK y FSK mediante BER, espectro y señales IQ de apoyo para GNU Radio.
+4. Evaluar el enlace con conformado RRC, desvanecimiento, Doppler residual, FEC, AX.25, presupuesto de enlace y seguimiento de estación terrena.
+5. Contrastar el modelo con parámetros documentados de CubeSats reales y generar las tablas del informe desde las salidas de los scripts.
+6. Hacer trazable la interpretación de la telemetría en una plataforma web y un gemelo digital, distinguiendo datos crudos, datos procesados, valores decodificados e inferencias.
+
+### 1.3 Alcance y trazabilidad
+
+El trabajo es una caracterización académica reproducible, no la construcción, operación ni reparación física de un satélite. La simulación RF es un modelo equivalente en banda base: no sustituye una captura UHF real ni certifica un receptor de vuelo. La recuperación de portadora, temporización y trama se asume ideal; la validación contra IQ recibido por SDR queda como trabajo futuro.
+
+El presente informe es la fuente integrada de resultados. Cada valor numérico debe poder rastrearse a un script, a sus parámetros y a los archivos de `resultados_simulacion/`. El script `generar_tablas_informe.py` actualiza las tablas marcadas del informe desde esas salidas; si cambia un modelo, se deben regenerar sus resultados y las tablas antes de publicar una conclusión.
+
 ---
 
 ## 2. Metodología y herramientas
@@ -652,7 +671,7 @@ El uplink dispone de mucho más margen que el downlink (23,3 dB frente a 7,1 dB 
 | Perdida por apuntamiento maxima | 0.01 dB |
 <!-- /TABLA:estacion_terrena -->
 
-El hallazgo relevante es dinámico. En la culminación del paso el satélite exige una velocidad de barrido en azimut de **8,23 °/s**, mientras que el rotor modelado alcanza 5 °/s. El resultado es un retraso de hasta 20° en azimut. Sin embargo, como ese retraso ocurre a 82,5° de elevación —donde un grado de azimut abarca mucho menos arco sobre el cielo—, el error real fuera de boresight es de solo 2,62°, que con un haz de 30° cuesta 0,09 dB. La conclusión práctica es que una Yagi de haz ancho tolera sin problema el límite de velocidad del rotor; una antena más directiva no lo haría, y ahí el cálculo del error angular verdadero (y no la resta directa de azimutes) resulta imprescindible.
+El hallazgo relevante es dinámico. En la culminación del paso el satélite exige una velocidad de barrido en azimut de **8,23 °/s**, mientras que el rotor modelado alcanza 5 °/s. Con la antena preposicionada en el punto de adquisición, la salida vigente del modelo conserva un error máximo fuera de boresight de **0,77°** y una pérdida máxima de **0,01 dB** con un haz de 30°. La conclusión práctica es que la Yagi modelada tolera el límite de velocidad; una antena más directiva debe evaluarse de nuevo con el cálculo del error angular verdadero y no con una resta directa de azimutes.
 
 ---
 
@@ -929,7 +948,7 @@ El motor es independiente de la interfaz: no importa nada de la web y se gobiern
 
 4. El link budget descendente muestra un margen mínimo de 7,1 dB a 5° de elevación y el ascendente de 23,3 dB, ambos por encima de los 3-6 dB recomendados por la literatura.
 
-5. El modelo de estación terrena sobre un paso completo de 12,8 minutos muestra que el límite de velocidad del rotor en azimut, aun siendo insuficiente en la culminación (8,23 °/s requeridos frente a 5 °/s disponibles), solo cuesta 0,09 dB con una antena de 30° de haz.
+5. El modelo de estación terrena sobre un paso completo de 15,0 minutos, con 12,4 minutos útiles sobre 5°, muestra que el límite de velocidad del rotor en azimut se evalúa contra una traza de círculo máximo y una antena de 30° de haz. Los valores vigentes —incluida la pérdida máxima de 0,01 dB— se regeneran desde `modelo_estacion_terrena.py` y `resultados_simulacion/estacion_terrena_seguimiento.json`.
 
 6. La comparación con 7 CubeSats reales muestra concordancia alta en los siete parámetros evaluados.
 
