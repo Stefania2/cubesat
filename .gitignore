@@ -11,6 +11,7 @@ resultados_simulacion/*.bin
 frames_STRAND1_bits.bin
 frames_STRAND1_gnuradio.bin
 frames_STRAND1_bpsk_iq_complex64.bin
+frames_STRAND1_bits_rx.bin
 
 # Archivos de sistema/editor
 .DS_Store
