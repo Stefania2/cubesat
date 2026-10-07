@@ -1,0 +1,20 @@
+# Dependencias de la funcion de Vercel. Es una copia de
+# telemetria_strand1/backend/requirements.txt con dos diferencias. Si cambias
+# una version alli, cambiala tambien aqui.
+#
+#  - Sin uvicorn: Vercel pone su propio servidor ASGI. (El instalador de Vercel
+#    tampoco admite `-r` hacia otra carpeta, por eso es una copia.)
+#  - Sin satnogsdecoders: depende de `enum34`, que en Vercel se instala por
+#    delante de la biblioteca estandar, tapa el `enum` de Python y la funcion
+#    muere al arrancar (`module 'enum' has no attribute 'global_enum'`). Solo
+#    hace falta para ingerir tramas, y eso aqui esta bloqueado (READ_ONLY); los
+#    valores que sirve la API salen de `strand_amsat`, que no lo necesita.
+fastapi==0.120.4
+sqlalchemy==2.0.44
+psycopg[binary]==3.2.12
+pydantic==2.12.4
+pydantic-settings==2.13.0
+httpx==0.28.1
+pandas==3.0.3
+python-multipart==0.0.20
+redis==6.4.0

@@ -27,7 +27,8 @@ from .ingest import (
     registrar_protocolo_strand,
 )
 from .models import Frame, Observation, ProtocolDefinition
-from .routers import anomalies, decoder, export, frames, gemelo, observations, telemetry
+from .permisos import exigir_escritura
+from .routers import anomalies, decoder, export, frames, gemelo, monitor, observations, telemetry
 from .schemas import IngestResultOut, StatusOut
 from .services.satnogs import SatnogsError
 
@@ -75,6 +76,8 @@ app.include_router(decoder.router)
 app.include_router(anomalies.router)
 app.include_router(export.router)
 app.include_router(gemelo.router)
+app.include_router(monitor.router)
+app.include_router(monitor.ws_router)
 
 sistema = APIRouter(prefix="/api", tags=["sistema"])
 
@@ -96,7 +99,7 @@ def estado(db: Session = Depends(get_db)):
     )
 
 
-@sistema.post("/ingest/csv", response_model=IngestResultOut)
+@sistema.post("/ingest/csv", response_model=IngestResultOut, dependencies=[Depends(exigir_escritura)])
 def ingesta_csv(db: Session = Depends(get_db)):
     """Carga el CSV local de telemetria real."""
     try:
@@ -109,7 +112,7 @@ def ingesta_csv(db: Session = Depends(get_db)):
     )
 
 
-@sistema.post("/ingest/demoddata", response_model=IngestResultOut)
+@sistema.post("/ingest/demoddata", response_model=IngestResultOut, dependencies=[Depends(exigir_escritura)])
 def ingesta_demoddata(db: Session = Depends(get_db), directorio: str | None = None):
     """Carga archivos de demoddata (`data_<obs>_<fecha>_g<n>`) de SatNOGS Network."""
     ruta = Path(directorio) if directorio else settings.demoddata_dir
@@ -125,14 +128,14 @@ def ingesta_demoddata(db: Session = Depends(get_db), directorio: str | None = No
     return IngestResultOut(**resultado, mensaje=mensaje)
 
 
-@sistema.post("/telemetry/decodificar")
+@sistema.post("/telemetry/decodificar", dependencies=[Depends(exigir_escritura)])
 def decodificar_almacenados(db: Session = Depends(get_db), solo_pendientes: bool = True):
     """Pasa el decodificador oficial de STRaND-1 por los frames guardados."""
     registrar_protocolo_strand(db)
     return decodificar_frames_almacenados(db, solo_pendientes=solo_pendientes)
 
 
-@sistema.post("/ingest/extraccion", response_model=IngestResultOut)
+@sistema.post("/ingest/extraccion", response_model=IngestResultOut, dependencies=[Depends(exigir_escritura)])
 def ingesta_extraccion(db: Session = Depends(get_db), archivo: str | None = None):
     """Carga el CSV de extraccion masiva de SatNOGS Network."""
     ruta = Path(archivo) if archivo else settings.extraccion_csv_path
@@ -151,7 +154,7 @@ def ingesta_extraccion(db: Session = Depends(get_db), archivo: str | None = None
     return IngestResultOut(**resultado, mensaje=mensaje)
 
 
-@sistema.post("/ingest/satnogs", response_model=IngestResultOut)
+@sistema.post("/ingest/satnogs", response_model=IngestResultOut, dependencies=[Depends(exigir_escritura)])
 def ingesta_satnogs(db: Session = Depends(get_db), limite: int = Query(100, ge=1, le=1000)):
     """Descarga frames nuevos desde SatNOGS DB."""
     try:

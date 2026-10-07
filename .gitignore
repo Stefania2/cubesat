@@ -20,3 +20,10 @@ Thumbs.db
 
 # Instrucciones locales para asistentes de codigo
 CLAUDE.md
+
+# Dashboard: salidas regenerables de la simulacion (copia del estado)
+backend/_estado/
+dashboard/dist/
+dashboard/node_modules/
+.vercel
+.env*

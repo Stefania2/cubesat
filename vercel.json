@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "npm ci --prefix telemetria_strand1/frontend",
+  "buildCommand": "npm run build --prefix telemetria_strand1/frontend",
+  "outputDirectory": "telemetria_strand1/frontend/dist",
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60,
+      "excludeFiles": "telemetria_strand1/frontend/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/((?!assets/|api/).*)", "destination": "/index.html" }
+  ]
+}

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Annotated
 
@@ -25,6 +26,29 @@ class Settings(BaseSettings):
     # responde, aborta el arranque con el motivo. Evita seguir trabajando sobre
     # una base local sin darse cuenta.
     require_postgres: bool = False
+    # Con READ_ONLY=true las rutas que escriben en la base responden 403 (ver
+    # `permisos.py`). Por omision se activa sola en Vercel, que define la
+    # variable VERCEL en todas sus funciones: alli la API queda publica y sin
+    # autenticacion. En local sigue desactivada.
+    read_only: bool = bool(os.environ.get("VERCEL"))
+
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def _dialecto(cls, v: object) -> object:
+        """Fuerza el dialecto psycopg3 en las cadenas que no lo traen.
+
+        Los proveedores gestionados (Neon, Supabase, Render) entregan la cadena
+        como `postgresql://...` o `postgres://...`. Sin `+psycopg`, SQLAlchemy
+        asume psycopg2, que no esta en requirements, y el arranque falla con un
+        ModuleNotFoundError que no menciona la cadena. Asi se puede pegar tal
+        cual la da el panel del proveedor.
+        """
+        if isinstance(v, str):
+            v = v.strip()
+            for prefijo in ("postgresql://", "postgres://"):
+                if v.startswith(prefijo):
+                    return "postgresql+psycopg://" + v[len(prefijo):]
+        return v
 
     satnogs_db_url: str = "https://db.satnogs.org/api"
     satnogs_network_url: str = "https://network.satnogs.org/api"
@@ -68,7 +92,10 @@ class Settings(BaseSettings):
     cors_origins: Annotated[list[str], NoDecode] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://cubesatstrand-1.vercel.app",
+        "https://cubesatstrand-1-25h8wjfcv-stefania2s-projects.vercel.app",
     ]
+
 
     @field_validator("cors_origins", mode="before")
     @classmethod

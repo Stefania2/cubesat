@@ -7,6 +7,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ..database import get_db
+from ..permisos import exigir_escritura
 from ..ingest import sincronizar_observaciones
 from ..models import Frame, Observation
 from ..schemas import ObservationListOut, ObservationOut
@@ -45,7 +46,7 @@ def listar(
     return ObservationListOut(total=total, items=items, partial_metadata=parcial)
 
 
-@router.post("/sync")
+@router.post("/sync", dependencies=[Depends(exigir_escritura)])
 def sincronizar(
     db: Session = Depends(get_db),
     limite: int = Query(100, ge=1, le=500),

@@ -9,6 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..database import get_db
+from ..permisos import exigir_escritura
 from ..models import AnomalyRule, Frame
 from ..schemas import AnomalyReportOut, AnomalyRuleOut, AnomalyRuleUpdate
 from ..services.anomalies import evaluar
@@ -38,7 +39,8 @@ def reglas(db: Session = Depends(get_db)):
     return db.scalars(select(AnomalyRule).order_by(AnomalyRule.id)).all()
 
 
-@router.patch("/rules/{key}", response_model=AnomalyRuleOut)
+@router.patch("/rules/{key}", response_model=AnomalyRuleOut,
+              dependencies=[Depends(exigir_escritura)])
 def actualizar_regla(key: str, cambios: AnomalyRuleUpdate, db: Session = Depends(get_db)):
     """Ajusta un umbral. Los limites no estan fijados en el codigo a proposito."""
     regla = db.scalar(select(AnomalyRule).where(AnomalyRule.key == key))

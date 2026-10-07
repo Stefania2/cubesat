@@ -1,0 +1,28 @@
+# A Vercel solo se sube lo que el despliegue necesita: el frontend, el backend
+# y lo que este lee de fuera de su carpeta. Todo lo demas se excluye: los
+# entornos virtuales contienen enlaces simbolicos que Vercel rechaza
+# (source_archive_invalid_symlink) y los .env llevan credenciales.
+/*
+!/vercel.json
+!/api
+!/gemelo_digital
+!/frames_STRAND1_bits.bin
+!/telemetria_strand1
+/telemetria_strand1/*
+!/telemetria_strand1/frontend
+!/telemetria_strand1/backend
+!/telemetria_strand1/telemetria_decodificada_good.csv
+
+# Credenciales y bases locales: nunca.
+.env
+.env.*
+*.db
+
+__pycache__
+*.pyc
+/telemetria_strand1/frontend/node_modules
+/telemetria_strand1/frontend/dist
+/telemetria_strand1/frontend/tsconfig.tsbuildinfo
+.venv
+venv
+node_modules
