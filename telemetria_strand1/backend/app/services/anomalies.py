@@ -8,7 +8,7 @@ codigo: viven en la tabla `anomaly_rules` y se editan desde la interfaz.
 
 from __future__ import annotations
 
-from collections import Counter
+from collections import defaultdict
 from datetime import timedelta
 
 REGLAS_POR_DEFECTO = [
@@ -83,10 +83,15 @@ def evaluar(frames: list, reglas: list) -> list[dict]:
     if "duplicate_frames" in activas:
         regla = activas["duplicate_frames"]
         minimo = (regla.params or {}).get("min_repeticiones", 2)
-        conteo = Counter(f.raw_hex for f in frames)
-        for raw, n in conteo.items():
+        # Agrupar en una sola pasada. Recorrer `frames` por cada hex repetido
+        # era cuadratico: 3045 grupos x 36 641 frames = 111 M de comparaciones,
+        # 26 s de espera en el panel.
+        por_hex: dict[str, list] = defaultdict(list)
+        for f in frames:
+            por_hex[f.raw_hex].append(f)
+        for raw, implicados in por_hex.items():
+            n = len(implicados)
             if n >= minimo:
-                implicados = [f for f in frames if f.raw_hex == raw]
                 hallazgos.append({
                     "rule": regla.key,
                     "label": regla.label,

@@ -30,31 +30,6 @@ options:
     state: enabled
 
 blocks:
-- name: import_os
-  id: import
-  parameters:
-    alias: ''
-    comment: Para resolver la ruta del .bin sin depender del directorio de trabajo
-    imports: import os
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [32, 128.0]
-    rotation: 0
-    state: enabled
-- name: ruta_base
-  id: variable
-  parameters:
-    comment: Carpeta donde vive este flowgraph
-    value: os.path.dirname(os.path.realpath(globals().get('__file__', '.')))
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [208, 128.0]
-    rotation: 0
-    state: enabled
 - name: noise_amplitude
   id: variable_qtgui_range
   parameters:
@@ -73,7 +48,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [240, 80]
+    coordinate: [440, 112.0]
+    rotation: 0
+    state: enabled
+- name: ruta_base
+  id: variable
+  parameters:
+    comment: Carpeta donde vive este flowgraph
+    value: os.path.dirname(os.path.realpath(globals().get('__file__', '.')))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 128.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -146,7 +133,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 248.0]
+    coordinate: [664, 296.0]
     rotation: 0
     state: enabled
 - name: blocks_file_source_0
@@ -190,6 +177,19 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [296, 280.0]
+    rotation: 0
+    state: enabled
+- name: import_os
+  id: import
+  parameters:
+    alias: ''
+    comment: Para resolver la ruta del .bin sin depender del directorio de trabajo
+    imports: import os
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 176.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0

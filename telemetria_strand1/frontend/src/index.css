@@ -92,3 +92,132 @@
   fill: var(--color-ink-soft);
   font-size: 11px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Pagina «Enlace RF»: consola oscura de estacion terrena (solo esta seccion;
+   el resto de la plataforma conserva su tema claro).
+   ═══════════════════════════════════════════════════════════════════════════ */
+.enlace-rf {
+  --e-fondo: #0a0f16;
+  --e-sup: #0d1520;
+  --e-borde: #1f2b3a;
+  --e-texto: #d7e3f0;
+  --e-suave: #8aa4c0;
+  --e-verde: #3fb950;
+  --e-ambar: #d29922;
+  --e-rojo: #f85149;
+  --e-azul: #3a6ea5;
+  --e-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--e-fondo);
+  color: var(--e-texto);
+  border: 1px solid var(--e-borde);
+  border-radius: 12px;
+  padding: 18px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.enlace-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--e-borde);
+  margin-bottom: 16px;
+}
+.enlace-titulo { font-size: 20px; font-weight: 700; letter-spacing: 0.4px; }
+.enlace-sub { color: var(--e-verde); font-weight: 600; font-size: 13px; }
+.enlace-sub2 { color: var(--e-suave); font-size: 12px; margin-top: 2px; }
+.enlace-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.enlace-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--e-borde); border-radius: 999px;
+  padding: 4px 10px; font-size: 12px; color: var(--e-suave);
+}
+.enlace-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--e-suave); }
+.enlace-chip-verde .enlace-dot { background: var(--e-verde); }
+.enlace-chip-rojo .enlace-dot { background: var(--e-rojo); }
+.enlace-chip-ambar .enlace-dot { background: var(--e-ambar); }
+.enlace-chip-verde { border-color: #2c4a3a; color: #7ee787; }
+.enlace-chip-rojo { border-color: #5c2c2c; color: #ff7b72; }
+.enlace-chip-ambar { border-color: #5c4a26; color: #e3b341; }
+
+.enlace-controles { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+.enlace-config { font-size: 11px; color: var(--e-suave); }
+.enlace-btn {
+  background: #16202e; color: var(--e-texto); border: 1px solid var(--e-borde);
+  border-radius: 6px; padding: 7px 12px; font-size: 13px; cursor: pointer;
+}
+.enlace-btn:hover:not(:disabled) { border-color: var(--e-azul); }
+.enlace-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.enlace-btn-primario { background: #1c4a2c; border-color: #2c6a42; color: #a5f3b2; }
+.enlace-btn-primario:hover:not(:disabled) { background: #225c36; }
+
+.enlace-banner {
+  background: #341417; color: #ff9a95; border: 1px solid #5c2c2c;
+  border-radius: 8px; padding: 8px 12px; font-size: 13px; margin-bottom: 14px;
+}
+
+.enlace-grid { display: grid; gap: 14px; margin-bottom: 14px; }
+.enlace-grid-metricas { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+.enlace-grid-dos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.enlace-grid-cuatro { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+
+.enlace-panel {
+  background: var(--e-sup);
+  border: 1px solid var(--e-borde);
+  border-radius: 10px;
+  padding: 16px;
+}
+.enlace-panel-titulo { margin: 0 0 12px; font-size: 15px; font-weight: 600; }
+
+.enlace-tarjeta {
+  border: 1px solid var(--e-borde);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #111a26;
+}
+.enlace-etiqueta { font-size: 11px; color: var(--e-suave); text-transform: uppercase; letter-spacing: 0.5px; }
+.enlace-valor { font-family: var(--e-mono); font-size: 22px; font-weight: 600; margin-top: 4px; }
+.enlace-unidad { font-size: 12px; color: var(--e-suave); margin-left: 5px; }
+.enlace-nota { font-size: 10.5px; color: var(--e-suave); margin-top: 4px; line-height: 1.35; }
+.enlace-tono-ok .enlace-valor { color: var(--e-verde); }
+.enlace-tono-ambar .enlace-valor { color: var(--e-ambar); }
+.enlace-tono-rojo .enlace-valor { color: var(--e-rojo); }
+.enlace-tono-gris .enlace-valor { color: var(--e-suave); }
+
+.enlace-veredicto {
+  display: inline-block; border-radius: 999px; padding: 2px 10px;
+  font-size: 11px; font-weight: 600; vertical-align: middle; margin-left: 8px;
+}
+.enlace-ok { background: #1c4a2c; color: #a5f3b2; }
+.enlace-mal { background: #4a1c1c; color: #ff9a95; }
+
+.enlace-paso { text-align: center; padding: 10px; border: 1px solid var(--e-borde); border-radius: 8px; background: #111a26; }
+.enlace-paso-valor { font-family: var(--e-mono); font-size: 26px; font-weight: 700; }
+.enlace-paso-etiqueta { font-size: 11px; color: var(--e-suave); margin-top: 4px; }
+.enlace-mono { font-family: var(--e-mono); font-size: 11px; color: var(--e-suave); word-break: break-all; margin-top: 8px; }
+.enlace-msg { margin-top: 8px; color: var(--e-texto); font-size: 13px; }
+
+.enlace-vacio { color: var(--e-suave); font-size: 13px; padding: 30px 0; text-align: center; }
+.enlace-fuente { color: var(--e-suave); font-size: 12px; margin: -6px 0 10px; }
+.enlace-ref { color: var(--e-suave); font-size: 11px; font-weight: 500; margin-left: 8px; }
+.enlace-subtitulo { margin: 16px 0 8px; font-size: 13px; color: var(--e-suave); }
+
+.enlace-tabla-scroll { overflow: auto; max-height: 280px; border: 1px solid var(--e-borde); border-radius: 8px; }
+.enlace-tabla { width: 100%; border-collapse: collapse; font-size: 12px; }
+.enlace-tabla th {
+  text-align: left; color: var(--e-suave); font-weight: 600;
+  border-bottom: 1px solid var(--e-borde); padding: 7px 8px;
+  position: sticky; top: 0; background: var(--e-sup);
+}
+.enlace-tabla td { padding: 6px 8px; border-bottom: 1px solid #16202e; }
+.enlace-tabla tr:hover td { background: #111a26; }
+
+.enlace-pie { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--e-borde);
+  font-size: 12px; color: var(--e-suave); }
+
+@media (max-width: 960px) {
+  .enlace-grid-dos { grid-template-columns: 1fr; }
+  .enlace-grid-cuatro { grid-template-columns: repeat(2, 1fr); }
+}

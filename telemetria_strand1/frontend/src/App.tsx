@@ -1,9 +1,12 @@
 import { Suspense, lazy } from 'react'
+import { Component } from 'react'
+import type { ErrorInfo, ReactNode } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Header } from './components/Header'
 import { Dashboard } from './pages/Dashboard'
 import { Observations } from './pages/Observations'
 import { Telemetry } from './pages/Telemetry'
+import { EnlaceRF } from './pages/EnlaceRF'
 import { Simulacion } from './pages/Simulacion'
 import { Analytics } from './pages/Analytics'
 import { Advanced } from './pages/Advanced'
@@ -22,6 +25,32 @@ import { api, useApi } from './lib/api'
 const GemeloDigital = lazy(() =>
   import('./pages/GemeloDigital').then((m) => ({ default: m.GemeloDigital })),
 )
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null }
+  static getDerivedStateFromError(error: Error) {
+    return { error }
+  }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('Error capturado en una pagina:', error, info.componentStack)
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="mx-auto max-w-2xl rounded-lg border border-line bg-white p-8 text-center">
+          <h2 className="mb-2 text-xl font-semibold text-ink">Algo salió mal en esta página</h2>
+          <p className="mb-4 text-sm text-ink-soft">
+            Recarga con Ctrl+Shift+R. Si persiste, el error fue:
+          </p>
+          <pre className="overflow-auto rounded bg-gray-50 p-3 text-left text-xs text-red-700">
+            {String(this.state.error?.message || this.state.error)}
+          </pre>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 function Footer() {
   return (
@@ -50,6 +79,7 @@ export default function App() {
             <Route path="/" element={<Dashboard status={status} />} />
             <Route path="/observations" element={<Observations />} />
             <Route path="/telemetry" element={<Telemetry />} />
+            <Route path="/enlace" element={<ErrorBoundary><EnlaceRF /></ErrorBoundary>} />
             <Route path="/simulacion" element={<Simulacion />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/advanced" element={<Advanced />} />

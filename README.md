@@ -85,6 +85,13 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 - Paso orbital completo sobre traza de circulo maximo: 15.0 min de horizonte a horizonte, 12.4 min utiles sobre 5°.
 - Seguimiento automatico de antena con velocidad limitada (5°/s az, 3°/s el).
 - Error de apuntamiento calculado fuera de boresight y perdida acotada al nivel de lobulo lateral.
+
+### Dashboard de monitoreo (GNU Radio → FastAPI → WebSocket → Web)
+- Capa de monitoreo y visualizacion del enlace RF simulado **sin tocar la cadena de 18.776 bits** y sin `Unpack Bits`.
+- **Version canonica integrada en la plataforma** `telemetria_strand1/`: pagina `/enlace`, modulo `backend/app/services/enlace_monitor.py`, router `/api/enlace/*` + `WS /ws/enlace`, frontend `pages/EnlaceRF.tsx`. Arranca con `telemetria_strand1/arrancar.sh`.
+- El backend lanza la cadena GNU Radio, verifica la integridad de los 18.776 bits (diferencia + SHA-256), calcula BER, espectro (FFT Welch) y constelacion BPSK desde el tap IQ real, y re-decodifica 5.830 balizas reales con `strand_amsat`.
+- Metodologia honesta: RSSI y FER se muestran como N/A con su explicacion (modelo baseband-equivalente, sin tramas AX.25/FEC); ningun valor se inventa.
+- Hay ademas una implementacion autonoma de referencia en `backend/` + `dashboard/` (scripts en `scripts/arrancar_dashboard.{sh,bat}`).
 - Resultado vigente: aunque la demanda instantanea de azimut alcanza 8.23 °/s frente a los 5 °/s del rotor, el seguimiento preposicionado produce un error maximo de 0.77° y una perdida maxima de 0.01 dB en la simulacion.
 
 ### Comparacion con CubeSats reales
@@ -99,6 +106,10 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 - `docs/ANALISIS_TELEMETRIA_SALUD_CUBESAT.md`: cadena completa senal RF -> estado del satelite,
   con procesamiento de senal, sincronizacion, estructura de paquetes, monitoreo de salud,
   indicadores de desempeno y comparacion de protocolos.
+- `docs/ARQUITECTURA_DASHBOARD.md`: arquitectura del dashboard (GNU Radio → FastAPI → WebSocket → Web).
+- `docs/API_DASHBOARD.md`: endpoints REST y mensajes WebSocket.
+- `docs/INTEGRACION_GNURADIO_DASHBOARD.md`: como el backend lanza y consume la cadena GNU Radio.
+- `docs/PRUEBAS_DASHBOARD.md`: pruebas de integridad, metricas, telemetria y API.
 
 ## Estructura del proyecto
 
@@ -158,6 +169,21 @@ cubesat/
 |   |-- frontend/src/             (interfaz de consulta)
 |   |-- tools/                    (descarga del historico y analisis de series por canal)
 |   `-- telemetria_*.csv          (exportaciones de tramas, parciales)
+|
+|-- backend/                      (dashboard: API de monitoreo en FastAPI)
+|   |-- main.py                   (endpoints REST + WebSocket /ws)
+|   |-- gnuradio_interface.py     (ejecuta cadena_strand1_awgn.py con tap IQ)
+|   |-- integridad.py             (validacion de los 18.776 bits)
+|   |-- metrics_service.py        (BER, espectro y constelacion reales del tap)
+|   |-- telemetry_service.py      (decodificacion AMSAT de balizas reales)
+|   `-- _estado/                  (salidas regenerables de la simulacion)
+|
+|-- dashboard/                    (frontend React + Vite del dashboard)
+|   `-- src/                      (paneles: enlace, metricas, espectro, constelacion, telemetria)
+|
+|-- scripts/
+|   |-- arrancar_dashboard.sh     (Linux/macOS: backend + frontend de una vez)
+|   `-- arrancar_dashboard.bat    (Windows: backend + frontend de una vez)
 |
 `-- resultados_simulacion/
     |-- configuracion_modelo_rf.json

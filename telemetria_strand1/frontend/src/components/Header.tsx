@@ -7,6 +7,7 @@ const NAV = [
   { to: '/', label: 'Dashboard', end: true },
   { to: '/observations', label: 'Observations' },
   { to: '/telemetry', label: 'Telemetry' },
+  { to: '/enlace', label: 'Enlace RF' },
   { to: '/simulacion', label: 'Simulación RF' },
   { to: '/analytics', label: 'Analytics' },
   { to: '/advanced', label: 'Advanced' },

@@ -48,6 +48,19 @@ de modo que no hay CORS que configurar por entorno.
 
 ## Puesta en marcha
 
+### 0. Todo a la vez (recomendado)
+
+```bash
+./arrancar.sh
+```
+
+Levanta backend (`:8000`) y frontend (`:5173`) juntos, espera a que el backend
+responda, y **abre el navegador solo** en el panel. Antes de lanzar nada corrige
+solo las causas típicas de que «localhost no abra»: detiene procesos anteriores
+del proyecto que sigan ocupando los puertos, avisa con el comando para arrancar
+PostgreSQL si está caído, e imprime el final del log del backend si este falla al
+bootear (en vez de quedarse mudo). `Ctrl+C` detiene los dos procesos.
+
 ### 1. Backend
 
 ```bash
@@ -164,11 +177,40 @@ Conjuntos exportables: `observations`, `frames-raw`, `frames-processed`,
 `telemetry-decoded`. Cada archivo lleva su capa en el nombre para que no puedan
 confundirse entre sí.
 
+### Panel «Enlace RF» (monitoreo del enlace RF simulado)
+
+La página `/enlace` monitoriza la cadena GNU Radio del proyecto
+(`cubesat/cadena_strand1_awgn.py`) sin tocar la cadena de 18.776 bits ni la base
+de datos. El backend la lanza como subproceso (venv `strand`, que es el que
+tiene GNU Radio), verifica la integridad de los **18.776 bits** (longitud,
+diferencia por bit y SHA-256) y calcula BER, espectro (FFT Welch) y constelación
+desde el tap IQ real (`--iq-output`). La telemetría que muestra proviene de
+re-decodificar las **5.830 balizas reales** con `strand_amsat.py`, la misma
+fuente de verdad que el resto de la plataforma.
+
+| Endpoint | Devuelve |
+| --- | --- |
+| `GET /api/enlace/status` | Estado del enlace y de la simulación |
+| `GET /api/enlace/config` | Parámetros del enlace (BPSK, 437.568 MHz, 18.776 bits…) |
+| `GET /api/enlace/metrics` | BER medido, potencia/tuido del tap IQ (RSSI/FER = N/A) |
+| `GET /api/enlace/integrity` | Verificación de los 18.776 bits |
+| `GET /api/enlace/telemetry` | Balizas AMSAT re-decodificadas y sus parámetros |
+| `GET /api/enlace/spectrum` | FFT Welch real del tap IQ |
+| `GET /api/enlace/constellation` | Constelación BPSK real |
+| `POST /api/enlace/simulate` | `start` (SNR 0–12 dB) · `stop` · `reset` |
+| `WS /ws/enlace` | Mensajes `status/metrics/integrity/telemetry/spectrum/constellation/log` + `ping`→`pong` |
+
+Toda métrica sale de los archivos que escribe GNU Radio o del decodificador; no
+se estima nada. RSSI y FER se muestran como N/A porque el modelo es
+baseband-equivalente sin tramas AX.25/FEC.
+
 ## Diseño
 
 Interfaz clara, minimalista y científica: fondo gris muy claro, tarjetas blancas, azul
 marino dominante y verde para estados correctos. **Sin modo oscuro** — la aplicación se
-compromete deliberadamente con un único aspecto claro.
+compromete deliberadamente con un único aspecto claro. La única excepción es la página
+`/enlace`, un panel de consola oscuro de estación terrena (scoped bajo `.enlace-rf`) que
+monitoriza el enlace RF simulado en tiempo real.
 
 La paleta del sistema (`src/index.css`, bloque `@theme`) sigue la especificación al pie
 de la letra. Las **series de gráfica** son la única excepción y usan

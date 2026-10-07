@@ -1,0 +1,155 @@
+:root {
+  --fondo: #0a0f16;
+  --superficie: #0d1520;
+  --borde: #1f2b3a;
+  --texto: #d7e3f0;
+  --texto-suave: #8aa4c0;
+  --verde: #3fb950;
+  --ambar: #d29922;
+  --rojo: #f85149;
+  --azul: #3a6ea5;
+  --violeta: #5a4a8a;
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+}
+
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+
+.contenido {
+  flex: 1;
+  width: 100%;
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fila { display: grid; gap: 16px; }
+.dos-columnas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* ── Barra superior ─────────────────────────────────────────────── */
+.barra-superior {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: linear-gradient(180deg, #0f1826, #0a0f16);
+  border-bottom: 1px solid var(--borde);
+}
+.marca-titulo { font-size: 20px; font-weight: 700; letter-spacing: 0.4px; }
+.marca-sub { color: var(--verde); font-weight: 600; font-size: 13px; }
+.marca-sub2 { color: var(--texto-suave); font-size: 12px; margin-top: 2px; }
+.estado-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--borde); border-radius: 999px;
+  padding: 4px 10px; font-size: 12px; color: var(--texto-suave);
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--texto-suave); }
+.chip-verde .dot { background: var(--verde); }
+.chip-rojo .dot { background: var(--rojo); }
+.chip-ambar .dot { background: var(--ambar); }
+.chip-gris .dot { background: var(--texto-suave); }
+.chip-verde { border-color: #2c4a3a; color: #7ee787; }
+.chip-rojo { border-color: #5c2c2c; color: #ff7b72; }
+.chip-ambar { border-color: #5c4a26; color: #e3b341; }
+
+.controles { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+.config-ref { font-size: 11px; color: var(--texto-suave); }
+.btn {
+  background: #16202e; color: var(--texto); border: 1px solid var(--borde);
+  border-radius: 6px; padding: 7px 12px; font-size: 13px; cursor: pointer;
+}
+.btn:hover:not(:disabled) { border-color: var(--azul); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primario { background: #1c4a2c; border-color: #2c6a42; color: #a5f3b2; }
+.btn-primario:hover:not(:disabled) { background: #225c36; }
+
+/* ── Paneles ────────────────────────────────────────────────────── */
+.panel {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 16px;
+}
+.panel-titulo { margin: 0 0 12px; font-size: 15px; font-weight: 600; }
+.sub-titulo { margin: 18px 0 8px; font-size: 13px; color: var(--texto-suave); }
+.fuente { color: var(--texto-suave); font-size: 12px; margin: -6px 0 10px; }
+.notas-config { display: flex; flex-wrap: wrap; gap: 14px; color: var(--texto-suave); font-size: 12px; margin-top: 10px; }
+
+.malla-metricas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.metrica {
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #111a26;
+}
+.metrica-etiqueta { font-size: 11px; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.5px; }
+.metrica-valor { font-family: var(--mono); font-size: 22px; font-weight: 600; margin-top: 4px; }
+.metrica-unidad { font-size: 12px; color: var(--texto-suave); margin-left: 5px; }
+.metrica-nota { font-size: 10.5px; color: var(--texto-suave); margin-top: 4px; line-height: 1.35; }
+.tono-ok .metrica-valor { color: var(--verde); }
+.tono-ambar .metrica-valor { color: var(--ambar); }
+.tono-rojo .metrica-valor { color: var(--rojo); }
+.tono-gris .metrica-valor { color: var(--texto-suave); }
+
+/* ── Integridad ─────────────────────────────────────────────────── */
+.integridad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.stat { text-align: center; padding: 10px; border: 1px solid var(--borde); border-radius: 8px; background: #111a26; }
+.stat-valor { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--verde); }
+.stat-valor.stat-alerta { color: var(--rojo); }
+.stat-etiqueta { font-size: 11px; color: var(--texto-suave); margin-top: 4px; }
+.mono { font-family: var(--mono); font-size: 11px; color: var(--texto-suave); word-break: break-all; margin-top: 8px; }
+.mensaje { margin-top: 8px; color: var(--texto); }
+.banner-error {
+  background: #341417; color: #ff9a95; border-bottom: 1px solid #5c2c2c;
+  padding: 8px 18px; font-size: 13px;
+}
+.vacio { color: var(--texto-suave); font-size: 13px; padding: 24px 0; text-align: center; }
+.nota-banda { color: var(--texto-suave); font-size: 11px; margin-top: 6px; }
+
+.etiqueta-estado {
+  display: inline-block; border-radius: 999px; padding: 2px 10px;
+  font-size: 11px; font-weight: 600; vertical-align: middle; margin-left: 8px;
+}
+.etiqueta-green { background: #1c4a2c; color: #a5f3b2; }
+.etiqueta-red { background: #4a1c1c; color: #ff9a95; }
+.etiqueta-ref { color: var(--texto-suave); font-size: 11px; font-weight: 500; margin-left: 8px; }
+
+/* ── Tablas ─────────────────────────────────────────────────────── */
+.tabla-scroll { overflow: auto; max-height: 320px; }
+.tabla { width: 100%; border-collapse: collapse; font-size: 12px; }
+.tabla th {
+  text-align: left; color: var(--texto-suave); font-weight: 600;
+  border-bottom: 1px solid var(--borde); padding: 7px 8px; position: sticky; top: 0; background: var(--superficie);
+}
+.tabla td { padding: 6px 8px; border-bottom: 1px solid #16202e; }
+.tabla tr:hover td { background: #111a26; }
+
+/* ── Gráficos ───────────────────────────────────────────────────── */
+.grafico { width: 100%; }
+
+/* ── Pie ────────────────────────────────────────────────────────── */
+.pie { padding: 14px 18px; font-size: 12px; color: var(--texto-suave); border-top: 1px solid var(--borde); }
+
+@media (max-width: 960px) {
+  .dos-columnas { grid-template-columns: 1fr; }
+  .integridad-grid { grid-template-columns: repeat(2, 1fr); }
+}

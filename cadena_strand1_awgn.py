@@ -17,7 +17,7 @@ KAPPA = 1.98733
 
 
 class cadena_strand1(gr.top_block):
-    def __init__(self, infile, outfile, snr_db, seed):
+    def __init__(self, infile, outfile, snr_db, seed, iq_output=None):
         gr.top_block.__init__(self)
         taps = firdes.root_raised_cosine(SP, SR, SYM, ALPHA, NTAPS)
         self.z_tail = blocks.vector_source_b([0] * L, False, 1)
@@ -42,12 +42,17 @@ class cadena_strand1(gr.top_block):
         self.connect(self.mux, self.mapper, self.tx_filter, self.to_complex)
         self.connect(self.to_complex, (self.add_noise, 0))
         self.connect(self.noise, (self.add_noise, 1))
+
+        if iq_output:
+            self.iq_sink = blocks.file_sink(gr.sizeof_gr_complex * 1, iq_output)
+            self.connect(self.add_noise, self.iq_sink)
+
         self.connect(self.add_noise, self.to_real, self.rx_filter, self.align)
         self.connect(self.align, self.sampler, self.offset, self.slicer, self.sink)
 
 
-def run_cadena(infile, outfile, snr_db, seed):
-    tb = cadena_strand1(infile, outfile, snr_db, seed)
+def run_cadena(infile, outfile, snr_db, seed, iq_output=None):
+    tb = cadena_strand1(infile, outfile, snr_db, seed, iq_output)
     tb.start()
     tb.wait()
 
@@ -59,9 +64,11 @@ def main():
     parser.add_argument('--output', default=os.path.join(here, 'frames_STRAND1_bits_rx.bin'))
     parser.add_argument('--snr-db', type=float, default=10.0, help='Eb/N0 en dB')
     parser.add_argument('--seed', type=int, default=11)
+    parser.add_argument('--iq-output', default=None,
+                        help='Copia compleja del canal (tap de monitorizacion)')
     args = parser.parse_args()
 
-    run_cadena(args.input, args.output, args.snr_db, args.seed)
+    run_cadena(args.input, args.output, args.snr_db, args.seed, args.iq_output)
 
 
 if __name__ == '__main__':
