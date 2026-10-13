@@ -9,7 +9,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 402.8,
-    "c_n0_db_hz": 59.08
+    "c_n0_db_hz": 58.08
   },
   {
     "tiempo_s": 1.0,
@@ -21,7 +21,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 402.5,
-    "c_n0_db_hz": 59.1
+    "c_n0_db_hz": 58.1
   },
   {
     "tiempo_s": 2.0,
@@ -33,7 +33,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 402.1,
-    "c_n0_db_hz": 59.12
+    "c_n0_db_hz": 58.12
   },
   {
     "tiempo_s": 3.0,
@@ -45,7 +45,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 401.7,
-    "c_n0_db_hz": 59.14
+    "c_n0_db_hz": 58.14
   },
   {
     "tiempo_s": 4.0,
@@ -57,7 +57,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 401.3,
-    "c_n0_db_hz": 59.17
+    "c_n0_db_hz": 58.17
   },
   {
     "tiempo_s": 5.0,
@@ -69,7 +69,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 401.0,
-    "c_n0_db_hz": 59.19
+    "c_n0_db_hz": 58.19
   },
   {
     "tiempo_s": 6.0,
@@ -81,7 +81,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 400.6,
-    "c_n0_db_hz": 59.21
+    "c_n0_db_hz": 58.21
   },
   {
     "tiempo_s": 7.0,
@@ -93,7 +93,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 400.2,
-    "c_n0_db_hz": 59.23
+    "c_n0_db_hz": 58.23
   },
   {
     "tiempo_s": 8.0,
@@ -105,7 +105,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 399.8,
-    "c_n0_db_hz": 59.25
+    "c_n0_db_hz": 58.25
   },
   {
     "tiempo_s": 9.0,
@@ -117,7 +117,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 399.5,
-    "c_n0_db_hz": 59.28
+    "c_n0_db_hz": 58.28
   },
   {
     "tiempo_s": 10.0,
@@ -129,7 +129,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 399.1,
-    "c_n0_db_hz": 59.3
+    "c_n0_db_hz": 58.3
   },
   {
     "tiempo_s": 11.0,
@@ -141,7 +141,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 398.7,
-    "c_n0_db_hz": 59.32
+    "c_n0_db_hz": 58.32
   },
   {
     "tiempo_s": 12.0,
@@ -153,7 +153,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 398.4,
-    "c_n0_db_hz": 59.34
+    "c_n0_db_hz": 58.34
   },
   {
     "tiempo_s": 13.0,
@@ -165,7 +165,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 398.0,
-    "c_n0_db_hz": 59.37
+    "c_n0_db_hz": 58.37
   },
   {
     "tiempo_s": 14.0,
@@ -177,7 +177,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 397.6,
-    "c_n0_db_hz": 59.39
+    "c_n0_db_hz": 58.39
   },
   {
     "tiempo_s": 15.0,
@@ -189,7 +189,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 397.2,
-    "c_n0_db_hz": 59.41
+    "c_n0_db_hz": 58.41
   },
   {
     "tiempo_s": 16.0,
@@ -201,7 +201,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 396.9,
-    "c_n0_db_hz": 59.43
+    "c_n0_db_hz": 58.43
   },
   {
     "tiempo_s": 17.0,
@@ -213,7 +213,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 396.5,
-    "c_n0_db_hz": 59.46
+    "c_n0_db_hz": 58.46
   },
   {
     "tiempo_s": 18.0,
@@ -225,7 +225,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 396.2,
-    "c_n0_db_hz": 59.48
+    "c_n0_db_hz": 58.48
   },
   {
     "tiempo_s": 19.0,
@@ -237,7 +237,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 395.8,
-    "c_n0_db_hz": 59.5
+    "c_n0_db_hz": 58.5
   },
   {
     "tiempo_s": 20.0,
@@ -249,7 +249,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 395.4,
-    "c_n0_db_hz": 59.52
+    "c_n0_db_hz": 58.52
   },
   {
     "tiempo_s": 21.0,
@@ -261,7 +261,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 395.1,
-    "c_n0_db_hz": 59.55
+    "c_n0_db_hz": 58.55
   },
   {
     "tiempo_s": 22.0,
@@ -273,7 +273,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 394.7,
-    "c_n0_db_hz": 59.57
+    "c_n0_db_hz": 58.57
   },
   {
     "tiempo_s": 23.0,
@@ -285,7 +285,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 394.3,
-    "c_n0_db_hz": 59.59
+    "c_n0_db_hz": 58.59
   },
   {
     "tiempo_s": 24.0,
@@ -297,7 +297,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 394.0,
-    "c_n0_db_hz": 59.61
+    "c_n0_db_hz": 58.61
   },
   {
     "tiempo_s": 25.0,
@@ -309,7 +309,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 393.6,
-    "c_n0_db_hz": 59.64
+    "c_n0_db_hz": 58.64
   },
   {
     "tiempo_s": 26.0,
@@ -321,7 +321,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 393.3,
-    "c_n0_db_hz": 59.66
+    "c_n0_db_hz": 58.66
   },
   {
     "tiempo_s": 27.0,
@@ -333,7 +333,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 392.9,
-    "c_n0_db_hz": 59.68
+    "c_n0_db_hz": 58.68
   },
   {
     "tiempo_s": 28.0,
@@ -345,7 +345,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 392.5,
-    "c_n0_db_hz": 59.7
+    "c_n0_db_hz": 58.7
   },
   {
     "tiempo_s": 29.0,
@@ -357,7 +357,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 392.2,
-    "c_n0_db_hz": 59.73
+    "c_n0_db_hz": 58.73
   },
   {
     "tiempo_s": 30.0,
@@ -369,7 +369,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 391.8,
-    "c_n0_db_hz": 59.75
+    "c_n0_db_hz": 58.75
   },
   {
     "tiempo_s": 31.0,
@@ -381,7 +381,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 391.5,
-    "c_n0_db_hz": 59.77
+    "c_n0_db_hz": 58.77
   },
   {
     "tiempo_s": 32.0,
@@ -393,7 +393,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 391.1,
-    "c_n0_db_hz": 59.8
+    "c_n0_db_hz": 58.8
   },
   {
     "tiempo_s": 33.0,
@@ -405,7 +405,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 390.8,
-    "c_n0_db_hz": 59.82
+    "c_n0_db_hz": 58.82
   },
   {
     "tiempo_s": 34.0,
@@ -417,7 +417,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 390.4,
-    "c_n0_db_hz": 59.84
+    "c_n0_db_hz": 58.84
   },
   {
     "tiempo_s": 35.0,
@@ -429,7 +429,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 390.0,
-    "c_n0_db_hz": 59.87
+    "c_n0_db_hz": 58.87
   },
   {
     "tiempo_s": 36.0,
@@ -441,7 +441,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 389.7,
-    "c_n0_db_hz": 59.89
+    "c_n0_db_hz": 58.89
   },
   {
     "tiempo_s": 37.0,
@@ -453,7 +453,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 389.3,
-    "c_n0_db_hz": 59.91
+    "c_n0_db_hz": 58.91
   },
   {
     "tiempo_s": 38.0,
@@ -465,7 +465,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 389.0,
-    "c_n0_db_hz": 59.94
+    "c_n0_db_hz": 58.94
   },
   {
     "tiempo_s": 39.0,
@@ -477,7 +477,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 388.6,
-    "c_n0_db_hz": 59.96
+    "c_n0_db_hz": 58.96
   },
   {
     "tiempo_s": 40.0,
@@ -489,7 +489,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 388.3,
-    "c_n0_db_hz": 59.98
+    "c_n0_db_hz": 58.98
   },
   {
     "tiempo_s": 41.0,
@@ -501,7 +501,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 387.9,
-    "c_n0_db_hz": 60.01
+    "c_n0_db_hz": 59.01
   },
   {
     "tiempo_s": 42.0,
@@ -513,7 +513,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 387.6,
-    "c_n0_db_hz": 60.03
+    "c_n0_db_hz": 59.03
   },
   {
     "tiempo_s": 43.0,
@@ -525,7 +525,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 387.2,
-    "c_n0_db_hz": 60.05
+    "c_n0_db_hz": 59.05
   },
   {
     "tiempo_s": 44.0,
@@ -537,7 +537,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 386.9,
-    "c_n0_db_hz": 60.08
+    "c_n0_db_hz": 59.08
   },
   {
     "tiempo_s": 45.0,
@@ -549,7 +549,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 386.6,
-    "c_n0_db_hz": 60.1
+    "c_n0_db_hz": 59.1
   },
   {
     "tiempo_s": 46.0,
@@ -561,7 +561,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 386.2,
-    "c_n0_db_hz": 60.12
+    "c_n0_db_hz": 59.12
   },
   {
     "tiempo_s": 47.0,
@@ -573,7 +573,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 385.9,
-    "c_n0_db_hz": 60.15
+    "c_n0_db_hz": 59.15
   },
   {
     "tiempo_s": 48.0,
@@ -585,7 +585,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 385.5,
-    "c_n0_db_hz": 60.17
+    "c_n0_db_hz": 59.17
   },
   {
     "tiempo_s": 49.0,
@@ -597,7 +597,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 385.2,
-    "c_n0_db_hz": 60.19
+    "c_n0_db_hz": 59.19
   },
   {
     "tiempo_s": 50.0,
@@ -609,7 +609,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 384.8,
-    "c_n0_db_hz": 60.22
+    "c_n0_db_hz": 59.22
   },
   {
     "tiempo_s": 51.0,
@@ -621,7 +621,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 384.5,
-    "c_n0_db_hz": 60.24
+    "c_n0_db_hz": 59.24
   },
   {
     "tiempo_s": 52.0,
@@ -633,7 +633,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 384.1,
-    "c_n0_db_hz": 60.27
+    "c_n0_db_hz": 59.27
   },
   {
     "tiempo_s": 53.0,
@@ -645,7 +645,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 383.8,
-    "c_n0_db_hz": 60.29
+    "c_n0_db_hz": 59.29
   },
   {
     "tiempo_s": 54.0,
@@ -657,7 +657,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 383.5,
-    "c_n0_db_hz": 60.31
+    "c_n0_db_hz": 59.31
   },
   {
     "tiempo_s": 55.0,
@@ -669,7 +669,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 383.1,
-    "c_n0_db_hz": 60.34
+    "c_n0_db_hz": 59.34
   },
   {
     "tiempo_s": 56.0,
@@ -681,7 +681,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 382.8,
-    "c_n0_db_hz": 60.36
+    "c_n0_db_hz": 59.36
   },
   {
     "tiempo_s": 57.0,
@@ -693,7 +693,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 382.4,
-    "c_n0_db_hz": 60.39
+    "c_n0_db_hz": 59.39
   },
   {
     "tiempo_s": 58.0,
@@ -705,7 +705,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 382.1,
-    "c_n0_db_hz": 60.41
+    "c_n0_db_hz": 59.41
   },
   {
     "tiempo_s": 59.0,
@@ -717,7 +717,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 381.8,
-    "c_n0_db_hz": 60.43
+    "c_n0_db_hz": 59.43
   },
   {
     "tiempo_s": 60.0,
@@ -729,7 +729,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 381.4,
-    "c_n0_db_hz": 60.46
+    "c_n0_db_hz": 59.46
   },
   {
     "tiempo_s": 61.0,
@@ -741,7 +741,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 381.1,
-    "c_n0_db_hz": 60.48
+    "c_n0_db_hz": 59.48
   },
   {
     "tiempo_s": 62.0,
@@ -753,7 +753,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 380.8,
-    "c_n0_db_hz": 60.51
+    "c_n0_db_hz": 59.51
   },
   {
     "tiempo_s": 63.0,
@@ -765,7 +765,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 380.4,
-    "c_n0_db_hz": 60.53
+    "c_n0_db_hz": 59.53
   },
   {
     "tiempo_s": 64.0,
@@ -777,7 +777,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 380.1,
-    "c_n0_db_hz": 60.55
+    "c_n0_db_hz": 59.55
   },
   {
     "tiempo_s": 65.0,
@@ -789,7 +789,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 379.8,
-    "c_n0_db_hz": 60.58
+    "c_n0_db_hz": 59.58
   },
   {
     "tiempo_s": 66.0,
@@ -801,7 +801,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 379.4,
-    "c_n0_db_hz": 60.6
+    "c_n0_db_hz": 59.6
   },
   {
     "tiempo_s": 67.0,
@@ -813,7 +813,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 379.1,
-    "c_n0_db_hz": 60.63
+    "c_n0_db_hz": 59.63
   },
   {
     "tiempo_s": 68.0,
@@ -825,7 +825,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 378.8,
-    "c_n0_db_hz": 60.65
+    "c_n0_db_hz": 59.65
   },
   {
     "tiempo_s": 69.0,
@@ -837,7 +837,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 378.4,
-    "c_n0_db_hz": 60.68
+    "c_n0_db_hz": 59.68
   },
   {
     "tiempo_s": 70.0,
@@ -849,7 +849,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 378.1,
-    "c_n0_db_hz": 60.7
+    "c_n0_db_hz": 59.7
   },
   {
     "tiempo_s": 71.0,
@@ -861,7 +861,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 377.8,
-    "c_n0_db_hz": 60.73
+    "c_n0_db_hz": 59.73
   },
   {
     "tiempo_s": 72.0,
@@ -873,7 +873,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 377.4,
-    "c_n0_db_hz": 60.75
+    "c_n0_db_hz": 59.75
   },
   {
     "tiempo_s": 73.0,
@@ -885,7 +885,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 377.1,
-    "c_n0_db_hz": 60.78
+    "c_n0_db_hz": 59.78
   },
   {
     "tiempo_s": 74.0,
@@ -897,7 +897,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 376.8,
-    "c_n0_db_hz": 60.8
+    "c_n0_db_hz": 59.8
   },
   {
     "tiempo_s": 75.0,
@@ -909,7 +909,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 376.5,
-    "c_n0_db_hz": 60.82
+    "c_n0_db_hz": 59.82
   },
   {
     "tiempo_s": 76.0,
@@ -921,7 +921,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 376.1,
-    "c_n0_db_hz": 60.85
+    "c_n0_db_hz": 59.85
   },
   {
     "tiempo_s": 77.0,
@@ -933,7 +933,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 375.8,
-    "c_n0_db_hz": 60.87
+    "c_n0_db_hz": 59.87
   },
   {
     "tiempo_s": 78.0,
@@ -945,7 +945,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 375.5,
-    "c_n0_db_hz": 60.9
+    "c_n0_db_hz": 59.9
   },
   {
     "tiempo_s": 79.0,
@@ -957,7 +957,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 375.2,
-    "c_n0_db_hz": 60.92
+    "c_n0_db_hz": 59.92
   },
   {
     "tiempo_s": 80.0,
@@ -969,7 +969,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 374.8,
-    "c_n0_db_hz": 60.95
+    "c_n0_db_hz": 59.95
   },
   {
     "tiempo_s": 81.0,
@@ -981,7 +981,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 374.5,
-    "c_n0_db_hz": 60.97
+    "c_n0_db_hz": 59.97
   },
   {
     "tiempo_s": 82.0,
@@ -993,7 +993,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 374.2,
-    "c_n0_db_hz": 61.0
+    "c_n0_db_hz": 60.0
   },
   {
     "tiempo_s": 83.0,
@@ -1005,7 +1005,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 373.9,
-    "c_n0_db_hz": 61.02
+    "c_n0_db_hz": 60.02
   },
   {
     "tiempo_s": 84.0,
@@ -1017,7 +1017,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 373.5,
-    "c_n0_db_hz": 61.05
+    "c_n0_db_hz": 60.05
   },
   {
     "tiempo_s": 85.0,
@@ -1029,7 +1029,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 373.2,
-    "c_n0_db_hz": 61.08
+    "c_n0_db_hz": 60.08
   },
   {
     "tiempo_s": 86.0,
@@ -1041,7 +1041,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 372.9,
-    "c_n0_db_hz": 61.1
+    "c_n0_db_hz": 60.1
   },
   {
     "tiempo_s": 87.0,
@@ -1053,7 +1053,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 372.6,
-    "c_n0_db_hz": 61.13
+    "c_n0_db_hz": 60.13
   },
   {
     "tiempo_s": 88.0,
@@ -1065,7 +1065,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 372.3,
-    "c_n0_db_hz": 61.15
+    "c_n0_db_hz": 60.15
   },
   {
     "tiempo_s": 89.0,
@@ -1077,7 +1077,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 372.0,
-    "c_n0_db_hz": 61.18
+    "c_n0_db_hz": 60.18
   },
   {
     "tiempo_s": 90.0,
@@ -1089,7 +1089,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 371.6,
-    "c_n0_db_hz": 61.2
+    "c_n0_db_hz": 60.2
   },
   {
     "tiempo_s": 91.0,
@@ -1101,7 +1101,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 371.3,
-    "c_n0_db_hz": 61.23
+    "c_n0_db_hz": 60.23
   },
   {
     "tiempo_s": 92.0,
@@ -1113,7 +1113,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 371.0,
-    "c_n0_db_hz": 61.25
+    "c_n0_db_hz": 60.25
   },
   {
     "tiempo_s": 93.0,
@@ -1125,7 +1125,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 370.7,
-    "c_n0_db_hz": 61.28
+    "c_n0_db_hz": 60.28
   },
   {
     "tiempo_s": 94.0,
@@ -1137,7 +1137,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 370.4,
-    "c_n0_db_hz": 61.3
+    "c_n0_db_hz": 60.3
   },
   {
     "tiempo_s": 95.0,
@@ -1149,7 +1149,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 370.1,
-    "c_n0_db_hz": 61.33
+    "c_n0_db_hz": 60.33
   },
   {
     "tiempo_s": 96.0,
@@ -1161,7 +1161,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 369.7,
-    "c_n0_db_hz": 61.36
+    "c_n0_db_hz": 60.36
   },
   {
     "tiempo_s": 97.0,
@@ -1173,7 +1173,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 369.4,
-    "c_n0_db_hz": 61.38
+    "c_n0_db_hz": 60.38
   },
   {
     "tiempo_s": 98.0,
@@ -1185,7 +1185,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 369.1,
-    "c_n0_db_hz": 61.41
+    "c_n0_db_hz": 60.41
   },
   {
     "tiempo_s": 99.0,
@@ -1197,7 +1197,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 368.8,
-    "c_n0_db_hz": 61.43
+    "c_n0_db_hz": 60.43
   },
   {
     "tiempo_s": 100.0,
@@ -1209,7 +1209,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 368.5,
-    "c_n0_db_hz": 61.46
+    "c_n0_db_hz": 60.46
   },
   {
     "tiempo_s": 101.0,
@@ -1221,7 +1221,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 368.2,
-    "c_n0_db_hz": 61.49
+    "c_n0_db_hz": 60.49
   },
   {
     "tiempo_s": 102.0,
@@ -1233,7 +1233,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 367.9,
-    "c_n0_db_hz": 61.51
+    "c_n0_db_hz": 60.51
   },
   {
     "tiempo_s": 103.0,
@@ -1245,7 +1245,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 367.6,
-    "c_n0_db_hz": 61.54
+    "c_n0_db_hz": 60.54
   },
   {
     "tiempo_s": 104.0,
@@ -1257,7 +1257,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 367.3,
-    "c_n0_db_hz": 61.56
+    "c_n0_db_hz": 60.56
   },
   {
     "tiempo_s": 105.0,
@@ -1269,7 +1269,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 366.9,
-    "c_n0_db_hz": 61.59
+    "c_n0_db_hz": 60.59
   },
   {
     "tiempo_s": 106.0,
@@ -1281,7 +1281,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 366.6,
-    "c_n0_db_hz": 61.62
+    "c_n0_db_hz": 60.62
   },
   {
     "tiempo_s": 107.0,
@@ -1293,7 +1293,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 366.3,
-    "c_n0_db_hz": 61.64
+    "c_n0_db_hz": 60.64
   },
   {
     "tiempo_s": 108.0,
@@ -1305,7 +1305,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 366.0,
-    "c_n0_db_hz": 61.67
+    "c_n0_db_hz": 60.67
   },
   {
     "tiempo_s": 109.0,
@@ -1317,7 +1317,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 365.7,
-    "c_n0_db_hz": 61.7
+    "c_n0_db_hz": 60.7
   },
   {
     "tiempo_s": 110.0,
@@ -1329,7 +1329,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 365.4,
-    "c_n0_db_hz": 61.72
+    "c_n0_db_hz": 60.72
   },
   {
     "tiempo_s": 111.0,
@@ -1341,7 +1341,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 365.1,
-    "c_n0_db_hz": 61.75
+    "c_n0_db_hz": 60.75
   },
   {
     "tiempo_s": 112.0,
@@ -1353,7 +1353,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 364.8,
-    "c_n0_db_hz": 61.77
+    "c_n0_db_hz": 60.77
   },
   {
     "tiempo_s": 113.0,
@@ -1365,7 +1365,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 364.5,
-    "c_n0_db_hz": 61.8
+    "c_n0_db_hz": 60.8
   },
   {
     "tiempo_s": 114.0,
@@ -1377,7 +1377,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 364.2,
-    "c_n0_db_hz": 61.83
+    "c_n0_db_hz": 60.83
   },
   {
     "tiempo_s": 115.0,
@@ -1389,7 +1389,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 363.9,
-    "c_n0_db_hz": 61.85
+    "c_n0_db_hz": 60.85
   },
   {
     "tiempo_s": 116.0,
@@ -1401,7 +1401,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 363.6,
-    "c_n0_db_hz": 61.88
+    "c_n0_db_hz": 60.88
   },
   {
     "tiempo_s": 117.0,
@@ -1413,7 +1413,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 363.3,
-    "c_n0_db_hz": 61.91
+    "c_n0_db_hz": 60.91
   },
   {
     "tiempo_s": 118.0,
@@ -1425,7 +1425,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 363.0,
-    "c_n0_db_hz": 61.94
+    "c_n0_db_hz": 60.94
   },
   {
     "tiempo_s": 119.0,
@@ -1437,7 +1437,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 362.7,
-    "c_n0_db_hz": 61.96
+    "c_n0_db_hz": 60.96
   },
   {
     "tiempo_s": 120.0,
@@ -1449,7 +1449,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 362.4,
-    "c_n0_db_hz": 61.99
+    "c_n0_db_hz": 60.99
   },
   {
     "tiempo_s": 121.0,
@@ -1461,7 +1461,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 362.1,
-    "c_n0_db_hz": 62.02
+    "c_n0_db_hz": 61.02
   },
   {
     "tiempo_s": 122.0,
@@ -1473,7 +1473,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 361.8,
-    "c_n0_db_hz": 62.04
+    "c_n0_db_hz": 61.04
   },
   {
     "tiempo_s": 123.0,
@@ -1485,7 +1485,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 361.5,
-    "c_n0_db_hz": 62.07
+    "c_n0_db_hz": 61.07
   },
   {
     "tiempo_s": 124.0,
@@ -1497,7 +1497,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 361.2,
-    "c_n0_db_hz": 62.1
+    "c_n0_db_hz": 61.1
   },
   {
     "tiempo_s": 125.0,
@@ -1509,7 +1509,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 360.9,
-    "c_n0_db_hz": 62.13
+    "c_n0_db_hz": 61.13
   },
   {
     "tiempo_s": 126.0,
@@ -1521,7 +1521,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 360.6,
-    "c_n0_db_hz": 62.15
+    "c_n0_db_hz": 61.15
   },
   {
     "tiempo_s": 127.0,
@@ -1533,7 +1533,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 360.3,
-    "c_n0_db_hz": 62.18
+    "c_n0_db_hz": 61.18
   },
   {
     "tiempo_s": 128.0,
@@ -1545,7 +1545,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 360.0,
-    "c_n0_db_hz": 62.21
+    "c_n0_db_hz": 61.21
   },
   {
     "tiempo_s": 129.0,
@@ -1557,7 +1557,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 359.7,
-    "c_n0_db_hz": 62.23
+    "c_n0_db_hz": 61.23
   },
   {
     "tiempo_s": 130.0,
@@ -1569,7 +1569,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 359.4,
-    "c_n0_db_hz": 62.26
+    "c_n0_db_hz": 61.26
   },
   {
     "tiempo_s": 131.0,
@@ -1581,7 +1581,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 359.2,
-    "c_n0_db_hz": 62.29
+    "c_n0_db_hz": 61.29
   },
   {
     "tiempo_s": 132.0,
@@ -1593,7 +1593,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 358.9,
-    "c_n0_db_hz": 62.32
+    "c_n0_db_hz": 61.32
   },
   {
     "tiempo_s": 133.0,
@@ -1605,7 +1605,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 358.6,
-    "c_n0_db_hz": 62.35
+    "c_n0_db_hz": 61.35
   },
   {
     "tiempo_s": 134.0,
@@ -1617,7 +1617,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 358.3,
-    "c_n0_db_hz": 62.37
+    "c_n0_db_hz": 61.37
   },
   {
     "tiempo_s": 135.0,
@@ -1629,7 +1629,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 358.0,
-    "c_n0_db_hz": 62.4
+    "c_n0_db_hz": 61.4
   },
   {
     "tiempo_s": 136.0,
@@ -1641,7 +1641,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 357.7,
-    "c_n0_db_hz": 62.43
+    "c_n0_db_hz": 61.43
   },
   {
     "tiempo_s": 137.0,
@@ -1653,7 +1653,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 357.4,
-    "c_n0_db_hz": 62.46
+    "c_n0_db_hz": 61.46
   },
   {
     "tiempo_s": 138.0,
@@ -1665,7 +1665,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 357.1,
-    "c_n0_db_hz": 62.48
+    "c_n0_db_hz": 61.48
   },
   {
     "tiempo_s": 139.0,
@@ -1677,7 +1677,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 356.8,
-    "c_n0_db_hz": 62.51
+    "c_n0_db_hz": 61.51
   },
   {
     "tiempo_s": 140.0,
@@ -1689,7 +1689,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 356.6,
-    "c_n0_db_hz": 62.54
+    "c_n0_db_hz": 61.54
   },
   {
     "tiempo_s": 141.0,
@@ -1701,7 +1701,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 356.3,
-    "c_n0_db_hz": 62.57
+    "c_n0_db_hz": 61.57
   },
   {
     "tiempo_s": 142.0,
@@ -1713,7 +1713,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 356.0,
-    "c_n0_db_hz": 62.6
+    "c_n0_db_hz": 61.6
   },
   {
     "tiempo_s": 143.0,
@@ -1725,7 +1725,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 355.7,
-    "c_n0_db_hz": 62.63
+    "c_n0_db_hz": 61.63
   },
   {
     "tiempo_s": 144.0,
@@ -1737,7 +1737,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 355.4,
-    "c_n0_db_hz": 62.65
+    "c_n0_db_hz": 61.65
   },
   {
     "tiempo_s": 145.0,
@@ -1749,7 +1749,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 355.1,
-    "c_n0_db_hz": 62.68
+    "c_n0_db_hz": 61.68
   },
   {
     "tiempo_s": 146.0,
@@ -1761,7 +1761,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 354.9,
-    "c_n0_db_hz": 62.71
+    "c_n0_db_hz": 61.71
   },
   {
     "tiempo_s": 147.0,
@@ -1773,7 +1773,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 354.6,
-    "c_n0_db_hz": 62.74
+    "c_n0_db_hz": 61.74
   },
   {
     "tiempo_s": 148.0,
@@ -1785,7 +1785,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 354.3,
-    "c_n0_db_hz": 62.77
+    "c_n0_db_hz": 61.77
   },
   {
     "tiempo_s": 149.0,
@@ -1797,7 +1797,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 354.0,
-    "c_n0_db_hz": 62.8
+    "c_n0_db_hz": 61.8
   },
   {
     "tiempo_s": 150.0,
@@ -1809,7 +1809,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 353.7,
-    "c_n0_db_hz": 62.82
+    "c_n0_db_hz": 61.82
   },
   {
     "tiempo_s": 151.0,
@@ -1821,7 +1821,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 353.4,
-    "c_n0_db_hz": 62.85
+    "c_n0_db_hz": 61.85
   },
   {
     "tiempo_s": 152.0,
@@ -1833,7 +1833,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 353.2,
-    "c_n0_db_hz": 62.88
+    "c_n0_db_hz": 61.88
   },
   {
     "tiempo_s": 153.0,
@@ -1845,7 +1845,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 352.9,
-    "c_n0_db_hz": 62.91
+    "c_n0_db_hz": 61.91
   },
   {
     "tiempo_s": 154.0,
@@ -1857,7 +1857,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 352.6,
-    "c_n0_db_hz": 62.94
+    "c_n0_db_hz": 61.94
   },
   {
     "tiempo_s": 155.0,
@@ -1869,7 +1869,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 352.3,
-    "c_n0_db_hz": 62.97
+    "c_n0_db_hz": 61.97
   },
   {
     "tiempo_s": 156.0,
@@ -1881,7 +1881,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 352.1,
-    "c_n0_db_hz": 63.0
+    "c_n0_db_hz": 62.0
   },
   {
     "tiempo_s": 157.0,
@@ -1893,7 +1893,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 351.8,
-    "c_n0_db_hz": 63.03
+    "c_n0_db_hz": 62.03
   },
   {
     "tiempo_s": 158.0,
@@ -1905,7 +1905,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 351.5,
-    "c_n0_db_hz": 63.06
+    "c_n0_db_hz": 62.06
   },
   {
     "tiempo_s": 159.0,
@@ -1917,7 +1917,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 351.2,
-    "c_n0_db_hz": 63.09
+    "c_n0_db_hz": 62.09
   },
   {
     "tiempo_s": 160.0,
@@ -1929,7 +1929,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 351.0,
-    "c_n0_db_hz": 63.12
+    "c_n0_db_hz": 62.12
   },
   {
     "tiempo_s": 161.0,
@@ -1941,7 +1941,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 350.7,
-    "c_n0_db_hz": 63.14
+    "c_n0_db_hz": 62.14
   },
   {
     "tiempo_s": 162.0,
@@ -1953,7 +1953,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 350.4,
-    "c_n0_db_hz": 63.17
+    "c_n0_db_hz": 62.17
   },
   {
     "tiempo_s": 163.0,
@@ -1965,7 +1965,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 350.1,
-    "c_n0_db_hz": 63.2
+    "c_n0_db_hz": 62.2
   },
   {
     "tiempo_s": 164.0,
@@ -1977,7 +1977,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 349.9,
-    "c_n0_db_hz": 63.23
+    "c_n0_db_hz": 62.23
   },
   {
     "tiempo_s": 165.0,
@@ -1989,7 +1989,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 349.6,
-    "c_n0_db_hz": 63.26
+    "c_n0_db_hz": 62.26
   },
   {
     "tiempo_s": 166.0,
@@ -2001,7 +2001,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 349.3,
-    "c_n0_db_hz": 63.29
+    "c_n0_db_hz": 62.29
   },
   {
     "tiempo_s": 167.0,
@@ -2013,7 +2013,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 349.1,
-    "c_n0_db_hz": 63.32
+    "c_n0_db_hz": 62.32
   },
   {
     "tiempo_s": 168.0,
@@ -2025,7 +2025,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 348.8,
-    "c_n0_db_hz": 63.35
+    "c_n0_db_hz": 62.35
   },
   {
     "tiempo_s": 169.0,
@@ -2037,7 +2037,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 348.5,
-    "c_n0_db_hz": 63.38
+    "c_n0_db_hz": 62.38
   },
   {
     "tiempo_s": 170.0,
@@ -2049,7 +2049,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 348.3,
-    "c_n0_db_hz": 63.41
+    "c_n0_db_hz": 62.41
   },
   {
     "tiempo_s": 171.0,
@@ -2061,7 +2061,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 348.0,
-    "c_n0_db_hz": 63.44
+    "c_n0_db_hz": 62.44
   },
   {
     "tiempo_s": 172.0,
@@ -2073,7 +2073,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 347.7,
-    "c_n0_db_hz": 63.47
+    "c_n0_db_hz": 62.47
   },
   {
     "tiempo_s": 173.0,
@@ -2085,7 +2085,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 347.5,
-    "c_n0_db_hz": 63.5
+    "c_n0_db_hz": 62.5
   },
   {
     "tiempo_s": 174.0,
@@ -2097,7 +2097,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 347.2,
-    "c_n0_db_hz": 63.53
+    "c_n0_db_hz": 62.53
   },
   {
     "tiempo_s": 175.0,
@@ -2109,7 +2109,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 346.9,
-    "c_n0_db_hz": 63.56
+    "c_n0_db_hz": 62.56
   },
   {
     "tiempo_s": 176.0,
@@ -2121,7 +2121,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 346.7,
-    "c_n0_db_hz": 63.59
+    "c_n0_db_hz": 62.59
   },
   {
     "tiempo_s": 177.0,
@@ -2133,7 +2133,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 346.4,
-    "c_n0_db_hz": 63.62
+    "c_n0_db_hz": 62.62
   },
   {
     "tiempo_s": 178.0,
@@ -2145,7 +2145,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 346.1,
-    "c_n0_db_hz": 63.65
+    "c_n0_db_hz": 62.65
   },
   {
     "tiempo_s": 179.0,
@@ -2157,7 +2157,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 345.9,
-    "c_n0_db_hz": 63.68
+    "c_n0_db_hz": 62.68
   },
   {
     "tiempo_s": 180.0,
@@ -2169,7 +2169,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 345.6,
-    "c_n0_db_hz": 63.72
+    "c_n0_db_hz": 62.72
   },
   {
     "tiempo_s": 181.0,
@@ -2181,7 +2181,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 345.4,
-    "c_n0_db_hz": 63.75
+    "c_n0_db_hz": 62.75
   },
   {
     "tiempo_s": 182.0,
@@ -2193,7 +2193,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 345.1,
-    "c_n0_db_hz": 63.78
+    "c_n0_db_hz": 62.78
   },
   {
     "tiempo_s": 183.0,
@@ -2205,7 +2205,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 344.8,
-    "c_n0_db_hz": 63.81
+    "c_n0_db_hz": 62.81
   },
   {
     "tiempo_s": 184.0,
@@ -2217,7 +2217,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 344.6,
-    "c_n0_db_hz": 63.84
+    "c_n0_db_hz": 62.84
   },
   {
     "tiempo_s": 185.0,
@@ -2229,7 +2229,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 344.3,
-    "c_n0_db_hz": 63.87
+    "c_n0_db_hz": 62.87
   },
   {
     "tiempo_s": 186.0,
@@ -2241,7 +2241,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 344.1,
-    "c_n0_db_hz": 63.9
+    "c_n0_db_hz": 62.9
   },
   {
     "tiempo_s": 187.0,
@@ -2253,7 +2253,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 343.8,
-    "c_n0_db_hz": 63.93
+    "c_n0_db_hz": 62.93
   },
   {
     "tiempo_s": 188.0,
@@ -2265,7 +2265,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 343.5,
-    "c_n0_db_hz": 63.96
+    "c_n0_db_hz": 62.96
   },
   {
     "tiempo_s": 189.0,
@@ -2277,7 +2277,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 343.3,
-    "c_n0_db_hz": 63.99
+    "c_n0_db_hz": 62.99
   },
   {
     "tiempo_s": 190.0,
@@ -2289,7 +2289,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 343.0,
-    "c_n0_db_hz": 64.03
+    "c_n0_db_hz": 63.03
   },
   {
     "tiempo_s": 191.0,
@@ -2301,7 +2301,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 342.8,
-    "c_n0_db_hz": 64.06
+    "c_n0_db_hz": 63.06
   },
   {
     "tiempo_s": 192.0,
@@ -2313,7 +2313,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 342.5,
-    "c_n0_db_hz": 64.09
+    "c_n0_db_hz": 63.09
   },
   {
     "tiempo_s": 193.0,
@@ -2325,7 +2325,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 342.3,
-    "c_n0_db_hz": 64.12
+    "c_n0_db_hz": 63.12
   },
   {
     "tiempo_s": 194.0,
@@ -2337,7 +2337,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 342.0,
-    "c_n0_db_hz": 64.15
+    "c_n0_db_hz": 63.15
   },
   {
     "tiempo_s": 195.0,
@@ -2349,7 +2349,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 341.8,
-    "c_n0_db_hz": 64.18
+    "c_n0_db_hz": 63.18
   },
   {
     "tiempo_s": 196.0,
@@ -2361,7 +2361,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 341.5,
-    "c_n0_db_hz": 64.21
+    "c_n0_db_hz": 63.21
   },
   {
     "tiempo_s": 197.0,
@@ -2373,7 +2373,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 341.3,
-    "c_n0_db_hz": 64.25
+    "c_n0_db_hz": 63.25
   },
   {
     "tiempo_s": 198.0,
@@ -2385,7 +2385,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 341.0,
-    "c_n0_db_hz": 64.28
+    "c_n0_db_hz": 63.28
   },
   {
     "tiempo_s": 199.0,
@@ -2397,7 +2397,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 340.8,
-    "c_n0_db_hz": 64.31
+    "c_n0_db_hz": 63.31
   },
   {
     "tiempo_s": 200.0,
@@ -2409,7 +2409,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 340.5,
-    "c_n0_db_hz": 64.34
+    "c_n0_db_hz": 63.34
   },
   {
     "tiempo_s": 201.0,
@@ -2421,7 +2421,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 340.3,
-    "c_n0_db_hz": 64.37
+    "c_n0_db_hz": 63.37
   },
   {
     "tiempo_s": 202.0,
@@ -2433,7 +2433,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 340.0,
-    "c_n0_db_hz": 64.41
+    "c_n0_db_hz": 63.41
   },
   {
     "tiempo_s": 203.0,
@@ -2445,7 +2445,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.8,
-    "c_n0_db_hz": 64.44
+    "c_n0_db_hz": 63.44
   },
   {
     "tiempo_s": 204.0,
@@ -2457,7 +2457,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.5,
-    "c_n0_db_hz": 64.47
+    "c_n0_db_hz": 63.47
   },
   {
     "tiempo_s": 205.0,
@@ -2469,7 +2469,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.3,
-    "c_n0_db_hz": 64.5
+    "c_n0_db_hz": 63.5
   },
   {
     "tiempo_s": 206.0,
@@ -2481,7 +2481,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.0,
-    "c_n0_db_hz": 64.54
+    "c_n0_db_hz": 63.54
   },
   {
     "tiempo_s": 207.0,
@@ -2493,7 +2493,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 338.8,
-    "c_n0_db_hz": 64.57
+    "c_n0_db_hz": 63.57
   },
   {
     "tiempo_s": 208.0,
@@ -2505,7 +2505,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 338.6,
-    "c_n0_db_hz": 64.6
+    "c_n0_db_hz": 63.6
   },
   {
     "tiempo_s": 209.0,
@@ -2517,7 +2517,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 338.3,
-    "c_n0_db_hz": 64.63
+    "c_n0_db_hz": 63.63
   },
   {
     "tiempo_s": 210.0,
@@ -2529,7 +2529,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 338.1,
-    "c_n0_db_hz": 64.67
+    "c_n0_db_hz": 63.67
   },
   {
     "tiempo_s": 211.0,
@@ -2541,7 +2541,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 337.8,
-    "c_n0_db_hz": 64.7
+    "c_n0_db_hz": 63.7
   },
   {
     "tiempo_s": 212.0,
@@ -2553,7 +2553,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 337.6,
-    "c_n0_db_hz": 64.73
+    "c_n0_db_hz": 63.73
   },
   {
     "tiempo_s": 213.0,
@@ -2565,7 +2565,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 337.4,
-    "c_n0_db_hz": 64.77
+    "c_n0_db_hz": 63.77
   },
   {
     "tiempo_s": 214.0,
@@ -2577,7 +2577,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 337.1,
-    "c_n0_db_hz": 64.8
+    "c_n0_db_hz": 63.8
   },
   {
     "tiempo_s": 215.0,
@@ -2589,7 +2589,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 336.9,
-    "c_n0_db_hz": 64.83
+    "c_n0_db_hz": 63.83
   },
   {
     "tiempo_s": 216.0,
@@ -2601,7 +2601,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 336.6,
-    "c_n0_db_hz": 64.87
+    "c_n0_db_hz": 63.87
   },
   {
     "tiempo_s": 217.0,
@@ -2613,7 +2613,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 336.4,
-    "c_n0_db_hz": 64.9
+    "c_n0_db_hz": 63.9
   },
   {
     "tiempo_s": 218.0,
@@ -2625,7 +2625,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 336.2,
-    "c_n0_db_hz": 64.93
+    "c_n0_db_hz": 63.93
   },
   {
     "tiempo_s": 219.0,
@@ -2637,7 +2637,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.9,
-    "c_n0_db_hz": 64.97
+    "c_n0_db_hz": 63.97
   },
   {
     "tiempo_s": 220.0,
@@ -2649,7 +2649,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.7,
-    "c_n0_db_hz": 65.0
+    "c_n0_db_hz": 64.0
   },
   {
     "tiempo_s": 221.0,
@@ -2661,7 +2661,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.5,
-    "c_n0_db_hz": 65.03
+    "c_n0_db_hz": 64.03
   },
   {
     "tiempo_s": 222.0,
@@ -2673,7 +2673,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.2,
-    "c_n0_db_hz": 65.07
+    "c_n0_db_hz": 64.07
   },
   {
     "tiempo_s": 223.0,
@@ -2685,7 +2685,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.0,
-    "c_n0_db_hz": 65.1
+    "c_n0_db_hz": 64.1
   },
   {
     "tiempo_s": 224.0,
@@ -2697,7 +2697,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.8,
-    "c_n0_db_hz": 65.13
+    "c_n0_db_hz": 64.13
   },
   {
     "tiempo_s": 225.0,
@@ -2709,7 +2709,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.5,
-    "c_n0_db_hz": 65.17
+    "c_n0_db_hz": 64.17
   },
   {
     "tiempo_s": 226.0,
@@ -2721,7 +2721,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.3,
-    "c_n0_db_hz": 65.2
+    "c_n0_db_hz": 64.2
   },
   {
     "tiempo_s": 227.0,
@@ -2733,7 +2733,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.1,
-    "c_n0_db_hz": 65.24
+    "c_n0_db_hz": 64.24
   },
   {
     "tiempo_s": 228.0,
@@ -2745,7 +2745,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.9,
-    "c_n0_db_hz": 65.27
+    "c_n0_db_hz": 64.27
   },
   {
     "tiempo_s": 229.0,
@@ -2757,7 +2757,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.6,
-    "c_n0_db_hz": 65.3
+    "c_n0_db_hz": 64.3
   },
   {
     "tiempo_s": 230.0,
@@ -2769,7 +2769,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.4,
-    "c_n0_db_hz": 65.34
+    "c_n0_db_hz": 64.34
   },
   {
     "tiempo_s": 231.0,
@@ -2781,7 +2781,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.2,
-    "c_n0_db_hz": 65.37
+    "c_n0_db_hz": 64.37
   },
   {
     "tiempo_s": 232.0,
@@ -2793,7 +2793,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.0,
-    "c_n0_db_hz": 65.41
+    "c_n0_db_hz": 64.41
   },
   {
     "tiempo_s": 233.0,
@@ -2805,7 +2805,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.7,
-    "c_n0_db_hz": 65.44
+    "c_n0_db_hz": 64.44
   },
   {
     "tiempo_s": 234.0,
@@ -2817,7 +2817,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.5,
-    "c_n0_db_hz": 65.48
+    "c_n0_db_hz": 64.48
   },
   {
     "tiempo_s": 235.0,
@@ -2829,7 +2829,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.3,
-    "c_n0_db_hz": 65.51
+    "c_n0_db_hz": 64.51
   },
   {
     "tiempo_s": 236.0,
@@ -2841,7 +2841,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.1,
-    "c_n0_db_hz": 65.55
+    "c_n0_db_hz": 64.55
   },
   {
     "tiempo_s": 237.0,
@@ -2853,7 +2853,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.8,
-    "c_n0_db_hz": 65.58
+    "c_n0_db_hz": 64.58
   },
   {
     "tiempo_s": 238.0,
@@ -2865,7 +2865,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.6,
-    "c_n0_db_hz": 65.62
+    "c_n0_db_hz": 64.62
   },
   {
     "tiempo_s": 239.0,
@@ -2877,7 +2877,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.4,
-    "c_n0_db_hz": 65.65
+    "c_n0_db_hz": 64.65
   },
   {
     "tiempo_s": 240.0,
@@ -2889,7 +2889,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.2,
-    "c_n0_db_hz": 65.69
+    "c_n0_db_hz": 64.69
   },
   {
     "tiempo_s": 241.0,
@@ -2901,7 +2901,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.0,
-    "c_n0_db_hz": 65.72
+    "c_n0_db_hz": 64.72
   },
   {
     "tiempo_s": 242.0,
@@ -2913,7 +2913,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.7,
-    "c_n0_db_hz": 65.76
+    "c_n0_db_hz": 64.76
   },
   {
     "tiempo_s": 243.0,
@@ -2925,7 +2925,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.5,
-    "c_n0_db_hz": 65.79
+    "c_n0_db_hz": 64.79
   },
   {
     "tiempo_s": 244.0,
@@ -2937,7 +2937,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.3,
-    "c_n0_db_hz": 65.83
+    "c_n0_db_hz": 64.83
   },
   {
     "tiempo_s": 245.0,
@@ -2949,7 +2949,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.1,
-    "c_n0_db_hz": 65.86
+    "c_n0_db_hz": 64.86
   },
   {
     "tiempo_s": 246.0,
@@ -2961,7 +2961,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.9,
-    "c_n0_db_hz": 65.9
+    "c_n0_db_hz": 64.9
   },
   {
     "tiempo_s": 247.0,
@@ -2973,7 +2973,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.7,
-    "c_n0_db_hz": 65.93
+    "c_n0_db_hz": 64.93
   },
   {
     "tiempo_s": 248.0,
@@ -2985,7 +2985,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.5,
-    "c_n0_db_hz": 65.97
+    "c_n0_db_hz": 64.97
   },
   {
     "tiempo_s": 249.0,
@@ -2997,7 +2997,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.2,
-    "c_n0_db_hz": 66.01
+    "c_n0_db_hz": 65.01
   },
   {
     "tiempo_s": 250.0,
@@ -3009,7 +3009,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.0,
-    "c_n0_db_hz": 66.04
+    "c_n0_db_hz": 65.04
   },
   {
     "tiempo_s": 251.0,
@@ -3021,7 +3021,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.8,
-    "c_n0_db_hz": 66.08
+    "c_n0_db_hz": 65.08
   },
   {
     "tiempo_s": 252.0,
@@ -3033,7 +3033,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.6,
-    "c_n0_db_hz": 66.11
+    "c_n0_db_hz": 65.11
   },
   {
     "tiempo_s": 253.0,
@@ -3045,7 +3045,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.4,
-    "c_n0_db_hz": 66.15
+    "c_n0_db_hz": 65.15
   },
   {
     "tiempo_s": 254.0,
@@ -3057,7 +3057,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.2,
-    "c_n0_db_hz": 66.19
+    "c_n0_db_hz": 65.19
   },
   {
     "tiempo_s": 255.0,
@@ -3069,7 +3069,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.0,
-    "c_n0_db_hz": 66.22
+    "c_n0_db_hz": 65.22
   },
   {
     "tiempo_s": 256.0,
@@ -3081,7 +3081,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.8,
-    "c_n0_db_hz": 66.26
+    "c_n0_db_hz": 65.26
   },
   {
     "tiempo_s": 257.0,
@@ -3093,7 +3093,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.6,
-    "c_n0_db_hz": 66.3
+    "c_n0_db_hz": 65.3
   },
   {
     "tiempo_s": 258.0,
@@ -3105,7 +3105,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.4,
-    "c_n0_db_hz": 66.33
+    "c_n0_db_hz": 65.33
   },
   {
     "tiempo_s": 259.0,
@@ -3117,7 +3117,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.2,
-    "c_n0_db_hz": 66.37
+    "c_n0_db_hz": 65.37
   },
   {
     "tiempo_s": 260.0,
@@ -3129,7 +3129,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.0,
-    "c_n0_db_hz": 66.41
+    "c_n0_db_hz": 65.41
   },
   {
     "tiempo_s": 261.0,
@@ -3141,7 +3141,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.8,
-    "c_n0_db_hz": 66.44
+    "c_n0_db_hz": 65.44
   },
   {
     "tiempo_s": 262.0,
@@ -3153,7 +3153,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.6,
-    "c_n0_db_hz": 66.48
+    "c_n0_db_hz": 65.48
   },
   {
     "tiempo_s": 263.0,
@@ -3165,7 +3165,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.4,
-    "c_n0_db_hz": 66.52
+    "c_n0_db_hz": 65.52
   },
   {
     "tiempo_s": 264.0,
@@ -3177,7 +3177,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.2,
-    "c_n0_db_hz": 66.55
+    "c_n0_db_hz": 65.55
   },
   {
     "tiempo_s": 265.0,
@@ -3189,7 +3189,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.0,
-    "c_n0_db_hz": 66.59
+    "c_n0_db_hz": 65.59
   },
   {
     "tiempo_s": 266.0,
@@ -3201,7 +3201,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.8,
-    "c_n0_db_hz": 66.63
+    "c_n0_db_hz": 65.63
   },
   {
     "tiempo_s": 267.0,
@@ -3213,7 +3213,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.6,
-    "c_n0_db_hz": 66.66
+    "c_n0_db_hz": 65.66
   },
   {
     "tiempo_s": 268.0,
@@ -3225,7 +3225,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.4,
-    "c_n0_db_hz": 66.7
+    "c_n0_db_hz": 65.7
   },
   {
     "tiempo_s": 269.0,
@@ -3237,7 +3237,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.2,
-    "c_n0_db_hz": 66.74
+    "c_n0_db_hz": 65.74
   },
   {
     "tiempo_s": 270.0,
@@ -3249,7 +3249,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.0,
-    "c_n0_db_hz": 66.78
+    "c_n0_db_hz": 65.78
   },
   {
     "tiempo_s": 271.0,
@@ -3261,7 +3261,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.8,
-    "c_n0_db_hz": 66.81
+    "c_n0_db_hz": 65.81
   },
   {
     "tiempo_s": 272.0,
@@ -3273,7 +3273,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.6,
-    "c_n0_db_hz": 66.85
+    "c_n0_db_hz": 65.85
   },
   {
     "tiempo_s": 273.0,
@@ -3285,7 +3285,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.4,
-    "c_n0_db_hz": 66.89
+    "c_n0_db_hz": 65.89
   },
   {
     "tiempo_s": 274.0,
@@ -3297,7 +3297,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.2,
-    "c_n0_db_hz": 66.93
+    "c_n0_db_hz": 65.93
   },
   {
     "tiempo_s": 275.0,
@@ -3309,7 +3309,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.1,
-    "c_n0_db_hz": 66.97
+    "c_n0_db_hz": 65.97
   },
   {
     "tiempo_s": 276.0,
@@ -3321,7 +3321,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.9,
-    "c_n0_db_hz": 67.0
+    "c_n0_db_hz": 66.0
   },
   {
     "tiempo_s": 277.0,
@@ -3333,7 +3333,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.7,
-    "c_n0_db_hz": 67.04
+    "c_n0_db_hz": 66.04
   },
   {
     "tiempo_s": 278.0,
@@ -3345,7 +3345,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.5,
-    "c_n0_db_hz": 67.08
+    "c_n0_db_hz": 66.08
   },
   {
     "tiempo_s": 279.0,
@@ -3357,7 +3357,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.3,
-    "c_n0_db_hz": 67.12
+    "c_n0_db_hz": 66.12
   },
   {
     "tiempo_s": 280.0,
@@ -3369,7 +3369,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.1,
-    "c_n0_db_hz": 67.16
+    "c_n0_db_hz": 66.16
   },
   {
     "tiempo_s": 281.0,
@@ -3381,7 +3381,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.9,
-    "c_n0_db_hz": 67.2
+    "c_n0_db_hz": 66.2
   },
   {
     "tiempo_s": 282.0,
@@ -3393,7 +3393,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.8,
-    "c_n0_db_hz": 67.23
+    "c_n0_db_hz": 66.23
   },
   {
     "tiempo_s": 283.0,
@@ -3405,7 +3405,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.6,
-    "c_n0_db_hz": 67.27
+    "c_n0_db_hz": 66.27
   },
   {
     "tiempo_s": 284.0,
@@ -3417,7 +3417,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.4,
-    "c_n0_db_hz": 67.31
+    "c_n0_db_hz": 66.31
   },
   {
     "tiempo_s": 285.0,
@@ -3429,7 +3429,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.2,
-    "c_n0_db_hz": 67.35
+    "c_n0_db_hz": 66.35
   },
   {
     "tiempo_s": 286.0,
@@ -3441,7 +3441,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.0,
-    "c_n0_db_hz": 67.39
+    "c_n0_db_hz": 66.39
   },
   {
     "tiempo_s": 287.0,
@@ -3453,7 +3453,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.9,
-    "c_n0_db_hz": 67.43
+    "c_n0_db_hz": 66.43
   },
   {
     "tiempo_s": 288.0,
@@ -3465,7 +3465,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.7,
-    "c_n0_db_hz": 67.47
+    "c_n0_db_hz": 66.47
   },
   {
     "tiempo_s": 289.0,
@@ -3477,7 +3477,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.5,
-    "c_n0_db_hz": 67.5
+    "c_n0_db_hz": 66.5
   },
   {
     "tiempo_s": 290.0,
@@ -3489,7 +3489,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.3,
-    "c_n0_db_hz": 67.54
+    "c_n0_db_hz": 66.54
   },
   {
     "tiempo_s": 291.0,
@@ -3501,7 +3501,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.2,
-    "c_n0_db_hz": 67.58
+    "c_n0_db_hz": 66.58
   },
   {
     "tiempo_s": 292.0,
@@ -3513,7 +3513,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.0,
-    "c_n0_db_hz": 67.62
+    "c_n0_db_hz": 66.62
   },
   {
     "tiempo_s": 293.0,
@@ -3525,7 +3525,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.8,
-    "c_n0_db_hz": 67.66
+    "c_n0_db_hz": 66.66
   },
   {
     "tiempo_s": 294.0,
@@ -3537,7 +3537,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.7,
-    "c_n0_db_hz": 67.7
+    "c_n0_db_hz": 66.7
   },
   {
     "tiempo_s": 295.0,
@@ -3549,7 +3549,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.5,
-    "c_n0_db_hz": 67.74
+    "c_n0_db_hz": 66.74
   },
   {
     "tiempo_s": 296.0,
@@ -3561,7 +3561,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.3,
-    "c_n0_db_hz": 67.78
+    "c_n0_db_hz": 66.78
   },
   {
     "tiempo_s": 297.0,
@@ -3573,7 +3573,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.2,
-    "c_n0_db_hz": 67.82
+    "c_n0_db_hz": 66.82
   },
   {
     "tiempo_s": 298.0,
@@ -3585,7 +3585,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.0,
-    "c_n0_db_hz": 67.86
+    "c_n0_db_hz": 66.86
   },
   {
     "tiempo_s": 299.0,
@@ -3597,7 +3597,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.8,
-    "c_n0_db_hz": 67.9
+    "c_n0_db_hz": 66.9
   },
   {
     "tiempo_s": 300.0,
@@ -3609,7 +3609,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.7,
-    "c_n0_db_hz": 67.94
+    "c_n0_db_hz": 66.94
   },
   {
     "tiempo_s": 301.0,
@@ -3621,7 +3621,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.5,
-    "c_n0_db_hz": 67.98
+    "c_n0_db_hz": 66.98
   },
   {
     "tiempo_s": 302.0,
@@ -3633,7 +3633,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.3,
-    "c_n0_db_hz": 68.02
+    "c_n0_db_hz": 67.02
   },
   {
     "tiempo_s": 303.0,
@@ -3645,7 +3645,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.2,
-    "c_n0_db_hz": 68.06
+    "c_n0_db_hz": 67.06
   },
   {
     "tiempo_s": 304.0,
@@ -3657,7 +3657,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.0,
-    "c_n0_db_hz": 68.1
+    "c_n0_db_hz": 67.1
   },
   {
     "tiempo_s": 305.0,
@@ -3669,7 +3669,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.9,
-    "c_n0_db_hz": 68.14
+    "c_n0_db_hz": 67.14
   },
   {
     "tiempo_s": 306.0,
@@ -3681,7 +3681,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.7,
-    "c_n0_db_hz": 68.18
+    "c_n0_db_hz": 67.18
   },
   {
     "tiempo_s": 307.0,
@@ -3693,7 +3693,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.6,
-    "c_n0_db_hz": 68.22
+    "c_n0_db_hz": 67.22
   },
   {
     "tiempo_s": 308.0,
@@ -3705,7 +3705,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.4,
-    "c_n0_db_hz": 68.26
+    "c_n0_db_hz": 67.26
   },
   {
     "tiempo_s": 309.0,
@@ -3717,7 +3717,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.2,
-    "c_n0_db_hz": 68.3
+    "c_n0_db_hz": 67.3
   },
   {
     "tiempo_s": 310.0,
@@ -3729,7 +3729,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.1,
-    "c_n0_db_hz": 68.34
+    "c_n0_db_hz": 67.34
   },
   {
     "tiempo_s": 311.0,
@@ -3741,7 +3741,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.9,
-    "c_n0_db_hz": 68.38
+    "c_n0_db_hz": 67.38
   },
   {
     "tiempo_s": 312.0,
@@ -3753,7 +3753,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.8,
-    "c_n0_db_hz": 68.42
+    "c_n0_db_hz": 67.42
   },
   {
     "tiempo_s": 313.0,
@@ -3765,7 +3765,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.6,
-    "c_n0_db_hz": 68.46
+    "c_n0_db_hz": 67.46
   },
   {
     "tiempo_s": 314.0,
@@ -3777,7 +3777,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.5,
-    "c_n0_db_hz": 68.5
+    "c_n0_db_hz": 67.5
   },
   {
     "tiempo_s": 315.0,
@@ -3789,7 +3789,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.4,
-    "c_n0_db_hz": 68.54
+    "c_n0_db_hz": 67.54
   },
   {
     "tiempo_s": 316.0,
@@ -3801,7 +3801,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.2,
-    "c_n0_db_hz": 68.58
+    "c_n0_db_hz": 67.58
   },
   {
     "tiempo_s": 317.0,
@@ -3813,7 +3813,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.1,
-    "c_n0_db_hz": 68.62
+    "c_n0_db_hz": 67.62
   },
   {
     "tiempo_s": 318.0,
@@ -3825,7 +3825,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.9,
-    "c_n0_db_hz": 68.66
+    "c_n0_db_hz": 67.66
   },
   {
     "tiempo_s": 319.0,
@@ -3837,7 +3837,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.8,
-    "c_n0_db_hz": 68.7
+    "c_n0_db_hz": 67.7
   },
   {
     "tiempo_s": 320.0,
@@ -3849,7 +3849,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.6,
-    "c_n0_db_hz": 68.74
+    "c_n0_db_hz": 67.74
   },
   {
     "tiempo_s": 321.0,
@@ -3861,7 +3861,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.5,
-    "c_n0_db_hz": 68.78
+    "c_n0_db_hz": 67.78
   },
   {
     "tiempo_s": 322.0,
@@ -3873,7 +3873,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.4,
-    "c_n0_db_hz": 68.82
+    "c_n0_db_hz": 67.82
   },
   {
     "tiempo_s": 323.0,
@@ -3885,7 +3885,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.2,
-    "c_n0_db_hz": 68.87
+    "c_n0_db_hz": 67.87
   },
   {
     "tiempo_s": 324.0,
@@ -3897,7 +3897,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.1,
-    "c_n0_db_hz": 68.91
+    "c_n0_db_hz": 67.91
   },
   {
     "tiempo_s": 325.0,
@@ -3909,7 +3909,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.0,
-    "c_n0_db_hz": 68.95
+    "c_n0_db_hz": 67.95
   },
   {
     "tiempo_s": 326.0,
@@ -3921,7 +3921,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.8,
-    "c_n0_db_hz": 68.99
+    "c_n0_db_hz": 67.99
   },
   {
     "tiempo_s": 327.0,
@@ -3933,7 +3933,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.7,
-    "c_n0_db_hz": 69.03
+    "c_n0_db_hz": 68.03
   },
   {
     "tiempo_s": 328.0,
@@ -3945,7 +3945,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.6,
-    "c_n0_db_hz": 69.07
+    "c_n0_db_hz": 68.07
   },
   {
     "tiempo_s": 329.0,
@@ -3957,7 +3957,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.4,
-    "c_n0_db_hz": 69.11
+    "c_n0_db_hz": 68.11
   },
   {
     "tiempo_s": 330.0,
@@ -3969,7 +3969,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.3,
-    "c_n0_db_hz": 69.15
+    "c_n0_db_hz": 68.15
   },
   {
     "tiempo_s": 331.0,
@@ -3981,7 +3981,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.2,
-    "c_n0_db_hz": 69.19
+    "c_n0_db_hz": 68.19
   },
   {
     "tiempo_s": 332.0,
@@ -3993,7 +3993,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.1,
-    "c_n0_db_hz": 69.23
+    "c_n0_db_hz": 68.23
   },
   {
     "tiempo_s": 333.0,
@@ -4005,7 +4005,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.9,
-    "c_n0_db_hz": 69.27
+    "c_n0_db_hz": 68.27
   },
   {
     "tiempo_s": 334.0,
@@ -4017,7 +4017,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.8,
-    "c_n0_db_hz": 69.31
+    "c_n0_db_hz": 68.31
   },
   {
     "tiempo_s": 335.0,
@@ -4029,7 +4029,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.7,
-    "c_n0_db_hz": 69.36
+    "c_n0_db_hz": 68.36
   },
   {
     "tiempo_s": 336.0,
@@ -4041,7 +4041,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.6,
-    "c_n0_db_hz": 69.4
+    "c_n0_db_hz": 68.4
   },
   {
     "tiempo_s": 337.0,
@@ -4053,7 +4053,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.5,
-    "c_n0_db_hz": 69.44
+    "c_n0_db_hz": 68.44
   },
   {
     "tiempo_s": 338.0,
@@ -4065,7 +4065,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.3,
-    "c_n0_db_hz": 69.48
+    "c_n0_db_hz": 68.48
   },
   {
     "tiempo_s": 339.0,
@@ -4077,7 +4077,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.2,
-    "c_n0_db_hz": 69.52
+    "c_n0_db_hz": 68.52
   },
   {
     "tiempo_s": 340.0,
@@ -4089,7 +4089,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.1,
-    "c_n0_db_hz": 69.56
+    "c_n0_db_hz": 68.56
   },
   {
     "tiempo_s": 341.0,
@@ -4101,7 +4101,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.0,
-    "c_n0_db_hz": 69.6
+    "c_n0_db_hz": 68.6
   },
   {
     "tiempo_s": 342.0,
@@ -4113,7 +4113,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.9,
-    "c_n0_db_hz": 69.64
+    "c_n0_db_hz": 68.64
   },
   {
     "tiempo_s": 343.0,
@@ -4125,7 +4125,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.8,
-    "c_n0_db_hz": 69.68
+    "c_n0_db_hz": 68.68
   },
   {
     "tiempo_s": 344.0,
@@ -4137,7 +4137,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.7,
-    "c_n0_db_hz": 69.72
+    "c_n0_db_hz": 68.72
   },
   {
     "tiempo_s": 345.0,
@@ -4149,7 +4149,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.5,
-    "c_n0_db_hz": 69.76
+    "c_n0_db_hz": 68.76
   },
   {
     "tiempo_s": 346.0,
@@ -4161,7 +4161,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.4,
-    "c_n0_db_hz": 69.81
+    "c_n0_db_hz": 68.81
   },
   {
     "tiempo_s": 347.0,
@@ -4173,7 +4173,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.3,
-    "c_n0_db_hz": 69.85
+    "c_n0_db_hz": 68.85
   },
   {
     "tiempo_s": 348.0,
@@ -4185,7 +4185,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.2,
-    "c_n0_db_hz": 69.89
+    "c_n0_db_hz": 68.89
   },
   {
     "tiempo_s": 349.0,
@@ -4197,7 +4197,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.1,
-    "c_n0_db_hz": 69.93
+    "c_n0_db_hz": 68.93
   },
   {
     "tiempo_s": 350.0,
@@ -4209,7 +4209,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.0,
-    "c_n0_db_hz": 69.97
+    "c_n0_db_hz": 68.97
   },
   {
     "tiempo_s": 351.0,
@@ -4221,7 +4221,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.9,
-    "c_n0_db_hz": 70.01
+    "c_n0_db_hz": 69.01
   },
   {
     "tiempo_s": 352.0,
@@ -4233,7 +4233,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.8,
-    "c_n0_db_hz": 70.05
+    "c_n0_db_hz": 69.05
   },
   {
     "tiempo_s": 353.0,
@@ -4245,7 +4245,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.7,
-    "c_n0_db_hz": 70.09
+    "c_n0_db_hz": 69.09
   },
   {
     "tiempo_s": 354.0,
@@ -4257,7 +4257,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.6,
-    "c_n0_db_hz": 70.13
+    "c_n0_db_hz": 69.13
   },
   {
     "tiempo_s": 355.0,
@@ -4269,7 +4269,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.5,
-    "c_n0_db_hz": 70.17
+    "c_n0_db_hz": 69.17
   },
   {
     "tiempo_s": 356.0,
@@ -4281,7 +4281,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.4,
-    "c_n0_db_hz": 70.21
+    "c_n0_db_hz": 69.21
   },
   {
     "tiempo_s": 357.0,
@@ -4293,7 +4293,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.3,
-    "c_n0_db_hz": 70.25
+    "c_n0_db_hz": 69.25
   },
   {
     "tiempo_s": 358.0,
@@ -4305,7 +4305,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.3,
-    "c_n0_db_hz": 70.29
+    "c_n0_db_hz": 69.29
   },
   {
     "tiempo_s": 359.0,
@@ -4317,7 +4317,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.2,
-    "c_n0_db_hz": 70.33
+    "c_n0_db_hz": 69.33
   },
   {
     "tiempo_s": 360.0,
@@ -4329,7 +4329,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.1,
-    "c_n0_db_hz": 70.37
+    "c_n0_db_hz": 69.37
   },
   {
     "tiempo_s": 361.0,
@@ -4341,7 +4341,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.0,
-    "c_n0_db_hz": 70.41
+    "c_n0_db_hz": 69.41
   },
   {
     "tiempo_s": 362.0,
@@ -4353,7 +4353,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.9,
-    "c_n0_db_hz": 70.45
+    "c_n0_db_hz": 69.45
   },
   {
     "tiempo_s": 363.0,
@@ -4365,7 +4365,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.8,
-    "c_n0_db_hz": 70.49
+    "c_n0_db_hz": 69.49
   },
   {
     "tiempo_s": 364.0,
@@ -4377,7 +4377,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.7,
-    "c_n0_db_hz": 70.53
+    "c_n0_db_hz": 69.53
   },
   {
     "tiempo_s": 365.0,
@@ -4389,7 +4389,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.7,
-    "c_n0_db_hz": 70.57
+    "c_n0_db_hz": 69.57
   },
   {
     "tiempo_s": 366.0,
@@ -4401,7 +4401,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.6,
-    "c_n0_db_hz": 70.61
+    "c_n0_db_hz": 69.61
   },
   {
     "tiempo_s": 367.0,
@@ -4413,7 +4413,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.5,
-    "c_n0_db_hz": 70.65
+    "c_n0_db_hz": 69.65
   },
   {
     "tiempo_s": 368.0,
@@ -4425,7 +4425,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.4,
-    "c_n0_db_hz": 70.68
+    "c_n0_db_hz": 69.68
   },
   {
     "tiempo_s": 369.0,
@@ -4437,7 +4437,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.3,
-    "c_n0_db_hz": 70.72
+    "c_n0_db_hz": 69.72
   },
   {
     "tiempo_s": 370.0,
@@ -4449,7 +4449,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.3,
-    "c_n0_db_hz": 70.76
+    "c_n0_db_hz": 69.76
   },
   {
     "tiempo_s": 371.0,
@@ -4461,7 +4461,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.2,
-    "c_n0_db_hz": 70.8
+    "c_n0_db_hz": 69.8
   },
   {
     "tiempo_s": 372.0,
@@ -4473,7 +4473,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.1,
-    "c_n0_db_hz": 70.84
+    "c_n0_db_hz": 69.84
   },
   {
     "tiempo_s": 373.0,
@@ -4485,7 +4485,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.0,
-    "c_n0_db_hz": 70.88
+    "c_n0_db_hz": 69.88
   },
   {
     "tiempo_s": 374.0,
@@ -4497,7 +4497,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.0,
-    "c_n0_db_hz": 70.91
+    "c_n0_db_hz": 69.91
   },
   {
     "tiempo_s": 375.0,
@@ -4509,7 +4509,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.9,
-    "c_n0_db_hz": 70.95
+    "c_n0_db_hz": 69.95
   },
   {
     "tiempo_s": 376.0,
@@ -4521,7 +4521,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.8,
-    "c_n0_db_hz": 70.99
+    "c_n0_db_hz": 69.99
   },
   {
     "tiempo_s": 377.0,
@@ -4533,7 +4533,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.8,
-    "c_n0_db_hz": 71.03
+    "c_n0_db_hz": 70.03
   },
   {
     "tiempo_s": 378.0,
@@ -4545,7 +4545,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.7,
-    "c_n0_db_hz": 71.06
+    "c_n0_db_hz": 70.06
   },
   {
     "tiempo_s": 379.0,
@@ -4557,7 +4557,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.6,
-    "c_n0_db_hz": 71.1
+    "c_n0_db_hz": 70.1
   },
   {
     "tiempo_s": 380.0,
@@ -4569,7 +4569,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.6,
-    "c_n0_db_hz": 71.14
+    "c_n0_db_hz": 70.14
   },
   {
     "tiempo_s": 381.0,
@@ -4581,7 +4581,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.5,
-    "c_n0_db_hz": 71.17
+    "c_n0_db_hz": 70.17
   },
   {
     "tiempo_s": 382.0,
@@ -4593,7 +4593,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.4,
-    "c_n0_db_hz": 71.21
+    "c_n0_db_hz": 70.21
   },
   {
     "tiempo_s": 383.0,
@@ -4605,7 +4605,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.4,
-    "c_n0_db_hz": 71.24
+    "c_n0_db_hz": 70.24
   },
   {
     "tiempo_s": 384.0,
@@ -4617,7 +4617,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.3,
-    "c_n0_db_hz": 71.28
+    "c_n0_db_hz": 70.28
   },
   {
     "tiempo_s": 385.0,
@@ -4629,7 +4629,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.3,
-    "c_n0_db_hz": 71.31
+    "c_n0_db_hz": 70.31
   },
   {
     "tiempo_s": 386.0,
@@ -4641,7 +4641,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.2,
-    "c_n0_db_hz": 71.35
+    "c_n0_db_hz": 70.35
   },
   {
     "tiempo_s": 387.0,
@@ -4653,7 +4653,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.2,
-    "c_n0_db_hz": 71.38
+    "c_n0_db_hz": 70.38
   },
   {
     "tiempo_s": 388.0,
@@ -4665,7 +4665,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.1,
-    "c_n0_db_hz": 71.42
+    "c_n0_db_hz": 70.42
   },
   {
     "tiempo_s": 389.0,
@@ -4677,7 +4677,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.0,
-    "c_n0_db_hz": 71.45
+    "c_n0_db_hz": 70.45
   },
   {
     "tiempo_s": 390.0,
@@ -4689,7 +4689,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.0,
-    "c_n0_db_hz": 71.49
+    "c_n0_db_hz": 70.49
   },
   {
     "tiempo_s": 391.0,
@@ -4701,7 +4701,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.9,
-    "c_n0_db_hz": 71.52
+    "c_n0_db_hz": 70.52
   },
   {
     "tiempo_s": 392.0,
@@ -4713,7 +4713,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.9,
-    "c_n0_db_hz": 71.55
+    "c_n0_db_hz": 70.55
   },
   {
     "tiempo_s": 393.0,
@@ -4725,7 +4725,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.8,
-    "c_n0_db_hz": 71.59
+    "c_n0_db_hz": 70.59
   },
   {
     "tiempo_s": 394.0,
@@ -4737,7 +4737,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.8,
-    "c_n0_db_hz": 71.62
+    "c_n0_db_hz": 70.62
   },
   {
     "tiempo_s": 395.0,
@@ -4749,7 +4749,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.8,
-    "c_n0_db_hz": 71.65
+    "c_n0_db_hz": 70.65
   },
   {
     "tiempo_s": 396.0,
@@ -4761,7 +4761,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.7,
-    "c_n0_db_hz": 71.68
+    "c_n0_db_hz": 70.68
   },
   {
     "tiempo_s": 397.0,
@@ -4773,7 +4773,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.7,
-    "c_n0_db_hz": 71.71
+    "c_n0_db_hz": 70.71
   },
   {
     "tiempo_s": 398.0,
@@ -4785,7 +4785,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.6,
-    "c_n0_db_hz": 71.75
+    "c_n0_db_hz": 70.75
   },
   {
     "tiempo_s": 399.0,
@@ -4797,7 +4797,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.6,
-    "c_n0_db_hz": 71.78
+    "c_n0_db_hz": 70.78
   },
   {
     "tiempo_s": 400.0,
@@ -4809,7 +4809,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.5,
-    "c_n0_db_hz": 71.81
+    "c_n0_db_hz": 70.81
   },
   {
     "tiempo_s": 401.0,
@@ -4821,7 +4821,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.5,
-    "c_n0_db_hz": 71.84
+    "c_n0_db_hz": 70.84
   },
   {
     "tiempo_s": 402.0,
@@ -4833,7 +4833,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.5,
-    "c_n0_db_hz": 71.87
+    "c_n0_db_hz": 70.87
   },
   {
     "tiempo_s": 403.0,
@@ -4845,7 +4845,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.4,
-    "c_n0_db_hz": 71.89
+    "c_n0_db_hz": 70.89
   },
   {
     "tiempo_s": 404.0,
@@ -4857,7 +4857,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.4,
-    "c_n0_db_hz": 71.92
+    "c_n0_db_hz": 70.92
   },
   {
     "tiempo_s": 405.0,
@@ -4869,7 +4869,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.3,
-    "c_n0_db_hz": 71.95
+    "c_n0_db_hz": 70.95
   },
   {
     "tiempo_s": 406.0,
@@ -4881,7 +4881,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.3,
-    "c_n0_db_hz": 71.98
+    "c_n0_db_hz": 70.98
   },
   {
     "tiempo_s": 407.0,
@@ -4893,7 +4893,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.3,
-    "c_n0_db_hz": 72.01
+    "c_n0_db_hz": 71.01
   },
   {
     "tiempo_s": 408.0,
@@ -4905,7 +4905,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.2,
-    "c_n0_db_hz": 72.03
+    "c_n0_db_hz": 71.03
   },
   {
     "tiempo_s": 409.0,
@@ -4917,7 +4917,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.2,
-    "c_n0_db_hz": 72.06
+    "c_n0_db_hz": 71.06
   },
   {
     "tiempo_s": 410.0,
@@ -4929,7 +4929,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.2,
-    "c_n0_db_hz": 72.08
+    "c_n0_db_hz": 71.08
   },
   {
     "tiempo_s": 411.0,
@@ -4941,7 +4941,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.1,
-    "c_n0_db_hz": 72.11
+    "c_n0_db_hz": 71.11
   },
   {
     "tiempo_s": 412.0,
@@ -4953,7 +4953,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.1,
-    "c_n0_db_hz": 72.13
+    "c_n0_db_hz": 71.13
   },
   {
     "tiempo_s": 413.0,
@@ -4965,7 +4965,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.1,
-    "c_n0_db_hz": 72.16
+    "c_n0_db_hz": 71.16
   },
   {
     "tiempo_s": 414.0,
@@ -4977,7 +4977,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.1,
-    "c_n0_db_hz": 72.18
+    "c_n0_db_hz": 71.18
   },
   {
     "tiempo_s": 415.0,
@@ -4989,7 +4989,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.0,
-    "c_n0_db_hz": 72.21
+    "c_n0_db_hz": 71.21
   },
   {
     "tiempo_s": 416.0,
@@ -5001,7 +5001,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.0,
-    "c_n0_db_hz": 72.23
+    "c_n0_db_hz": 71.23
   },
   {
     "tiempo_s": 417.0,
@@ -5013,7 +5013,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.0,
-    "c_n0_db_hz": 72.25
+    "c_n0_db_hz": 71.25
   },
   {
     "tiempo_s": 418.0,
@@ -5025,7 +5025,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.0,
-    "c_n0_db_hz": 72.27
+    "c_n0_db_hz": 71.27
   },
   {
     "tiempo_s": 419.0,
@@ -5037,7 +5037,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.29
+    "c_n0_db_hz": 71.29
   },
   {
     "tiempo_s": 420.0,
@@ -5049,7 +5049,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.31
+    "c_n0_db_hz": 71.31
   },
   {
     "tiempo_s": 421.0,
@@ -5061,7 +5061,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.33
+    "c_n0_db_hz": 71.33
   },
   {
     "tiempo_s": 422.0,
@@ -5073,7 +5073,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.35
+    "c_n0_db_hz": 71.35
   },
   {
     "tiempo_s": 423.0,
@@ -5085,7 +5085,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.37
+    "c_n0_db_hz": 71.37
   },
   {
     "tiempo_s": 424.0,
@@ -5097,7 +5097,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.39
+    "c_n0_db_hz": 71.39
   },
   {
     "tiempo_s": 425.0,
@@ -5109,7 +5109,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.41
+    "c_n0_db_hz": 71.41
   },
   {
     "tiempo_s": 426.0,
@@ -5121,7 +5121,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.42
+    "c_n0_db_hz": 71.42
   },
   {
     "tiempo_s": 427.0,
@@ -5133,7 +5133,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.44
+    "c_n0_db_hz": 71.44
   },
   {
     "tiempo_s": 428.0,
@@ -5145,7 +5145,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.45
+    "c_n0_db_hz": 71.45
   },
   {
     "tiempo_s": 429.0,
@@ -5157,7 +5157,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.47
+    "c_n0_db_hz": 71.47
   },
   {
     "tiempo_s": 430.0,
@@ -5169,7 +5169,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.48
+    "c_n0_db_hz": 71.48
   },
   {
     "tiempo_s": 431.0,
@@ -5181,7 +5181,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.5
+    "c_n0_db_hz": 71.5
   },
   {
     "tiempo_s": 432.0,
@@ -5193,7 +5193,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.51
+    "c_n0_db_hz": 71.51
   },
   {
     "tiempo_s": 433.0,
@@ -5205,7 +5205,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.52
+    "c_n0_db_hz": 71.52
   },
   {
     "tiempo_s": 434.0,
@@ -5217,7 +5217,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.53
+    "c_n0_db_hz": 71.53
   },
   {
     "tiempo_s": 435.0,
@@ -5229,7 +5229,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.54
+    "c_n0_db_hz": 71.54
   },
   {
     "tiempo_s": 436.0,
@@ -5241,7 +5241,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.55
+    "c_n0_db_hz": 71.55
   },
   {
     "tiempo_s": 437.0,
@@ -5253,7 +5253,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.56
+    "c_n0_db_hz": 71.56
   },
   {
     "tiempo_s": 438.0,
@@ -5265,7 +5265,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.57
+    "c_n0_db_hz": 71.57
   },
   {
     "tiempo_s": 439.0,
@@ -5277,7 +5277,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.58
+    "c_n0_db_hz": 71.58
   },
   {
     "tiempo_s": 440.0,
@@ -5289,7 +5289,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.59
+    "c_n0_db_hz": 71.59
   },
   {
     "tiempo_s": 441.0,
@@ -5301,7 +5301,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.59
+    "c_n0_db_hz": 71.59
   },
   {
     "tiempo_s": 442.0,
@@ -5313,7 +5313,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.6
+    "c_n0_db_hz": 71.6
   },
   {
     "tiempo_s": 443.0,
@@ -5325,7 +5325,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.61
+    "c_n0_db_hz": 71.61
   },
   {
     "tiempo_s": 444.0,
@@ -5337,7 +5337,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.61
+    "c_n0_db_hz": 71.61
   },
   {
     "tiempo_s": 445.0,
@@ -5349,7 +5349,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.61
+    "c_n0_db_hz": 71.61
   },
   {
     "tiempo_s": 446.0,
@@ -5361,7 +5361,7 @@
     "error_apuntamiento_deg": 0.02,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.62
+    "c_n0_db_hz": 71.62
   },
   {
     "tiempo_s": 447.0,
@@ -5373,7 +5373,7 @@
     "error_apuntamiento_deg": 0.077,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.62
+    "c_n0_db_hz": 71.62
   },
   {
     "tiempo_s": 448.0,
@@ -5385,7 +5385,7 @@
     "error_apuntamiento_deg": 0.161,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.62
+    "c_n0_db_hz": 71.62
   },
   {
     "tiempo_s": 449.0,
@@ -5397,7 +5397,7 @@
     "error_apuntamiento_deg": 0.264,
     "pointing_loss_db": 0.001,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.62
+    "c_n0_db_hz": 71.62
   },
   {
     "tiempo_s": 450.0,
@@ -5409,7 +5409,7 @@
     "error_apuntamiento_deg": 0.377,
     "pointing_loss_db": 0.002,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.62
+    "c_n0_db_hz": 71.62
   },
   {
     "tiempo_s": 451.0,
@@ -5421,7 +5421,7 @@
     "error_apuntamiento_deg": 0.492,
     "pointing_loss_db": 0.003,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.62
+    "c_n0_db_hz": 71.62
   },
   {
     "tiempo_s": 452.0,
@@ -5433,7 +5433,7 @@
     "error_apuntamiento_deg": 0.597,
     "pointing_loss_db": 0.005,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.62
+    "c_n0_db_hz": 71.62
   },
   {
     "tiempo_s": 453.0,
@@ -5445,7 +5445,7 @@
     "error_apuntamiento_deg": 0.685,
     "pointing_loss_db": 0.006,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.61
+    "c_n0_db_hz": 71.61
   },
   {
     "tiempo_s": 454.0,
@@ -5457,7 +5457,7 @@
     "error_apuntamiento_deg": 0.747,
     "pointing_loss_db": 0.007,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.61
+    "c_n0_db_hz": 71.61
   },
   {
     "tiempo_s": 455.0,
@@ -5469,7 +5469,7 @@
     "error_apuntamiento_deg": 0.773,
     "pointing_loss_db": 0.008,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.6
+    "c_n0_db_hz": 71.6
   },
   {
     "tiempo_s": 456.0,
@@ -5481,7 +5481,7 @@
     "error_apuntamiento_deg": 0.755,
     "pointing_loss_db": 0.008,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.6
+    "c_n0_db_hz": 71.6
   },
   {
     "tiempo_s": 457.0,
@@ -5493,7 +5493,7 @@
     "error_apuntamiento_deg": 0.687,
     "pointing_loss_db": 0.006,
     "t_sys_k": 308.5,
-    "c_n0_db_hz": 72.6
+    "c_n0_db_hz": 71.6
   },
   {
     "tiempo_s": 458.0,
@@ -5505,7 +5505,7 @@
     "error_apuntamiento_deg": 0.562,
     "pointing_loss_db": 0.004,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.59
+    "c_n0_db_hz": 71.59
   },
   {
     "tiempo_s": 459.0,
@@ -5517,7 +5517,7 @@
     "error_apuntamiento_deg": 0.375,
     "pointing_loss_db": 0.002,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.59
+    "c_n0_db_hz": 71.59
   },
   {
     "tiempo_s": 460.0,
@@ -5529,7 +5529,7 @@
     "error_apuntamiento_deg": 0.12,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.58
+    "c_n0_db_hz": 71.58
   },
   {
     "tiempo_s": 461.0,
@@ -5541,7 +5541,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.58
+    "c_n0_db_hz": 71.58
   },
   {
     "tiempo_s": 462.0,
@@ -5553,7 +5553,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.57
+    "c_n0_db_hz": 71.57
   },
   {
     "tiempo_s": 463.0,
@@ -5565,7 +5565,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.56
+    "c_n0_db_hz": 71.56
   },
   {
     "tiempo_s": 464.0,
@@ -5577,7 +5577,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.55
+    "c_n0_db_hz": 71.55
   },
   {
     "tiempo_s": 465.0,
@@ -5589,7 +5589,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.6,
-    "c_n0_db_hz": 72.54
+    "c_n0_db_hz": 71.54
   },
   {
     "tiempo_s": 466.0,
@@ -5601,7 +5601,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.53
+    "c_n0_db_hz": 71.53
   },
   {
     "tiempo_s": 467.0,
@@ -5613,7 +5613,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.51
+    "c_n0_db_hz": 71.51
   },
   {
     "tiempo_s": 468.0,
@@ -5625,7 +5625,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.5
+    "c_n0_db_hz": 71.5
   },
   {
     "tiempo_s": 469.0,
@@ -5637,7 +5637,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.49
+    "c_n0_db_hz": 71.49
   },
   {
     "tiempo_s": 470.0,
@@ -5649,7 +5649,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.47
+    "c_n0_db_hz": 71.47
   },
   {
     "tiempo_s": 471.0,
@@ -5661,7 +5661,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.7,
-    "c_n0_db_hz": 72.46
+    "c_n0_db_hz": 71.46
   },
   {
     "tiempo_s": 472.0,
@@ -5673,7 +5673,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.44
+    "c_n0_db_hz": 71.44
   },
   {
     "tiempo_s": 473.0,
@@ -5685,7 +5685,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.43
+    "c_n0_db_hz": 71.43
   },
   {
     "tiempo_s": 474.0,
@@ -5697,7 +5697,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.41
+    "c_n0_db_hz": 71.41
   },
   {
     "tiempo_s": 475.0,
@@ -5709,7 +5709,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.39
+    "c_n0_db_hz": 71.39
   },
   {
     "tiempo_s": 476.0,
@@ -5721,7 +5721,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.8,
-    "c_n0_db_hz": 72.38
+    "c_n0_db_hz": 71.38
   },
   {
     "tiempo_s": 477.0,
@@ -5733,7 +5733,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.36
+    "c_n0_db_hz": 71.36
   },
   {
     "tiempo_s": 478.0,
@@ -5745,7 +5745,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.34
+    "c_n0_db_hz": 71.34
   },
   {
     "tiempo_s": 479.0,
@@ -5757,7 +5757,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.32
+    "c_n0_db_hz": 71.32
   },
   {
     "tiempo_s": 480.0,
@@ -5769,7 +5769,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.3
+    "c_n0_db_hz": 71.3
   },
   {
     "tiempo_s": 481.0,
@@ -5781,7 +5781,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 308.9,
-    "c_n0_db_hz": 72.28
+    "c_n0_db_hz": 71.28
   },
   {
     "tiempo_s": 482.0,
@@ -5793,7 +5793,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.0,
-    "c_n0_db_hz": 72.26
+    "c_n0_db_hz": 71.26
   },
   {
     "tiempo_s": 483.0,
@@ -5805,7 +5805,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.0,
-    "c_n0_db_hz": 72.24
+    "c_n0_db_hz": 71.24
   },
   {
     "tiempo_s": 484.0,
@@ -5817,7 +5817,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.0,
-    "c_n0_db_hz": 72.21
+    "c_n0_db_hz": 71.21
   },
   {
     "tiempo_s": 485.0,
@@ -5829,7 +5829,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.0,
-    "c_n0_db_hz": 72.19
+    "c_n0_db_hz": 71.19
   },
   {
     "tiempo_s": 486.0,
@@ -5841,7 +5841,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.1,
-    "c_n0_db_hz": 72.17
+    "c_n0_db_hz": 71.17
   },
   {
     "tiempo_s": 487.0,
@@ -5853,7 +5853,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.1,
-    "c_n0_db_hz": 72.14
+    "c_n0_db_hz": 71.14
   },
   {
     "tiempo_s": 488.0,
@@ -5865,7 +5865,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.1,
-    "c_n0_db_hz": 72.12
+    "c_n0_db_hz": 71.12
   },
   {
     "tiempo_s": 489.0,
@@ -5877,7 +5877,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.2,
-    "c_n0_db_hz": 72.09
+    "c_n0_db_hz": 71.09
   },
   {
     "tiempo_s": 490.0,
@@ -5889,7 +5889,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.2,
-    "c_n0_db_hz": 72.07
+    "c_n0_db_hz": 71.07
   },
   {
     "tiempo_s": 491.0,
@@ -5901,7 +5901,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.2,
-    "c_n0_db_hz": 72.04
+    "c_n0_db_hz": 71.04
   },
   {
     "tiempo_s": 492.0,
@@ -5913,7 +5913,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.3,
-    "c_n0_db_hz": 72.01
+    "c_n0_db_hz": 71.01
   },
   {
     "tiempo_s": 493.0,
@@ -5925,7 +5925,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.3,
-    "c_n0_db_hz": 71.99
+    "c_n0_db_hz": 70.99
   },
   {
     "tiempo_s": 494.0,
@@ -5937,7 +5937,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.3,
-    "c_n0_db_hz": 71.96
+    "c_n0_db_hz": 70.96
   },
   {
     "tiempo_s": 495.0,
@@ -5949,7 +5949,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.4,
-    "c_n0_db_hz": 71.93
+    "c_n0_db_hz": 70.93
   },
   {
     "tiempo_s": 496.0,
@@ -5961,7 +5961,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.4,
-    "c_n0_db_hz": 71.9
+    "c_n0_db_hz": 70.9
   },
   {
     "tiempo_s": 497.0,
@@ -5973,7 +5973,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.4,
-    "c_n0_db_hz": 71.87
+    "c_n0_db_hz": 70.87
   },
   {
     "tiempo_s": 498.0,
@@ -5985,7 +5985,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.5,
-    "c_n0_db_hz": 71.85
+    "c_n0_db_hz": 70.85
   },
   {
     "tiempo_s": 499.0,
@@ -5997,7 +5997,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.5,
-    "c_n0_db_hz": 71.82
+    "c_n0_db_hz": 70.82
   },
   {
     "tiempo_s": 500.0,
@@ -6009,7 +6009,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.6,
-    "c_n0_db_hz": 71.79
+    "c_n0_db_hz": 70.79
   },
   {
     "tiempo_s": 501.0,
@@ -6021,7 +6021,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.6,
-    "c_n0_db_hz": 71.75
+    "c_n0_db_hz": 70.75
   },
   {
     "tiempo_s": 502.0,
@@ -6033,7 +6033,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.6,
-    "c_n0_db_hz": 71.72
+    "c_n0_db_hz": 70.72
   },
   {
     "tiempo_s": 503.0,
@@ -6045,7 +6045,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.7,
-    "c_n0_db_hz": 71.69
+    "c_n0_db_hz": 70.69
   },
   {
     "tiempo_s": 504.0,
@@ -6057,7 +6057,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.7,
-    "c_n0_db_hz": 71.66
+    "c_n0_db_hz": 70.66
   },
   {
     "tiempo_s": 505.0,
@@ -6069,7 +6069,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.8,
-    "c_n0_db_hz": 71.63
+    "c_n0_db_hz": 70.63
   },
   {
     "tiempo_s": 506.0,
@@ -6081,7 +6081,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.8,
-    "c_n0_db_hz": 71.6
+    "c_n0_db_hz": 70.6
   },
   {
     "tiempo_s": 507.0,
@@ -6093,7 +6093,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.9,
-    "c_n0_db_hz": 71.56
+    "c_n0_db_hz": 70.56
   },
   {
     "tiempo_s": 508.0,
@@ -6105,7 +6105,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 309.9,
-    "c_n0_db_hz": 71.53
+    "c_n0_db_hz": 70.53
   },
   {
     "tiempo_s": 509.0,
@@ -6117,7 +6117,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.0,
-    "c_n0_db_hz": 71.5
+    "c_n0_db_hz": 70.5
   },
   {
     "tiempo_s": 510.0,
@@ -6129,7 +6129,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.0,
-    "c_n0_db_hz": 71.46
+    "c_n0_db_hz": 70.46
   },
   {
     "tiempo_s": 511.0,
@@ -6141,7 +6141,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.1,
-    "c_n0_db_hz": 71.43
+    "c_n0_db_hz": 70.43
   },
   {
     "tiempo_s": 512.0,
@@ -6153,7 +6153,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.1,
-    "c_n0_db_hz": 71.4
+    "c_n0_db_hz": 70.4
   },
   {
     "tiempo_s": 513.0,
@@ -6165,7 +6165,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.2,
-    "c_n0_db_hz": 71.36
+    "c_n0_db_hz": 70.36
   },
   {
     "tiempo_s": 514.0,
@@ -6177,7 +6177,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.2,
-    "c_n0_db_hz": 71.33
+    "c_n0_db_hz": 70.33
   },
   {
     "tiempo_s": 515.0,
@@ -6189,7 +6189,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.3,
-    "c_n0_db_hz": 71.29
+    "c_n0_db_hz": 70.29
   },
   {
     "tiempo_s": 516.0,
@@ -6201,7 +6201,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.4,
-    "c_n0_db_hz": 71.26
+    "c_n0_db_hz": 70.26
   },
   {
     "tiempo_s": 517.0,
@@ -6213,7 +6213,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.4,
-    "c_n0_db_hz": 71.22
+    "c_n0_db_hz": 70.22
   },
   {
     "tiempo_s": 518.0,
@@ -6225,7 +6225,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.5,
-    "c_n0_db_hz": 71.18
+    "c_n0_db_hz": 70.18
   },
   {
     "tiempo_s": 519.0,
@@ -6237,7 +6237,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.5,
-    "c_n0_db_hz": 71.15
+    "c_n0_db_hz": 70.15
   },
   {
     "tiempo_s": 520.0,
@@ -6249,7 +6249,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.6,
-    "c_n0_db_hz": 71.11
+    "c_n0_db_hz": 70.11
   },
   {
     "tiempo_s": 521.0,
@@ -6261,7 +6261,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.7,
-    "c_n0_db_hz": 71.07
+    "c_n0_db_hz": 70.07
   },
   {
     "tiempo_s": 522.0,
@@ -6273,7 +6273,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.7,
-    "c_n0_db_hz": 71.04
+    "c_n0_db_hz": 70.04
   },
   {
     "tiempo_s": 523.0,
@@ -6285,7 +6285,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.8,
-    "c_n0_db_hz": 71.0
+    "c_n0_db_hz": 70.0
   },
   {
     "tiempo_s": 524.0,
@@ -6297,7 +6297,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.9,
-    "c_n0_db_hz": 70.96
+    "c_n0_db_hz": 69.96
   },
   {
     "tiempo_s": 525.0,
@@ -6309,7 +6309,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 310.9,
-    "c_n0_db_hz": 70.93
+    "c_n0_db_hz": 69.93
   },
   {
     "tiempo_s": 526.0,
@@ -6321,7 +6321,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.0,
-    "c_n0_db_hz": 70.89
+    "c_n0_db_hz": 69.89
   },
   {
     "tiempo_s": 527.0,
@@ -6333,7 +6333,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.1,
-    "c_n0_db_hz": 70.85
+    "c_n0_db_hz": 69.85
   },
   {
     "tiempo_s": 528.0,
@@ -6345,7 +6345,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.2,
-    "c_n0_db_hz": 70.81
+    "c_n0_db_hz": 69.81
   },
   {
     "tiempo_s": 529.0,
@@ -6357,7 +6357,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.2,
-    "c_n0_db_hz": 70.77
+    "c_n0_db_hz": 69.77
   },
   {
     "tiempo_s": 530.0,
@@ -6369,7 +6369,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.3,
-    "c_n0_db_hz": 70.73
+    "c_n0_db_hz": 69.73
   },
   {
     "tiempo_s": 531.0,
@@ -6381,7 +6381,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.4,
-    "c_n0_db_hz": 70.7
+    "c_n0_db_hz": 69.7
   },
   {
     "tiempo_s": 532.0,
@@ -6393,7 +6393,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.5,
-    "c_n0_db_hz": 70.66
+    "c_n0_db_hz": 69.66
   },
   {
     "tiempo_s": 533.0,
@@ -6405,7 +6405,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.5,
-    "c_n0_db_hz": 70.62
+    "c_n0_db_hz": 69.62
   },
   {
     "tiempo_s": 534.0,
@@ -6417,7 +6417,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.6,
-    "c_n0_db_hz": 70.58
+    "c_n0_db_hz": 69.58
   },
   {
     "tiempo_s": 535.0,
@@ -6429,7 +6429,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.7,
-    "c_n0_db_hz": 70.54
+    "c_n0_db_hz": 69.54
   },
   {
     "tiempo_s": 536.0,
@@ -6441,7 +6441,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.8,
-    "c_n0_db_hz": 70.5
+    "c_n0_db_hz": 69.5
   },
   {
     "tiempo_s": 537.0,
@@ -6453,7 +6453,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 311.9,
-    "c_n0_db_hz": 70.46
+    "c_n0_db_hz": 69.46
   },
   {
     "tiempo_s": 538.0,
@@ -6465,7 +6465,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.0,
-    "c_n0_db_hz": 70.42
+    "c_n0_db_hz": 69.42
   },
   {
     "tiempo_s": 539.0,
@@ -6477,7 +6477,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.0,
-    "c_n0_db_hz": 70.38
+    "c_n0_db_hz": 69.38
   },
   {
     "tiempo_s": 540.0,
@@ -6489,7 +6489,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.1,
-    "c_n0_db_hz": 70.34
+    "c_n0_db_hz": 69.34
   },
   {
     "tiempo_s": 541.0,
@@ -6501,7 +6501,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.2,
-    "c_n0_db_hz": 70.3
+    "c_n0_db_hz": 69.3
   },
   {
     "tiempo_s": 542.0,
@@ -6513,7 +6513,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.3,
-    "c_n0_db_hz": 70.26
+    "c_n0_db_hz": 69.26
   },
   {
     "tiempo_s": 543.0,
@@ -6525,7 +6525,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.4,
-    "c_n0_db_hz": 70.22
+    "c_n0_db_hz": 69.22
   },
   {
     "tiempo_s": 544.0,
@@ -6537,7 +6537,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.5,
-    "c_n0_db_hz": 70.18
+    "c_n0_db_hz": 69.18
   },
   {
     "tiempo_s": 545.0,
@@ -6549,7 +6549,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.6,
-    "c_n0_db_hz": 70.14
+    "c_n0_db_hz": 69.14
   },
   {
     "tiempo_s": 546.0,
@@ -6561,7 +6561,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.7,
-    "c_n0_db_hz": 70.1
+    "c_n0_db_hz": 69.1
   },
   {
     "tiempo_s": 547.0,
@@ -6573,7 +6573,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.8,
-    "c_n0_db_hz": 70.06
+    "c_n0_db_hz": 69.06
   },
   {
     "tiempo_s": 548.0,
@@ -6585,7 +6585,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 312.9,
-    "c_n0_db_hz": 70.02
+    "c_n0_db_hz": 69.02
   },
   {
     "tiempo_s": 549.0,
@@ -6597,7 +6597,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.0,
-    "c_n0_db_hz": 69.98
+    "c_n0_db_hz": 68.98
   },
   {
     "tiempo_s": 550.0,
@@ -6609,7 +6609,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.1,
-    "c_n0_db_hz": 69.94
+    "c_n0_db_hz": 68.94
   },
   {
     "tiempo_s": 551.0,
@@ -6621,7 +6621,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.2,
-    "c_n0_db_hz": 69.9
+    "c_n0_db_hz": 68.9
   },
   {
     "tiempo_s": 552.0,
@@ -6633,7 +6633,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.3,
-    "c_n0_db_hz": 69.86
+    "c_n0_db_hz": 68.86
   },
   {
     "tiempo_s": 553.0,
@@ -6645,7 +6645,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.4,
-    "c_n0_db_hz": 69.82
+    "c_n0_db_hz": 68.82
   },
   {
     "tiempo_s": 554.0,
@@ -6657,7 +6657,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.5,
-    "c_n0_db_hz": 69.78
+    "c_n0_db_hz": 68.78
   },
   {
     "tiempo_s": 555.0,
@@ -6669,7 +6669,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.6,
-    "c_n0_db_hz": 69.74
+    "c_n0_db_hz": 68.74
   },
   {
     "tiempo_s": 556.0,
@@ -6681,7 +6681,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.7,
-    "c_n0_db_hz": 69.7
+    "c_n0_db_hz": 68.7
   },
   {
     "tiempo_s": 557.0,
@@ -6693,7 +6693,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 313.8,
-    "c_n0_db_hz": 69.66
+    "c_n0_db_hz": 68.66
   },
   {
     "tiempo_s": 558.0,
@@ -6705,7 +6705,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.0,
-    "c_n0_db_hz": 69.61
+    "c_n0_db_hz": 68.61
   },
   {
     "tiempo_s": 559.0,
@@ -6717,7 +6717,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.1,
-    "c_n0_db_hz": 69.57
+    "c_n0_db_hz": 68.57
   },
   {
     "tiempo_s": 560.0,
@@ -6729,7 +6729,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.2,
-    "c_n0_db_hz": 69.53
+    "c_n0_db_hz": 68.53
   },
   {
     "tiempo_s": 561.0,
@@ -6741,7 +6741,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.3,
-    "c_n0_db_hz": 69.49
+    "c_n0_db_hz": 68.49
   },
   {
     "tiempo_s": 562.0,
@@ -6753,7 +6753,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.4,
-    "c_n0_db_hz": 69.45
+    "c_n0_db_hz": 68.45
   },
   {
     "tiempo_s": 563.0,
@@ -6765,7 +6765,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.5,
-    "c_n0_db_hz": 69.41
+    "c_n0_db_hz": 68.41
   },
   {
     "tiempo_s": 564.0,
@@ -6777,7 +6777,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.7,
-    "c_n0_db_hz": 69.37
+    "c_n0_db_hz": 68.37
   },
   {
     "tiempo_s": 565.0,
@@ -6789,7 +6789,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.8,
-    "c_n0_db_hz": 69.33
+    "c_n0_db_hz": 68.33
   },
   {
     "tiempo_s": 566.0,
@@ -6801,7 +6801,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 314.9,
-    "c_n0_db_hz": 69.29
+    "c_n0_db_hz": 68.29
   },
   {
     "tiempo_s": 567.0,
@@ -6813,7 +6813,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.0,
-    "c_n0_db_hz": 69.25
+    "c_n0_db_hz": 68.25
   },
   {
     "tiempo_s": 568.0,
@@ -6825,7 +6825,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.1,
-    "c_n0_db_hz": 69.21
+    "c_n0_db_hz": 68.21
   },
   {
     "tiempo_s": 569.0,
@@ -6837,7 +6837,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.3,
-    "c_n0_db_hz": 69.16
+    "c_n0_db_hz": 68.16
   },
   {
     "tiempo_s": 570.0,
@@ -6849,7 +6849,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.4,
-    "c_n0_db_hz": 69.12
+    "c_n0_db_hz": 68.12
   },
   {
     "tiempo_s": 571.0,
@@ -6861,7 +6861,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.5,
-    "c_n0_db_hz": 69.08
+    "c_n0_db_hz": 68.08
   },
   {
     "tiempo_s": 572.0,
@@ -6873,7 +6873,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.7,
-    "c_n0_db_hz": 69.04
+    "c_n0_db_hz": 68.04
   },
   {
     "tiempo_s": 573.0,
@@ -6885,7 +6885,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.8,
-    "c_n0_db_hz": 69.0
+    "c_n0_db_hz": 68.0
   },
   {
     "tiempo_s": 574.0,
@@ -6897,7 +6897,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 315.9,
-    "c_n0_db_hz": 68.96
+    "c_n0_db_hz": 67.96
   },
   {
     "tiempo_s": 575.0,
@@ -6909,7 +6909,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.1,
-    "c_n0_db_hz": 68.92
+    "c_n0_db_hz": 67.92
   },
   {
     "tiempo_s": 576.0,
@@ -6921,7 +6921,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.2,
-    "c_n0_db_hz": 68.88
+    "c_n0_db_hz": 67.88
   },
   {
     "tiempo_s": 577.0,
@@ -6933,7 +6933,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.3,
-    "c_n0_db_hz": 68.84
+    "c_n0_db_hz": 67.84
   },
   {
     "tiempo_s": 578.0,
@@ -6945,7 +6945,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.5,
-    "c_n0_db_hz": 68.8
+    "c_n0_db_hz": 67.8
   },
   {
     "tiempo_s": 579.0,
@@ -6957,7 +6957,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.6,
-    "c_n0_db_hz": 68.76
+    "c_n0_db_hz": 67.76
   },
   {
     "tiempo_s": 580.0,
@@ -6969,7 +6969,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.7,
-    "c_n0_db_hz": 68.72
+    "c_n0_db_hz": 67.72
   },
   {
     "tiempo_s": 581.0,
@@ -6981,7 +6981,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 316.9,
-    "c_n0_db_hz": 68.67
+    "c_n0_db_hz": 67.67
   },
   {
     "tiempo_s": 582.0,
@@ -6993,7 +6993,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.0,
-    "c_n0_db_hz": 68.63
+    "c_n0_db_hz": 67.63
   },
   {
     "tiempo_s": 583.0,
@@ -7005,7 +7005,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.2,
-    "c_n0_db_hz": 68.59
+    "c_n0_db_hz": 67.59
   },
   {
     "tiempo_s": 584.0,
@@ -7017,7 +7017,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.3,
-    "c_n0_db_hz": 68.55
+    "c_n0_db_hz": 67.55
   },
   {
     "tiempo_s": 585.0,
@@ -7029,7 +7029,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.5,
-    "c_n0_db_hz": 68.51
+    "c_n0_db_hz": 67.51
   },
   {
     "tiempo_s": 586.0,
@@ -7041,7 +7041,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.6,
-    "c_n0_db_hz": 68.47
+    "c_n0_db_hz": 67.47
   },
   {
     "tiempo_s": 587.0,
@@ -7053,7 +7053,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.7,
-    "c_n0_db_hz": 68.43
+    "c_n0_db_hz": 67.43
   },
   {
     "tiempo_s": 588.0,
@@ -7065,7 +7065,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 317.9,
-    "c_n0_db_hz": 68.39
+    "c_n0_db_hz": 67.39
   },
   {
     "tiempo_s": 589.0,
@@ -7077,7 +7077,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.0,
-    "c_n0_db_hz": 68.35
+    "c_n0_db_hz": 67.35
   },
   {
     "tiempo_s": 590.0,
@@ -7089,7 +7089,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.2,
-    "c_n0_db_hz": 68.31
+    "c_n0_db_hz": 67.31
   },
   {
     "tiempo_s": 591.0,
@@ -7101,7 +7101,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.4,
-    "c_n0_db_hz": 68.27
+    "c_n0_db_hz": 67.27
   },
   {
     "tiempo_s": 592.0,
@@ -7113,7 +7113,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.5,
-    "c_n0_db_hz": 68.23
+    "c_n0_db_hz": 67.23
   },
   {
     "tiempo_s": 593.0,
@@ -7125,7 +7125,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.7,
-    "c_n0_db_hz": 68.19
+    "c_n0_db_hz": 67.19
   },
   {
     "tiempo_s": 594.0,
@@ -7137,7 +7137,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 318.8,
-    "c_n0_db_hz": 68.15
+    "c_n0_db_hz": 67.15
   },
   {
     "tiempo_s": 595.0,
@@ -7149,7 +7149,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.0,
-    "c_n0_db_hz": 68.11
+    "c_n0_db_hz": 67.11
   },
   {
     "tiempo_s": 596.0,
@@ -7161,7 +7161,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.1,
-    "c_n0_db_hz": 68.07
+    "c_n0_db_hz": 67.07
   },
   {
     "tiempo_s": 597.0,
@@ -7173,7 +7173,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.3,
-    "c_n0_db_hz": 68.03
+    "c_n0_db_hz": 67.03
   },
   {
     "tiempo_s": 598.0,
@@ -7185,7 +7185,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.4,
-    "c_n0_db_hz": 67.99
+    "c_n0_db_hz": 66.99
   },
   {
     "tiempo_s": 599.0,
@@ -7197,7 +7197,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.6,
-    "c_n0_db_hz": 67.95
+    "c_n0_db_hz": 66.95
   },
   {
     "tiempo_s": 600.0,
@@ -7209,7 +7209,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.8,
-    "c_n0_db_hz": 67.91
+    "c_n0_db_hz": 66.91
   },
   {
     "tiempo_s": 601.0,
@@ -7221,7 +7221,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 319.9,
-    "c_n0_db_hz": 67.87
+    "c_n0_db_hz": 66.87
   },
   {
     "tiempo_s": 602.0,
@@ -7233,7 +7233,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.1,
-    "c_n0_db_hz": 67.83
+    "c_n0_db_hz": 66.83
   },
   {
     "tiempo_s": 603.0,
@@ -7245,7 +7245,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.3,
-    "c_n0_db_hz": 67.79
+    "c_n0_db_hz": 66.79
   },
   {
     "tiempo_s": 604.0,
@@ -7257,7 +7257,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.4,
-    "c_n0_db_hz": 67.75
+    "c_n0_db_hz": 66.75
   },
   {
     "tiempo_s": 605.0,
@@ -7269,7 +7269,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.6,
-    "c_n0_db_hz": 67.71
+    "c_n0_db_hz": 66.71
   },
   {
     "tiempo_s": 606.0,
@@ -7281,7 +7281,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.8,
-    "c_n0_db_hz": 67.67
+    "c_n0_db_hz": 66.67
   },
   {
     "tiempo_s": 607.0,
@@ -7293,7 +7293,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 320.9,
-    "c_n0_db_hz": 67.63
+    "c_n0_db_hz": 66.63
   },
   {
     "tiempo_s": 608.0,
@@ -7305,7 +7305,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.1,
-    "c_n0_db_hz": 67.6
+    "c_n0_db_hz": 66.6
   },
   {
     "tiempo_s": 609.0,
@@ -7317,7 +7317,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.3,
-    "c_n0_db_hz": 67.56
+    "c_n0_db_hz": 66.56
   },
   {
     "tiempo_s": 610.0,
@@ -7329,7 +7329,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.5,
-    "c_n0_db_hz": 67.52
+    "c_n0_db_hz": 66.52
   },
   {
     "tiempo_s": 611.0,
@@ -7341,7 +7341,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.6,
-    "c_n0_db_hz": 67.48
+    "c_n0_db_hz": 66.48
   },
   {
     "tiempo_s": 612.0,
@@ -7353,7 +7353,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 321.8,
-    "c_n0_db_hz": 67.44
+    "c_n0_db_hz": 66.44
   },
   {
     "tiempo_s": 613.0,
@@ -7365,7 +7365,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.0,
-    "c_n0_db_hz": 67.4
+    "c_n0_db_hz": 66.4
   },
   {
     "tiempo_s": 614.0,
@@ -7377,7 +7377,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.2,
-    "c_n0_db_hz": 67.36
+    "c_n0_db_hz": 66.36
   },
   {
     "tiempo_s": 615.0,
@@ -7389,7 +7389,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.3,
-    "c_n0_db_hz": 67.32
+    "c_n0_db_hz": 66.32
   },
   {
     "tiempo_s": 616.0,
@@ -7401,7 +7401,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.5,
-    "c_n0_db_hz": 67.28
+    "c_n0_db_hz": 66.28
   },
   {
     "tiempo_s": 617.0,
@@ -7413,7 +7413,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.7,
-    "c_n0_db_hz": 67.25
+    "c_n0_db_hz": 66.25
   },
   {
     "tiempo_s": 618.0,
@@ -7425,7 +7425,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 322.9,
-    "c_n0_db_hz": 67.21
+    "c_n0_db_hz": 66.21
   },
   {
     "tiempo_s": 619.0,
@@ -7437,7 +7437,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.1,
-    "c_n0_db_hz": 67.17
+    "c_n0_db_hz": 66.17
   },
   {
     "tiempo_s": 620.0,
@@ -7449,7 +7449,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.2,
-    "c_n0_db_hz": 67.13
+    "c_n0_db_hz": 66.13
   },
   {
     "tiempo_s": 621.0,
@@ -7461,7 +7461,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.4,
-    "c_n0_db_hz": 67.09
+    "c_n0_db_hz": 66.09
   },
   {
     "tiempo_s": 622.0,
@@ -7473,7 +7473,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.6,
-    "c_n0_db_hz": 67.05
+    "c_n0_db_hz": 66.05
   },
   {
     "tiempo_s": 623.0,
@@ -7485,7 +7485,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 323.8,
-    "c_n0_db_hz": 67.02
+    "c_n0_db_hz": 66.02
   },
   {
     "tiempo_s": 624.0,
@@ -7497,7 +7497,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.0,
-    "c_n0_db_hz": 66.98
+    "c_n0_db_hz": 65.98
   },
   {
     "tiempo_s": 625.0,
@@ -7509,7 +7509,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.2,
-    "c_n0_db_hz": 66.94
+    "c_n0_db_hz": 65.94
   },
   {
     "tiempo_s": 626.0,
@@ -7521,7 +7521,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.4,
-    "c_n0_db_hz": 66.9
+    "c_n0_db_hz": 65.9
   },
   {
     "tiempo_s": 627.0,
@@ -7533,7 +7533,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.6,
-    "c_n0_db_hz": 66.86
+    "c_n0_db_hz": 65.86
   },
   {
     "tiempo_s": 628.0,
@@ -7545,7 +7545,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.7,
-    "c_n0_db_hz": 66.83
+    "c_n0_db_hz": 65.83
   },
   {
     "tiempo_s": 629.0,
@@ -7557,7 +7557,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 324.9,
-    "c_n0_db_hz": 66.79
+    "c_n0_db_hz": 65.79
   },
   {
     "tiempo_s": 630.0,
@@ -7569,7 +7569,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.1,
-    "c_n0_db_hz": 66.75
+    "c_n0_db_hz": 65.75
   },
   {
     "tiempo_s": 631.0,
@@ -7581,7 +7581,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.3,
-    "c_n0_db_hz": 66.71
+    "c_n0_db_hz": 65.71
   },
   {
     "tiempo_s": 632.0,
@@ -7593,7 +7593,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.5,
-    "c_n0_db_hz": 66.68
+    "c_n0_db_hz": 65.68
   },
   {
     "tiempo_s": 633.0,
@@ -7605,7 +7605,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.7,
-    "c_n0_db_hz": 66.64
+    "c_n0_db_hz": 65.64
   },
   {
     "tiempo_s": 634.0,
@@ -7617,7 +7617,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 325.9,
-    "c_n0_db_hz": 66.6
+    "c_n0_db_hz": 65.6
   },
   {
     "tiempo_s": 635.0,
@@ -7629,7 +7629,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.1,
-    "c_n0_db_hz": 66.57
+    "c_n0_db_hz": 65.57
   },
   {
     "tiempo_s": 636.0,
@@ -7641,7 +7641,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.3,
-    "c_n0_db_hz": 66.53
+    "c_n0_db_hz": 65.53
   },
   {
     "tiempo_s": 637.0,
@@ -7653,7 +7653,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.5,
-    "c_n0_db_hz": 66.49
+    "c_n0_db_hz": 65.49
   },
   {
     "tiempo_s": 638.0,
@@ -7665,7 +7665,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.7,
-    "c_n0_db_hz": 66.45
+    "c_n0_db_hz": 65.45
   },
   {
     "tiempo_s": 639.0,
@@ -7677,7 +7677,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 326.9,
-    "c_n0_db_hz": 66.42
+    "c_n0_db_hz": 65.42
   },
   {
     "tiempo_s": 640.0,
@@ -7689,7 +7689,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.1,
-    "c_n0_db_hz": 66.38
+    "c_n0_db_hz": 65.38
   },
   {
     "tiempo_s": 641.0,
@@ -7701,7 +7701,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.3,
-    "c_n0_db_hz": 66.34
+    "c_n0_db_hz": 65.34
   },
   {
     "tiempo_s": 642.0,
@@ -7713,7 +7713,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.5,
-    "c_n0_db_hz": 66.31
+    "c_n0_db_hz": 65.31
   },
   {
     "tiempo_s": 643.0,
@@ -7725,7 +7725,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.7,
-    "c_n0_db_hz": 66.27
+    "c_n0_db_hz": 65.27
   },
   {
     "tiempo_s": 644.0,
@@ -7737,7 +7737,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 327.9,
-    "c_n0_db_hz": 66.23
+    "c_n0_db_hz": 65.23
   },
   {
     "tiempo_s": 645.0,
@@ -7749,7 +7749,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.1,
-    "c_n0_db_hz": 66.2
+    "c_n0_db_hz": 65.2
   },
   {
     "tiempo_s": 646.0,
@@ -7761,7 +7761,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.3,
-    "c_n0_db_hz": 66.16
+    "c_n0_db_hz": 65.16
   },
   {
     "tiempo_s": 647.0,
@@ -7773,7 +7773,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.6,
-    "c_n0_db_hz": 66.13
+    "c_n0_db_hz": 65.13
   },
   {
     "tiempo_s": 648.0,
@@ -7785,7 +7785,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 328.8,
-    "c_n0_db_hz": 66.09
+    "c_n0_db_hz": 65.09
   },
   {
     "tiempo_s": 649.0,
@@ -7797,7 +7797,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.0,
-    "c_n0_db_hz": 66.05
+    "c_n0_db_hz": 65.05
   },
   {
     "tiempo_s": 650.0,
@@ -7809,7 +7809,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.2,
-    "c_n0_db_hz": 66.02
+    "c_n0_db_hz": 65.02
   },
   {
     "tiempo_s": 651.0,
@@ -7821,7 +7821,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.4,
-    "c_n0_db_hz": 65.98
+    "c_n0_db_hz": 64.98
   },
   {
     "tiempo_s": 652.0,
@@ -7833,7 +7833,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.6,
-    "c_n0_db_hz": 65.95
+    "c_n0_db_hz": 64.95
   },
   {
     "tiempo_s": 653.0,
@@ -7845,7 +7845,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 329.8,
-    "c_n0_db_hz": 65.91
+    "c_n0_db_hz": 64.91
   },
   {
     "tiempo_s": 654.0,
@@ -7857,7 +7857,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.0,
-    "c_n0_db_hz": 65.87
+    "c_n0_db_hz": 64.87
   },
   {
     "tiempo_s": 655.0,
@@ -7869,7 +7869,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.2,
-    "c_n0_db_hz": 65.84
+    "c_n0_db_hz": 64.84
   },
   {
     "tiempo_s": 656.0,
@@ -7881,7 +7881,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.5,
-    "c_n0_db_hz": 65.8
+    "c_n0_db_hz": 64.8
   },
   {
     "tiempo_s": 657.0,
@@ -7893,7 +7893,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.7,
-    "c_n0_db_hz": 65.77
+    "c_n0_db_hz": 64.77
   },
   {
     "tiempo_s": 658.0,
@@ -7905,7 +7905,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 330.9,
-    "c_n0_db_hz": 65.73
+    "c_n0_db_hz": 64.73
   },
   {
     "tiempo_s": 659.0,
@@ -7917,7 +7917,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.1,
-    "c_n0_db_hz": 65.7
+    "c_n0_db_hz": 64.7
   },
   {
     "tiempo_s": 660.0,
@@ -7929,7 +7929,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.3,
-    "c_n0_db_hz": 65.66
+    "c_n0_db_hz": 64.66
   },
   {
     "tiempo_s": 661.0,
@@ -7941,7 +7941,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.6,
-    "c_n0_db_hz": 65.63
+    "c_n0_db_hz": 64.63
   },
   {
     "tiempo_s": 662.0,
@@ -7953,7 +7953,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 331.8,
-    "c_n0_db_hz": 65.59
+    "c_n0_db_hz": 64.59
   },
   {
     "tiempo_s": 663.0,
@@ -7965,7 +7965,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.0,
-    "c_n0_db_hz": 65.56
+    "c_n0_db_hz": 64.56
   },
   {
     "tiempo_s": 664.0,
@@ -7977,7 +7977,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.2,
-    "c_n0_db_hz": 65.52
+    "c_n0_db_hz": 64.52
   },
   {
     "tiempo_s": 665.0,
@@ -7989,7 +7989,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.4,
-    "c_n0_db_hz": 65.49
+    "c_n0_db_hz": 64.49
   },
   {
     "tiempo_s": 666.0,
@@ -8001,7 +8001,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.7,
-    "c_n0_db_hz": 65.45
+    "c_n0_db_hz": 64.45
   },
   {
     "tiempo_s": 667.0,
@@ -8013,7 +8013,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 332.9,
-    "c_n0_db_hz": 65.42
+    "c_n0_db_hz": 64.42
   },
   {
     "tiempo_s": 668.0,
@@ -8025,7 +8025,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.1,
-    "c_n0_db_hz": 65.38
+    "c_n0_db_hz": 64.38
   },
   {
     "tiempo_s": 669.0,
@@ -8037,7 +8037,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.3,
-    "c_n0_db_hz": 65.35
+    "c_n0_db_hz": 64.35
   },
   {
     "tiempo_s": 670.0,
@@ -8049,7 +8049,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.6,
-    "c_n0_db_hz": 65.32
+    "c_n0_db_hz": 64.32
   },
   {
     "tiempo_s": 671.0,
@@ -8061,7 +8061,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 333.8,
-    "c_n0_db_hz": 65.28
+    "c_n0_db_hz": 64.28
   },
   {
     "tiempo_s": 672.0,
@@ -8073,7 +8073,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.0,
-    "c_n0_db_hz": 65.25
+    "c_n0_db_hz": 64.25
   },
   {
     "tiempo_s": 673.0,
@@ -8085,7 +8085,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.2,
-    "c_n0_db_hz": 65.21
+    "c_n0_db_hz": 64.21
   },
   {
     "tiempo_s": 674.0,
@@ -8097,7 +8097,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.5,
-    "c_n0_db_hz": 65.18
+    "c_n0_db_hz": 64.18
   },
   {
     "tiempo_s": 675.0,
@@ -8109,7 +8109,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.7,
-    "c_n0_db_hz": 65.14
+    "c_n0_db_hz": 64.14
   },
   {
     "tiempo_s": 676.0,
@@ -8121,7 +8121,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 334.9,
-    "c_n0_db_hz": 65.11
+    "c_n0_db_hz": 64.11
   },
   {
     "tiempo_s": 677.0,
@@ -8133,7 +8133,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.2,
-    "c_n0_db_hz": 65.08
+    "c_n0_db_hz": 64.08
   },
   {
     "tiempo_s": 678.0,
@@ -8145,7 +8145,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.4,
-    "c_n0_db_hz": 65.04
+    "c_n0_db_hz": 64.04
   },
   {
     "tiempo_s": 679.0,
@@ -8157,7 +8157,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.6,
-    "c_n0_db_hz": 65.01
+    "c_n0_db_hz": 64.01
   },
   {
     "tiempo_s": 680.0,
@@ -8169,7 +8169,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 335.9,
-    "c_n0_db_hz": 64.98
+    "c_n0_db_hz": 63.98
   },
   {
     "tiempo_s": 681.0,
@@ -8181,7 +8181,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 336.1,
-    "c_n0_db_hz": 64.94
+    "c_n0_db_hz": 63.94
   },
   {
     "tiempo_s": 682.0,
@@ -8193,7 +8193,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 336.3,
-    "c_n0_db_hz": 64.91
+    "c_n0_db_hz": 63.91
   },
   {
     "tiempo_s": 683.0,
@@ -8205,7 +8205,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 336.6,
-    "c_n0_db_hz": 64.88
+    "c_n0_db_hz": 63.88
   },
   {
     "tiempo_s": 684.0,
@@ -8217,7 +8217,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 336.8,
-    "c_n0_db_hz": 64.84
+    "c_n0_db_hz": 63.84
   },
   {
     "tiempo_s": 685.0,
@@ -8229,7 +8229,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 337.0,
-    "c_n0_db_hz": 64.81
+    "c_n0_db_hz": 63.81
   },
   {
     "tiempo_s": 686.0,
@@ -8241,7 +8241,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 337.3,
-    "c_n0_db_hz": 64.78
+    "c_n0_db_hz": 63.78
   },
   {
     "tiempo_s": 687.0,
@@ -8253,7 +8253,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 337.5,
-    "c_n0_db_hz": 64.74
+    "c_n0_db_hz": 63.74
   },
   {
     "tiempo_s": 688.0,
@@ -8265,7 +8265,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 337.8,
-    "c_n0_db_hz": 64.71
+    "c_n0_db_hz": 63.71
   },
   {
     "tiempo_s": 689.0,
@@ -8277,7 +8277,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 338.0,
-    "c_n0_db_hz": 64.68
+    "c_n0_db_hz": 63.68
   },
   {
     "tiempo_s": 690.0,
@@ -8289,7 +8289,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 338.2,
-    "c_n0_db_hz": 64.64
+    "c_n0_db_hz": 63.64
   },
   {
     "tiempo_s": 691.0,
@@ -8301,7 +8301,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 338.5,
-    "c_n0_db_hz": 64.61
+    "c_n0_db_hz": 63.61
   },
   {
     "tiempo_s": 692.0,
@@ -8313,7 +8313,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 338.7,
-    "c_n0_db_hz": 64.58
+    "c_n0_db_hz": 63.58
   },
   {
     "tiempo_s": 693.0,
@@ -8325,7 +8325,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.0,
-    "c_n0_db_hz": 64.55
+    "c_n0_db_hz": 63.55
   },
   {
     "tiempo_s": 694.0,
@@ -8337,7 +8337,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.2,
-    "c_n0_db_hz": 64.51
+    "c_n0_db_hz": 63.51
   },
   {
     "tiempo_s": 695.0,
@@ -8349,7 +8349,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.5,
-    "c_n0_db_hz": 64.48
+    "c_n0_db_hz": 63.48
   },
   {
     "tiempo_s": 696.0,
@@ -8361,7 +8361,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.7,
-    "c_n0_db_hz": 64.45
+    "c_n0_db_hz": 63.45
   },
   {
     "tiempo_s": 697.0,
@@ -8373,7 +8373,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 339.9,
-    "c_n0_db_hz": 64.42
+    "c_n0_db_hz": 63.42
   },
   {
     "tiempo_s": 698.0,
@@ -8385,7 +8385,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 340.2,
-    "c_n0_db_hz": 64.39
+    "c_n0_db_hz": 63.39
   },
   {
     "tiempo_s": 699.0,
@@ -8397,7 +8397,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 340.4,
-    "c_n0_db_hz": 64.35
+    "c_n0_db_hz": 63.35
   },
   {
     "tiempo_s": 700.0,
@@ -8409,7 +8409,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 340.7,
-    "c_n0_db_hz": 64.32
+    "c_n0_db_hz": 63.32
   },
   {
     "tiempo_s": 701.0,
@@ -8421,7 +8421,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 340.9,
-    "c_n0_db_hz": 64.29
+    "c_n0_db_hz": 63.29
   },
   {
     "tiempo_s": 702.0,
@@ -8433,7 +8433,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 341.2,
-    "c_n0_db_hz": 64.26
+    "c_n0_db_hz": 63.26
   },
   {
     "tiempo_s": 703.0,
@@ -8445,7 +8445,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 341.4,
-    "c_n0_db_hz": 64.23
+    "c_n0_db_hz": 63.23
   },
   {
     "tiempo_s": 704.0,
@@ -8457,7 +8457,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 341.7,
-    "c_n0_db_hz": 64.19
+    "c_n0_db_hz": 63.19
   },
   {
     "tiempo_s": 705.0,
@@ -8469,7 +8469,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 341.9,
-    "c_n0_db_hz": 64.16
+    "c_n0_db_hz": 63.16
   },
   {
     "tiempo_s": 706.0,
@@ -8481,7 +8481,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 342.2,
-    "c_n0_db_hz": 64.13
+    "c_n0_db_hz": 63.13
   },
   {
     "tiempo_s": 707.0,
@@ -8493,7 +8493,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 342.4,
-    "c_n0_db_hz": 64.1
+    "c_n0_db_hz": 63.1
   },
   {
     "tiempo_s": 708.0,
@@ -8505,7 +8505,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 342.7,
-    "c_n0_db_hz": 64.07
+    "c_n0_db_hz": 63.07
   },
   {
     "tiempo_s": 709.0,
@@ -8517,7 +8517,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 343.0,
-    "c_n0_db_hz": 64.04
+    "c_n0_db_hz": 63.04
   },
   {
     "tiempo_s": 710.0,
@@ -8529,7 +8529,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 343.2,
-    "c_n0_db_hz": 64.0
+    "c_n0_db_hz": 63.0
   },
   {
     "tiempo_s": 711.0,
@@ -8541,7 +8541,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 343.5,
-    "c_n0_db_hz": 63.97
+    "c_n0_db_hz": 62.97
   },
   {
     "tiempo_s": 712.0,
@@ -8553,7 +8553,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 343.7,
-    "c_n0_db_hz": 63.94
+    "c_n0_db_hz": 62.94
   },
   {
     "tiempo_s": 713.0,
@@ -8565,7 +8565,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 344.0,
-    "c_n0_db_hz": 63.91
+    "c_n0_db_hz": 62.91
   },
   {
     "tiempo_s": 714.0,
@@ -8577,7 +8577,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 344.2,
-    "c_n0_db_hz": 63.88
+    "c_n0_db_hz": 62.88
   },
   {
     "tiempo_s": 715.0,
@@ -8589,7 +8589,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 344.5,
-    "c_n0_db_hz": 63.85
+    "c_n0_db_hz": 62.85
   },
   {
     "tiempo_s": 716.0,
@@ -8601,7 +8601,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 344.7,
-    "c_n0_db_hz": 63.82
+    "c_n0_db_hz": 62.82
   },
   {
     "tiempo_s": 717.0,
@@ -8613,7 +8613,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 345.0,
-    "c_n0_db_hz": 63.79
+    "c_n0_db_hz": 62.79
   },
   {
     "tiempo_s": 718.0,
@@ -8625,7 +8625,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 345.3,
-    "c_n0_db_hz": 63.76
+    "c_n0_db_hz": 62.76
   },
   {
     "tiempo_s": 719.0,
@@ -8637,7 +8637,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 345.5,
-    "c_n0_db_hz": 63.73
+    "c_n0_db_hz": 62.73
   },
   {
     "tiempo_s": 720.0,
@@ -8649,7 +8649,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 345.8,
-    "c_n0_db_hz": 63.69
+    "c_n0_db_hz": 62.69
   },
   {
     "tiempo_s": 721.0,
@@ -8661,7 +8661,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 346.1,
-    "c_n0_db_hz": 63.66
+    "c_n0_db_hz": 62.66
   },
   {
     "tiempo_s": 722.0,
@@ -8673,7 +8673,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 346.3,
-    "c_n0_db_hz": 63.63
+    "c_n0_db_hz": 62.63
   },
   {
     "tiempo_s": 723.0,
@@ -8685,7 +8685,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 346.6,
-    "c_n0_db_hz": 63.6
+    "c_n0_db_hz": 62.6
   },
   {
     "tiempo_s": 724.0,
@@ -8697,7 +8697,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 346.8,
-    "c_n0_db_hz": 63.57
+    "c_n0_db_hz": 62.57
   },
   {
     "tiempo_s": 725.0,
@@ -8709,7 +8709,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 347.1,
-    "c_n0_db_hz": 63.54
+    "c_n0_db_hz": 62.54
   },
   {
     "tiempo_s": 726.0,
@@ -8721,7 +8721,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 347.4,
-    "c_n0_db_hz": 63.51
+    "c_n0_db_hz": 62.51
   },
   {
     "tiempo_s": 727.0,
@@ -8733,7 +8733,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 347.6,
-    "c_n0_db_hz": 63.48
+    "c_n0_db_hz": 62.48
   },
   {
     "tiempo_s": 728.0,
@@ -8745,7 +8745,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 347.9,
-    "c_n0_db_hz": 63.45
+    "c_n0_db_hz": 62.45
   },
   {
     "tiempo_s": 729.0,
@@ -8757,7 +8757,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 348.2,
-    "c_n0_db_hz": 63.42
+    "c_n0_db_hz": 62.42
   },
   {
     "tiempo_s": 730.0,
@@ -8769,7 +8769,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 348.4,
-    "c_n0_db_hz": 63.39
+    "c_n0_db_hz": 62.39
   },
   {
     "tiempo_s": 731.0,
@@ -8781,7 +8781,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 348.7,
-    "c_n0_db_hz": 63.36
+    "c_n0_db_hz": 62.36
   },
   {
     "tiempo_s": 732.0,
@@ -8793,7 +8793,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 349.0,
-    "c_n0_db_hz": 63.33
+    "c_n0_db_hz": 62.33
   },
   {
     "tiempo_s": 733.0,
@@ -8805,7 +8805,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 349.2,
-    "c_n0_db_hz": 63.3
+    "c_n0_db_hz": 62.3
   },
   {
     "tiempo_s": 734.0,
@@ -8817,7 +8817,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 349.5,
-    "c_n0_db_hz": 63.27
+    "c_n0_db_hz": 62.27
   },
   {
     "tiempo_s": 735.0,
@@ -8829,7 +8829,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 349.8,
-    "c_n0_db_hz": 63.24
+    "c_n0_db_hz": 62.24
   },
   {
     "tiempo_s": 736.0,
@@ -8841,7 +8841,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 350.1,
-    "c_n0_db_hz": 63.21
+    "c_n0_db_hz": 62.21
   },
   {
     "tiempo_s": 737.0,
@@ -8853,7 +8853,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 350.3,
-    "c_n0_db_hz": 63.18
+    "c_n0_db_hz": 62.18
   },
   {
     "tiempo_s": 738.0,
@@ -8865,7 +8865,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 350.6,
-    "c_n0_db_hz": 63.15
+    "c_n0_db_hz": 62.15
   },
   {
     "tiempo_s": 739.0,
@@ -8877,7 +8877,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 350.9,
-    "c_n0_db_hz": 63.12
+    "c_n0_db_hz": 62.12
   },
   {
     "tiempo_s": 740.0,
@@ -8889,7 +8889,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 351.1,
-    "c_n0_db_hz": 63.1
+    "c_n0_db_hz": 62.1
   },
   {
     "tiempo_s": 741.0,
@@ -8901,7 +8901,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 351.4,
-    "c_n0_db_hz": 63.07
+    "c_n0_db_hz": 62.07
   },
   {
     "tiempo_s": 742.0,
@@ -8913,7 +8913,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 351.7,
-    "c_n0_db_hz": 63.04
+    "c_n0_db_hz": 62.04
   },
   {
     "tiempo_s": 743.0,
@@ -8925,7 +8925,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 352.0,
-    "c_n0_db_hz": 63.01
+    "c_n0_db_hz": 62.01
   },
   {
     "tiempo_s": 744.0,
@@ -8937,7 +8937,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 352.2,
-    "c_n0_db_hz": 62.98
+    "c_n0_db_hz": 61.98
   },
   {
     "tiempo_s": 745.0,
@@ -8949,7 +8949,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 352.5,
-    "c_n0_db_hz": 62.95
+    "c_n0_db_hz": 61.95
   },
   {
     "tiempo_s": 746.0,
@@ -8961,7 +8961,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 352.8,
-    "c_n0_db_hz": 62.92
+    "c_n0_db_hz": 61.92
   },
   {
     "tiempo_s": 747.0,
@@ -8973,7 +8973,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 353.1,
-    "c_n0_db_hz": 62.89
+    "c_n0_db_hz": 61.89
   },
   {
     "tiempo_s": 748.0,
@@ -8985,7 +8985,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 353.4,
-    "c_n0_db_hz": 62.86
+    "c_n0_db_hz": 61.86
   },
   {
     "tiempo_s": 749.0,
@@ -8997,7 +8997,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 353.6,
-    "c_n0_db_hz": 62.83
+    "c_n0_db_hz": 61.83
   },
   {
     "tiempo_s": 750.0,
@@ -9009,7 +9009,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 353.9,
-    "c_n0_db_hz": 62.81
+    "c_n0_db_hz": 61.81
   },
   {
     "tiempo_s": 751.0,
@@ -9021,7 +9021,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 354.2,
-    "c_n0_db_hz": 62.78
+    "c_n0_db_hz": 61.78
   },
   {
     "tiempo_s": 752.0,
@@ -9033,7 +9033,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 354.5,
-    "c_n0_db_hz": 62.75
+    "c_n0_db_hz": 61.75
   },
   {
     "tiempo_s": 753.0,
@@ -9045,7 +9045,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 354.8,
-    "c_n0_db_hz": 62.72
+    "c_n0_db_hz": 61.72
   },
   {
     "tiempo_s": 754.0,
@@ -9057,7 +9057,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 355.0,
-    "c_n0_db_hz": 62.69
+    "c_n0_db_hz": 61.69
   },
   {
     "tiempo_s": 755.0,
@@ -9069,7 +9069,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 355.3,
-    "c_n0_db_hz": 62.66
+    "c_n0_db_hz": 61.66
   },
   {
     "tiempo_s": 756.0,
@@ -9081,7 +9081,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 355.6,
-    "c_n0_db_hz": 62.63
+    "c_n0_db_hz": 61.63
   },
   {
     "tiempo_s": 757.0,
@@ -9093,7 +9093,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 355.9,
-    "c_n0_db_hz": 62.61
+    "c_n0_db_hz": 61.61
   },
   {
     "tiempo_s": 758.0,
@@ -9105,7 +9105,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 356.2,
-    "c_n0_db_hz": 62.58
+    "c_n0_db_hz": 61.58
   },
   {
     "tiempo_s": 759.0,
@@ -9117,7 +9117,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 356.5,
-    "c_n0_db_hz": 62.55
+    "c_n0_db_hz": 61.55
   },
   {
     "tiempo_s": 760.0,
@@ -9129,7 +9129,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 356.8,
-    "c_n0_db_hz": 62.52
+    "c_n0_db_hz": 61.52
   },
   {
     "tiempo_s": 761.0,
@@ -9141,7 +9141,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 357.0,
-    "c_n0_db_hz": 62.49
+    "c_n0_db_hz": 61.49
   },
   {
     "tiempo_s": 762.0,
@@ -9153,7 +9153,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 357.3,
-    "c_n0_db_hz": 62.47
+    "c_n0_db_hz": 61.47
   },
   {
     "tiempo_s": 763.0,
@@ -9165,7 +9165,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 357.6,
-    "c_n0_db_hz": 62.44
+    "c_n0_db_hz": 61.44
   },
   {
     "tiempo_s": 764.0,
@@ -9177,7 +9177,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 357.9,
-    "c_n0_db_hz": 62.41
+    "c_n0_db_hz": 61.41
   },
   {
     "tiempo_s": 765.0,
@@ -9189,7 +9189,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 358.2,
-    "c_n0_db_hz": 62.38
+    "c_n0_db_hz": 61.38
   },
   {
     "tiempo_s": 766.0,
@@ -9201,7 +9201,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 358.5,
-    "c_n0_db_hz": 62.35
+    "c_n0_db_hz": 61.35
   },
   {
     "tiempo_s": 767.0,
@@ -9213,7 +9213,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 358.8,
-    "c_n0_db_hz": 62.33
+    "c_n0_db_hz": 61.33
   },
   {
     "tiempo_s": 768.0,
@@ -9225,7 +9225,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 359.1,
-    "c_n0_db_hz": 62.3
+    "c_n0_db_hz": 61.3
   },
   {
     "tiempo_s": 769.0,
@@ -9237,7 +9237,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 359.4,
-    "c_n0_db_hz": 62.27
+    "c_n0_db_hz": 61.27
   },
   {
     "tiempo_s": 770.0,
@@ -9249,7 +9249,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 359.6,
-    "c_n0_db_hz": 62.24
+    "c_n0_db_hz": 61.24
   },
   {
     "tiempo_s": 771.0,
@@ -9261,7 +9261,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 359.9,
-    "c_n0_db_hz": 62.22
+    "c_n0_db_hz": 61.22
   },
   {
     "tiempo_s": 772.0,
@@ -9273,7 +9273,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 360.2,
-    "c_n0_db_hz": 62.19
+    "c_n0_db_hz": 61.19
   },
   {
     "tiempo_s": 773.0,
@@ -9285,7 +9285,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 360.5,
-    "c_n0_db_hz": 62.16
+    "c_n0_db_hz": 61.16
   },
   {
     "tiempo_s": 774.0,
@@ -9297,7 +9297,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 360.8,
-    "c_n0_db_hz": 62.13
+    "c_n0_db_hz": 61.13
   },
   {
     "tiempo_s": 775.0,
@@ -9309,7 +9309,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 361.1,
-    "c_n0_db_hz": 62.11
+    "c_n0_db_hz": 61.11
   },
   {
     "tiempo_s": 776.0,
@@ -9321,7 +9321,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 361.4,
-    "c_n0_db_hz": 62.08
+    "c_n0_db_hz": 61.08
   },
   {
     "tiempo_s": 777.0,
@@ -9333,7 +9333,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 361.7,
-    "c_n0_db_hz": 62.05
+    "c_n0_db_hz": 61.05
   },
   {
     "tiempo_s": 778.0,
@@ -9345,7 +9345,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 362.0,
-    "c_n0_db_hz": 62.02
+    "c_n0_db_hz": 61.02
   },
   {
     "tiempo_s": 779.0,
@@ -9357,7 +9357,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 362.3,
-    "c_n0_db_hz": 62.0
+    "c_n0_db_hz": 61.0
   },
   {
     "tiempo_s": 780.0,
@@ -9369,7 +9369,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 362.6,
-    "c_n0_db_hz": 61.97
+    "c_n0_db_hz": 60.97
   },
   {
     "tiempo_s": 781.0,
@@ -9381,7 +9381,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 362.9,
-    "c_n0_db_hz": 61.94
+    "c_n0_db_hz": 60.94
   },
   {
     "tiempo_s": 782.0,
@@ -9393,7 +9393,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 363.2,
-    "c_n0_db_hz": 61.92
+    "c_n0_db_hz": 60.92
   },
   {
     "tiempo_s": 783.0,
@@ -9405,7 +9405,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 363.5,
-    "c_n0_db_hz": 61.89
+    "c_n0_db_hz": 60.89
   },
   {
     "tiempo_s": 784.0,
@@ -9417,7 +9417,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 363.8,
-    "c_n0_db_hz": 61.86
+    "c_n0_db_hz": 60.86
   },
   {
     "tiempo_s": 785.0,
@@ -9429,7 +9429,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 364.1,
-    "c_n0_db_hz": 61.84
+    "c_n0_db_hz": 60.84
   },
   {
     "tiempo_s": 786.0,
@@ -9441,7 +9441,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 364.4,
-    "c_n0_db_hz": 61.81
+    "c_n0_db_hz": 60.81
   },
   {
     "tiempo_s": 787.0,
@@ -9453,7 +9453,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 364.7,
-    "c_n0_db_hz": 61.78
+    "c_n0_db_hz": 60.78
   },
   {
     "tiempo_s": 788.0,
@@ -9465,7 +9465,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 365.0,
-    "c_n0_db_hz": 61.76
+    "c_n0_db_hz": 60.76
   },
   {
     "tiempo_s": 789.0,
@@ -9477,7 +9477,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 365.3,
-    "c_n0_db_hz": 61.73
+    "c_n0_db_hz": 60.73
   },
   {
     "tiempo_s": 790.0,
@@ -9489,7 +9489,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 365.6,
-    "c_n0_db_hz": 61.7
+    "c_n0_db_hz": 60.7
   },
   {
     "tiempo_s": 791.0,
@@ -9501,7 +9501,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 365.9,
-    "c_n0_db_hz": 61.68
+    "c_n0_db_hz": 60.68
   },
   {
     "tiempo_s": 792.0,
@@ -9513,7 +9513,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 366.2,
-    "c_n0_db_hz": 61.65
+    "c_n0_db_hz": 60.65
   },
   {
     "tiempo_s": 793.0,
@@ -9525,7 +9525,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 366.5,
-    "c_n0_db_hz": 61.62
+    "c_n0_db_hz": 60.62
   },
   {
     "tiempo_s": 794.0,
@@ -9537,7 +9537,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 366.9,
-    "c_n0_db_hz": 61.6
+    "c_n0_db_hz": 60.6
   },
   {
     "tiempo_s": 795.0,
@@ -9549,7 +9549,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 367.2,
-    "c_n0_db_hz": 61.57
+    "c_n0_db_hz": 60.57
   },
   {
     "tiempo_s": 796.0,
@@ -9561,7 +9561,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 367.5,
-    "c_n0_db_hz": 61.55
+    "c_n0_db_hz": 60.55
   },
   {
     "tiempo_s": 797.0,
@@ -9573,7 +9573,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 367.8,
-    "c_n0_db_hz": 61.52
+    "c_n0_db_hz": 60.52
   },
   {
     "tiempo_s": 798.0,
@@ -9585,7 +9585,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 368.1,
-    "c_n0_db_hz": 61.49
+    "c_n0_db_hz": 60.49
   },
   {
     "tiempo_s": 799.0,
@@ -9597,7 +9597,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 368.4,
-    "c_n0_db_hz": 61.47
+    "c_n0_db_hz": 60.47
   },
   {
     "tiempo_s": 800.0,
@@ -9609,7 +9609,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 368.7,
-    "c_n0_db_hz": 61.44
+    "c_n0_db_hz": 60.44
   },
   {
     "tiempo_s": 801.0,
@@ -9621,7 +9621,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 369.0,
-    "c_n0_db_hz": 61.42
+    "c_n0_db_hz": 60.42
   },
   {
     "tiempo_s": 802.0,
@@ -9633,7 +9633,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 369.3,
-    "c_n0_db_hz": 61.39
+    "c_n0_db_hz": 60.39
   },
   {
     "tiempo_s": 803.0,
@@ -9645,7 +9645,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 369.6,
-    "c_n0_db_hz": 61.36
+    "c_n0_db_hz": 60.36
   },
   {
     "tiempo_s": 804.0,
@@ -9657,7 +9657,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 370.0,
-    "c_n0_db_hz": 61.34
+    "c_n0_db_hz": 60.34
   },
   {
     "tiempo_s": 805.0,
@@ -9669,7 +9669,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 370.3,
-    "c_n0_db_hz": 61.31
+    "c_n0_db_hz": 60.31
   },
   {
     "tiempo_s": 806.0,
@@ -9681,7 +9681,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 370.6,
-    "c_n0_db_hz": 61.29
+    "c_n0_db_hz": 60.29
   },
   {
     "tiempo_s": 807.0,
@@ -9693,7 +9693,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 370.9,
-    "c_n0_db_hz": 61.26
+    "c_n0_db_hz": 60.26
   },
   {
     "tiempo_s": 808.0,
@@ -9705,7 +9705,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 371.2,
-    "c_n0_db_hz": 61.24
+    "c_n0_db_hz": 60.24
   },
   {
     "tiempo_s": 809.0,
@@ -9717,7 +9717,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 371.5,
-    "c_n0_db_hz": 61.21
+    "c_n0_db_hz": 60.21
   },
   {
     "tiempo_s": 810.0,
@@ -9729,7 +9729,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 371.9,
-    "c_n0_db_hz": 61.18
+    "c_n0_db_hz": 60.18
   },
   {
     "tiempo_s": 811.0,
@@ -9741,7 +9741,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 372.2,
-    "c_n0_db_hz": 61.16
+    "c_n0_db_hz": 60.16
   },
   {
     "tiempo_s": 812.0,
@@ -9753,7 +9753,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 372.5,
-    "c_n0_db_hz": 61.13
+    "c_n0_db_hz": 60.13
   },
   {
     "tiempo_s": 813.0,
@@ -9765,7 +9765,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 372.8,
-    "c_n0_db_hz": 61.11
+    "c_n0_db_hz": 60.11
   },
   {
     "tiempo_s": 814.0,
@@ -9777,7 +9777,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 373.1,
-    "c_n0_db_hz": 61.08
+    "c_n0_db_hz": 60.08
   },
   {
     "tiempo_s": 815.0,
@@ -9789,7 +9789,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 373.4,
-    "c_n0_db_hz": 61.06
+    "c_n0_db_hz": 60.06
   },
   {
     "tiempo_s": 816.0,
@@ -9801,7 +9801,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 373.8,
-    "c_n0_db_hz": 61.03
+    "c_n0_db_hz": 60.03
   },
   {
     "tiempo_s": 817.0,
@@ -9813,7 +9813,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 374.1,
-    "c_n0_db_hz": 61.01
+    "c_n0_db_hz": 60.01
   },
   {
     "tiempo_s": 818.0,
@@ -9825,7 +9825,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 374.4,
-    "c_n0_db_hz": 60.98
+    "c_n0_db_hz": 59.98
   },
   {
     "tiempo_s": 819.0,
@@ -9837,7 +9837,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 374.7,
-    "c_n0_db_hz": 60.96
+    "c_n0_db_hz": 59.96
   },
   {
     "tiempo_s": 820.0,
@@ -9849,7 +9849,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 375.1,
-    "c_n0_db_hz": 60.93
+    "c_n0_db_hz": 59.93
   },
   {
     "tiempo_s": 821.0,
@@ -9861,7 +9861,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 375.4,
-    "c_n0_db_hz": 60.91
+    "c_n0_db_hz": 59.91
   },
   {
     "tiempo_s": 822.0,
@@ -9873,7 +9873,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 375.7,
-    "c_n0_db_hz": 60.88
+    "c_n0_db_hz": 59.88
   },
   {
     "tiempo_s": 823.0,
@@ -9885,7 +9885,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 376.0,
-    "c_n0_db_hz": 60.86
+    "c_n0_db_hz": 59.86
   },
   {
     "tiempo_s": 824.0,
@@ -9897,7 +9897,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 376.4,
-    "c_n0_db_hz": 60.83
+    "c_n0_db_hz": 59.83
   },
   {
     "tiempo_s": 825.0,
@@ -9909,7 +9909,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 376.7,
-    "c_n0_db_hz": 60.81
+    "c_n0_db_hz": 59.81
   },
   {
     "tiempo_s": 826.0,
@@ -9921,7 +9921,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 377.0,
-    "c_n0_db_hz": 60.78
+    "c_n0_db_hz": 59.78
   },
   {
     "tiempo_s": 827.0,
@@ -9933,7 +9933,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 377.3,
-    "c_n0_db_hz": 60.76
+    "c_n0_db_hz": 59.76
   },
   {
     "tiempo_s": 828.0,
@@ -9945,7 +9945,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 377.7,
-    "c_n0_db_hz": 60.73
+    "c_n0_db_hz": 59.73
   },
   {
     "tiempo_s": 829.0,
@@ -9957,7 +9957,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 378.0,
-    "c_n0_db_hz": 60.71
+    "c_n0_db_hz": 59.71
   },
   {
     "tiempo_s": 830.0,
@@ -9969,7 +9969,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 378.3,
-    "c_n0_db_hz": 60.68
+    "c_n0_db_hz": 59.68
   },
   {
     "tiempo_s": 831.0,
@@ -9981,7 +9981,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 378.7,
-    "c_n0_db_hz": 60.66
+    "c_n0_db_hz": 59.66
   },
   {
     "tiempo_s": 832.0,
@@ -9993,7 +9993,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 379.0,
-    "c_n0_db_hz": 60.64
+    "c_n0_db_hz": 59.64
   },
   {
     "tiempo_s": 833.0,
@@ -10005,7 +10005,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 379.3,
-    "c_n0_db_hz": 60.61
+    "c_n0_db_hz": 59.61
   },
   {
     "tiempo_s": 834.0,
@@ -10017,7 +10017,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 379.7,
-    "c_n0_db_hz": 60.59
+    "c_n0_db_hz": 59.59
   },
   {
     "tiempo_s": 835.0,
@@ -10029,7 +10029,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 380.0,
-    "c_n0_db_hz": 60.56
+    "c_n0_db_hz": 59.56
   },
   {
     "tiempo_s": 836.0,
@@ -10041,7 +10041,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 380.3,
-    "c_n0_db_hz": 60.54
+    "c_n0_db_hz": 59.54
   },
   {
     "tiempo_s": 837.0,
@@ -10053,7 +10053,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 380.7,
-    "c_n0_db_hz": 60.51
+    "c_n0_db_hz": 59.51
   },
   {
     "tiempo_s": 838.0,
@@ -10065,7 +10065,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 381.0,
-    "c_n0_db_hz": 60.49
+    "c_n0_db_hz": 59.49
   },
   {
     "tiempo_s": 839.0,
@@ -10077,7 +10077,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 381.3,
-    "c_n0_db_hz": 60.47
+    "c_n0_db_hz": 59.47
   },
   {
     "tiempo_s": 840.0,
@@ -10089,7 +10089,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 381.7,
-    "c_n0_db_hz": 60.44
+    "c_n0_db_hz": 59.44
   },
   {
     "tiempo_s": 841.0,
@@ -10101,7 +10101,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 382.0,
-    "c_n0_db_hz": 60.42
+    "c_n0_db_hz": 59.42
   },
   {
     "tiempo_s": 842.0,
@@ -10113,7 +10113,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 382.3,
-    "c_n0_db_hz": 60.39
+    "c_n0_db_hz": 59.39
   },
   {
     "tiempo_s": 843.0,
@@ -10125,7 +10125,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 382.7,
-    "c_n0_db_hz": 60.37
+    "c_n0_db_hz": 59.37
   },
   {
     "tiempo_s": 844.0,
@@ -10137,7 +10137,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 383.0,
-    "c_n0_db_hz": 60.34
+    "c_n0_db_hz": 59.34
   },
   {
     "tiempo_s": 845.0,
@@ -10149,7 +10149,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 383.4,
-    "c_n0_db_hz": 60.32
+    "c_n0_db_hz": 59.32
   },
   {
     "tiempo_s": 846.0,
@@ -10161,7 +10161,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 383.7,
-    "c_n0_db_hz": 60.3
+    "c_n0_db_hz": 59.3
   },
   {
     "tiempo_s": 847.0,
@@ -10173,7 +10173,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 384.0,
-    "c_n0_db_hz": 60.27
+    "c_n0_db_hz": 59.27
   },
   {
     "tiempo_s": 848.0,
@@ -10185,7 +10185,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 384.4,
-    "c_n0_db_hz": 60.25
+    "c_n0_db_hz": 59.25
   },
   {
     "tiempo_s": 849.0,
@@ -10197,7 +10197,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 384.7,
-    "c_n0_db_hz": 60.23
+    "c_n0_db_hz": 59.23
   },
   {
     "tiempo_s": 850.0,
@@ -10209,7 +10209,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 385.1,
-    "c_n0_db_hz": 60.2
+    "c_n0_db_hz": 59.2
   },
   {
     "tiempo_s": 851.0,
@@ -10221,7 +10221,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 385.4,
-    "c_n0_db_hz": 60.18
+    "c_n0_db_hz": 59.18
   },
   {
     "tiempo_s": 852.0,
@@ -10233,7 +10233,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 385.8,
-    "c_n0_db_hz": 60.15
+    "c_n0_db_hz": 59.15
   },
   {
     "tiempo_s": 853.0,
@@ -10245,7 +10245,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 386.1,
-    "c_n0_db_hz": 60.13
+    "c_n0_db_hz": 59.13
   },
   {
     "tiempo_s": 854.0,
@@ -10257,7 +10257,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 386.4,
-    "c_n0_db_hz": 60.11
+    "c_n0_db_hz": 59.11
   },
   {
     "tiempo_s": 855.0,
@@ -10269,7 +10269,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 386.8,
-    "c_n0_db_hz": 60.08
+    "c_n0_db_hz": 59.08
   },
   {
     "tiempo_s": 856.0,
@@ -10281,7 +10281,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 387.1,
-    "c_n0_db_hz": 60.06
+    "c_n0_db_hz": 59.06
   },
   {
     "tiempo_s": 857.0,
@@ -10293,7 +10293,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 387.5,
-    "c_n0_db_hz": 60.04
+    "c_n0_db_hz": 59.04
   },
   {
     "tiempo_s": 858.0,
@@ -10305,7 +10305,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 387.8,
-    "c_n0_db_hz": 60.01
+    "c_n0_db_hz": 59.01
   },
   {
     "tiempo_s": 859.0,
@@ -10317,7 +10317,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 388.2,
-    "c_n0_db_hz": 59.99
+    "c_n0_db_hz": 58.99
   },
   {
     "tiempo_s": 860.0,
@@ -10329,7 +10329,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 388.5,
-    "c_n0_db_hz": 59.97
+    "c_n0_db_hz": 58.97
   },
   {
     "tiempo_s": 861.0,
@@ -10341,7 +10341,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 388.9,
-    "c_n0_db_hz": 59.94
+    "c_n0_db_hz": 58.94
   },
   {
     "tiempo_s": 862.0,
@@ -10353,7 +10353,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 389.2,
-    "c_n0_db_hz": 59.92
+    "c_n0_db_hz": 58.92
   },
   {
     "tiempo_s": 863.0,
@@ -10365,7 +10365,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 389.6,
-    "c_n0_db_hz": 59.9
+    "c_n0_db_hz": 58.9
   },
   {
     "tiempo_s": 864.0,
@@ -10377,7 +10377,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 389.9,
-    "c_n0_db_hz": 59.87
+    "c_n0_db_hz": 58.87
   },
   {
     "tiempo_s": 865.0,
@@ -10389,7 +10389,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 390.3,
-    "c_n0_db_hz": 59.85
+    "c_n0_db_hz": 58.85
   },
   {
     "tiempo_s": 866.0,
@@ -10401,7 +10401,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 390.6,
-    "c_n0_db_hz": 59.83
+    "c_n0_db_hz": 58.83
   },
   {
     "tiempo_s": 867.0,
@@ -10413,7 +10413,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 391.0,
-    "c_n0_db_hz": 59.8
+    "c_n0_db_hz": 58.8
   },
   {
     "tiempo_s": 868.0,
@@ -10425,7 +10425,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 391.4,
-    "c_n0_db_hz": 59.78
+    "c_n0_db_hz": 58.78
   },
   {
     "tiempo_s": 869.0,
@@ -10437,7 +10437,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 391.7,
-    "c_n0_db_hz": 59.76
+    "c_n0_db_hz": 58.76
   },
   {
     "tiempo_s": 870.0,
@@ -10449,7 +10449,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 392.1,
-    "c_n0_db_hz": 59.74
+    "c_n0_db_hz": 58.74
   },
   {
     "tiempo_s": 871.0,
@@ -10461,7 +10461,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 392.4,
-    "c_n0_db_hz": 59.71
+    "c_n0_db_hz": 58.71
   },
   {
     "tiempo_s": 872.0,
@@ -10473,7 +10473,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 392.8,
-    "c_n0_db_hz": 59.69
+    "c_n0_db_hz": 58.69
   },
   {
     "tiempo_s": 873.0,
@@ -10485,7 +10485,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 393.1,
-    "c_n0_db_hz": 59.67
+    "c_n0_db_hz": 58.67
   },
   {
     "tiempo_s": 874.0,
@@ -10497,7 +10497,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 393.5,
-    "c_n0_db_hz": 59.64
+    "c_n0_db_hz": 58.64
   },
   {
     "tiempo_s": 875.0,
@@ -10509,7 +10509,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 393.9,
-    "c_n0_db_hz": 59.62
+    "c_n0_db_hz": 58.62
   },
   {
     "tiempo_s": 876.0,
@@ -10521,7 +10521,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 394.2,
-    "c_n0_db_hz": 59.6
+    "c_n0_db_hz": 58.6
   },
   {
     "tiempo_s": 877.0,
@@ -10533,7 +10533,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 394.6,
-    "c_n0_db_hz": 59.58
+    "c_n0_db_hz": 58.58
   },
   {
     "tiempo_s": 878.0,
@@ -10545,7 +10545,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 394.9,
-    "c_n0_db_hz": 59.55
+    "c_n0_db_hz": 58.55
   },
   {
     "tiempo_s": 879.0,
@@ -10557,7 +10557,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 395.3,
-    "c_n0_db_hz": 59.53
+    "c_n0_db_hz": 58.53
   },
   {
     "tiempo_s": 880.0,
@@ -10569,7 +10569,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 395.7,
-    "c_n0_db_hz": 59.51
+    "c_n0_db_hz": 58.51
   },
   {
     "tiempo_s": 881.0,
@@ -10581,7 +10581,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 396.0,
-    "c_n0_db_hz": 59.48
+    "c_n0_db_hz": 58.48
   },
   {
     "tiempo_s": 882.0,
@@ -10593,7 +10593,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 396.4,
-    "c_n0_db_hz": 59.46
+    "c_n0_db_hz": 58.46
   },
   {
     "tiempo_s": 883.0,
@@ -10605,7 +10605,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 396.8,
-    "c_n0_db_hz": 59.44
+    "c_n0_db_hz": 58.44
   },
   {
     "tiempo_s": 884.0,
@@ -10617,7 +10617,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 397.1,
-    "c_n0_db_hz": 59.42
+    "c_n0_db_hz": 58.42
   },
   {
     "tiempo_s": 885.0,
@@ -10629,7 +10629,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 397.5,
-    "c_n0_db_hz": 59.39
+    "c_n0_db_hz": 58.39
   },
   {
     "tiempo_s": 886.0,
@@ -10641,7 +10641,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 397.9,
-    "c_n0_db_hz": 59.37
+    "c_n0_db_hz": 58.37
   },
   {
     "tiempo_s": 887.0,
@@ -10653,7 +10653,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 398.2,
-    "c_n0_db_hz": 59.35
+    "c_n0_db_hz": 58.35
   },
   {
     "tiempo_s": 888.0,
@@ -10665,7 +10665,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 398.6,
-    "c_n0_db_hz": 59.33
+    "c_n0_db_hz": 58.33
   },
   {
     "tiempo_s": 889.0,
@@ -10677,7 +10677,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 399.0,
-    "c_n0_db_hz": 59.31
+    "c_n0_db_hz": 58.31
   },
   {
     "tiempo_s": 890.0,
@@ -10689,7 +10689,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 399.3,
-    "c_n0_db_hz": 59.28
+    "c_n0_db_hz": 58.28
   },
   {
     "tiempo_s": 891.0,
@@ -10701,7 +10701,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 399.7,
-    "c_n0_db_hz": 59.26
+    "c_n0_db_hz": 58.26
   },
   {
     "tiempo_s": 892.0,
@@ -10713,7 +10713,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 400.1,
-    "c_n0_db_hz": 59.24
+    "c_n0_db_hz": 58.24
   },
   {
     "tiempo_s": 893.0,
@@ -10725,7 +10725,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 400.5,
-    "c_n0_db_hz": 59.22
+    "c_n0_db_hz": 58.22
   },
   {
     "tiempo_s": 894.0,
@@ -10737,7 +10737,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 400.8,
-    "c_n0_db_hz": 59.19
+    "c_n0_db_hz": 58.19
   },
   {
     "tiempo_s": 895.0,
@@ -10749,7 +10749,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 401.2,
-    "c_n0_db_hz": 59.17
+    "c_n0_db_hz": 58.17
   },
   {
     "tiempo_s": 896.0,
@@ -10761,7 +10761,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 401.6,
-    "c_n0_db_hz": 59.15
+    "c_n0_db_hz": 58.15
   },
   {
     "tiempo_s": 897.0,
@@ -10773,7 +10773,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 402.0,
-    "c_n0_db_hz": 59.13
+    "c_n0_db_hz": 58.13
   },
   {
     "tiempo_s": 898.0,
@@ -10785,7 +10785,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 402.3,
-    "c_n0_db_hz": 59.11
+    "c_n0_db_hz": 58.11
   },
   {
     "tiempo_s": 899.0,
@@ -10797,7 +10797,7 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 402.7,
-    "c_n0_db_hz": 59.08
+    "c_n0_db_hz": 58.08
   },
   {
     "tiempo_s": 900.0,
@@ -10809,6 +10809,6 @@
     "error_apuntamiento_deg": 0.0,
     "pointing_loss_db": 0.0,
     "t_sys_k": 403.1,
-    "c_n0_db_hz": 59.06
+    "c_n0_db_hz": 58.06
   }
 ]

@@ -2,9 +2,14 @@
  * Pagina «Enlace RF»: monitoreo en tiempo real del enlace RF simulado.
  *
  * Lanza la cadena GNU Radio del proyecto (subproceso), verifica la integridad
- * de los 18.776 bits y muestra BER, espectro y constelacion reales del tap IQ,
- * ademas de la telemetria AMSAT re-decodificada. Nada se inventa: los valores
- * vienen de GNU Radio o del decodificador; RSSI/FER salen como N/A.
+ * de los 18.776 bits y muestra BER, espectro y constelacion del tap IQ de la
+ * simulacion, ademas de la telemetria AMSAT re-decodificada. Nada se inventa:
+ * los valores vienen de GNU Radio o del decodificador; RSSI/FER salen como N/A.
+ *
+ * Dos clases de dato conviven aqui y se rotulan por separado: lo SIMULADO
+ * (cadena BPSK de banda base, modelo comparativo) y lo HISTORICO REAL (balizas
+ * de SatNOGS). El resultado de integridad solo se muestra si consta la corrida
+ * que lo produjo, con su SNR y su fecha.
  */
 import { useEffect, useReducer, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
@@ -42,6 +47,9 @@ type Integridad = {
   sha256_recuperado?: string | null
   frames_esperados?: number
   mensaje?: string | null
+  procedencia?: 'sin_corrida' | 'archivo_sin_registro' | 'sesion_actual' | 'corrida_anterior'
+  corrida_utc?: string | null
+  snr_db?: number | null
 } | null
 
 /* ── Estado del hook ──────────────────────────────────────────────────────── */
@@ -248,6 +256,8 @@ export function EnlaceRF() {
   const { status, metrics, integrity, telemetry, spectrum, constellation, config, history, conectado } = state
 
   const enMarcha = status?.sim_status === 'RUNNING'
+  // undefined mientras carga la configuracion: no se habilita ni se niega nada.
+  const simulable = config ? config.simulacion_disponible !== false : false
   const tonoLink = status?.link_status === 'ACTIVE' ? 'verde' : 'rojo'
   const tonoSim = enMarcha ? 'ambar' : status?.sim_status === 'STOPPED' ? 'verde' : 'gris'
 
@@ -259,7 +269,10 @@ export function EnlaceRF() {
           <span className="enlace-sub">RF Communication Link Monitoring</span>
           <div className="enlace-sub2">
             GNU Radio → FastAPI → WebSocket · {fmt(config?.frecuencia_hz, 0)} Hz ·{' '}
-            {((config?.tasa_bits_bps ?? 0) / 1000).toFixed(1)} kbps BPSK · 18.776 bits
+            {((config?.tasa_bits_bps ?? 0) / 1000).toFixed(1)} kbps BPSK (modelo) · 18.776 bits
+          </div>
+          <div className="enlace-sub2">
+            Simulación de banda base. {config?.modulacion_nota ?? ''}
           </div>
         </div>
         <div className="enlace-chips">
@@ -268,7 +281,8 @@ export function EnlaceRF() {
           <Chip label={`WebSocket: ${conectado ? 'conectado' : 'desconectado'}`} tono={conectado ? 'verde' : 'rojo'} />
         </div>
         <div className="enlace-controles">
-          <button className="enlace-btn enlace-btn-primario" disabled={enMarcha || ocupado}
+          <button className="enlace-btn enlace-btn-primario" disabled={enMarcha || ocupado || !simulable}
+            title={config?.simulacion_no_disponible_motivo ?? undefined}
             onClick={() => simular('start', config?.snr_default_db)}>
             ▶ Iniciar simulación
           </button>
@@ -285,9 +299,17 @@ export function EnlaceRF() {
       </header>
 
       {error && <div className="enlace-banner">{error}</div>}
+      {config?.simulacion_disponible === false && (
+        <div className="enlace-banner">
+          Simulación no disponible en esta instancia: {config.simulacion_no_disponible_motivo} Los
+          paneles de simulación quedan vacíos; la telemetría decodificada de abajo es histórica y sí
+          está disponible.
+        </div>
+      )}
 
       <section className="enlace-grid enlace-grid-metricas">
-        <Metrica etiqueta="SNR configurada" valor={fmt(metrics?.snr_db, 1)} unidad="dB" />
+        <Metrica etiqueta="Eb/N0 configurada" valor={fmt(metrics?.snr_db, 1)} unidad="dB"
+          nota="Valor impuesto a la simulación, no estimado de la señal" />
         <Metrica etiqueta="BER medido (empírico)" valor={metrics?.ber} tono="ok"
           nota={berNota(metrics?.ber as number | null)} />
         <Metrica etiqueta="RSSI" valor={null} unidad="dBm" nota={metrics?.nota_rssi} />
@@ -303,13 +325,17 @@ export function EnlaceRF() {
           <h3 className="enlace-panel-titulo">
             Integridad de bits{' '}
             <span className={`enlace-veredicto ${integrity?.valido ? 'enlace-ok' : 'enlace-mal'}`}>
-              {integrity?.valido ? 'IDENTICOS' : integrity?.valido === false ? 'DISCREPANCIA' : 'SIN DATOS'}
+              {integrity?.valido
+                ? 'IDENTICOS'
+                : integrity?.valido === false
+                  ? `${fmt(integrity?.diferencia)} BIT(S) ERRÓNEO(S)`
+                  : 'SIN CORRIDA'}
             </span>
           </h3>
           <div className="enlace-grid enlace-grid-cuatro">
             <Paso etiqueta="bits de entrada" valor={integrity?.bits_entrada} tono="enlace-mono" />
             <Paso etiqueta="bits recuperados" valor={integrity?.bits_recuperados} tono="enlace-mono" />
-            <Paso etiqueta="diferencia por bit"
+            <Paso etiqueta="bits erróneos"
               valor={fmt(integrity?.diferencia)} tono={integrity?.diferencia === 0 ? 'enlace-ok' : 'enlace-mal'} />
             <Paso etiqueta="tramas esperadas" valor={integrity?.frames_esperados} tono="enlace-mono" />
           </div>
@@ -317,6 +343,12 @@ export function EnlaceRF() {
             <div>SHA-256 TX:  {integrity?.sha256_entrada}</div>
             <div>SHA-256 RX:  {integrity?.sha256_recuperado}</div>
           </div>
+          {integrity?.corrida_utc && (
+            <div className="enlace-fuente">
+              Resultado simulado · corrida del {integrity.corrida_utc} · SNR {fmt(integrity.snr_db, 1)} dB
+              {integrity.procedencia === 'corrida_anterior' ? ' · anterior a esta sesión' : ''}
+            </div>
+          )}
           {integrity?.mensaje && <div className="enlace-msg">{integrity.mensaje}</div>}
           {status?.mensaje ? <div className="enlace-msg">{status.mensaje}</div> : null}
         </div>
@@ -401,14 +433,15 @@ export function EnlaceRF() {
       <section className="enlace-grid">
         <div className="enlace-panel">
           <h3 className="enlace-panel-titulo">
-            Telemetría decodificada{' '}
+            Telemetría decodificada (histórica real){' '}
             <span className="enlace-ref">{fmt(telemetry?.total_frames)} balizas AMSAT</span>
           </h3>
           {telemetry?.nota && <div className="enlace-fuente">{telemetry.nota}</div>}
           <div className="enlace-grid enlace-grid-metricas">
             {(telemetry?.parametros || []).slice(0, 18).map((p: any) => (
               <Metrica key={p.key} etiqueta={p.label} valor={p.value} unidad={p.unit}
-                tono={p.status === 'ALERTA' ? 'rojo' : 'ok'} />
+                nota={p.nota ?? undefined}
+                tono={p.status === 'SIN_MEDIDA' ? 'ambar' : 'ok'} />
             ))}
           </div>
           <h4 className="enlace-subtitulo">Últimas balizas recibidas</h4>
@@ -436,9 +469,10 @@ export function EnlaceRF() {
       </section>
 
       <footer className="enlace-pie">
-        Enlace RF simulado en GNU Radio 3.10 · Los valores son resultado real de la cadena y del
-        decodificador AMSAT. RSSI y FER se muestran como N/A porque el modelo es baseband-equivalente
-        sin tramas AX.25/FEC; nada se estima.
+        Enlace RF simulado en GNU Radio 3.10 (BPSK de banda base, modelo comparativo; la baliza
+        real es FSK 9600). BER, espectro y constelación son salidas de esa simulación; la telemetría
+        es histórica real, re-decodificada. RSSI y FER se muestran como N/A porque esta cadena no
+        tiene potencia RF ni tramas AX.25/FEC; la FER del modelo avanzado está en «Simulación RF».
       </footer>
     </div>
   )

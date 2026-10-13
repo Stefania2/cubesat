@@ -20,10 +20,12 @@ balizas válidas de STRaND-1.
 
 ---
 
+> **Nota de revisión (octubre de 2026).** Tras la auditoría recogida en [`AUDITORIA_GEMELO_RF.md`](AUDITORIA_GEMELO_RF.md), las cifras vigentes de simulación, presupuesto de enlace y pérdida de paquetes son las del [informe técnico](INFORME_TECNICO_FINAL.md), cuyas tablas se generan desde los datos. La modulación documentada de STRaND-1 es FSK a 9600 bit/s con NRZI; la BPSK del proyecto es un modelo comparativo de banda base.
+
 ## 1. Modulación digital: BPSK frente a FSK
 
-STRaND-1 emite en 437,568 MHz con FSK a 9600 bps según el registro de transmisores de
-SatNOGS. El proyecto simula ambos esquemas para cuantificar la diferencia sobre el mismo
+STRaND-1 emite en 437,568 MHz con FSK a 9600 bps, tramas AX.25 (HDLC) y NRZI, según AMSAT-UK
+y el registro de transmisores de SatNOGS DB. El proyecto simula ambos esquemas para cuantificar la diferencia sobre el mismo
 flujo de bits reales.
 
 ### 1.1 Resultados de BER en canal AWGN
@@ -37,8 +39,10 @@ flujo de bits reales.
 | 6 | 0 | 4,79 · 10⁻⁴ |
 | 8 | 0 | 0 |
 
-BPSK alcanza BER nula a partir de 2 dB de SNR por muestra, mientras que FSK necesita 8 dB:
-**una ventaja de 6 dB**. A 0 dB la diferencia es de tres órdenes de magnitud. El resultado es
+En estos dos modelos de banda base, BPSK deja de cometer errores (en 18 776 bits, una
+realización por punto) a partir de 2 dB de SNR por muestra y FSK a partir de 8 dB. La SNR por
+muestra equivale a Eb/N0 − 9,03 dB. La FSK del modelo —tonos a ±2400 Hz, detector de
+energía— no es la forma de onda del satélite, cuya desviación no está documentada. El resultado es
 el esperado teóricamente —BPSK es antipodal, FSK ortogonal, y la separación asintótica es de
 3 dB para detección coherente— y aquí se amplía porque el receptor FSK implementado es un
 detector de energía no coherente, que paga una penalización adicional.
@@ -54,11 +58,14 @@ detector de energía no coherente, que paga una penalización adicional.
 FSK ocupa menos de la mitad que BPSK sin conformado, y es la razón por la que un CubeSat
 puede preferirlo pese a su peor BER: la canalización UHF de radioaficionado es de 25 kHz.
 El conformado de pulso resuelve el dilema — BPSK con RRC baja de 66,1 kHz a 11,2 kHz en el
-modelo avanzado, igualando a FSK en ocupación espectral y conservando su ventaja de 6 dB.
+modelo avanzado, igualando a la FSK del modelo en ocupación espectral.
 
-**Conclusión de diseño:** para un CubeSat nuevo, BPSK con conformado RRC domina a FSK en
-ambos ejes. FSK sigue justificándose por simplicidad de implementación en el transceptor,
-que es probablemente el criterio que pesó en STRaND-1.
+**Lectura de diseño, con sus límites.** En AWGN y con sincronización ideal, BPSK coherente
+con RRC es más eficiente en potencia que FSK no coherente (unos 3,8 dB a BER 10⁻⁵ en teoría).
+Pero exige recuperar la portadora: con el desvanecimiento del modelo avanzado el lazo de
+Costas sufre saltos de ciclo, y sin codificación diferencial la BER se degrada mucho. FSK con
+NRZI —la elección de STRaND-1— es insensible a la fase y a la polaridad y admite receptores
+sencillos. No se dispone de documentación sobre el criterio de diseño real de la misión.
 
 ---
 
@@ -90,15 +97,13 @@ hay un filtro conformador; sin él es un tren de impulsos que tira 9 dB.
 
 ### 2.3 Codificación de canal
 
-| Condición | BER a −4 dB de SNR |
-|---|---:|
-| Sin FEC | 1,04 · 10⁻¹ |
-| Con codificación convolucional + Viterbi | 0 |
-
-La ganancia de codificación es de aproximadamente 4 dB en la región de BER 10⁻³. Por debajo
-de −8 dB aparece el umbral característico del decodificador Viterbi: cuando la tasa de error
-de entrada supera su capacidad de corrección, el decodificador empeora el resultado en lugar
-de mejorarlo.
+Comparado a igual Eb/N0 **por bit de información** y sobre el mismo canal, el código
+convolucional r = 1/2, K = 7 con Viterbi de decisión dura gana del orden de 1 dB a BER 10⁻³ y
+unos 3 dB en el umbral de FER 10 % de las tramas AX.25 (valores vigentes en la sección 5.3 del
+informe). La cifra de «≈4 dB» que figuraba aquí comparaba a igual SNR por muestra, lo que da
+al código el doble de energía por bit de información. Por debajo de su umbral el decodificador
+empeora el resultado en lugar de mejorarlo, y con el código el receptor pierde la
+sincronización antes, porque trabaja con 3 dB menos de energía por símbolo de canal.
 
 ---
 
@@ -317,16 +322,16 @@ datos coherentes hasta el final era el magnetómetro.
 | Integridad de la telemetría | 89,4 % (32 754 balizas de 36 641 frames) | Datos reales |
 | Balizas por pase | media 14,7 · mediana 6 · máx 411 | Datos reales |
 | Tiempo entre paquetes | mediana 2,0 s · p90 17,0 s | Datos reales |
-| Continuidad de secuencia | 27,4 % de transiciones consecutivas | Datos reales |
-| Pérdida de paquetes en el pase | 72,6 % de las transiciones con hueco | Datos reales |
 | Estaciones que recibieron balizas | 114 | Datos reales |
 | Observaciones con balizas | 775 de 3049 (25,4 %) | Datos reales |
-| Packet Error Rate | 64,2 % · 79,1 % en horizonte, 52,1 % en cenit | Datos reales |
-| BER (BPSK) | 0 para SNR ≥ 2 dB | Simulación |
-| BER (FSK) | 0 para SNR ≥ 8 dB | Simulación |
-| Margen de enlace descendente | 7,1 dB a 5° · 18,0 dB en cenit | Modelo de link budget |
-| Margen de enlace ascendente | 23,3 dB a 5° · 34,2 dB en cenit | Modelo de link budget |
-| C/N₀ en un paso completo | 60,9 – 72,6 dB-Hz | Modelo de estación terrena |
+| Pérdida de paquetes dentro de ráfagas | ver informe §3.7 (cota inferior, bajo hipótesis de contador) | Derivado de datos reales |
+| BER, PER y FER del modelo | ver informe §4 y §5 | Simulación |
+| Margen de enlace descendente | ver informe §7 (FSK documentada y BPSK comparativa) | Teórico / simulado |
+| Margen de enlace ascendente | escenario hipotético, informe §7.2 | Teórico |
+
+Las cifras de pérdida de paquetes que figuraban aquí (64,2 %, 72,6 %) restaban contadores de
+balizas consecutivas sin tener en cuenta que dos paquetes caben en el mismo segundo y pueden
+llegar en cualquier orden; el método corregido está en la sección 3.7 del informe.
 
 ### 7.1 Indicadores que no pudieron medirse
 

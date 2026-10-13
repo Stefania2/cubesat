@@ -193,6 +193,22 @@ export function FramesTable({
  *  El catálogo de arriba son ocho etiquetas elegidas de antemano; esto es lo que
  *  las balizas traen de verdad. Se marca cuáles no varían nunca: un campo
  *  constante no está midiendo nada, y ocultarlo lo haría parecer una medida. */
+const ETIQUETA_VALIDACION: Record<string, string> = {
+  calibrado: 'Calibrado',
+  canal_sin_medida: 'Canal sin medida',
+  pendiente_de_validacion: 'Pendiente de validar',
+  sin_calibrar: 'Sin calibrar',
+  dato_crudo: 'Dato crudo',
+  estructural: 'Estructural',
+  texto: 'Texto',
+}
+
+const TONO_VALIDACION: Record<string, string> = {
+  calibrado: 'normal',
+  canal_sin_medida: 'critical',
+  pendiente_de_validacion: 'warning',
+}
+
 function CamposDeLaBaliza() {
   const { data, error, loading, recargar } = useApi(() => api.telemetryCampos(), [])
 
@@ -213,7 +229,10 @@ function CamposDeLaBaliza() {
         El <strong className="font-semibold">rango típico</strong> son los percentiles 5 y 95: acota
         dónde está el grueso de las lecturas sin descartar ninguna. Un{' '}
         <span className="text-warn">⚠</span> junto al máximo avisa de que ese extremo queda lejos del
-        resto — pasa el cursor por encima para ver por qué en cada caso.
+        resto — pasa el cursor por encima para ver por qué en cada caso. La columna{' '}
+        <strong className="font-semibold">Validación</strong> dice cuánto puede sostenerse el valor
+        como medida física: «Canal sin medida» son canales cuya cuenta de ADC es 0, que la recta de
+        calibración convierte en su ordenada (9,75 V; 508–528 mA) sin que nada se esté midiendo.
       </p>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[860px] text-sm">
@@ -225,13 +244,24 @@ function CamposDeLaBaliza() {
               <th className="py-2 pr-3 text-right">Mín</th>
               <th className="py-2 pr-3 text-right">Máx</th>
               <th className="py-2 pr-3 text-right">Rango típico (p5–p95)</th>
-              <th className="py-2">Estado</th>
+              <th className="py-2 pr-3">Estado</th>
+              <th className="py-2">Validación</th>
             </tr>
           </thead>
           <tbody>
             {data.campos.map((c) => (
               <tr key={c.campo} className="border-b border-line/60">
-                <td className="py-2 pr-3 font-mono text-xs">{c.campo}</td>
+                <td className="py-2 pr-3 font-mono text-xs">
+                  {c.campo}
+                  {c.conversion && (
+                    <div
+                      className="mt-0.5 cursor-help font-sans text-[11px] text-ink-soft"
+                      title={c.origen ?? undefined}
+                    >
+                      {c.conversion}
+                    </div>
+                  )}
+                </td>
                 <td className="py-2 pr-3 text-right tnum">{numero(c.apariciones)}</td>
                 <td className="py-2 pr-3 text-right tnum">{c.valores_distintos}</td>
                 {c.tipo === 'texto' ? (
@@ -254,10 +284,21 @@ function CamposDeLaBaliza() {
                     </td>
                   </>
                 )}
-                <td className="py-2">
+                <td className="py-2 pr-3">
                   <Badge tono={c.constante ? 'warning' : 'normal'}>
                     {c.constante ? 'Constante' : 'Varía'}
                   </Badge>
+                </td>
+                <td className="py-2">
+                  {c.validacion ? (
+                    <span className="cursor-help" title={c.validacion.detalle}>
+                      <Badge tono={TONO_VALIDACION[c.validacion.estado] ?? 'unclassified'}>
+                        {ETIQUETA_VALIDACION[c.validacion.estado] ?? c.validacion.estado}
+                      </Badge>
+                    </span>
+                  ) : (
+                    '—'
+                  )}
                 </td>
               </tr>
             ))}

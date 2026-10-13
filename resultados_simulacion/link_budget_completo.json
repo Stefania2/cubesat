@@ -1,7 +1,7 @@
 {
   "parametros": {
     "frecuencia_hz": 437568000.0,
-    "modulation": "BPSK",
+    "modulation": "FSK",
     "symbol_rate_bps": 9600,
     "p_tx_dbm": 30.0,
     "g_tx_dbi": 0.0,
@@ -14,7 +14,8 @@
     "l_pol_db": 1.0,
     "l_point_db": 1.0,
     "l_impl_db": 2.0,
-    "eb_n0_req_db": 10.0,
+    "eb_n0_req_db": 13.35,
+    "eb_n0_req_bpsk_db": 9.59,
     "ber_target": 1e-05,
     "orbit_height_km": 775.0
   },
@@ -26,8 +27,10 @@
       "p_rx_dbm": -113.99,
       "c_n0_db_hz": 58.91,
       "eb_n0_db": 19.09,
-      "margen_db": 7.09,
-      "snr_requerida_db": 12.0,
+      "margen_db": 3.74,
+      "margen_bpsk_db": 7.5,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 156.49,
       "t_sys_k": 371.3
     },
@@ -38,8 +41,10 @@
       "p_rx_dbm": -112.56,
       "c_n0_db_hz": 60.35,
       "eb_n0_db": 20.52,
-      "margen_db": 8.52,
-      "snr_requerida_db": 12.0,
+      "margen_db": 5.17,
+      "margen_bpsk_db": 8.93,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 155.06,
       "t_sys_k": 371.3
     },
@@ -50,8 +55,10 @@
       "p_rx_dbm": -111.22,
       "c_n0_db_hz": 61.68,
       "eb_n0_db": 21.86,
-      "margen_db": 9.86,
-      "snr_requerida_db": 12.0,
+      "margen_db": 6.51,
+      "margen_bpsk_db": 10.27,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 153.72,
       "t_sys_k": 371.3
     },
@@ -62,8 +69,10 @@
       "p_rx_dbm": -109.99,
       "c_n0_db_hz": 62.91,
       "eb_n0_db": 23.09,
-      "margen_db": 11.09,
-      "snr_requerida_db": 12.0,
+      "margen_db": 7.74,
+      "margen_bpsk_db": 11.5,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 152.49,
       "t_sys_k": 371.3
     },
@@ -74,8 +83,10 @@
       "p_rx_dbm": -108.89,
       "c_n0_db_hz": 64.01,
       "eb_n0_db": 24.19,
-      "margen_db": 12.19,
-      "snr_requerida_db": 12.0,
+      "margen_db": 8.84,
+      "margen_bpsk_db": 12.6,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 151.39,
       "t_sys_k": 371.3
     },
@@ -86,8 +97,10 @@
       "p_rx_dbm": -107.91,
       "c_n0_db_hz": 64.99,
       "eb_n0_db": 25.17,
-      "margen_db": 13.17,
-      "snr_requerida_db": 12.0,
+      "margen_db": 9.82,
+      "margen_bpsk_db": 13.58,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 150.41,
       "t_sys_k": 371.3
     },
@@ -98,8 +111,10 @@
       "p_rx_dbm": -107.05,
       "c_n0_db_hz": 65.85,
       "eb_n0_db": 26.03,
-      "margen_db": 14.03,
-      "snr_requerida_db": 12.0,
+      "margen_db": 10.68,
+      "margen_bpsk_db": 14.44,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 149.55,
       "t_sys_k": 371.3
     },
@@ -110,8 +125,10 @@
       "p_rx_dbm": -106.29,
       "c_n0_db_hz": 66.61,
       "eb_n0_db": 26.79,
-      "margen_db": 14.79,
-      "snr_requerida_db": 12.0,
+      "margen_db": 11.44,
+      "margen_bpsk_db": 15.2,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 148.79,
       "t_sys_k": 371.3
     },
@@ -122,8 +139,10 @@
       "p_rx_dbm": -105.63,
       "c_n0_db_hz": 67.27,
       "eb_n0_db": 27.45,
-      "margen_db": 15.45,
-      "snr_requerida_db": 12.0,
+      "margen_db": 12.1,
+      "margen_bpsk_db": 15.86,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 148.13,
       "t_sys_k": 371.3
     },
@@ -134,8 +153,10 @@
       "p_rx_dbm": -105.05,
       "c_n0_db_hz": 67.85,
       "eb_n0_db": 28.02,
-      "margen_db": 16.02,
-      "snr_requerida_db": 12.0,
+      "margen_db": 12.67,
+      "margen_bpsk_db": 16.43,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 147.55,
       "t_sys_k": 371.3
     },
@@ -146,8 +167,10 @@
       "p_rx_dbm": -104.56,
       "c_n0_db_hz": 68.34,
       "eb_n0_db": 28.51,
-      "margen_db": 16.51,
-      "snr_requerida_db": 12.0,
+      "margen_db": 13.16,
+      "margen_bpsk_db": 16.92,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 147.06,
       "t_sys_k": 371.3
     },
@@ -158,8 +181,10 @@
       "p_rx_dbm": -104.15,
       "c_n0_db_hz": 68.75,
       "eb_n0_db": 28.93,
-      "margen_db": 16.93,
-      "snr_requerida_db": 12.0,
+      "margen_db": 13.58,
+      "margen_bpsk_db": 17.34,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 146.65,
       "t_sys_k": 371.3
     },
@@ -170,8 +195,10 @@
       "p_rx_dbm": -103.81,
       "c_n0_db_hz": 69.09,
       "eb_n0_db": 29.27,
-      "margen_db": 17.27,
-      "snr_requerida_db": 12.0,
+      "margen_db": 13.92,
+      "margen_bpsk_db": 17.68,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 146.31,
       "t_sys_k": 371.3
     },
@@ -182,8 +209,10 @@
       "p_rx_dbm": -103.53,
       "c_n0_db_hz": 69.37,
       "eb_n0_db": 29.55,
-      "margen_db": 17.55,
-      "snr_requerida_db": 12.0,
+      "margen_db": 14.2,
+      "margen_bpsk_db": 17.96,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 146.03,
       "t_sys_k": 371.3
     },
@@ -194,8 +223,10 @@
       "p_rx_dbm": -103.32,
       "c_n0_db_hz": 69.58,
       "eb_n0_db": 29.76,
-      "margen_db": 17.76,
-      "snr_requerida_db": 12.0,
+      "margen_db": 14.41,
+      "margen_bpsk_db": 18.17,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 145.82,
       "t_sys_k": 371.3
     },
@@ -206,8 +237,10 @@
       "p_rx_dbm": -103.17,
       "c_n0_db_hz": 69.73,
       "eb_n0_db": 29.91,
-      "margen_db": 17.91,
-      "snr_requerida_db": 12.0,
+      "margen_db": 14.56,
+      "margen_bpsk_db": 18.32,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 145.67,
       "t_sys_k": 371.3
     },
@@ -218,8 +251,10 @@
       "p_rx_dbm": -103.08,
       "c_n0_db_hz": 69.82,
       "eb_n0_db": 30.0,
-      "margen_db": 18.0,
-      "snr_requerida_db": 12.0,
+      "margen_db": 14.65,
+      "margen_bpsk_db": 18.41,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 145.58,
       "t_sys_k": 371.3
     },
@@ -230,20 +265,145 @@
       "p_rx_dbm": -103.05,
       "c_n0_db_hz": 69.85,
       "eb_n0_db": 30.02,
-      "margen_db": 18.02,
-      "snr_requerida_db": 12.0,
+      "margen_db": 14.67,
+      "margen_bpsk_db": 18.43,
+      "eb_n0_requerida_db": 15.35,
+      "eb_n0_requerida_bpsk_db": 11.59,
       "perdida_total_db": 145.55,
       "t_sys_k": 371.3
     }
   ],
   "resumen": {
-    "margen_maximo_db": 18.02,
-    "margen_minimo_db": 7.09,
-    "margen_promedio_db": 14.56,
+    "esquema_margen_principal": "FSK binaria ortogonal, deteccion no coherente",
+    "margen_bpsk_maximo_db": 18.43,
+    "margen_bpsk_minimo_db": 7.5,
+    "margen_maximo_db": 14.67,
+    "margen_minimo_db": 3.74,
+    "margen_promedio_db": 11.21,
     "elevacion_margen_minimo_deg": 5,
     "elevacion_margen_maximo_deg": 90,
     "peor_caso_p_rx_dbm": -113.99,
     "peor_caso_fspl_db": 153.99
+  },
+  "procedencia": {
+    "frecuencia_hz": {
+      "valor": 437568000.0,
+      "unidad": "Hz",
+      "procedencia": "documentado",
+      "fuente": "AMSAT-UK, «STRaND-1 Telemetry» (amsat-uk.org/satellites/telemetry/strand-1); SatNOGS DB, transmisor «UHF 9k6 FSK TLM» de NORAD 39090 (estado: inactive). eoPortal cita 437.575 MHz como asignacion previa al lanzamiento.",
+      "incertidumbre": null
+    },
+    "tasa_bit_bps": {
+      "valor": 9600.0,
+      "unidad": "bit/s",
+      "procedencia": "documentado",
+      "fuente": "AMSAT-UK, «STRaND-1 Telemetry» (amsat-uk.org/satellites/telemetry/strand-1); SatNOGS DB, transmisor «UHF 9k6 FSK TLM» de NORAD 39090 (estado: inactive)",
+      "incertidumbre": null
+    },
+    "altura_orbital_km": {
+      "valor": 775.0,
+      "unidad": "km",
+      "procedencia": "deducido",
+      "fuente": "TLE versionado tle/strand1_2026-08-09.tle (movimiento medio -> semieje mayor 7146 km). eoPortal: ~786 km en 2013.",
+      "incertidumbre": null
+    },
+    "p_tx_dbm": {
+      "valor": 30.0,
+      "unidad": "dBm",
+      "procedencia": "documentado",
+      "fuente": "eoPortal, «STRaND-1» (eoportal.org/satellite-missions/strand-1): 1 W nominal; 0.25 W en modo baliza/CW",
+      "incertidumbre": 6.0
+    },
+    "g_tx_dbi": {
+      "valor": 0.0,
+      "unidad": "dBi",
+      "procedencia": "supuesto",
+      "fuente": "monopolo UHF (eoPortal confirma el tipo de antena, no su ganancia)",
+      "incertidumbre": 2.0
+    },
+    "l_tx_db": {
+      "valor": 0.5,
+      "unidad": "dB",
+      "procedencia": "supuesto",
+      "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1",
+      "incertidumbre": 0.5
+    },
+    "g_rx_dbi": {
+      "valor": 15.0,
+      "unidad": "dBi",
+      "procedencia": "supuesto",
+      "fuente": "Yagi UHF de 11-13 elementos: estacion hipotetica del proyecto",
+      "incertidumbre": 2.0
+    },
+    "l_rx_db": {
+      "valor": 2.0,
+      "unidad": "dB",
+      "procedencia": "supuesto",
+      "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1",
+      "incertidumbre": 1.0
+    },
+    "nf_rx_db": {
+      "valor": 2.0,
+      "unidad": "dB",
+      "procedencia": "supuesto",
+      "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1",
+      "incertidumbre": 1.0
+    },
+    "t_ant_k": {
+      "valor": 150.0,
+      "unidad": "K",
+      "procedencia": "supuesto",
+      "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1; el ruido urbano en UHF puede superarlo ampliamente",
+      "incertidumbre": 100.0
+    },
+    "l_atm_db": {
+      "valor": 0.5,
+      "unidad": "dB",
+      "procedencia": "supuesto",
+      "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1",
+      "incertidumbre": 0.5
+    },
+    "l_pol_db": {
+      "valor": 1.0,
+      "unidad": "dB",
+      "procedencia": "supuesto",
+      "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1; con polarizacion lineal-lineal el valor real es variable (ver informe)",
+      "incertidumbre": 2.0
+    },
+    "l_point_db": {
+      "valor": 1.0,
+      "unidad": "dB",
+      "procedencia": "supuesto",
+      "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1; en el paso SGP4 se sustituye por la perdida calculada del rotor",
+      "incertidumbre": 1.0
+    },
+    "l_impl_db": {
+      "valor": 2.0,
+      "unidad": "dB",
+      "procedencia": "supuesto",
+      "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1 (reserva de implementacion del demodulador)",
+      "incertidumbre": 2.0
+    }
+  },
+  "esquemas": {
+    "fsk_no_coherente": {
+      "nombre": "FSK binaria ortogonal, deteccion no coherente",
+      "papel": "referencia del enlace documentado (FSK 9600)",
+      "nota": "Cota teorica de la familia FSK. Un receptor G3RUH real demodula con discriminador de FM y su umbral no esta documentado para STRaND-1: se trata como incertidumbre, no como valor confirmado.",
+      "eb_n0_teorica_db": 13.35
+    },
+    "fsk_coherente": {
+      "nombre": "FSK binaria ortogonal, deteccion coherente",
+      "papel": "cota optimista de FSK",
+      "nota": "Requiere recuperar la fase de ambos tonos; no es lo habitual en UHF amateur.",
+      "eb_n0_teorica_db": 12.6
+    },
+    "bpsk_coherente": {
+      "nombre": "BPSK, deteccion coherente",
+      "papel": "modelo comparativo (no es la modulacion documentada de STRaND-1)",
+      "nota": "Es el esquema del modelo avanzado y de la cadena GNU Radio del proyecto.",
+      "eb_n0_teorica_db": 9.59
+    }
   },
   "constantes": {
     "K_boltz": 1.380649e-23,

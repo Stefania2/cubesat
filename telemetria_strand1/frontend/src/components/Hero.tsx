@@ -76,7 +76,7 @@ export function Hero({ status }: { status: Status | null }) {
           <Dato etiqueta="Transmitter" valor="UHF 9k6 FSK TLM" />
           <Dato etiqueta="Frequency" valor={frecuenciaMHz(437_568_000)} />
           <Dato etiqueta="Mode" valor="FSK 9600" />
-          <Dato etiqueta="Status" valor="ACTIVE" tono="ok" />
+          <Dato etiqueta="Estado en SatNOGS DB" valor="inactive" />
           <Dato
             etiqueta="Frames en base"
             valor={status ? status.frames.toLocaleString('es-ES') : '—'}

@@ -55,15 +55,27 @@ def leer_json(nombre: str):
 
 # ─── Tablas ─────────────────────────────────────────────────────────────────
 
+def fmt_tasa(valor, cota_sup=None) -> str:
+    """Tasa de error. Un cero observado se escribe con su cota superior al 95 %."""
+    if valor is None or valor == "":
+        return "N/A"
+    valor = float(valor)
+    if valor == 0.0:
+        return f"0 (< {float(cota_sup):.1e})" if cota_sup not in (None, "") else "0"
+    return f"{valor:.2e}"
+
+
 def tabla_ber_basico() -> str:
     filas_por_snr: dict[str, dict[str, str]] = {}
+    ebn0: dict[str, str] = {}
     for r in leer_csv("resultados_ber_fsk_bpsk.csv"):
         filas_por_snr.setdefault(r["snr_db"], {})[r["modulacion"]] = fmt_ber(float(r["ber"]))
+        ebn0[r["snr_db"]] = r["ebn0_db"]
     filas = [
-        [snr, datos.get("BPSK", "-"), datos.get("FSK", "-")]
+        [snr, ebn0[snr], datos.get("BPSK", "-"), datos.get("FSK", "-")]
         for snr, datos in sorted(filas_por_snr.items(), key=lambda kv: float(kv[0]))
     ]
-    return tabla_md(["SNR (dB)", "BER BPSK", "BER FSK"], filas)
+    return tabla_md(["SNR por muestra (dB)", "Eb/N0 (dB)", "BER BPSK", "BER FSK"], filas)
 
 
 def tabla_ancho_banda_basico() -> str:
@@ -73,114 +85,260 @@ def tabla_ancho_banda_basico() -> str:
     return tabla_md(["Modulacion", "Ancho de banda (-20 dB)"], filas)
 
 
-def _grupos_avanzado() -> dict[str, list[dict]]:
-    rows = leer_csv("resultados_simulacion_avanzada.csv")
-    grupos: dict[str, list[dict]] = {}
-    for r in rows:
-        if r["modulation"] == "AX.25":
-            clave = "AX.25 + RRC"
-        elif r["fec"] == "True":
-            clave = "BPSK + FEC conv. (r=1/2, K=7)"
-        else:
-            clave = "BPSK + RRC (α=0.35)" if r["rrc"] == "True" else "BPSK rectangular (NRZ)"
-            if r["fading"] == "True":
-                clave += " + fading Rice"
-            residual = float(r["doppler_residual_hz"])
-            if residual > 0:
-                clave += f" + Doppler residual {residual:g} Hz"
-        grupos.setdefault(clave, []).append(r)
-    for pts in grupos.values():
-        pts.sort(key=lambda r: float(r["snr_db"]))
-    return grupos
+def _avanzado() -> dict:
+    return leer_json("resultados_simulacion_avanzada.json")
+
+
+def _curva(esquema: str, canal: str) -> list[dict]:
+    return [r for r in _avanzado()["resultados"]
+            if r["esquema"] == esquema and r["canal"] == canal]
 
 
 def tabla_avanzado_principal() -> str:
-    grupos = _grupos_avanzado()
-    orden = [
-        "BPSK rectangular (NRZ)",
-        "BPSK + RRC (α=0.35)",
-        "BPSK rectangular (NRZ) + fading Rice",
-        "BPSK + FEC conv. (r=1/2, K=7)",
-    ]
-    snrs = ["-8", "-6", "-4", "-2"]
+    """BER en AWGN: teoria, sincronizacion ideal y receptor con lazos."""
+    ideal, rrc, nrz, fec = (_curva(e, "awgn") for e in ("ideal_rrc", "rrc", "nrz", "rrc_fec"))
     filas = []
-    for clave in orden:
-        if clave not in grupos:
-            continue
-        por_snr = {r["snr_db"]: r for r in grupos[clave]}
-        fila = [clave]
-        fila += [fmt_ber(float(por_snr[s]["ber"])) if s in por_snr else "-" for s in snrs]
-        fila.append(f"{float(grupos[clave][0]['ancho_banda_hz']) / 1000:.1f} kHz")
-        filas.append(fila)
+    for i, r in enumerate(rrc):
+        filas.append([
+            f"{r['ebn0_db']:.1f}", f"{r['snr_muestra_db']:.2f}", f"{r['ber_teorica_bpsk']:.2e}",
+            fmt_tasa(ideal[i]["ber"], ideal[i]["ber_ic95_sup"]),
+            fmt_tasa(r["ber"], r["ber_ic95_sup"]),
+            fmt_tasa(nrz[i]["ber"], nrz[i]["ber_ic95_sup"]),
+            fmt_tasa(fec[i]["ber"], fec[i]["ber_ic95_sup"]),
+        ])
     return tabla_md(
-        ["Configuracion"] + [f"BER a {s} dB" for s in snrs] + ["Ancho de banda (99 %)"],
-        filas,
-    )
+        ["Eb/N0 (dB)", "SNR/muestra sin codigo (dB)", "Teoria BPSK", "RRC, sinc. ideal",
+         "RRC, Costas+Gardner", "NRZ, Costas+Gardner", "RRC + FEC"], filas)
+
+
+def tabla_avanzado_rice() -> str:
+    rrc, fec, ax, axf = (_curva(e, "rice") for e in ("rrc", "rrc_fec", "ax25", "ax25_fec"))
+    filas = []
+    for i, r in enumerate(rrc):
+        filas.append([
+            f"{r['ebn0_db']:.1f}", fmt_tasa(r["ber"]), fmt_tasa(r["ber_diferencial"]),
+            fmt_tasa(fec[i]["ber_diferencial"]), fmt_tasa(r["per"]),
+            fmt_tasa(ax[i]["fer"]), fmt_tasa(axf[i]["fer"]),
+        ])
+    return tabla_md(
+        ["Eb/N0 (dB)", "BER", "BER diferencial", "BER dif. con FEC", "PER",
+         "FER AX.25", "FER AX.25 + FEC"], filas)
 
 
 def tabla_doppler_residual() -> str:
-    grupos = _grupos_avanzado()
-    base = "BPSK rectangular (NRZ)"
-    claves = [base] + sorted(
-        (k for k in grupos if k.startswith(base + " + Doppler residual")),
-        key=lambda k: float(re.search(r"([\d.]+) Hz", k).group(1)),
-    )
-    snrs = ["-8", "-4", "0", "4"]
-    filas = []
-    for clave in claves:
-        m = re.search(r"residual ([\d.]+) Hz", clave)
-        etiqueta = f"{m.group(1)} Hz" if m else "0 Hz"
-        por_snr = {r["snr_db"]: r for r in grupos[clave]}
-        filas.append([etiqueta] + [fmt_ber(float(por_snr[s]["ber"])) if s in por_snr else "-"
-                                   for s in snrs])
-    return tabla_md(["Residual de Doppler"] + [f"BER a {s} dB" for s in snrs], filas)
+    base = _curva("rrc", "awgn")
+    canales = _avanzado()["metadatos"]["canales"]
+    columnas = [("awgn", "0 Hz")] + [
+        (k, canales[k]["nombre"].replace("AWGN + ", "")) for k in ("res10", "res50", "res100", "deriva")]
+    curvas = {k: _curva("rrc", k) for k, _ in columnas}
+    filas = [[f"{r['ebn0_db']:.1f}"] + [fmt_tasa(curvas[k][i]["ber_diferencial"]) for k, _ in columnas]
+             for i, r in enumerate(base)]
+    return tabla_md(["Eb/N0 (dB)"] + [n for _, n in columnas], filas)
 
 
 def tabla_ax25() -> str:
+    ax, axf = _curva("ax25", "awgn"), _curva("ax25_fec", "awgn")
+    filas = []
+    for i, r in enumerate(ax):
+        f = axf[i]
+        filas.append([
+            f"{r['ebn0_db']:.1f}", fmt_tasa(r["ber"], r["ber_ic95_sup"]),
+            f"{r['ax25_frames_validos']}/{r['ax25_frames_tx']}",
+            f"{r['ax25_frames_invalidos']}", f"{r['ax25_frames_descartados']}",
+            fmt_tasa(r["fer"], r["fer_ic95_sup"]), fmt_tasa(r["per"], r["per_ic95_sup"]),
+            f"{f['ax25_frames_validos']}/{f['ax25_frames_tx']}",
+            fmt_tasa(f["fer"], f["fer_ic95_sup"]),
+        ])
+    return tabla_md(
+        ["Eb/N0 (dB)", "BER", "Tramas validas", "FCS invalido", "No recuperadas", "FER", "PER",
+         "Validas con FEC", "FER con FEC"], filas)
+
+
+def tabla_ganancia_codificacion() -> str:
+    an = _avanzado()["analisis"]
+    filas = []
+    for g in an["ganancia_codificacion"]:
+        filas.append([f"BER {g['ber_objetivo']:g}", g["canal"],
+                      _na(g["ebn0_sin_codigo_db"]), _na(g["ebn0_con_codigo_db"]),
+                      _na(g["ganancia_db"]), g["estado"]])
+    for g in an["ganancia_codificacion_fer"]:
+        filas.append([f"FER {g['fer_objetivo']:g} (AX.25)", g["canal"],
+                      _na(g["ebn0_sin_codigo_db"]), _na(g["ebn0_con_codigo_db"]),
+                      _na(g["ganancia_db"]), g["estado"]])
+    return tabla_md(["Objetivo", "Canal", "Eb/N0 sin codigo (dB)", "Eb/N0 con codigo (dB)",
+                     "Ganancia (dB)", "Estado"], filas, alineacion="l")
+
+
+def _na(v) -> str:
+    return "N/A" if v is None else f"{v:.2f}"
+
+
+def tabla_procedencia() -> str:
+    m = _avanzado()["metadatos"]
+    paso = leer_json("margen_paso_sgp4.json")
     filas = [
-        [r["snr_db"], fmt_ber(float(r["ber"])), r["ax25_frames_validos"]]
-        for r in _grupos_avanzado()["AX.25 + RRC"]
+        ["Commit del codigo", m["commit"]],
+        ["Fecha de la simulacion avanzada (UTC)", m["generado_utc"]],
+        ["Fecha del analisis del paso SGP4 (UTC)", paso["generado_utc"]],
+        ["Semilla base", str(m["semilla_base"])],
+        ["Semillas por corrida", m["semillas"]],
+        ["Ensayos por punto", str(m["ensayos_por_punto"])],
+        ["Bits de informacion por ensayo", str(m["entrada"]["bits"])],
+        ["Valores de Eb/N0 (dB)", ", ".join(f"{x:g}" for x in m["ebn0_db"])],
+        ["Definicion de Eb/N0", m["definicion_ebn0"]],
+        ["Ambiguedad de fase", m["sincronizacion"]["ambiguedad_de_fase"]],
+        ["Semilla y corridas del Monte Carlo de margen",
+         f"{paso['sensibilidad']['montecarlo']['semilla']} · "
+         f"{paso['sensibilidad']['montecarlo']['corridas']}"],
+        ["TLE", f"{paso['tle']['fuente']} (epoca {paso['tle']['epoca_utc']})"],
     ]
-    return tabla_md(["SNR (dB)", "BER", "Tramas validas por FCS (de 37)"], filas)
+    return tabla_md(["Elemento", "Valor"], filas, alineacion="l")
 
 
 def tabla_link_budget() -> str:
     filas = [
-        [r["elevacion_deg"], r["distancia_km"], r["fspl_db"],
-         r["c_n0_db_hz"], r["eb_n0_db"], r["margen_db"]]
+        [r["elevacion_deg"], r["distancia_km"], r["fspl_db"], r["p_rx_dbm"],
+         r["c_n0_db_hz"], r["eb_n0_db"], r["margen_db"], r["margen_bpsk_db"]]
         for r in leer_csv("link_budget_resultados.csv")
         if int(float(r["elevacion_deg"])) % 10 == 5 or int(float(r["elevacion_deg"])) % 30 == 0
     ]
     return tabla_md(
-        ["Elevacion (deg)", "Distancia (km)", "FSPL (dB)",
-         "C/N0 (dB-Hz)", "Eb/N0 (dB)", "Margen (dB)"],
+        ["Elevacion (deg)", "Distancia (km)", "FSPL (dB)", "P_rx (dBm)",
+         "C/N0 (dB-Hz)", "Eb/N0 (dB)", "Margen FSK no coh. (dB)", "Margen BPSK, modelo (dB)"],
         filas,
     )
 
 
 def tabla_link_budget_parametros() -> str:
-    p = leer_json("link_budget_completo.json")["parametros"]
-    r = leer_json("link_budget_completo.json")["resultados"]
+    datos = leer_json("link_budget_completo.json")
+    p, r, proc = datos["parametros"], datos["resultados"], datos["procedencia"]
+
+    def fila(nombre, clave, valor, unidad):
+        return [nombre, valor, unidad, proc[clave]["procedencia"] if clave in proc else "calculado"]
+
     filas = [
-        ["Frecuencia", f"{p['frecuencia_hz'] / 1e6:.3f}", "MHz"],
-        ["Tasa de datos", f"{p['symbol_rate_bps']}", "bps"],
-        ["Altura orbital", f"{p['orbit_height_km']:.0f}", "km"],
-        ["Potencia TX (satelite)", f"{p['p_tx_dbm']:.1f}", "dBm"],
-        ["Ganancia antena TX", f"{p['g_tx_dbi']:.1f}", "dBi"],
-        ["Perdida cables TX", f"{p['l_tx_db']:.1f}", "dB"],
-        ["Ganancia antena RX", f"{p['g_rx_dbi']:.1f}", "dBi"],
-        ["Perdida cables RX", f"{p['l_rx_db']:.1f}", "dB"],
-        ["Figura de ruido RX", f"{p['nf_rx_db']:.1f}", "dB"],
-        ["Temperatura de antena", f"{p['t_ant_k']:.1f}", "K"],
-        ["Temperatura de sistema", f"{r[0]['t_sys_k']:.1f}", "K"],
-        ["Perdida atmosferica", f"{p['l_atm_db']:.1f}", "dB"],
-        ["Perdida por polarizacion", f"{p['l_pol_db']:.1f}", "dB"],
-        ["Perdida por apuntamiento", f"{p['l_point_db']:.1f}", "dB"],
-        ["Perdida de implementacion", f"{p['l_impl_db']:.1f}", "dB"],
-        ["Eb/N0 requerida", f"{p['eb_n0_req_db']:.1f}", "dB"],
-        ["BER objetivo", f"{p['ber_target']:.0e}", "-"],
+        fila("Frecuencia", "frecuencia_hz", f"{p['frecuencia_hz'] / 1e6:.3f}", "MHz"),
+        fila("Tasa de bits", "tasa_bit_bps", f"{p['symbol_rate_bps']}", "bit/s"),
+        fila("Altura orbital", "altura_orbital_km", f"{p['orbit_height_km']:.0f}", "km"),
+        fila("Potencia TX (satelite)", "p_tx_dbm", f"{p['p_tx_dbm']:.1f}", "dBm"),
+        fila("Ganancia antena TX", "g_tx_dbi", f"{p['g_tx_dbi']:.1f}", "dBi"),
+        fila("Perdida cables TX", "l_tx_db", f"{p['l_tx_db']:.1f}", "dB"),
+        fila("Ganancia antena RX", "g_rx_dbi", f"{p['g_rx_dbi']:.1f}", "dBi"),
+        fila("Perdida cables RX", "l_rx_db", f"{p['l_rx_db']:.1f}", "dB"),
+        fila("Figura de ruido RX", "nf_rx_db", f"{p['nf_rx_db']:.1f}", "dB"),
+        fila("Temperatura de antena", "t_ant_k", f"{p['t_ant_k']:.1f}", "K"),
+        fila("Temperatura de sistema", "-", f"{r[0]['t_sys_k']:.1f}", "K"),
+        fila("Perdida atmosferica", "l_atm_db", f"{p['l_atm_db']:.1f}", "dB"),
+        fila("Perdida por polarizacion", "l_pol_db", f"{p['l_pol_db']:.1f}", "dB"),
+        fila("Perdida por apuntamiento", "l_point_db", f"{p['l_point_db']:.1f}", "dB"),
+        fila("Reserva de implementacion", "l_impl_db", f"{p['l_impl_db']:.1f}", "dB"),
+        fila("Eb/N0 teorica, FSK no coherente", "-", f"{p['eb_n0_req_db']:.2f}", "dB"),
+        fila("Eb/N0 teorica, BPSK coherente", "-", f"{p['eb_n0_req_bpsk_db']:.2f}", "dB"),
+        fila("BER objetivo", "-", f"{p['ber_target']:.0e}", "-"),
     ]
-    return tabla_md(["Parametro", "Valor", "Unidad"], filas)
+    return tabla_md(["Parametro", "Valor", "Unidad", "Procedencia"], filas)
+
+
+def tabla_margen_paso() -> str:
+    paso = leer_json("margen_paso_sgp4.json")
+    filas = []
+    for clave, m in paso["margen"].items():
+        u = paso["umbrales"][clave]
+        pc = m["percentiles_db"]
+        filas.append([
+            clave, u["tipo"].replace("_", " "), f"{u['eb_n0_db']:.2f}",
+            f"{m['margen_min_db']:.2f}", f"{pc['p5']:.2f}", f"{pc['p50']:.2f}",
+            f"{m['margen_medio_db']:.2f}", f"{m['margen_max_db']:.2f}",
+            f"{m['porcentaje_tiempo_margen_positivo']:.1f}",
+            f"{m['duracion_total_margen_positivo_s']:.0f}",
+        ])
+    return tabla_md(
+        ["Umbral", "Tipo", "Eb/N0 umbral (dB)", "Min", "p5", "p50", "Medio", "Max",
+         "% tiempo > 0", "Duracion > 0 (s)"], filas)
+
+
+def tabla_doppler_paso() -> str:
+    paso = leer_json("margen_paso_sgp4.json")
+    d = paso["doppler"]
+    filas = [
+        ["Paso analizado (inicio UTC)", paso["paso_analizado"]["inicio_utc"]],
+        ["Culminacion", f"{paso['paso_analizado']['elev_max_deg']:.2f}°"],
+        ["Antiguedad del TLE en el paso", f"{paso['antiguedad_tle_en_el_paso_h']:.1f} h"],
+        ["Doppler (elevacion >= 5°)", f"{d['doppler_min_hz']:.0f} a {d['doppler_max_hz']:+.0f} Hz"],
+        ["Tasa de cambio maxima", f"{d['tasa_doppler_max_abs_hz_s']:.1f} Hz/s"],
+        ["Coherencia v_radial vs d(distancia)/dt",
+         f"diferencia maxima {d['coherencia_velocidad_radial_max_abs_km_s'] * 1000:.2f} m/s"],
+    ] + [
+        [f"Residual con error de tiempo de {r['error_tiempo_s']:g} s",
+         f"max {r['residual_max_abs_hz']:.1f} Hz · rms {r['residual_rms_hz']:.1f} Hz"]
+        for r in d["residual_tras_precompensacion"]
+    ] + [
+        ["Error de apuntamiento maximo del rotor",
+         f"{paso['apuntamiento']['error_max_deg']:.2f}° ({paso['apuntamiento']['perdida_max_db']:.2f} dB)"],
+    ]
+    return tabla_md(["Magnitud", "Valor"], filas, alineacion="l")
+
+
+def tabla_sensibilidad() -> str:
+    s = leer_json("margen_paso_sgp4.json")["sensibilidad"]
+    filas = [[r["parametro"], f"{r['valor_base']:g} {r['unidad']}", f"±{r['incertidumbre']:g}",
+              r["procedencia"], f"{r['delta_margen_db_menos']:+.2f}", f"{r['delta_margen_db_mas']:+.2f}"]
+             for r in s["uno_a_la_vez"]]
+    mc = s["montecarlo"]
+    filas.append(["**Monte Carlo conjunto**", f"{mc['corridas']} corridas", "todos", "-",
+                  f"p5: {mc['margen_min_db']['p5']:+.2f}", f"p95: {mc['margen_min_db']['p95']:+.2f}"])
+    return tabla_md(["Parametro", "Valor base", "Incertidumbre", "Procedencia",
+                     "Δ margen con − (dB)", "Δ margen con + (dB)"], filas)
+
+
+def tabla_estimador_snr() -> str:
+    filas = [
+        [f["canal"], f["reloj"], f"{f['esn0_real_db']:.0f}", str(f["ventana_simbolos"]),
+         f"{f['ventanas_validas']}/{f['ventanas']}", _na(f["esn0_estimada_media_db"]),
+         _na(f["sesgo_db"]), _na(f["desviacion_db"])]
+        for f in leer_json("estimacion_snr_iq.json")["resultados"]
+        if f["reloj"] == "gardner" and f["ventana_simbolos"] in (64, 1024)
+        and f["esn0_real_db"] in (0.0, 6.0, 12.0)
+    ]
+    return tabla_md(["Canal", "Reloj", "Es/N0 real (dB)", "Ventana (simbolos)", "Ventanas validas",
+                     "Media estimada (dB)", "Sesgo (dB)", "Desviacion (dB)"], filas)
+
+
+def tabla_perdida_secuencia() -> str:
+    ps = leer_json("analisis_recepcion_telemetria.json")["perdida_por_secuencia"]
+
+    def fila(nombre, v):
+        return [nombre, str(v["rafagas"]), str(v["paquetes_emitidos_estimados"]),
+                str(v["paquetes_recibidos"]),
+                "N/A" if v["perdida"] is None else f"{100 * v['perdida']:.1f} %"]
+
+    filas = [fila(f"{v['elevacion_maxima_deg']}°", v)
+             for v in ps["por_elevacion_maxima_de_la_observacion"]]
+    filas.append(fila("**Global (todas las rafagas)**", ps["global"]))
+    return tabla_md(["Elevacion maxima de la observacion", "Rafagas", "Emitidos (estimados)",
+                     "Recibidos", "Perdida"], filas)
+
+
+def tabla_diversidad() -> str:
+    rec = leer_json("analisis_recepcion_telemetria.json")
+    d, p = rec["diversidad"], rec["par_M0KSF"]
+    n = d["por_numero_de_estaciones"]
+    c = p["en_ventanas_comunes"]
+    filas = [
+        ["Balizas con observador", str(rec["balizas"]["con_observador"])],
+        ["Emisiones distintas recibidas", str(d["emisiones_distintas_recibidas"])],
+        ["Recibidas por 1 / 2 / 3 / 4 o mas estaciones",
+         f"{n['1']} / {n['2']} / {n['3']} / {n['4_o_mas']}"],
+        ["Ventanas con varias estaciones", str(d["ventanas_con_varias_estaciones"])],
+        ["Emisiones en esas ventanas: union / mejor estacion sola",
+         f"{d['emisiones_en_esas_ventanas']} / {d['emisiones_de_la_mejor_estacion_de_cada_ventana']}"],
+        ["Ganancia por combinacion", f"×{d['ganancia_por_combinacion']:.2f}"],
+        ["M0KSF y M0KSF-BB, ventanas comunes", str(p["ventanas_comunes"])],
+        ["Solo M0KSF / solo M0KSF-BB / ambas",
+         f"{c['solo_M0KSF']} / {c['solo_M0KSF-BB']} / {c['ambas']}"],
+        ["Ganancia de la union sobre la mejor del par", f"×{p['ganancia_union_sobre_la_mejor']:.2f}"],
+    ]
+    return tabla_md(["Magnitud", "Valor"], filas, alineacion="l")
 
 
 def tabla_uplink() -> str:
@@ -225,11 +383,13 @@ def tabla_cubesats() -> str:
     datos = leer_json("cubesats_reales_referencia.json")["cubesats_reales"]
     filas = [
         [c["nombre"], c["pais"], str(c["ano_lanzamiento"]), c["formato"],
-         f"{c['frecuencia_mhz']:.3f}", c["modulacion"], str(c["tasa_bps"])]
+         f"{c['frecuencia_mhz']:.3f}", c["modulacion"], str(c["tasa_bps"]),
+         "si" if c.get("verificado") else "pendiente"]
         for c in datos
     ]
     return tabla_md(
-        ["CubeSat", "Pais", "Ano", "Formato", "Frecuencia (MHz)", "Modulacion", "Tasa (bps)"],
+        ["CubeSat", "Pais", "Ano", "Formato", "Frecuencia (MHz)", "Modulacion", "Tasa (bps)",
+         "Verificado en fuente"],
         filas,
     )
 
@@ -240,17 +400,26 @@ def tabla_concordancia() -> str:
         [m["parametro"],
          m["simulado"].replace("\n", "<br>"),
          m["real_referencia"].split("\n")[0],
-         m["concordancia"].split(".")[0]]
+         m["concordancia"].replace("\n", " ")]
         for m in datos
     ]
-    return tabla_md(["Parametro", "Valor simulado", "Referencia real", "Concordancia"],
+    return tabla_md(["Parametro", "Valor del modelo", "Referencia", "Relacion"],
                     filas, alineacion="l")
 
 
 TABLAS = {
     "ber_basico": tabla_ber_basico,
     "ancho_banda_basico": tabla_ancho_banda_basico,
+    "procedencia": tabla_procedencia,
     "avanzado_principal": tabla_avanzado_principal,
+    "avanzado_rice": tabla_avanzado_rice,
+    "ganancia_codificacion": tabla_ganancia_codificacion,
+    "estimador_snr": tabla_estimador_snr,
+    "margen_paso": tabla_margen_paso,
+    "doppler_paso": tabla_doppler_paso,
+    "sensibilidad": tabla_sensibilidad,
+    "perdida_secuencia": tabla_perdida_secuencia,
+    "diversidad": tabla_diversidad,
     "doppler_residual": tabla_doppler_residual,
     "ax25": tabla_ax25,
     "link_budget_parametros": tabla_link_budget_parametros,
@@ -274,8 +443,9 @@ def actualizar_informe() -> int:
             re.DOTALL,
         )
         if not patron.search(texto):
-            print(f"  aviso: no se encontro el marcador TABLA:{nombre} en {INFORME}")
-            continue
+            # Una tabla sin marcador quedaria sin actualizar en silencio y el
+            # informe volveria a contradecir a los datos: es un error.
+            raise SystemExit(f"Falta el marcador TABLA:{nombre} en {INFORME}")
         texto = patron.sub(lambda m: m.group(1) + generador() + m.group(2), texto)
         sustituidas += 1
 
@@ -289,6 +459,8 @@ def main() -> None:
                           "enlace_ascendente_resultados.json",
                           "estacion_terrena_seguimiento.json",
                           "cubesats_reales_referencia.json",
+                          "resultados_simulacion_avanzada.json", "margen_paso_sgp4.json",
+                          "estimacion_snr_iq.json", "analisis_recepcion_telemetria.json",
                           "comparacion_parametros_cubesats_reales.json")
              if not (OUTPUT_DIR / n).exists()]
     if faltan:

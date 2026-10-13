@@ -1,0 +1,402 @@
+{
+  "tipo_de_dato": "simulado (prediccion de modelo; no es una medicion del enlace)",
+  "generado_utc": "2026-10-13T19:28:48+00:00",
+  "tle": {
+    "nombre": "STRAND-1",
+    "linea1": "1 39090U 13009E   26221.45537571  .00000137  00000+0  60240-4 0  9990",
+    "linea2": "2 39090  98.3951  40.3881 0009851  74.2914 285.9358 14.37191275704711",
+    "fuente": "tle/strand1_2026-08-09.tle",
+    "epoca_utc": "2026-08-09T10:55:44.461344+00:00"
+  },
+  "antiguedad_tle_en_el_paso_h": 23.29,
+  "estacion": {
+    "lat_deg": 4.711,
+    "lon_deg": -74.0721,
+    "alt_m": 2600.0,
+    "nota": "estacion hipotetica (Bogota); no existe una estacion real del proyecto"
+  },
+  "sistema_de_referencia": "SGP4 en TEME; rotacion a terrestre por GMST (IAU 1982), elipsoide WGS-84; sin movimiento polar ni refraccion",
+  "elevacion_operativa_deg": 5.0,
+  "pasos_en_ventana": [
+    {
+      "inicio_utc": "2026-08-09T21:39:44.461344+00:00",
+      "fin_utc": "2026-08-09T21:53:04.461344+00:00",
+      "elev_max_deg": 26.6
+    },
+    {
+      "inicio_utc": "2026-08-09T23:19:04.461344+00:00",
+      "fin_utc": "2026-08-09T23:31:24.461344+00:00",
+      "elev_max_deg": 17.9
+    },
+    {
+      "inicio_utc": "2026-08-10T08:39:24.461344+00:00",
+      "fin_utc": "2026-08-10T08:44:44.461344+00:00",
+      "elev_max_deg": 1.9
+    },
+    {
+      "inicio_utc": "2026-08-10T10:13:24.461344+00:00",
+      "fin_utc": "2026-08-10T10:27:44.461344+00:00",
+      "elev_max_deg": 83.2
+    },
+    {
+      "inicio_utc": "2026-08-10T11:56:04.461344+00:00",
+      "fin_utc": "2026-08-10T12:02:44.461344+00:00",
+      "elev_max_deg": 3.1
+    },
+    {
+      "inicio_utc": "2026-08-10T21:05:24.461344+00:00",
+      "fin_utc": "2026-08-10T21:15:44.461344+00:00",
+      "elev_max_deg": 8.8
+    },
+    {
+      "inicio_utc": "2026-08-10T22:42:24.461344+00:00",
+      "fin_utc": "2026-08-10T22:56:24.461344+00:00",
+      "elev_max_deg": 49.3
+    },
+    {
+      "inicio_utc": "2026-08-11T09:38:04.461344+00:00",
+      "fin_utc": "2026-08-11T09:51:24.461344+00:00",
+      "elev_max_deg": 29.5
+    }
+  ],
+  "paso_analizado": {
+    "inicio_utc": "2026-08-10T10:13:24.461344+00:00",
+    "elev_max_deg": 84.07,
+    "duracion_sobre_horizonte_s": 881.0,
+    "criterio": "mayor elevacion de culminacion de la ventana"
+  },
+  "parametros": {
+    "frecuencia_hz": 437568000.0,
+    "tasa_bit_bps": 9600.0,
+    "altura_orbital_km": 775.0,
+    "p_tx_dbm": 30.0,
+    "g_tx_dbi": 0.0,
+    "l_tx_db": 0.5,
+    "g_rx_dbi": 15.0,
+    "l_rx_db": 2.0,
+    "nf_rx_db": 2.0,
+    "t_ant_k": 150.0,
+    "l_atm_db": 0.5,
+    "l_pol_db": 1.0,
+    "l_point_db": 1.0,
+    "l_impl_db": 2.0
+  },
+  "umbrales": {
+    "fsk_no_coherente": {
+      "tipo": "teorico",
+      "descripcion": "FSK binaria ortogonal, deteccion no coherente: curva teorica AWGN a BER 1e-05 + 2 dB de reserva de implementacion",
+      "papel": "referencia del enlace documentado (FSK 9600)",
+      "eb_n0_db": 15.35
+    },
+    "fsk_coherente": {
+      "tipo": "teorico",
+      "descripcion": "FSK binaria ortogonal, deteccion coherente: curva teorica AWGN a BER 1e-05 + 2 dB de reserva de implementacion",
+      "papel": "cota optimista de FSK",
+      "eb_n0_db": 14.6
+    },
+    "bpsk_coherente": {
+      "tipo": "teorico",
+      "descripcion": "BPSK, deteccion coherente: curva teorica AWGN a BER 1e-05 + 2 dB de reserva de implementacion",
+      "papel": "modelo comparativo (no es la modulacion documentada de STRaND-1)",
+      "eb_n0_db": 11.59
+    },
+    "simulado_ber1e-3_rrc": {
+      "tipo": "calibrado_receptor_simulado",
+      "descripcion": "receptor simulado (Costas+Gardner), AWGN: BER 1e-3, BPSK+RRC sin codificar",
+      "papel": "receptor BPSK simulado (modelo comparativo); sin reserva adicional",
+      "eb_n0_db": 6.79
+    },
+    "simulado_fer10_ax25": {
+      "tipo": "calibrado_receptor_simulado",
+      "descripcion": "receptor simulado (Costas+Gardner), AWGN: FER 10 %, AX.25 sobre BPSK+RRC",
+      "papel": "receptor BPSK simulado (modelo comparativo); sin reserva adicional",
+      "eb_n0_db": 8.15
+    },
+    "simulado_fer10_ax25_fec": {
+      "tipo": "calibrado_receptor_simulado",
+      "descripcion": "receptor simulado (Costas+Gardner), AWGN: FER 10 %, AX.25 + FEC sobre BPSK+RRC",
+      "papel": "receptor BPSK simulado (modelo comparativo); sin reserva adicional",
+      "eb_n0_db": 5.13
+    }
+  },
+  "margen": {
+    "fsk_no_coherente": {
+      "disponible": true,
+      "umbral_eb_n0_db": 15.35,
+      "muestras": 731,
+      "margen_min_db": 4.79,
+      "margen_max_db": 15.75,
+      "margen_medio_db": 10.18,
+      "percentiles_db": {
+        "p5": 5.21,
+        "p25": 7.03,
+        "p50": 9.86,
+        "p75": 13.38,
+        "p95": 15.62
+      },
+      "porcentaje_tiempo_margen_positivo": 100.0,
+      "porcentaje_tiempo_margen_mayor_3db": 100.0,
+      "intervalos_margen_positivo_s": [
+        730.0
+      ],
+      "duracion_total_margen_positivo_s": 730.0
+    },
+    "fsk_coherente": {
+      "disponible": true,
+      "umbral_eb_n0_db": 14.6,
+      "muestras": 731,
+      "margen_min_db": 5.54,
+      "margen_max_db": 16.5,
+      "margen_medio_db": 10.93,
+      "percentiles_db": {
+        "p5": 5.96,
+        "p25": 7.78,
+        "p50": 10.61,
+        "p75": 14.13,
+        "p95": 16.37
+      },
+      "porcentaje_tiempo_margen_positivo": 100.0,
+      "porcentaje_tiempo_margen_mayor_3db": 100.0,
+      "intervalos_margen_positivo_s": [
+        730.0
+      ],
+      "duracion_total_margen_positivo_s": 730.0
+    },
+    "bpsk_coherente": {
+      "disponible": true,
+      "umbral_eb_n0_db": 11.59,
+      "muestras": 731,
+      "margen_min_db": 8.55,
+      "margen_max_db": 19.51,
+      "margen_medio_db": 13.94,
+      "percentiles_db": {
+        "p5": 8.97,
+        "p25": 10.79,
+        "p50": 13.62,
+        "p75": 17.14,
+        "p95": 19.38
+      },
+      "porcentaje_tiempo_margen_positivo": 100.0,
+      "porcentaje_tiempo_margen_mayor_3db": 100.0,
+      "intervalos_margen_positivo_s": [
+        730.0
+      ],
+      "duracion_total_margen_positivo_s": 730.0
+    },
+    "simulado_ber1e-3_rrc": {
+      "disponible": true,
+      "umbral_eb_n0_db": 6.79,
+      "muestras": 731,
+      "margen_min_db": 13.35,
+      "margen_max_db": 24.31,
+      "margen_medio_db": 18.74,
+      "percentiles_db": {
+        "p5": 13.78,
+        "p25": 15.59,
+        "p50": 18.42,
+        "p75": 21.94,
+        "p95": 24.18
+      },
+      "porcentaje_tiempo_margen_positivo": 100.0,
+      "porcentaje_tiempo_margen_mayor_3db": 100.0,
+      "intervalos_margen_positivo_s": [
+        730.0
+      ],
+      "duracion_total_margen_positivo_s": 730.0
+    },
+    "simulado_fer10_ax25": {
+      "disponible": true,
+      "umbral_eb_n0_db": 8.15,
+      "muestras": 731,
+      "margen_min_db": 11.99,
+      "margen_max_db": 22.95,
+      "margen_medio_db": 17.38,
+      "percentiles_db": {
+        "p5": 12.41,
+        "p25": 14.22,
+        "p50": 17.06,
+        "p75": 20.58,
+        "p95": 22.82
+      },
+      "porcentaje_tiempo_margen_positivo": 100.0,
+      "porcentaje_tiempo_margen_mayor_3db": 100.0,
+      "intervalos_margen_positivo_s": [
+        730.0
+      ],
+      "duracion_total_margen_positivo_s": 730.0
+    },
+    "simulado_fer10_ax25_fec": {
+      "disponible": true,
+      "umbral_eb_n0_db": 5.13,
+      "muestras": 731,
+      "margen_min_db": 15.01,
+      "margen_max_db": 25.97,
+      "margen_medio_db": 20.4,
+      "percentiles_db": {
+        "p5": 15.44,
+        "p25": 17.25,
+        "p50": 20.08,
+        "p75": 23.6,
+        "p95": 25.84
+      },
+      "porcentaje_tiempo_margen_positivo": 100.0,
+      "porcentaje_tiempo_margen_mayor_3db": 100.0,
+      "intervalos_margen_positivo_s": [
+        730.0
+      ],
+      "duracion_total_margen_positivo_s": 730.0
+    }
+  },
+  "apuntamiento": {
+    "error_max_deg": 0.203,
+    "perdida_max_db": 0.001,
+    "nota": "sustituye a la reserva fija l_point_db del barrido por elevacion"
+  },
+  "doppler": {
+    "portadora_hz": 437568000.0,
+    "convencion": "Doppler = -v_radial * f / c; v_radial < 0 (acercamiento) -> Doppler > 0",
+    "doppler_max_hz": 9808.4,
+    "doppler_min_hz": -9819.6,
+    "tasa_doppler_max_abs_hz_s": 97.1,
+    "coherencia_velocidad_radial_max_abs_km_s": 0.00051,
+    "residual_tras_precompensacion": [
+      {
+        "error_tiempo_s": 0.1,
+        "residual_max_abs_hz": 9.7,
+        "residual_rms_hz": 4.0
+      },
+      {
+        "error_tiempo_s": 0.5,
+        "residual_max_abs_hz": 48.5,
+        "residual_rms_hz": 20.1
+      },
+      {
+        "error_tiempo_s": 1.0,
+        "residual_max_abs_hz": 97.1,
+        "residual_rms_hz": 40.3
+      },
+      {
+        "error_tiempo_s": 2.0,
+        "residual_max_abs_hz": 194.2,
+        "residual_rms_hz": 80.5
+      }
+    ],
+    "nota_residual": "El residual se obtiene restando al Doppler del paso el que predice el mismo TLE desplazado en el tiempo. Es un modelo del error a lo largo de la traza; los desplazamientos evaluados son escenarios, no una medida del error real del TLE."
+  },
+  "sensibilidad": {
+    "esquema": "FSK binaria ortogonal, deteccion no coherente",
+    "margen_min_base_db": 4.79,
+    "porcentaje_positivo_base": 100.0,
+    "uno_a_la_vez": [
+      {
+        "parametro": "p_tx_dbm",
+        "valor_base": 30.0,
+        "incertidumbre": 6.0,
+        "unidad": "dBm",
+        "procedencia": "documentado",
+        "delta_margen_db_menos": -6.0,
+        "delta_margen_db_mas": 6.0
+      },
+      {
+        "parametro": "g_tx_dbi",
+        "valor_base": 0.0,
+        "incertidumbre": 2.0,
+        "unidad": "dBi",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": -2.0,
+        "delta_margen_db_mas": 2.0
+      },
+      {
+        "parametro": "g_rx_dbi",
+        "valor_base": 15.0,
+        "incertidumbre": 2.0,
+        "unidad": "dBi",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": -2.0,
+        "delta_margen_db_mas": 2.0
+      },
+      {
+        "parametro": "l_pol_db",
+        "valor_base": 1.0,
+        "incertidumbre": 2.0,
+        "unidad": "dB",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": 2.0,
+        "delta_margen_db_mas": -2.0
+      },
+      {
+        "parametro": "l_impl_db",
+        "valor_base": 2.0,
+        "incertidumbre": 2.0,
+        "unidad": "dB",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": 2.0,
+        "delta_margen_db_mas": -2.0
+      },
+      {
+        "parametro": "l_rx_db",
+        "valor_base": 2.0,
+        "incertidumbre": 1.0,
+        "unidad": "dB",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": 1.28,
+        "delta_margen_db_mas": -1.21
+      },
+      {
+        "parametro": "nf_rx_db",
+        "valor_base": 2.0,
+        "incertidumbre": 1.0,
+        "unidad": "dB",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": 1.28,
+        "delta_margen_db_mas": -1.21
+      },
+      {
+        "parametro": "t_ant_k",
+        "valor_base": 150.0,
+        "incertidumbre": 100.0,
+        "unidad": "K",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": 0.81,
+        "delta_margen_db_mas": -0.68
+      },
+      {
+        "parametro": "l_tx_db",
+        "valor_base": 0.5,
+        "incertidumbre": 0.5,
+        "unidad": "dB",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": 0.5,
+        "delta_margen_db_mas": -0.5
+      },
+      {
+        "parametro": "l_atm_db",
+        "valor_base": 0.5,
+        "incertidumbre": 0.5,
+        "unidad": "dB",
+        "procedencia": "supuesto",
+        "delta_margen_db_menos": 0.5,
+        "delta_margen_db_mas": -0.5
+      }
+    ],
+    "montecarlo": {
+      "semilla": 20261013,
+      "corridas": 5000,
+      "distribucion": "uniforme dentro de ±incertidumbre de cada parametro, independientes; umbral del receptor con 0 a 4 dB adicionales",
+      "margen_min_db": {
+        "p5": -4.67,
+        "p25": -0.44,
+        "p50": 2.84,
+        "p75": 5.96,
+        "p95": 10.22
+      },
+      "probabilidad_margen_min_positivo": 0.722,
+      "porcentaje_tiempo_positivo": {
+        "p5": 53.1,
+        "p50": 100.0,
+        "p95": 100.0
+      }
+    },
+    "nota": "Las incertidumbres son rangos de diseño asignados en parametros_enlace.py, no errores medidos. El resultado cuantifica cuanto depende la conclusion de los supuestos, no la probabilidad real de recibir."
+  }
+}

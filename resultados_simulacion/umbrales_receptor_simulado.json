@@ -1,0 +1,19 @@
+{
+  "generado_utc": "2026-10-13T19:28:29+00:00",
+  "commit": "918e2c7+cambios sin confirmar",
+  "nota": "Eb/N0 medida en el receptor BPSK simulado; incluye la degradacion de sincronizacion, por lo que no se le suma reserva de implementacion.",
+  "umbrales": {
+    "ber1e-3_rrc": {
+      "descripcion": "receptor simulado (Costas+Gardner), AWGN: BER 1e-3, BPSK+RRC sin codificar",
+      "eb_n0_db": 6.79
+    },
+    "fer10_ax25": {
+      "descripcion": "receptor simulado (Costas+Gardner), AWGN: FER 10 %, AX.25 sobre BPSK+RRC",
+      "eb_n0_db": 8.15
+    },
+    "fer10_ax25_fec": {
+      "descripcion": "receptor simulado (Costas+Gardner), AWGN: FER 10 %, AX.25 + FEC sobre BPSK+RRC",
+      "eb_n0_db": 5.13
+    }
+  }
+}

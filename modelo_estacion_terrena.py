@@ -21,6 +21,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
+import parametros_enlace as pe
 from geometria_orbital import (
     angulo_central_deg,
     angulo_central_maximo_deg,
@@ -37,10 +38,10 @@ from geometria_orbital import (
 
 # ─── Constantes ────────────────────────────────────────────────────────────
 
-FREQ_HZ = 437.568e6
+FREQ_HZ = pe.valor("frecuencia_hz")
 # Altura real de STRaND-1 segun su TLE (ver calcular_link_budget.py). Con ella
 # el periodo del paso sale de 100.2 min, no de los 96.5 que daban los 600 km.
-ORBIT_HEIGHT_KM = 775.0
+ORBIT_HEIGHT_KM = pe.valor("altura_orbital_km")
 ORBIT_PERIOD_S = periodo_orbital_s(ORBIT_HEIGHT_KM)
 
 # Parametros de estacion terrena
@@ -49,7 +50,7 @@ GS_LON_DEG = -74.0721 # Longitud
 GS_ALT_M = 2_600.0    # Altitud (msnm)
 
 # Antena Yagi UHF
-G_ANT_DBI = 15.0
+G_ANT_DBI = pe.valor("g_rx_dbi")
 HPBW_DEG = 30.0       # Ancho de haz a -3 dB (tipico Yagi 11 el)
 AZ_RATE_DEG_S = 5.0   # Velocidad de rotacion azimut (deg/s)
 EL_RATE_DEG_S = 3.0   # Velocidad de rotacion elevacion (deg/s)
@@ -59,13 +60,17 @@ EL_RATE_DEG_S = 3.0   # Velocidad de rotacion elevacion (deg/s)
 # perdidas de cientos de dB en cuanto la antena queda descolgada del satelite.
 L_POINT_MAX_DB = 25.0
 
-# Enlace descendente (mismos valores que calcular_link_budget.py)
-P_TX_DBM = 30.0
-G_TX_DBI = 0.0
-L_TX_DB = 0.5
-L_RX_DB = 2.0
-L_ATM_DB = 0.5
-NF_RX_DB = 2.0
+# Enlace descendente: los mismos valores que calcular_link_budget.py, tomados
+# de la fuente unica. La perdida de polarizacion faltaba en este modelo, de modo
+# que su C/N0 salia 1 dB por encima del que daba el link budget en la misma
+# geometria. La de apuntamiento no se toma de la reserva fija: aqui se calcula.
+P_TX_DBM = pe.valor("p_tx_dbm")
+G_TX_DBI = pe.valor("g_tx_dbi")
+L_TX_DB = pe.valor("l_tx_db")
+L_RX_DB = pe.valor("l_rx_db")
+L_ATM_DB = pe.valor("l_atm_db")
+L_POL_DB = pe.valor("l_pol_db")
+NF_RX_DB = pe.valor("nf_rx_db")
 T_ANT_MIN_K = 50.0    # Temperatura de ruido de antena en cenit
 T_ANT_MAX_K = 200.0   # Temperatura de ruido de antena en horizonte
 
@@ -206,7 +211,7 @@ def simulate_pass(params: GroundStationParams, dt_s: float = DT_S) -> list[Track
         p_rx_dbm = (
             P_TX_DBM + G_TX_DBI - L_TX_DB
             + params.g_ant_dbi - L_RX_DB
-            - fspl - L_ATM_DB - p_loss
+            - fspl - L_ATM_DB - L_POL_DB - p_loss
         )
 
         results.append(TrackingResult(
@@ -254,8 +259,10 @@ def plot_tracking(results: list[TrackingResult], output_dir: Path) -> None:
 
     ax = axes[1, 1]
     ax.plot(t, [r.c_n0_db_hz for r in results], color="orange", linewidth=1.4)
-    ax.axhline(y=51.8, color="r", linestyle="--", alpha=0.5,
-               label="Requerido 9600 bps (Eb/N0=12 dB)")
+    req = (pe.ebn0_requerida_db(pe.ESQUEMA_DOCUMENTADO) + pe.valor("l_impl_db"))
+    ax.axhline(y=req + 10.0 * math.log10(pe.valor("tasa_bit_bps")),
+               color="r", linestyle="--", alpha=0.5,
+               label=f"Requerido 9600 bit/s FSK no coh. (Eb/N0={req:.1f} dB)")
     ax.set_title("C/N0 durante el paso")
     ax.set_xlabel("Tiempo (s)"); ax.set_ylabel("C/N0 (dB-Hz)")
     ax.grid(True, linestyle=":"); ax.legend(fontsize=8)

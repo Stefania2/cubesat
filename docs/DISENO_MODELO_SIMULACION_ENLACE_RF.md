@@ -6,6 +6,10 @@ Autora: Mayelin Stefania Aguilar Vasquez.
 
 Fecha de elaboracion: 2026-05-21.
 
+> **Nota de revisión (octubre de 2026).** Tras la auditoría recogida en [`AUDITORIA_GEMELO_RF.md`](AUDITORIA_GEMELO_RF.md), las cifras vigentes de simulación, presupuesto de enlace y pérdida de paquetes son las del [informe técnico](INFORME_TECNICO_FINAL.md), cuyas tablas se generan desde los datos. La modulación documentada de STRaND-1 es FSK a 9600 bit/s con NRZI; la BPSK del proyecto es un modelo comparativo de banda base.
+
+Este documento describe el modelo basico tal como se diseño en la Fase 2; sus tablas son las de aquella corrida.
+
 ## 1. Proposito de la fase
 
 De acuerdo con la Fase 2 de la propuesta, esta etapa cubre la instalacion/configuracion del entorno de simulacion y el diseño del modelo del enlace de comunicacion para transmision y recepcion de una señal RF modulada en FSK/BPSK.

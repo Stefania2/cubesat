@@ -13,6 +13,10 @@
 !/telemetria_strand1/backend
 !/telemetria_strand1/telemetria_decodificada_good.csv
 
+# Estado de corridas locales de GNU Radio: en el despliegue no se puede
+# ejecutar la cadena, asi que subirlo solo sirve para mostrar un resultado viejo.
+/telemetria_strand1/backend/_estado_enlace
+
 # Credenciales y bases locales: nunca.
 .env
 .env.*

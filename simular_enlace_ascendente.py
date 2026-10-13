@@ -1,6 +1,11 @@
 """
 Simulacion del enlace ascendente (uplink) para comandos hacia el CubeSat.
 
+ESCENARIO HIPOTETICO. No representa el enlace ascendente real de STRaND-1:
+eoPortal cita una asignacion en VHF (145.860 MHz) y ni el modem ni el umbral
+del receptor de a bordo estan caracterizados en este proyecto. El umbral de
+10 dB + 2 dB es un supuesto de diseño, no un valor documentado.
+
 Modela:
   - Potencia de transmision desde estacion terrena
   - Link budget ascendente (Tierra → satelite)

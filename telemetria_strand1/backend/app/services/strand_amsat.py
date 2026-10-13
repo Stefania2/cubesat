@@ -172,6 +172,46 @@ class Baliza:
     fuera_de_rango: bool = False
 
 
+def calibraciones() -> dict[str, dict[str, Any]]:
+    """Procedencia de cada magnitud calibrada: nodo, canal, recta y unidad.
+
+    Sirve para que la interfaz pueda decir de donde sale un valor y, sobre
+    todo, cual es el valor que la recta devuelve cuando la cuenta del ADC es
+    cero. Todas las rectas de la hoja son decrecientes con ordenada positiva,
+    asi que un canal que no mide (cuenta 0) aparece como su valor MAXIMO: 9.75 V
+    de bateria, 508-528 mA de corriente de panel. Ese numero es la ordenada de
+    la recta, no una medida.
+    """
+    tabla: dict[str, dict[str, Any]] = {}
+    for nodo, (_, canales) in NODOS.items():
+        for canal, spec in (canales or {}).items():
+            if spec.m is None:
+                continue
+            tabla[spec.nombre] = {
+                "nodo_i2c": f"0x{nodo:02X}", "canal": f"0x{canal:02X}",
+                "campo_original": f"{spec.nombre}_adc", "tipo_original": "cuenta ADC de 10 bits",
+                "unidad": spec.unidad, "m": spec.m, "c": spec.c,
+                "conversion": f"{spec.unidad} = {spec.m:g} · ADC + {spec.c:g}",
+                "valor_con_cuenta_cero": spec.c,
+            }
+    for canal, (nombre, m_i, c_i, m_v, c_v) in INTERRUPTORES.items():
+        for sufijo, unidad, m, c in (("corriente", "mA", m_i, c_i), ("tension", "mV", m_v, c_v)):
+            if m is None:
+                continue
+            tabla[f"{nombre}_{sufijo}"] = {
+                "nodo_i2c": "0x66", "canal": f"0x{canal:02X}",
+                "campo_original": f"{sufijo} (2 bytes, big endian)",
+                "tipo_original": "cuenta de 16 bits",
+                "unidad": unidad, "m": m, "c": c,
+                "conversion": f"{unidad} = {m:g} · cuenta + {c:g}",
+                "valor_con_cuenta_cero": c,
+            }
+    return tabla
+
+
+FUENTE_CALIBRACION = "AMSAT-UK, «STRAND-1 Packet Format» (amsat-strand-1-20130327.xlsx)"
+
+
 def desescapar_kiss(data: bytes) -> bytes:
     return data.replace(*ESCAPE_KISS)
 

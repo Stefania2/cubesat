@@ -1,8 +1,9 @@
 """Deteccion de anomalias sobre metadatos de frames.
 
 Todas las reglas operan sobre hechos verificables (bytes, marcas de tiempo,
-duplicados) y **no** sobre magnitudes fisicas interpretadas, que no existen
-mientras no haya un protocolo validado. Los umbrales no estan grabados en el
+duplicados) y **no** sobre magnitudes fisicas interpretadas: aunque las balizas
+ya se decodifican, el proyecto no dispone de rangos de operacion documentados
+contra los que marcar una alarma. Los umbrales no estan grabados en el
 codigo: viven en la tabla `anomaly_rules` y se editan desde la interfaz.
 """
 

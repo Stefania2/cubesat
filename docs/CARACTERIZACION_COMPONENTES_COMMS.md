@@ -6,7 +6,9 @@
 
 **Línea de investigación:** Ciberseguridad y Telecomunicaciones
 
-**Fecha:** Julio 2026
+**Fecha:** Julio 2026 (revisado en octubre de 2026)
+
+> **Nota de revisión (octubre de 2026).** Tras la auditoría recogida en [`AUDITORIA_GEMELO_RF.md`](AUDITORIA_GEMELO_RF.md), las cifras vigentes de simulación, presupuesto de enlace y pérdida de paquetes son las del [informe técnico](INFORME_TECNICO_FINAL.md), cuyas tablas se generan desde los datos. La modulación documentada de STRaND-1 es FSK a 9600 bit/s con NRZI; la BPSK del proyecto es un modelo comparativo de banda base.
 
 ---
 
@@ -124,13 +126,13 @@ RECEPTOR:
 
 ### 3.5 Parámetros del transceptor del STRaND-1
 
-Basado en datos de la misión y transceptores típicos de Clyde Space (fabricante de STRaND-1):
+Valores documentados de la misión donde existen, y supuestos típicos de transceptores UHF de CubeSat en el resto (STRaND-1 fue desarrollado por Surrey Space Centre y SSTL). eoPortal documenta 1 W nominal de salida, 0,25 W en modo baliza/CW; AMSAT-UK y SatNOGS DB, la modulación:
 
 | Parámetro | Valor |
 |-----------|-------|
 | Frecuencia de transmisión | 437.568 MHz |
 | Potencia de transmisión | 1 W (30 dBm) |
-| Tipo de modulación compatible | BPSK / GMSK |
+| Modulación del enlace descendente | FSK 9600 bit/s, AX.25 (HDLC), NRZI — documentada |
 | Estabilidad de frecuencia | ±2 ppm |
 | Impedancia de antena | 50 Ω |
 | Consumo en transmisión | ~3-5 W |
@@ -204,7 +206,7 @@ La simulación confirma lo esperado teóricamente:
 
 - **BPSK** requiere aproximadamente 3 dB menos de SNR que FSK no coherente para la misma BER, debido a la distancia euclidiana entre símbolos (2√E vs. √2E).
 - **FSK** ofrece un ancho de banda menor (~12 kHz vs. ~27 kHz) debido a que la energía se concentra en dos tonos discretos, pero su demodulación no coherente es menos eficiente energéticamente.
-- Para el enlace CubeSat típico con restricciones de potencia, **BPSK es la opción preferida**, lo que coincide con el ~45% de las misiones CubeSat universitarias que usan BPSK (Bouwmeester & Guo, 2010).
+- La elección no es unívoca. BPSK coherente es más eficiente en potencia, pero necesita recuperación de portadora y resolver la ambigüedad de fase; FSK (y sus variantes GFSK/GMSK con discriminador) admite receptores sencillos y es insensible a la fase, a costa de varios dB. **STRaND-1 usa FSK a 9600 bit/s con NRZI**; la BPSK de este proyecto es un modelo comparativo. La distribución de esquemas entre misiones CubeSat puede consultarse en Bouwmeester & Guo (2010); las proporciones que este documento citaba no se han podido verificar contra esa fuente y se han retirado.
 
 ---
 
@@ -236,7 +238,7 @@ El sistema TT&C (Telemetry, Tracking & Command) es el responsable de tres funcio
 
 - **Origen:** Derivado del protocolo X.25 para redes de radioaficionados.
 - **Estructura:** Trama con flag (0x7E), dirección, control, PID, información, FCS.
-- **Tasa típica:** 1200 bps (AFSK Bell 202) o 9600 bps (BPSK/GMSK).
+- **Tasa típica:** 1200 bps (AFSK Bell 202) o 9600 bps (FSK/GMSK tipo G3RUH, BPSK).
 - **Uso en CubeSats:** Protocolo más extendido en CubeSats universitarios. Usado por STRaND-1 para telemetría, Libertad 1, AAUSAT-II, entre otros.
 
 #### 5.3.2 CCSDS (Consultative Committee for Space Data Systems)

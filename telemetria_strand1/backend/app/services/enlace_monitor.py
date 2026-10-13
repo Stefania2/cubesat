@@ -18,16 +18,17 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 import logging
 import os
 from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 
-from .strand_amsat import decodificar
+from .strand_amsat import calibraciones, decodificar
 
 logger = logging.getLogger(__name__)
 
@@ -42,11 +43,20 @@ BITS_TX = RAIZ_CUBESAT / "frames_STRAND1_bits.bin"  # 18.776 bytes, 1 byte = 1 b
 CADENA_GR = RAIZ_CUBESAT / "cadena_strand1_awgn.py"  # cadena GNU Radio validada
 BITS_RX_SIM = ESTADO_DIR / "bits_rx_sim.bin"
 IQ_SIM = ESTADO_DIR / "iq_sim.c64"
+# Registro de la corrida que produjo los dos archivos anteriores. Sin el, un
+# `bits_rx_sim.bin` que quedo en disco de otra sesion (o que viajo en el
+# despliegue) se presentaba como resultado actual: la pagina mostraba
+# «discrepancia de 1 bit» sin haber ejecutado nada.
+CORRIDA_META = ESTADO_DIR / "corrida.json"
 BALIZAS_CSV = RAIZ_CUBESAT / "telemetria_strand1" / "telemetria_decodificada_good.csv"
 
 N_BITS = 18_776
 FRAMES_ESPERADOS = 100
 MODULACION = "BPSK"
+MODULACION_NOTA = (
+    "BPSK es la modulacion del modelo de banda base (comparativo). La baliza "
+    "documentada de STRaND-1 es FSK a 9600 bit/s con NRZI."
+)
 FREQ_HZ = 437_568_000
 SYMBOL_RATE = 9_600  # baudios
 SAMPLE_RATE = 76_800  # Hz
@@ -62,14 +72,13 @@ FFT_NFFT = 4096
 FFT_MAX_PUNTOS = 2048
 CONST_PUNTOS = 400
 
-# Limites de ingenieria documentados para marcar NORMAL/ALERTA. Las claves son
-# los canales del decodificador AMSAT; los rangos se deducen de la calibracion
-# publicada (p. ej. bateria ~ 9.75 V nominal).
-LIMITES_TELEMETRIA = {
-    "battery_0_voltage": (8.0, 9.9),
-    "battery_1_voltage": (8.0, 9.9),
-    "battery_0_temperature": (0.0, 45.0),
-    "battery_1_temperature": (0.0, 45.0),
+# No hay limites NORMAL/ALERTA: el proyecto no dispone de rangos de operacion
+# documentados para STRaND-1. Los que habia (bateria «nominal» de 8.0-9.9 V)
+# se habian deducido de la propia recta de calibracion y daban por sana una
+# lectura de 9.75 V, que es justo la ordenada de la recta: cuenta ADC = 0, es
+# decir, un canal que no mide. Lo unico que se marca es ese caso objetivo.
+ORDENADAS_CALIBRACION = {
+    nombre: cal["valor_con_cuenta_cero"] for nombre, cal in calibraciones().items()
 }
 
 # Orden de presentacion preferido de los parametros en el panel.
@@ -113,6 +122,69 @@ def sha256_bits(bits: np.ndarray) -> str:
     return hashlib.sha256(bits.tobytes()).hexdigest()
 
 
+def leer_corrida() -> dict[str, Any] | None:
+    """Metadatos de la corrida que escribio los archivos de estado, si constan.
+
+    Solo se da por buena si el SHA-256 registrado coincide con el del archivo
+    de bits actual: asi un archivo huerfano o sustituido no hereda la etiqueta.
+    """
+    try:
+        meta = json.loads(CORRIDA_META.read_text(encoding="utf-8"))
+        if meta.get("sha256_rx") != sha256_bits(cargar_bits(BITS_RX_SIM)):
+            return None
+        return meta
+    except (OSError, ValueError):
+        return None
+
+
+def simulacion_disponible() -> tuple[bool, str | None]:
+    """Si esta instancia puede lanzar la cadena GNU Radio, y si no, por que."""
+    if os.environ.get("VERCEL"):
+        return False, ("Esta instancia es un despliegue sin GNU Radio: la simulacion solo se "
+                       "puede ejecutar en la instalacion local.")
+    if not CADENA_GR.exists():
+        return False, f"No existe la cadena GNU Radio ({CADENA_GR.name})."
+    if not BITS_TX.exists():
+        return False, f"No existe el archivo de bits de entrada ({BITS_TX.name})."
+    return True, None
+
+
+def integridad_enlace() -> dict[str, Any]:
+    """Integridad de la ultima corrida REGISTRADA, con su procedencia.
+
+    Un bit distinto no es una averia de la cadena: es un error de canal a la
+    SNR de esa corrida, y se dice asi.
+    """
+    if not BITS_RX_SIM.exists():
+        return {**validar_integridad(BITS_RX_SIM), "procedencia": "sin_corrida"}
+    meta = leer_corrida()
+    if meta is None:
+        fecha = datetime.fromtimestamp(BITS_RX_SIM.stat().st_mtime, timezone.utc)
+        return {
+            "valido": None, "bits_entrada": N_BITS, "bits_recuperados": None,
+            "diferencia": None, "sha256_entrada": None, "sha256_recuperado": None,
+            "frames_esperados": FRAMES_ESPERADOS, "procedencia": "archivo_sin_registro",
+            "mensaje": (
+                f"Hay una salida en disco del {fecha:%Y-%m-%d %H:%M} UTC sin registro de la "
+                "corrida que la produjo (SNR y semilla desconocidas). No se presenta como "
+                "resultado: ejecuta la simulacion para obtener uno trazable."),
+        }
+    check = validar_integridad(BITS_RX_SIM)
+    dif = check["diferencia"]
+    check.update(
+        procedencia="sesion_actual" if enlace.corrio_en_esta_sesion else "corrida_anterior",
+        corrida_utc=meta.get("timestamp_utc"), snr_db=meta.get("snr_db"),
+        semilla=meta.get("semilla"),
+    )
+    if dif:
+        check["mensaje"] = (
+            f"{dif} bit(s) erroneo(s) de {N_BITS} a SNR {meta.get('snr_db')} dB "
+            f"(BER {dif / N_BITS:.2e}): errores de canal de esa corrida, no un fallo de la cadena")
+    if check["procedencia"] == "corrida_anterior":
+        check["mensaje"] += f" · corrida del {meta.get('timestamp_utc')}, anterior a esta sesion"
+    return check
+
+
 def validar_integridad(ruta_rx: Path = BITS_RX_SIM) -> dict[str, Any]:
     """Compara TX (18.776 bits) contra RX: longitud, diferencia y SHA-256."""
     try:
@@ -150,6 +222,9 @@ def validar_integridad(ruta_rx: Path = BITS_RX_SIM) -> dict[str, Any]:
 # ─────────────────────────────────────────────────────────────────────────────
 def _leer_iq(ruta: Path = IQ_SIM) -> np.ndarray | None:
     if not ruta.exists():
+        return None
+    # El tap IQ por defecto solo vale si consta la corrida que lo escribio.
+    if ruta == IQ_SIM and leer_corrida() is None:
         return None
     try:
         datos = np.fromfile(ruta, dtype=np.complex64)
@@ -288,11 +363,14 @@ def parametros_telemetria() -> list[dict[str, Any]]:
     parametros = []
     for clave in sorted(visibles, key=clave_orden):
         valor = ultimo[clave]
-        limite = LIMITES_TELEMETRIA.get(clave)
-        if isinstance(valor, (int, float)) and limite is not None:
-            status = "NORMAL" if limite[0] <= valor <= limite[1] else "ALERTA"
+        ordenada = ORDENADAS_CALIBRACION.get(clave)
+        nota = None
+        if isinstance(valor, (int, float)) and ordenada is not None and valor == ordenada:
+            status = "SIN_MEDIDA"
+            nota = ("Cuenta ADC = 0: el valor es la ordenada de la recta de calibracion, "
+                    "no una medida")
         else:
-            status = "OK"
+            status = "DECODIFICADO"
         parametros.append(
             {
                 "key": clave,
@@ -300,6 +378,7 @@ def parametros_telemetria() -> list[dict[str, Any]]:
                 "value": valor,
                 "unit": unidades.get(clave),
                 "status": status,
+                "nota": nota,
                 "disponible": True,
             }
         )
@@ -327,7 +406,9 @@ def telemetria_enlace() -> dict[str, Any]:
         "frames": frames,
         "nota": (
             f"{len(balizas)} balizas reales re-decodificadas con strand_amsat.py "
-            "(especificacion AMSAT-UK corregida). Ultimo valor por canal."
+            "(especificacion AMSAT-UK corregida). Ultimo valor por canal: dato "
+            "historico real, no producido por la simulacion de esta pagina. "
+            "«SIN MEDIDA» = cuenta ADC 0 (canal que no mide)."
         ),
     }
 
@@ -347,6 +428,7 @@ class EnlaceRunner:
         # Metricas acumuladas por la sesion (historial para la grafica BER/SNR).
         self._historial: deque[dict[str, Any]] = deque(maxlen=HISTORIAL_MAX)
         self._metricas: dict[str, Any] | None = None
+        self.corrio_en_esta_sesion = False
 
     @property
     def estado(self) -> str:
@@ -363,6 +445,9 @@ class EnlaceRunner:
     def iniciar(self, snr_db: float) -> None:
         if self._estado == "RUNNING":
             raise RuntimeError("Ya hay una simulacion en marcha.")
+        disponible, motivo = simulacion_disponible()
+        if not disponible:
+            raise RuntimeError(motivo)
         if not BITS_TX.exists():
             raise RuntimeError(f"No existe el archivo de bits de entrada: {BITS_TX}")
         if not CADENA_GR.exists():
@@ -448,7 +533,8 @@ class EnlaceRunner:
         self._estado = self._estado if self._estado == "ERROR" else "STOPPED"
 
     def reset(self) -> None:
-        for ruta in (BITS_RX_SIM, IQ_SIM):
+        self.corrio_en_esta_sesion = False
+        for ruta in (BITS_RX_SIM, IQ_SIM, CORRIDA_META):
             try:
                 ruta.unlink(missing_ok=True)
             except OSError:
@@ -486,9 +572,9 @@ class EnlaceRunner:
                 "para expresar en dBm"
             ),
             "nota_fer": (
-                "N/A — la cadena minima no tiene trama AX.25 ni FEC; el modelo "
-                "avanzado (simular_enlace_rf_bpsk_avanzado.py) si reporta "
-                "ax25_frames_validos"
+                "N/A en esta cadena: no tiene trama AX.25 ni FEC, asi que no hay "
+                "trama que validar. La FER se mide en el modelo avanzado "
+                "(simular_enlace_rf_bpsk_avanzado.py) y se muestra en «Simulacion RF»"
             ),
             "nota_frecuencia": "437.568 MHz UHF (banda de bajada nominal de STRAND-1)",
             "nota_ancho_banda": (
@@ -506,6 +592,14 @@ class EnlaceRunner:
         n = min(len(tx), len(rx))
         errores = int(np.count_nonzero(tx[:n] != rx[:n])) if n else 0
         ber = errores / n if n else None
+        # Se registra la corrida ANTES de leer nada mas: a partir de aqui los
+        # archivos de estado tienen SNR, semilla y fecha conocidas.
+        CORRIDA_META.write_text(json.dumps({
+            "timestamp_utc": ahora_iso(), "snr_db": snr_db, "semilla": SEED,
+            "cadena": CADENA_GR.name, "sha256_rx": sha256_bits(rx),
+            "bits_comparados": n, "errores_bit": errores,
+        }, indent=2), encoding="utf-8")
+        self.corrio_en_esta_sesion = True
         integridad = validar_integridad(BITS_RX_SIM)
 
         iq = _leer_iq()
@@ -519,6 +613,8 @@ class EnlaceRunner:
             {
                 "snr_db": snr_db,
                 "ber": ber,
+                "bits_comparados": n,
+                "errores_bit": errores,
                 "potencia_relativa_dbfs": potencia,
                 "ruido_estimado": ruido,
                 "frames_recibidos": FRAMES_ESPERADOS,
@@ -574,7 +670,11 @@ def estado_enlace() -> dict[str, Any]:
 
 
 def config_enlace() -> dict[str, Any]:
+    disponible, motivo = simulacion_disponible()
     return {
+        "simulacion_disponible": disponible,
+        "simulacion_no_disponible_motivo": motivo,
+        "modulacion_nota": MODULACION_NOTA,
         "modulacion": MODULACION,
         "frecuencia_hz": FREQ_HZ,
         "tasa_bits_bps": SYMBOL_RATE,

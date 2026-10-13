@@ -17,7 +17,7 @@
 
 ## Resumen
 
-Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi, tramas AX.25 verificadas por FCS y sincronización realista de portadora y símbolo con lazos de Costas y Gardner; (4) flujogramas en GNU Radio para visualización IQ y demodulación; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo, complementado con una ruta SGP4 con TLE real versionado y con el formato de validación para capturas IQ de un SDR; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida; y (9) un gemelo digital que reconstruye el estado del satélite a partir de esos registros, lo reproduce en un eje temporal comprimido y lo representa en tres dimensiones, con detección de anomalías que fecha por sí sola el fallo de la instrumentación de energía y con la edad de cada lectura siempre a la vista. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
+Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN —la modulación documentada del satélite es FSK a 9600 bit/s con NRZI; la BPSK es un modelo comparativo—; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi, tramas AX.25 verificadas por FCS y sincronización realista de portadora y símbolo con lazos de Costas y Gardner; (4) flujogramas en GNU Radio para visualización IQ y demodulación; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo, complementado con una ruta SGP4 con TLE real versionado y con el formato de validación para capturas IQ de un SDR; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida; y (9) un gemelo digital que reconstruye el estado del satélite a partir de esos registros, lo reproduce en un eje temporal comprimido y lo representa en tres dimensiones, con detección de anomalías que fecha por sí sola el fallo de la instrumentación de energía y con la edad de cada lectura siempre a la vista. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
 
 El resultado central es que la cadena completa —señal RF, demodulación, bits, tramas, paquetes, variables y estado del sistema— puede recorrerse íntegramente con datos de una red abierta de estaciones voluntarias, y que el eslabón que falla no es el enlace, sino la interpretación de los bytes.
 
@@ -43,6 +43,10 @@ Caracterizar y simular el subsistema electrónico de comunicaciones de un CubeSa
 ### 1.3 Alcance y trazabilidad
 
 El trabajo es una caracterización académica reproducible, no la construcción, operación ni reparación física de un satélite. La simulación RF es un modelo equivalente en banda base: no sustituye una captura UHF real ni certifica un receptor de vuelo. La recuperación de portadora y de temporización de símbolo se implementa con lazos de Costas y Gardner (sección 5.4); la de trama sigue localizando las tramas por desplazamiento conocido. La validación contra capturas IQ reales de un SDR queda como trabajo futuro, aunque se define el formato para conservarlas (sección 8.2).
+
+**Modulación real y modulación del modelo.** La modulación documentada del enlace descendente de STRaND-1 es **FSK a 9600 bit/s con tramas AX.25 (HDLC) y codificación NRZI** (AMSAT-UK; registro de transmisores de SatNOGS DB, hoy marcado *inactive*; recepción documentada por PY4ZBZ con módem G3RUH). Ninguna fuente consultada describe BPSK en este satélite. La BPSK coherente del modelo avanzado y de la cadena GNU Radio es, por tanto, un **modelo comparativo de banda base** elegido para estudiar conformado de pulso, sincronización y codificación; sus umbrales no son los del receptor FSK real. No están documentados —y aquí se tratan como incertidumbre— la desviación de frecuencia, el filtrado del modulador, el uso de aleatorizador G3RUH a bordo, la ganancia de la antena y el umbral de Eb/N0 de un receptor real. `parametros_enlace.py` es la fuente única de los parámetros del enlace y declara la procedencia de cada uno (documentado, deducido de datos o supuesto de diseño).
+
+**Clases de dato.** A lo largo del informe se distinguen cuatro: *telemetría recibida* (bytes de SatNOGS, sin alterar), *magnitudes decodificadas* (con su estado de validación), *resultados simulados* (salidas de los modelos, con semilla y configuración registradas) y *valores teóricos* (curvas y presupuestos calculados). Un resultado simulado no es una medición del enlace.
 
 El presente informe es la fuente integrada de resultados. Cada valor numérico debe poder rastrearse a un script, a sus parámetros y a los archivos de `resultados_simulacion/`. El script `generar_tablas_informe.py` actualiza las tablas marcadas del informe desde esas salidas; si cambia un modelo, se deben regenerar sus resultados y las tablas antes de publicar una conclusión.
 
@@ -386,34 +390,60 @@ Estas tramas **no llevan CRC** —su longitud es exactamente `8 + DATA_SIZE`, si
 | Integridad de la telemetría | 89,4 % (32 754 balizas de 36 641 frames) | Medido |
 | Balizas por pase | media 14,7 · mediana 6 · máx 411 | Medido |
 | Tiempo entre paquetes | mediana 2,0 s · p90 17,0 s | Medido |
-| **Packet Error Rate** | **64,2 %** (10 411 paquetes perdidos de 16 221 emitidos) | Medido |
-| **PER en horizonte / cenit** | **79,1 % a 0-14° · 52,1 % a 75-89°** | Medido |
+| **Pérdida de paquetes dentro de ráfagas** | ver tabla de esta sección | Derivado, bajo hipótesis de contador |
 | **Pureza de trama en horizonte / cenit** | **82,2 % a 0-14° · 96,9 % en cenit** | Medido |
 | Observaciones con balizas | 775 de 3049 (25,4 %) | Medido |
 | Estaciones que recibieron balizas | 114 | Medido |
-| BER BPSK / FSK | 0 para SNR ≥ 2 dB / ≥ 8 dB | Simulado (§4) |
-| Margen descendente | 7,1 dB a 5° · 18,0 dB en cenit | Modelo (§7) |
-| C/N₀ en un paso completo | 60,9 – 72,6 dB-Hz | Modelo (§8) |
+| BER, PER y FER del modelo | tablas de §4 y §5 | Simulado |
+| Margen descendente | tablas de §7 | Teórico / simulado |
 
-#### Packet Error Rate medida sobre el número de secuencia
+#### Pérdida de paquetes estimada con el número de secuencia
 
-La baliza de STRaND-1 lleva un contador de secuencia de 8 bits que el satélite incrementa **en cada paquete emitido**. Entre dos balizas recibidas consecutivamente en un mismo pase, la diferencia de contadores dice cuántos paquetes emitió el satélite en ese intervalo, y por tanto cuántos no llegaron. Eso permite una PER genuina, no una cota:
+La baliza lleva un contador de secuencia de 8 bits. **Hipótesis:** el satélite lo incrementa en uno por paquete emitido. La respaldan las ráfagas de 2016 a 2021, en las que llegan dos paquetes por segundo con contadores consecutivos; deja de cumplirse cuando el OBC se reinicia en bucle (desde 2022 abundan balizas con el contador clavado en 1), y esos tramos se excluyen.
 
-$$\text{PER} = \frac{\sum (\Delta_i - 1)}{\sum \Delta_i}, \qquad \Delta_i = (s_{i+1} - s_i) \bmod 256$$
+Para cada *ráfaga* —balizas de una misma estación separadas menos de 30 s y con saltos de contador de hasta 32— se cuenta cuántos valores distintos del contador llegaron frente a cuántos abarca el tramo:
 
-Se descartan las transiciones con $\Delta = 0$ —paquete repetido, recibido por dos estaciones— y con $\Delta > 32$, que corresponden a huecos entre pases y no a pérdidas dentro de uno. Sobre 775 pases y 5810 transiciones útiles:
+$$\text{pérdida} = 1 - \frac{\text{contadores distintos recibidos}}{c_{max} - c_{min} + 1}$$
 
-| Elevación máxima del pase | Transiciones | Emitidos | Perdidos | PER |
+<!-- TABLA:perdida_secuencia -->
+| Elevacion maxima de la observacion | Rafagas | Emitidos (estimados) | Recibidos | Perdida |
 |:---|---:|---:|---:|---:|
-| 0 – 14° | 85 | 407 | 322 | **79,1 %** |
-| 15 – 29° | 325 | 1086 | 761 | 70,1 % |
-| 30 – 44° | 904 | 1738 | 834 | 48,0 % |
-| 45 – 59° | 402 | 935 | 533 | 57,0 % |
-| 60 – 74° | 530 | 1187 | 657 | 55,3 % |
-| 75 – 89° | 645 | 1346 | 701 | **52,1 %** |
-| **Global** | **5810** | **16 221** | **10 411** | **64,2 %** |
+| 0-15° | 21 | 385 | 95 | 75.3 % |
+| 15-30° | 30 | 852 | 317 | 62.8 % |
+| 30-45° | 70 | 936 | 599 | 36.0 % |
+| 45-60° | 61 | 570 | 359 | 37.0 % |
+| 60-75° | 88 | 816 | 568 | 30.4 % |
+| 75-90° | 139 | 992 | 636 | 35.9 % |
+| **Global (todas las rafagas)** | 1403 | 30576 | 19311 | 36.8 % |
+<!-- /TABLA:perdida_secuencia -->
 
-La PER cae 27 puntos del horizonte al cenit, que es la forma que predice el modelo de link budget de la sección 7: el margen pasa de 7,1 dB a 5° a 18,0 dB en cenit. La corrección de esta medida frente a la versión anterior de este informe está en que antes se contaban como pérdidas todos los huecos de secuencia, incluidos los que separan pases distintos; acotando $\Delta$ el resultado baja del 72,6 % declarado entonces al 64,2 % real.
+Tres advertencias acotan lo que la cifra significa:
+
+1. **No es la FER del paso.** Solo cuenta lo que falta *entre* paquetes recibidos. No ve lo perdido antes del primero ni después del último, ni los pasos sin ninguna recepción: es una cota inferior. Una FER empírica completa no es obtenible, porque SatNOGS solo registra las tramas demoduladas y no existe registro de las emitidas.
+2. **No es atribuible solo al canal.** En la pérdida intervienen también la disponibilidad de la estación, el detector de señal, el demodulador y el decodificador.
+3. **La elevación es la máxima de la observación**, no la del instante de cada trama, y solo existe para las observaciones de SatNOGS Network (2022 en adelante). Los tramos con pocas ráfagas tienen una incertidumbre grande.
+
+*Corrección respecto de la versión anterior de este informe.* Antes se publicaba una PER del 64,2 % obtenida restando contadores de balizas consecutivas. La marca de tiempo de SatNOGS tiene 1 s de resolución y en ese segundo caben dos paquetes, que la base devuelve en cualquier orden: cada par desordenado se contaba como un «salto de 2» (un paquete perdido que no lo estaba). Contar valores distintos dentro de la ráfaga no depende del orden y da la cifra de la tabla, sensiblemente menor. La tendencia con la elevación se mantiene.
+
+#### Coincidencias entre estaciones
+
+Que un mismo contenido aparezca varias veces no es, por sí solo, una anomalía. STRaND-1 repite balizas idénticas (el reloj del OBC se reinicia y vuelve a emitir los mismos bytes), de modo que la igualdad de bytes no implica la misma emisión. Se define como **misma emisión** el mismo contenido recibido por estaciones distintas con marcas de tiempo a ±2 s; se conservan el origen y el instante de cada recepción, y el análisis es una capa derivada que no modifica la tabla de tramas (`tools/analizar_recepcion.py`).
+
+<!-- TABLA:diversidad -->
+| Magnitud | Valor |
+|:---|:---|
+| Balizas con observador | 30590 |
+| Emisiones distintas recibidas | 28179 |
+| Recibidas por 1 / 2 / 3 / 4 o mas estaciones | 26186 / 1697 / 210 / 86 |
+| Ventanas con varias estaciones | 231 |
+| Emisiones en esas ventanas: union / mejor estacion sola | 15153 / 11503 |
+| Ganancia por combinacion | ×1.32 |
+| M0KSF y M0KSF-BB, ventanas comunes | 30 |
+| Solo M0KSF / solo M0KSF-BB / ambas | 249 / 33 / 215 |
+| Ganancia de la union sobre la mejor del par | ×1.07 |
+<!-- /TABLA:diversidad -->
+
+La «ganancia por combinación» es el cociente entre las emisiones distintas recuperadas por todas las estaciones de una ventana y las que recupera la mejor estación sola. Es un resultado **observacional**: las estaciones difieren en antena, receptor, horario y disponibilidad, y los metadatos no permiten afirmar diversidad física del canal. Para el par M0KSF / M0KSF-BB, una parte apreciable de las emisiones llega a ambas: son la misma trama oída dos veces, no duplicados de ingesta (que la clave única contenido-instante-observador ya impide).
 
 #### Un observable en lugar de RSSI
 
@@ -460,21 +490,23 @@ El desarrollo completo de esta cadena —de la señal RF al estado del satélite
 ### 4.2 Resultados de BER
 
 <!-- TABLA:ber_basico -->
-| SNR (dB) | BER BPSK | BER FSK |
-|:---|---:|---:|
-| -2 | 8.52e-04 | 1.08e-01 |
-| 0 | 5.33e-05 | 5.33e-02 |
-| 2 | 0 (sin errores) | 1.91e-02 |
-| 4 | 0 (sin errores) | 3.89e-03 |
-| 6 | 0 (sin errores) | 4.79e-04 |
-| 8 | 0 (sin errores) | 0 (sin errores) |
-| 10 | 0 (sin errores) | 0 (sin errores) |
-| 12 | 0 (sin errores) | 0 (sin errores) |
+| SNR por muestra (dB) | Eb/N0 (dB) | BER BPSK | BER FSK |
+|:---|---:|---:|---:|
+| -2 | 7.03 | 8.52e-04 | 1.08e-01 |
+| 0 | 9.03 | 5.33e-05 | 5.33e-02 |
+| 2 | 11.03 | 0 (sin errores) | 1.91e-02 |
+| 4 | 13.03 | 0 (sin errores) | 3.89e-03 |
+| 6 | 15.03 | 0 (sin errores) | 4.79e-04 |
+| 8 | 17.03 | 0 (sin errores) | 0 (sin errores) |
+| 10 | 19.03 | 0 (sin errores) | 0 (sin errores) |
+| 12 | 21.03 | 0 (sin errores) | 0 (sin errores) |
 <!-- /TABLA:ber_basico -->
 
 ### 4.3 Análisis
 
-**BPSK** resulta claramente más robusta que **FSK** en canal AWGN. La razón teórica es la distancia euclidiana entre símbolos: para BPSK antipodal es $2\sqrt{E_b}$, mientras que entre dos tonos FSK ortogonales es $\sqrt{2E_b}$, lo que da una ventaja de 3 dB en Eb/N0, a la que se suma la penalización de la detección no coherente.
+*Cómo leer esta comparación.* El eje es la SNR **por muestra**; con 8 muestras por símbolo, Eb/N0 = SNR + 9,03 dB (segunda columna de la tabla). Cada punto es una única realización de ruido sobre 18 776 bits, así que «0 errores» solo acota la BER por debajo de ≈2·10⁻⁴ con un 95 % de confianza. Y la FSK de este modelo (tonos a ±2400 Hz, detector de energía) **no es la forma de onda de STRaND-1**: es un modelo de banda base de la misma familia. La comparación es entre dos modelos, no un veredicto sobre el enlace real.
+
+**BPSK** resulta más robusta que **FSK** en canal AWGN. La razón teórica es la distancia euclidiana entre símbolos: para BPSK antipodal es $2\sqrt{E_b}$, mientras que entre dos tonos FSK ortogonales es $\sqrt{2E_b}$, lo que da una ventaja de 3 dB en Eb/N0, a la que se suma la penalización de la detección no coherente.
 
 Conviene señalar una limitación del modelo FSK: la separación entre tonos es de 4800 Hz, es decir $\Delta f \cdot T = 0{,}5$. Esa separación garantiza ortogonalidad para detección **coherente**, pero la detección por energía implementada requiere $\Delta f \cdot T \geq 1$ para ser estrictamente ortogonal. La FSK simulada arrastra por tanto una penalización adicional respecto a la curva teórica de FSK no coherente con la que se contrasta.
 
@@ -493,69 +525,153 @@ La FSK ocupa menos ancho de banda porque concentra la energía en dos componente
 
 ## 5. Modelo avanzado de enlace
 
-`simular_enlace_rf_bpsk_avanzado.py` añade, como etapas componibles sobre la misma cadena, conformado de pulso RRC ($\alpha = 0{,}35$), desvanecimiento Rice con perfil Jakes ($K = 10$ dB), error residual de Doppler, codificación convolucional $r=1/2$, $K=7$ con decodificación Viterbi, construcción y verificación de tramas AX.25, y un receptor con **sincronización realista** (lazo de Costas para la portadora y lazo de Gardner para la temporización de símbolo, descritos en 5.4). Se evalúan 18 configuraciones en 8 puntos de SNR (144 corridas).
+`simular_enlace_rf_bpsk_avanzado.py` es un modelo **BPSK de banda base (comparativo)** que añade a la cadena básica conformado RRC ($\alpha = 0{,}35$), recuperación de portadora (Costas) y de reloj (Gardner), desvanecimiento Rice, Doppler residual, código convolucional $r=1/2$, $K=7$ con Viterbi de decisión dura y tramas AX.25 con FCS.
 
-El barrido de SNR de este modelo (−10 a 4 dB) es más bajo que el del modelo básico porque el conformado de pulso correcto, el filtro adaptado y la recuperación de portadora permiten que la BPSK deje de cometer errores a partir de 2 dB. Los puntos superiores solapan con el modelo básico y permiten verificar que ambos coinciden: a 0 dB ambos dan BER $5{,}33\times10^{-5}$.
+### 5.1 Condiciones de comparación
 
-### 5.1 Resultados principales
+Todas las configuraciones se comparan bajo las mismas reglas:
+
+- **Mismos bits de entrada:** los 18 776 bits de telemetría real.
+- **Misma definición de energía:** el eje es $E_b/N_0$ **por bit de información**. Con ruido complejo de varianza $\sigma^2$ por muestra, $\text{SNR}_{muestra} = (E_b/N_0)\cdot r / 8$, donde $r$ es la tasa del código: sin código, $E_b/N_0 - 9{,}03$ dB; con $r=1/2$, 3,01 dB menos. La versión anterior comparaba a igual SNR por muestra, lo que daba al código el doble de energía por bit de información.
+- **Mismo canal:** el ruido y el desvanecimiento se generan con semillas comunes a todas las configuraciones (comparación pareada), y el nivel de ruido se fija con la potencia **transmitida**, no con la de la realización desvanecida.
+- **Varios ensayos por punto**, con intervalos de confianza de Wilson al 95 %. Cuando no se observa ningún error, la tabla muestra «0 (< x)», donde x es la cota superior que la muestra permite afirmar.
+- **Mismo criterio de conteo.** BER = bits erróneos / bits efectivamente comparados. Un *paquete* es un bloque de 64 bytes de telemetría (la carga útil de una trama AX.25); PER = paquetes erróneos o no recuperados / transmitidos. FER = (tramas con FCS inválido + tramas no recuperadas) / tramas transmitidas, y solo existe en los esquemas con trama AX.25: en el resto es **N/A**, no cero.
+- **Ambigüedad de fase.** Un lazo de Costas BPSK engancha en 0° o en 180°. Se resuelve con los primeros 64 bits como palabra de sincronismo; un salto de ciclo posterior cuenta como error. Se informa además la **BER diferencial** (tras decodificar diferencialmente ambos flujos), que es la que vería un receptor insensible a la polaridad como el NRZI de STRaND-1.
+
+<!-- TABLA:procedencia -->
+| Elemento | Valor |
+|:---|:---|
+| Commit del codigo | 918e2c7+cambios sin confirmar |
+| Fecha de la simulacion avanzada (UTC) | 2026-10-13T19:28:29+00:00 |
+| Fecha del analisis del paso SGP4 (UTC) | 2026-10-13T19:28:48+00:00 |
+| Semilla base | 20260701 |
+| Semillas por corrida | ruido = (semilla_base, 1, ensayo, indice_EbN0); desvanecimiento = (semilla_base, 2, ensayo). Comunes a todas las configuraciones: comparacion pareada. |
+| Ensayos por punto | 6 |
+| Bits de informacion por ensayo | 18776 |
+| Valores de Eb/N0 (dB) | 0, 1.5, 3, 4.5, 6, 7.5, 9, 10.5, 12 |
+| Definicion de Eb/N0 | Eb/N0 por bit de informacion (antes del FEC; en AX.25, por bit de trama incluida la cabecera). SNR por muestra = Eb/N0 + 10 log10(tasa_codigo / 8). |
+| Ambiguedad de fase | resuelta con los primeros 64 bits como palabra de sincronismo conocida; los saltos de ciclo posteriores cuentan como error |
+| Semilla y corridas del Monte Carlo de margen | 20261013 · 5000 |
+| TLE | tle/strand1_2026-08-09.tle (epoca 2026-08-09T10:55:44.461344+00:00) |
+<!-- /TABLA:procedencia -->
+
+### 5.2 Canal AWGN: validación y coste de la sincronización
 
 <!-- TABLA:avanzado_principal -->
-| Configuracion | BER a -8 dB | BER a -6 dB | BER a -4 dB | BER a -2 dB | Ancho de banda (99 %) |
-|:---|---:|---:|---:|---:|---:|
-| BPSK rectangular (NRZ) | 5.71e-01 | 1.47e-01 | 8.99e-02 | 4.52e-02 | 66.1 kHz |
-| BPSK + RRC (α=0.35) | 6.18e-02 | 2.38e-02 | 6.76e-03 | 8.52e-04 | 11.2 kHz |
-| BPSK rectangular (NRZ) + fading Rice | 4.17e-01 | 4.99e-01 | 7.98e-01 | 5.51e-02 | 66.1 kHz |
-| BPSK + FEC conv. (r=1/2, K=7) | 4.92e-01 | 4.42e-01 | 5.85e-02 | 1.54e-03 | 66.0 kHz |
+| Eb/N0 (dB) | SNR/muestra sin codigo (dB) | Teoria BPSK | RRC, sinc. ideal | RRC, Costas+Gardner | NRZ, Costas+Gardner | RRC + FEC |
+|:---|---:|---:|---:|---:|---:|---:|
+| 0.0 | -9.03 | 7.86e-02 | 7.88e-02 | 4.31e-01 | 5.03e-01 | 5.01e-01 |
+| 1.5 | -7.53 | 4.64e-02 | 4.79e-02 | 2.65e-01 | 5.05e-01 | 4.80e-01 |
+| 3.0 | -6.03 | 2.29e-02 | 2.21e-02 | 2.41e-02 | 4.02e-01 | 4.78e-01 |
+| 4.5 | -4.53 | 8.79e-03 | 8.57e-03 | 9.24e-03 | 1.06e-01 | 7.81e-02 |
+| 6.0 | -3.03 | 2.39e-03 | 2.25e-03 | 2.41e-03 | 6.88e-02 | 1.07e-04 |
+| 7.5 | -1.53 | 3.99e-04 | 4.26e-04 | 4.53e-04 | 1.15e-01 | 0 (< 3.4e-05) |
+| 9.0 | -0.03 | 3.36e-05 | 3.55e-05 | 4.44e-05 | 1.71e-02 | 0 (< 3.4e-05) |
+| 10.5 | 1.47 | 1.08e-06 | 0 (< 3.4e-05) | 0 (< 3.4e-05) | 6.21e-03 | 0 (< 3.4e-05) |
+| 12.0 | 2.97 | 9.01e-09 | 0 (< 3.4e-05) | 0 (< 3.4e-05) | 1.40e-03 | 0 (< 3.4e-05) |
 <!-- /TABLA:avanzado_principal -->
 
-**Conformado RRC.** Con sincronización realista la ventaja del conformado deja de ser solo espectral. Con pulso rectangular sin filtro adaptado el receptor con sincronización trabaja sobre 9 dB más de ruido (todo el ancho de banda de muestreo de 76,8 kHz) y pierde el enganche: a −8 dB su BER es 5,7e−01. Con RRC y su filtro adaptado la BER a −8 dB es 6,2e−02 —prácticamente la misma que la del modelo de sincronización ideal— y además el ancho de banda ocupado al 99 % baja de ~66 kHz a ~11 kHz, un factor de 5,9, cerca del límite teórico $R_b(1+\alpha) = 12{,}96$ kHz y dentro de la canalización UHF de 25 kHz. El filtro adaptado no solo conserva la relación señal-ruido en el instante de decisión: es lo que da al lazo de temporización un espectro limpio donde engancharse.
+Con sincronización ideal el modelo reproduce la curva teórica $Q(\sqrt{2E_b/N_0})$ dentro del intervalo de confianza en todo el barrido: es la validación del canal y de la normalización de energía. Con los lazos reales, la BPSK con RRC sigue esa curva desde 3 dB y se aparta por debajo, donde los lazos pierden el enganche. El pulso rectangular sin filtro adaptado obliga a los lazos a trabajar sobre todo el ancho de banda de muestreo y no se sostiene hasta valores mucho más altos: la ventaja del RRC no es solo espectral (el ancho de banda ocupado al 99 % pasa de ~66 kHz a ~11 kHz) sino de sincronización. Con el código, el receptor trabaja con 3 dB menos de energía por símbolo de canal a igual $E_b/N_0$, y su umbral de sincronización sube en consecuencia.
 
-**Desvanecimiento Rice.** Con $K = 10$ dB la componente de línea de vista domina, pero en presencia de desvanecimiento los lazos de sincronización se ven forzados al mínimo. A −2 dB la penalización es de unos 3 dB (5,5e−02 frente a 4,5e−02 del NRZ sin desvanecer); por debajo, los desvanecimientos profundos hacen perder el enganche y la BER deja de ser interpretable como error de canal. Es la primera manifestación de un **umbral de sincronización**: la región útil del receptor empieza alrededor de −6 dB.
+### 5.3 Ganancia de codificación
 
-**Codificación convolucional.** El código aporta ganancia en cuanto el lazo de temporización sostiene la sincronización: a −2 dB reduce la BER de 4,5e−02 (sin codificar) a 1,5e−03, unas 29 veces (≈4 dB). Por debajo de −5 dB la BER de entrada al decodificador supera su umbral de decisión dura y la decodificación empeora el resultado, el comportamiento clásico del Viterbi cuando la tasa de error excede su capacidad de corrección.
+<!-- TABLA:ganancia_codificacion -->
+| Objetivo | Canal | Eb/N0 sin codigo (dB) | Eb/N0 con codigo (dB) | Ganancia (dB) | Estado |
+|:---|:---|:---|:---|:---|:---|
+| BER 0.001 | awgn | 6.79 | 5.49 | 1.30 | medida |
+| BER 0.001 | rice | N/A | N/A | N/A | no estimable: el barrido no encierra la BER objetivo en ambas curvas |
+| FER 0.1 (AX.25) | awgn | 8.15 | 5.13 | 3.01 | medida |
+| FER 0.1 (AX.25) | rice | N/A | 11.45 | N/A | no estimable: el barrido no encierra la FER objetivo en ambas curvas |
+<!-- /TABLA:ganancia_codificacion -->
 
-### 5.2 Sensibilidad al error residual de Doppler
+La ganancia se informa únicamente donde el barrido encierra la tasa de error objetivo en las dos curvas, y con la resolución del barrido como incertidumbre. La cifra de «≈4 dB» de versiones anteriores salía de comparar un único punto a igual SNR por muestra; a igual $E_b/N_0$ por bit de información la ganancia medida es la de la tabla. Es coherente con un Viterbi de **decisión dura** cuyo receptor, además, pierde sincronización antes que el no codificado.
 
-El desplazamiento Doppler para una órbita LEO a 437 MHz alcanza ±150 Hz (±10 kHz sobre la portadora real; aquí se modela el residuo en banda base). La estación terrena lo pre-compensa a partir de la predicción TLE, de modo que lo que llega al demodulador no es el Doppler completo sino el **error de esa predicción**. La tabla recoge esa sensibilidad:
+### 5.4 Escenario con desvanecimiento Rice
+
+El canal Rice se define con $K = P_{LOS}/P_{dif} = 10$ dB y potencia media total unitaria; la componente difusa es una suma de 64 sinusoides con ángulos y fases uniformes (modelo de Clarke), con frecuencia Doppler máxima de 150 Hz, que fija un tiempo de coherencia del orden de milisegundos. **Estos parámetros no proceden de medidas del enlace de STRaND-1:** el escenario es hipotético. (La implementación anterior generaba la componente difusa con la mitad de potencia —un $K$ efectivo de 13 dB— y una potencia media inferior a 1; la prueba `test_rice_potencia_unitaria_y_factor_k` fija ahora ambas propiedades.)
+
+<!-- TABLA:avanzado_rice -->
+| Eb/N0 (dB) | BER | BER diferencial | BER dif. con FEC | PER | FER AX.25 | FER AX.25 + FEC |
+|:---|---:|---:|---:|---:|---:|---:|
+| 0.0 | 4.85e-01 | 2.38e-01 | 4.60e-01 | 1.00e+00 | 1.00e+00 | 1.00e+00 |
+| 1.5 | 4.48e-01 | 1.57e-01 | 3.89e-01 | 1.00e+00 | 1.00e+00 | 1.00e+00 |
+| 3.0 | 3.93e-01 | 9.77e-02 | 2.11e-01 | 1.00e+00 | 1.00e+00 | 1.00e+00 |
+| 4.5 | 1.18e-01 | 5.15e-02 | 8.77e-02 | 1.00e+00 | 1.00e+00 | 9.95e-01 |
+| 6.0 | 4.86e-01 | 2.51e-02 | 2.67e-02 | 9.91e-01 | 1.00e+00 | 9.01e-01 |
+| 7.5 | 3.70e-01 | 1.20e-02 | 8.24e-03 | 8.83e-01 | 9.23e-01 | 5.81e-01 |
+| 9.0 | 2.35e-01 | 5.24e-03 | 3.47e-03 | 5.72e-01 | 6.85e-01 | 3.11e-01 |
+| 10.5 | 6.02e-02 | 2.78e-03 | 8.52e-04 | 2.97e-01 | 3.60e-01 | 1.58e-01 |
+| 12.0 | 8.70e-02 | 1.31e-03 | 5.68e-04 | 1.53e-01 | 1.71e-01 | 7.66e-02 |
+<!-- /TABLA:avanzado_rice -->
+
+En este escenario el receptor BPSK sufre saltos de ciclo: tras cada uno el flujo queda invertido y la BER sin decodificación diferencial deja de medir el canal. La BER diferencial y la FER —el verificador de trama acepta las dos polaridades— sí son interpretables y muestran un suelo de error que el código reduce pero no elimina. La lectura es de diseño: sobre un canal así, BPSK coherente sin codificación diferencial no es una opción robusta, lo que es coherente con que la baliza real use FSK con NRZI.
+
+### 5.5 Doppler residual
+
+El Doppler orbital completo se calcula con SGP4 en la sección 7.3 y alcanza unos ±9,8 kHz. Lo que llega al demodulador tras la precompensación de la estación es el **error de esa predicción**; aplicar el Doppler completo y restar la predicción equivale exactamente a aplicar su diferencia, que es lo que hace el modelo. Los residuales evaluados salen del propio paso: un error de tiempo de 0,1, 0,5 y 1 s en la culminación deja unos 10, 50 y 100 Hz, y se añade el caso de una portadora centrada cuya deriva (97 Hz/s) no se sigue.
 
 <!-- TABLA:doppler_residual -->
-| Residual de Doppler | BER a -8 dB | BER a -4 dB | BER a 0 dB | BER a 4 dB |
-|:---|---:|---:|---:|---:|
-| 0 Hz | 5.71e-01 | 8.99e-02 | 1.73e-02 | 3.20e-04 |
-| 0.05 Hz | 3.61e-01 | 9.49e-02 | 1.56e-02 | 7.46e-04 |
-| 0.1 Hz | 5.00e-01 | 9.33e-02 | 1.60e-02 | 3.73e-04 |
-| 0.2 Hz | 4.98e-01 | 5.04e-01 | 1.69e-02 | 4.79e-04 |
+| Eb/N0 (dB) | 0 Hz | residual 10 Hz | residual 50 Hz | residual 100 Hz | deriva 97 Hz/s |
+|:---|---:|---:|---:|---:|---:|
+| 0.0 | 1.81e-01 | 1.78e-01 | 1.76e-01 | 1.76e-01 | 1.77e-01 |
+| 1.5 | 1.01e-01 | 1.01e-01 | 1.01e-01 | 9.94e-02 | 9.84e-02 |
+| 3.0 | 4.70e-02 | 5.07e-02 | 4.89e-02 | 4.95e-02 | 4.86e-02 |
+| 4.5 | 1.83e-02 | 2.02e-02 | 1.98e-02 | 1.86e-02 | 1.92e-02 |
+| 6.0 | 4.83e-03 | 4.90e-03 | 5.04e-03 | 5.10e-03 | 4.81e-03 |
+| 7.5 | 9.05e-04 | 1.05e-03 | 8.52e-04 | 7.63e-04 | 9.23e-04 |
+| 9.0 | 8.88e-05 | 1.42e-04 | 5.33e-05 | 1.69e-04 | 1.42e-04 |
+| 10.5 | 0 | 0 | 0 | 1.78e-05 | 1.78e-05 |
+| 12.0 | 0 | 0 | 0 | 0 | 0 |
 <!-- /TABLA:doppler_residual -->
 
-La tabla corresponde a la configuración NRZ sin filtro adaptado, la más exigente para los lazos. En el modelo de sincronización ideal (sin recuperación de portadora) un residual de 0,2 Hz bastaba para producir un piso de error irreducible de 3,6e−01 sobre el registro de 1,96 s, porque la fase acumulada $2\pi f_{res} T$ giraba sin corrección y bastaba superar $\pi/2$ para invertir las decisiones. **Con el lazo de Costas (ancho de banda de 80 Hz) ese residual se recupera**: en la región de enganche (0 dB) la BER es 1,7e−02 tanto con 0,2 Hz como con 0 Hz, y a 4 dB baja a 5e−04. La tabla muestra que la sensibilidad al Doppler residual dejó de ser el eslabón crítico: el límite operativo lo marca ahora el umbral de sincronización (deslizamientos de ciclo por debajo de ~−6 dB), no la deriva de portadora.
+*(BER diferencial, BPSK + RRC, canal AWGN.)* El lazo de Costas de 80 Hz absorbe 50 Hz y la deriva sin penalización apreciable; con 100 Hz el umbral de enganche sube. La versión anterior evaluaba residuales de 0,05 a 0,2 Hz, tres órdenes de magnitud por debajo de lo que la geometría del paso produce, y describía un desplazamiento fijo de 150 Hz como «Doppler orbital variable».
 
-### 5.3 Tramas AX.25
+### 5.6 Tramas AX.25
 
-Las tramas se construyen conforme a AX.25 2.2: campo de dirección de 7 bytes por indicativo con los caracteres desplazados un bit y el bit de fin de dirección en el último byte, control UI (0x03), PID 0xF0 y FCS CRC-16/X-25 (polinomio 0x1021 reflejado, inicialización 0xFFFF, salida complementada, byte bajo primero). El FCS cubre únicamente los campos entre banderas, como exige la norma. La telemetría se reparte en 37 tramas de hasta 64 bytes de información.
+Las tramas se construyen conforme a AX.25 2.2: direcciones de 7 bytes, control UI (0x03), PID 0xF0 y FCS CRC-16/X-25 calculado sobre los campos entre banderas. La telemetría se reparte en 37 tramas de hasta 64 bytes de información.
 
 <!-- TABLA:ax25 -->
-| SNR (dB) | BER | Tramas validas por FCS (de 37) |
-|:---|---:|---:|
-| -10 | 4.71e-01 | 0 |
-| -8 | 6.34e-01 | 0 |
-| -6 | 2.52e-02 | 0 |
-| -4 | 6.48e-03 | 0 |
-| -2 | 1.13e-03 | 17 |
-| 0 | 0 (sin errores) | 37 |
-| 2 | 0 (sin errores) | 37 |
-| 4 | 0 (sin errores) | 37 |
+| Eb/N0 (dB) | BER | Tramas validas | FCS invalido | No recuperadas | FER | PER | Validas con FEC | FER con FEC |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0.0 | 6.39e-01 | 0/222 | 222 | 0 | 1.00e+00 | 1.00e+00 | 0/222 | 1.00e+00 |
+| 1.5 | 5.21e-02 | 0/222 | 222 | 0 | 1.00e+00 | 1.00e+00 | 0/222 | 1.00e+00 |
+| 3.0 | 2.41e-02 | 0/222 | 222 | 0 | 1.00e+00 | 1.00e+00 | 1/222 | 9.95e-01 |
+| 4.5 | 9.56e-03 | 0/222 | 222 | 0 | 1.00e+00 | 1.00e+00 | 156/222 | 2.97e-01 |
+| 6.0 | 2.59e-03 | 50/222 | 172 | 0 | 7.75e-01 | 7.12e-01 | 217/222 | 2.25e-02 |
+| 7.5 | 4.72e-04 | 162/222 | 60 | 0 | 2.70e-01 | 2.12e-01 | 222/222 | 0 (< 1.7e-02) |
+| 9.0 | 4.05e-05 | 216/222 | 6 | 0 | 2.70e-02 | 2.70e-02 | 222/222 | 0 (< 1.7e-02) |
+| 10.5 | 0 (< 2.6e-05) | 222/222 | 0 | 0 | 0 (< 1.7e-02) | 0 (< 1.7e-02) | 222/222 | 0 (< 1.7e-02) |
+| 12.0 | 0 (< 2.6e-05) | 222/222 | 0 | 0 | 0 (< 1.7e-02) | 0 (< 1.7e-02) | 222/222 | 0 (< 1.7e-02) |
 <!-- /TABLA:ax25 -->
 
-La verificación es un cálculo real del FCS sobre los bytes recibidos, no una comparación con la trama transmitida. La transición es abrupta —de 0 tramas válidas a −4 dB a 17 a −2 dB y las 37 a partir de 0 dB— porque el FCS es una comprobación de todo o nada: un solo bit erróneo invalida la trama completa. Con tramas de 40 a 104 bytes, una BER de $10^{-3}$ ya corrompe la mayoría; a −4 dB la BER de 6,5e−03 deja a todas las tramas con al menos un bit erróneo.
+La verificación es un cálculo real del FCS sobre los bytes recibidos. Se cuentan por separado las tramas válidas, las de FCS inválido y las no recuperadas. La delimitación de trama es ideal (desplazamiento conocido, sin búsqueda de banderas ni *bit stuffing*): es una limitación declarada.
 
-### 5.4 Sincronización realista (Costas + Gardner)
+### 5.7 Sincronización (Costas + Gardner)
 
-El modelo anterior concedía al demodulador fase y temporización exactas. Para retirar ese privilegio se introduce un desfase de temporización reproducible de $0{,}35$ muestras (definido en `TIMING_OFFSET_SAMPLES`) en el canal, y el receptor lo recupera con dos lazos que no conocen los bits transmitidos:
+Se introduce un desfase de reloj reproducible de 0,35 muestras y el receptor lo recupera con dos lazos que no conocen los bits: un **Costas de segundo orden** (detector `signo(I)·Q`, 80 Hz) y un **Gardner** no asistido por decisión con interpolación lineal. `tests/test_sincronizacion.py` verifica que ambos recuperan una BPSK RRC con desfase y 100 Hz de Doppler sin errores en ausencia de ruido.
 
-- **Lazo de Costas de segundo orden** para la portadora: detector `signo(I)·Q` con ancho de banda de bucle de 80 Hz, implementado como PLL discreto con coeficientes deducidos de la frecuencia natural. Recupera la fase y la frecuencia residual sin necesitar una secuencia conocida.
-- **Recuperación de temporización de Gardner** no asistida por decisión: compara las muestras temprana y tardía (separadas medio símbolo) con la muestra central y ajusta el instante de muestreo símbolo a símbolo, con interpolación lineal y avance limitado para estabilidad bajo ruido.
+### 5.8 Estimación de SNR desde las muestras IQ
 
-El costo es el esperado de quitar la sincronización ideal: a muy baja SNR los lazos pierden el enganche y la BER satura (deslizamientos de ciclo), de modo que la región útil del receptor empieza alrededor de −6 dB. El beneficio es doble: **se cuantifica el umbral de sincronización** de la cadena y **se elimina la sensibilidad al Doppler residual** de décimas de hercio que dominaba el modelo anterior (sección 5.2). La prueba automatizada `tests/test_sincronizacion.py` verifica que ambos lazos recuperan una BPSK RRC con desfase y Doppler residual sin errores.
+Fijar la SNR de una simulación no es estimarla. `estimar_snr_iq.py` estima $E_s/N_0$ desde la señal recibida, sin conocer los bits, con el estimador **M2M4** sobre la salida del filtro adaptado a tasa de símbolo: $S = \sqrt{2M_2^2 - M_4}$, $N = M_2 - S$, con $M_2 = E\{|y|^2\}$ y $M_4 = E\{|y|^4\}$. Supone símbolos BPSK de amplitud constante, ruido gaussiano complejo y muestreo en el instante de símbolo.
+
+<!-- TABLA:estimador_snr -->
+| Canal | Reloj | Es/N0 real (dB) | Ventana (simbolos) | Ventanas validas | Media estimada (dB) | Sesgo (dB) | Desviacion (dB) |
+|:---|---:|---:|---:|---:|---:|---:|---:|
+| awgn | gardner | 0 | 64 | 968/1024 | 0.45 | 0.45 | 2.62 |
+| awgn | gardner | 0 | 1024 | 64/64 | 0.16 | 0.16 | 0.78 |
+| awgn | gardner | 6 | 64 | 1024/1024 | 6.12 | 0.12 | 1.20 |
+| awgn | gardner | 6 | 1024 | 64/64 | 5.96 | -0.04 | 0.24 |
+| awgn | gardner | 12 | 64 | 1024/1024 | 12.10 | 0.10 | 0.86 |
+| awgn | gardner | 12 | 1024 | 64/64 | 11.96 | -0.04 | 0.19 |
+| rice | gardner | 0 | 64 | 923/1024 | -0.07 | -0.07 | 2.79 |
+| rice | gardner | 0 | 1024 | 64/64 | -0.89 | -0.89 | 0.91 |
+| rice | gardner | 6 | 64 | 1023/1024 | 4.75 | -1.25 | 2.11 |
+| rice | gardner | 6 | 1024 | 64/64 | 4.24 | -1.76 | 0.64 |
+| rice | gardner | 12 | 64 | 1024/1024 | 9.06 | -2.94 | 2.48 |
+| rice | gardner | 12 | 1024 | 64/64 | 7.82 | -4.18 | 0.76 |
+<!-- /TABLA:estimador_snr -->
+
+En AWGN el sesgo es de décimas de dB y la dispersión cae con el tamaño de la ventana; con 64 símbolos y baja SNR una parte de las ventanas no tiene solución real y se informa como no válida. Con desvanecimiento, la variación de amplitud dentro de la ventana se interpreta como ruido y el estimador **subestima** la SNR, tanto más cuanto mayor es esta. El resultado caracteriza al estimador sobre IQ **sintético**; no es una medida del canal real.
 
 ---
 
@@ -588,28 +704,37 @@ Cadena de transmisión BPSK completa desde los bytes de telemetría real hasta l
 
 ### 7.1 Enlace descendente
 
-`calcular_link_budget.py` modela el enlace descendente UHF a 437.568 MHz desde el CubeSat (LEO 775 km) hasta una estación terrena típica de radioaficionado.
+`calcular_link_budget.py` modela el enlace descendente UHF a 437.568 MHz desde el CubeSat (LEO 775 km) hasta una estación terrena **hipotética** de radioaficionado. La cadena de unidades es:
+
+$$P_{rx}\,[\text{dBm}] = P_{tx} + G_{tx} - L_{tx} + G_{rx} - L_{rx} - L_{FSPL} - L_{atm} - L_{pol} - L_{apunt}$$
+
+$$N_0\,[\text{dBm/Hz}] = 10\log_{10}(k\,T_{sys}) + 30,\qquad C/N_0\,[\text{dB-Hz}] = P_{rx} - N_0,\qquad E_b/N_0\,[\text{dB}] = C/N_0 - 10\log_{10}R_b$$
+
+$$\text{margen} = E_b/N_0 - \big[(E_b/N_0)_{teórica}(\text{BER objetivo}) + L_{impl}\big]$$
+
+El umbral ya no es un número escrito a mano: se obtiene de la curva teórica de cada esquema para la BER objetivo. El margen principal se refiere al esquema **documentado** (FSK, cota no coherente $P_b = \tfrac12 e^{-E_b/2N_0}$) y el de BPSK coherente se informa aparte como modelo comparativo. $L_{impl}$ es una **reserva de diseño** para la degradación del demodulador real, no una pérdida física del trayecto; no se suma cuando el umbral procede del receptor simulado, que ya incluye esa degradación. La columna *Procedencia* distingue lo documentado para STRaND-1 de los supuestos de diseño.
 
 <!-- TABLA:link_budget_parametros -->
-| Parametro | Valor | Unidad |
-|:---|---:|---:|
-| Frecuencia | 437.568 | MHz |
-| Tasa de datos | 9600 | bps |
-| Altura orbital | 775 | km |
-| Potencia TX (satelite) | 30.0 | dBm |
-| Ganancia antena TX | 0.0 | dBi |
-| Perdida cables TX | 0.5 | dB |
-| Ganancia antena RX | 15.0 | dBi |
-| Perdida cables RX | 2.0 | dB |
-| Figura de ruido RX | 2.0 | dB |
-| Temperatura de antena | 150.0 | K |
-| Temperatura de sistema | 371.3 | K |
-| Perdida atmosferica | 0.5 | dB |
-| Perdida por polarizacion | 1.0 | dB |
-| Perdida por apuntamiento | 1.0 | dB |
-| Perdida de implementacion | 2.0 | dB |
-| Eb/N0 requerida | 10.0 | dB |
-| BER objetivo | 1e-05 | - |
+| Parametro | Valor | Unidad | Procedencia |
+|:---|---:|---:|---:|
+| Frecuencia | 437.568 | MHz | documentado |
+| Tasa de bits | 9600 | bit/s | documentado |
+| Altura orbital | 775 | km | deducido |
+| Potencia TX (satelite) | 30.0 | dBm | documentado |
+| Ganancia antena TX | 0.0 | dBi | supuesto |
+| Perdida cables TX | 0.5 | dB | supuesto |
+| Ganancia antena RX | 15.0 | dBi | supuesto |
+| Perdida cables RX | 2.0 | dB | supuesto |
+| Figura de ruido RX | 2.0 | dB | supuesto |
+| Temperatura de antena | 150.0 | K | supuesto |
+| Temperatura de sistema | 371.3 | K | calculado |
+| Perdida atmosferica | 0.5 | dB | supuesto |
+| Perdida por polarizacion | 1.0 | dB | supuesto |
+| Perdida por apuntamiento | 1.0 | dB | supuesto |
+| Reserva de implementacion | 2.0 | dB | supuesto |
+| Eb/N0 teorica, FSK no coherente | 13.35 | dB | calculado |
+| Eb/N0 teorica, BPSK coherente | 9.59 | dB | calculado |
+| BER objetivo | 1e-05 | - | calculado |
 <!-- /TABLA:link_budget_parametros -->
 
 La temperatura de sistema se calcula refiriendo el ruido a la entrada del receptor:
@@ -619,27 +744,27 @@ $$T_{sys} = \frac{T_{ant}}{L} + \frac{L-1}{L}T_0 + T_{rx}$$
 donde $L$ es la pérdida del cable entre la antena y el LNA. Los cables no solo atenúan la señal: aportan su propio ruido térmico y atenúan el de la antena. Con 2 dB de cable la diferencia frente a sumar simplemente $T_{ant} + T_{rx}$ es de 0,65 dB de margen.
 
 <!-- TABLA:link_budget -->
-| Elevacion (deg) | Distancia (km) | FSPL (dB) | C/N0 (dB-Hz) | Eb/N0 (dB) | Margen (dB) |
-|:---|---:|---:|---:|---:|---:|
-| 5 | 2728.6 | 153.99 | 58.91 | 19.09 | 7.09 |
-| 15 | 1983.5 | 151.22 | 61.68 | 21.86 | 9.86 |
-| 25 | 1517.6 | 148.89 | 64.01 | 24.19 | 12.19 |
-| 30 | 1355.8 | 147.91 | 64.99 | 25.17 | 13.17 |
-| 35 | 1227.3 | 147.05 | 65.85 | 26.03 | 14.03 |
-| 45 | 1042.1 | 145.63 | 67.27 | 27.45 | 15.45 |
-| 55 | 922.2 | 144.56 | 68.34 | 28.51 | 16.51 |
-| 60 | 879.3 | 144.15 | 68.75 | 28.93 | 16.93 |
-| 65 | 845.3 | 143.81 | 69.09 | 29.27 | 17.27 |
-| 75 | 799.2 | 143.32 | 69.58 | 29.76 | 17.76 |
-| 85 | 777.6 | 143.08 | 69.82 | 30.0 | 18.0 |
-| 90 | 775.0 | 143.05 | 69.85 | 30.02 | 18.02 |
+| Elevacion (deg) | Distancia (km) | FSPL (dB) | P_rx (dBm) | C/N0 (dB-Hz) | Eb/N0 (dB) | Margen FSK no coh. (dB) | Margen BPSK, modelo (dB) |
+|:---|---:|---:|---:|---:|---:|---:|---:|
+| 5 | 2728.6 | 153.99 | -113.99 | 58.91 | 19.09 | 3.74 | 7.5 |
+| 15 | 1983.5 | 151.22 | -111.22 | 61.68 | 21.86 | 6.51 | 10.27 |
+| 25 | 1517.6 | 148.89 | -108.89 | 64.01 | 24.19 | 8.84 | 12.6 |
+| 30 | 1355.8 | 147.91 | -107.91 | 64.99 | 25.17 | 9.82 | 13.58 |
+| 35 | 1227.3 | 147.05 | -107.05 | 65.85 | 26.03 | 10.68 | 14.44 |
+| 45 | 1042.1 | 145.63 | -105.63 | 67.27 | 27.45 | 12.1 | 15.86 |
+| 55 | 922.2 | 144.56 | -104.56 | 68.34 | 28.51 | 13.16 | 16.92 |
+| 60 | 879.3 | 144.15 | -104.15 | 68.75 | 28.93 | 13.58 | 17.34 |
+| 65 | 845.3 | 143.81 | -103.81 | 69.09 | 29.27 | 13.92 | 17.68 |
+| 75 | 799.2 | 143.32 | -103.32 | 69.58 | 29.76 | 14.41 | 18.17 |
+| 85 | 777.6 | 143.08 | -103.08 | 69.82 | 30.0 | 14.65 | 18.41 |
+| 90 | 775.0 | 143.05 | -103.05 | 69.85 | 30.02 | 14.67 | 18.43 |
 <!-- /TABLA:link_budget -->
 
-El margen mínimo, **7,1 dB a 5° de elevación**, supera el margen recomendado de 3-6 dB para comunicaciones por satélite (Larson & Wertz), lo que confirma la viabilidad del enlace a 9600 bps incluso cerca del horizonte. En cenit el margen alcanza 18,0 dB.
+Con el umbral teórico de FSK no coherente, el margen a 5° de elevación queda dentro del intervalo de 3-6 dB que la literatura recomienda como reserva (Larson & Wertz) y crece hacia el cenit; con el umbral de BPSK es unos 3,8 dB mayor, que es la diferencia entre las dos curvas a la BER objetivo. La versión anterior de este informe daba un único margen (7,1 dB a 5°) calculado con el umbral de BPSK y lo presentaba como el del satélite. **Un margen positivo en este cálculo no garantiza la recepción real:** la estación es hipotética, la mayoría de los parámetros son supuestos y el umbral de un receptor FSK real (discriminador de FM) no está documentado. La sección 7.3 cuantifica cuánto depende la conclusión de esos supuestos.
 
 ### 7.2 Enlace ascendente
 
-`simular_enlace_ascendente.py` modela el enlace de comandos a 1200 bps en 435 MHz, con 10 W de transmisión desde la estación terrena y antena isotrópica a bordo.
+`simular_enlace_ascendente.py` modela un enlace de comandos **hipotético** a 1200 bit/s en 435 MHz, con 10 W de transmisión desde la estación terrena y antena isotrópica a bordo. No representa el enlace ascendente real de STRaND-1 —eoPortal cita una asignación en VHF, 145,860 MHz—, cuyo módem y umbral no se han caracterizado en este trabajo: los valores sirven como ejercicio de dimensionamiento.
 
 <!-- TABLA:uplink -->
 | Elevacion (deg) | Distancia (km) | FSPL (dB) | C/N0 (dB-Hz) | Eb/N0 (dB) | Margen (dB) | Tasa max (kbps) |
@@ -658,7 +783,62 @@ El margen mínimo, **7,1 dB a 5° de elevación**, supera el margen recomendado 
 | 90 | 775.0 | 143.00 | 76.97 | 46.18 | 34.18 | 3142 |
 <!-- /TABLA:uplink -->
 
-El uplink dispone de mucho más margen que el downlink (23,3 dB frente a 7,1 dB en el peor caso) por la combinación de mayor potencia transmitida (10 W frente a 1 W), antena directiva en el extremo transmisor y una tasa ocho veces menor. La columna de tasa máxima indica la velocidad que agotaría ese margen manteniendo la Eb/N0 requerida: entre 253 kbps y 3,1 Mbps. No es una capacidad de Shannon, sino la tasa límite del enlace con el esquema de modulación y el objetivo de BER fijados.
+En este escenario el ascendente dispone de mucho más margen que el descendente por la combinación de mayor potencia transmitida (10 W frente a 1 W), antena directiva en el extremo transmisor y una tasa ocho veces menor. La columna de tasa máxima indica la velocidad que agotaría ese margen manteniendo la Eb/N0 requerida: entre 253 kbps y 3,1 Mbps. No es una capacidad de Shannon, sino la tasa límite del enlace con el esquema de modulación y el objetivo de BER fijados.
+
+### 7.3 Margen y Doppler a lo largo de un paso SGP4
+
+`margen_paso_sgp4.py` encadena TLE versionado → SGP4 → posición relativa → distancia y velocidad radial → Doppler y su derivada → seguimiento del rotor → $P_{rx}$ → $C/N_0$ → $E_b/N_0$ → margen. Busca los pasos completos de las 48 h siguientes a la época del TLE y analiza el de mayor culminación con resolución de 1 s. La pérdida de apuntamiento no es aquí la reserva fija del barrido, sino la que resulta del rotor.
+
+<!-- TABLA:doppler_paso -->
+| Magnitud | Valor |
+|:---|:---|
+| Paso analizado (inicio UTC) | 2026-08-10T10:13:24.461344+00:00 |
+| Culminacion | 84.07° |
+| Antiguedad del TLE en el paso | 23.3 h |
+| Doppler (elevacion >= 5°) | -9820 a +9808 Hz |
+| Tasa de cambio maxima | 97.1 Hz/s |
+| Coherencia v_radial vs d(distancia)/dt | diferencia maxima 0.51 m/s |
+| Residual con error de tiempo de 0.1 s | max 9.7 Hz · rms 4.0 Hz |
+| Residual con error de tiempo de 0.5 s | max 48.5 Hz · rms 20.1 Hz |
+| Residual con error de tiempo de 1 s | max 97.1 Hz · rms 40.3 Hz |
+| Residual con error de tiempo de 2 s | max 194.2 Hz · rms 80.5 Hz |
+| Error de apuntamiento maximo del rotor | 0.20° (0.00 dB) |
+<!-- /TABLA:doppler_paso -->
+
+Convención de signo: $f_D = -v_r f/c$, con $v_r < 0$ en acercamiento, de modo que el Doppler es positivo al inicio del paso y negativo al final. SGP4 entrega el estado en TEME y la rotación a terrestre se hace con GMST sobre el elipsoide WGS-84, sin movimiento polar ni refracción. El *residual* se calcula restando al Doppler del paso el que predice el mismo TLE desplazado en el tiempo: es un modelo del error a lo largo de la traza, y los desplazamientos evaluados son escenarios, no una medida del error real del TLE.
+
+<!-- TABLA:margen_paso -->
+| Umbral | Tipo | Eb/N0 umbral (dB) | Min | p5 | p50 | Medio | Max | % tiempo > 0 | Duracion > 0 (s) |
+|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| fsk_no_coherente | teorico | 15.35 | 4.79 | 5.21 | 9.86 | 10.18 | 15.75 | 100.0 | 730 |
+| fsk_coherente | teorico | 14.60 | 5.54 | 5.96 | 10.61 | 10.93 | 16.50 | 100.0 | 730 |
+| bpsk_coherente | teorico | 11.59 | 8.55 | 8.97 | 13.62 | 13.94 | 19.51 | 100.0 | 730 |
+| simulado_ber1e-3_rrc | calibrado receptor simulado | 6.79 | 13.35 | 13.78 | 18.42 | 18.74 | 24.31 | 100.0 | 730 |
+| simulado_fer10_ax25 | calibrado receptor simulado | 8.15 | 11.99 | 12.41 | 17.06 | 17.38 | 22.95 | 100.0 | 730 |
+| simulado_fer10_ax25_fec | calibrado receptor simulado | 5.13 | 15.01 | 15.44 | 20.08 | 20.40 | 25.97 | 100.0 | 730 |
+<!-- /TABLA:margen_paso -->
+
+*(Estadísticas con elevación ≥ 5°.)* Las tres primeras filas son márgenes respecto de **umbrales teóricos** más la reserva de implementación; las `simulado_*` son márgenes respecto del **umbral calibrado del receptor BPSK simulado** (sección 5), sin reserva adicional, y solo son aplicables a ese receptor.
+
+**Sensibilidad.** Cada parámetro supuesto se varía dentro del rango asignado en `parametros_enlace.py`; el Monte Carlo los varía a la vez y añade hasta 4 dB al umbral para representar el desconocimiento del receptor FSK real.
+
+<!-- TABLA:sensibilidad -->
+| Parametro | Valor base | Incertidumbre | Procedencia | Δ margen con − (dB) | Δ margen con + (dB) |
+|:---|---:|---:|---:|---:|---:|
+| p_tx_dbm | 30 dBm | ±6 | documentado | -6.00 | +6.00 |
+| g_tx_dbi | 0 dBi | ±2 | supuesto | -2.00 | +2.00 |
+| g_rx_dbi | 15 dBi | ±2 | supuesto | -2.00 | +2.00 |
+| l_pol_db | 1 dB | ±2 | supuesto | +2.00 | -2.00 |
+| l_impl_db | 2 dB | ±2 | supuesto | +2.00 | -2.00 |
+| l_rx_db | 2 dB | ±1 | supuesto | +1.28 | -1.21 |
+| nf_rx_db | 2 dB | ±1 | supuesto | +1.28 | -1.21 |
+| t_ant_k | 150 K | ±100 | supuesto | +0.81 | -0.68 |
+| l_tx_db | 0.5 dB | ±0.5 | supuesto | +0.50 | -0.50 |
+| l_atm_db | 0.5 dB | ±0.5 | supuesto | +0.50 | -0.50 |
+| **Monte Carlo conjunto** | 5000 corridas | todos | - | p5: -4.67 | p95: +10.22 |
+<!-- /TABLA:sensibilidad -->
+
+La potencia transmitida domina: si la telemetría se emite en el modo de 0,25 W que eoPortal describe para baliza/CW, el margen baja 6 dB. Los rangos son de diseño, no errores medidos; el resultado dice cuánto depende la conclusión de los supuestos, no la probabilidad real de recibir.
 
 ---
 
@@ -674,13 +854,13 @@ El uplink dispone de mucho más margen que el downlink (23,3 dB frente a 7,1 dB 
 | Elevacion de culminacion | 85.0° |
 | Distancia oblicua | 778 - 2725 km |
 | Temperatura de sistema | 308 - 376 K |
-| C/N0 promedio | 66.8 dB-Hz |
-| C/N0 minimo / maximo | 60.9 / 72.6 dB-Hz |
+| C/N0 promedio | 65.8 dB-Hz |
+| C/N0 minimo / maximo | 59.9 / 71.6 dB-Hz |
 | Error de apuntamiento maximo | 0.77° |
 | Perdida por apuntamiento maxima | 0.01 dB |
 <!-- /TABLA:estacion_terrena -->
 
-El hallazgo relevante es dinámico. En la culminación del paso el satélite exige una velocidad de barrido en azimut de **8,23 °/s**, mientras que el rotor modelado alcanza 5 °/s. Con la antena preposicionada en el punto de adquisición, la salida vigente del modelo conserva un error máximo fuera de boresight de **0,77°** y una pérdida máxima de **0,01 dB** con un haz de 30°. La conclusión práctica es que la Yagi modelada tolera el límite de velocidad; una antena más directiva debe evaluarse de nuevo con el cálculo del error angular verdadero y no con una resta directa de azimutes.
+El hallazgo relevante es dinámico: cerca de la culminación de un paso casi cenital el azimut del satélite cambia más deprisa de lo que el rotor modelado (5 °/s) puede seguir. Con la antena preposicionada en el punto de adquisición, el error máximo fuera de boresight y la pérdida asociada son los de la tabla anterior, despreciables con un haz de 30°. La conclusión práctica es que la Yagi modelada tolera el límite de velocidad; una antena más directiva debe evaluarse de nuevo con el cálculo del error angular verdadero y no con una resta directa de azimutes.
 
 ### 8.1 Paso orbital con SGP4 y TLE real
 
@@ -710,32 +890,32 @@ Como no se dispone aún de una recepción física, se genera una **captura de re
 ### 9.1 CubeSats de referencia
 
 <!-- TABLA:cubesats -->
-| CubeSat | Pais | Ano | Formato | Frecuencia (MHz) | Modulacion | Tasa (bps) |
-|:---|---:|---:|---:|---:|---:|---:|
-| STRaND-1 | Reino Unido | 2013 | 3U | 437.568 | BPSK | 9600 |
-| Libertad 1 | Colombia | 2007 | 1U | 437.405 | AFSK | 1200 |
-| FACSAT-1 | Colombia | 2018 | 3U | 437.375 | BPSK | 9600 |
-| Delfi-C3 | Paises Bajos | 2008 | 3U | 145.870 | BPSK | 1200 |
-| ESTCube-1 | Estonia | 2013 | 1U | 437.250 | BPSK | 9600 |
-| AAUSAT-II | Dinamarca | 2008 | 1U | 437.425 | AFSK | 1200 |
-| ITUPSAT 1 | Turquia | 2009 | 1U | 437.325 | BPSK | 9600 |
+| CubeSat | Pais | Ano | Formato | Frecuencia (MHz) | Modulacion | Tasa (bps) | Verificado en fuente |
+|:---|---:|---:|---:|---:|---:|---:|---:|
+| STRaND-1 | Reino Unido | 2013 | 3U | 437.568 | FSK | 9600 | si |
+| Libertad 1 | Colombia | 2007 | 1U | 437.405 | AFSK | 1200 | pendiente |
+| FACSAT-1 | Colombia | 2018 | 3U | 437.375 | BPSK | 9600 | pendiente |
+| Delfi-C3 | Paises Bajos | 2008 | 3U | 145.870 | BPSK | 1200 | pendiente |
+| ESTCube-1 | Estonia | 2013 | 1U | 437.250 | BPSK | 9600 | pendiente |
+| AAUSAT-II | Dinamarca | 2008 | 1U | 437.425 | AFSK | 1200 | pendiente |
+| ITUPSAT 1 | Turquia | 2009 | 1U | 437.325 | BPSK | 9600 | pendiente |
 <!-- /TABLA:cubesats -->
 
 ### 9.2 Concordancia por parámetro
 
 <!-- TABLA:concordancia -->
-| Parametro | Valor simulado | Referencia real | Concordancia |
+| Parametro | Valor del modelo | Referencia | Relacion |
 |:---|:---|:---|:---|
-| Frecuencia de operacion | 437.568 MHz (UHF) | STRaND-1: 437.568 MHz | Alta |
-| Modulacion | BPSK y FSK | STRaND-1: BPSK | Alta |
-| Tasa de simbolos (baudios) | 9600 bps | STRaND-1: 9600 bps | Alta |
-| Potencia de transmision | 1 W (30 dBm) | STRaND-1: 1 W | Alta |
-| BER vs SNR - BPSK | BER ~5.3e-05 a SNR=0 dB<br>BER ~0 a SNR >= 2 dB (con 18776 bits) | BPSK teorica: BER ~3.9e-4 a Eb/N0=4 dB | Esperada dentro del modelo |
-| Margen de enlace (link budget) | 7.1 dB a elev=5 deg<br>18.0 dB a elev=90 deg | Margen tipico requerido: 3-6 dB | Alta |
-| Ancho de banda estimado | BPSK rectangular: ~27.0 kHz (-20 dB)<br>FSK: ~11.8 kHz (-20 dB)<br>BPSK + RRC (α=0.35): ~11.2 kHz (99 % ocupado) | BPSK 9600 bps: ancho de banda nulo ~19.2 kHz | Alta con conformado de pulso |
+| Frecuencia de operacion | 437.568 MHz (UHF) | STRaND-1: 437.568 MHz (AMSAT-UK, SatNOGS DB) | Coincide por construccion: el modelo usa la frecuencia documentada del satelite. |
+| Modulacion | BPSK coherente (modelo comparativo) y FSK de banda base | STRaND-1: FSK 9600, AX.25/HDLC, NRZI (AMSAT-UK, SatNOGS DB) | Parcial. La familia FSK coincide; la BPSK del modelo avanzado NO es la modulacion del satelite. La desviacion y el filtrado del modulador real no estan documentados. |
+| Tasa de bits | 9600 bit/s | STRaND-1: 9600 bit/s (AMSAT-UK, SatNOGS DB) | Coincide por construccion. |
+| Potencia de transmision | 1 W (30 dBm) | STRaND-1: 1 W nominal; 0.25 W en modo baliza/CW (eoPortal) | Coincide con el valor nominal. El modo en que se emite la telemetria no esta confirmado: -6 dB entra en la sensibilidad. |
+| BER vs SNR - BPSK | BER 5.3e-05 a SNR por muestra de 0 dB (Eb/N0 9.03 dB)<br>0 errores en 18776 bits desde 2 dB | Teoria BPSK coherente: BER 3.4e-5 a Eb/N0 = 9 dB | Compatible con la teoria dentro del intervalo de confianza de una muestra de 18776 bits. No es una comparacion con el satelite: no existe BER medida del enlace real. |
+| Margen de enlace (link budget) | 3.7 dB a elev=5 deg<br>14.7 dB a elev=90 deg<br>(FSK no coherente, umbral teorico) | Sin dato publicado del margen de STRaND-1. | No comparable con una medida. El valor es una prediccion con estacion hipotetica y parametros supuestos (ver sensibilidad). |
+| Ancho de banda estimado | BPSK rectangular: ~27.0 kHz (-20 dB)<br>FSK: ~11.8 kHz (-20 dB)<br>BPSK + RRC (α=0.35): ~11.1 kHz (99 % ocupado) | Canalizacion UHF amateur: 25 kHz | El modelo con RRC cabe en el canal. El ancho de banda real de la emision de STRaND-1 no se ha medido en este trabajo. |
 <!-- /TABLA:concordancia -->
 
-La concordancia es alta en los siete parámetros evaluados. El ancho de banda, que en versiones anteriores del modelo quedaba en concordancia moderada por el uso de pulsos rectangulares, converge al valor teórico $R_b(1+\alpha)$ una vez incorporado el conformado RRC.
+La columna *Relación* describe qué puede afirmarse de cada parámetro. Frecuencia, tasa y potencia nominal coinciden **por construcción** —el modelo las toma de la documentación—; la modulación coincide solo en la familia FSK; el margen y la BER no son comparables con medidas porque no existen. De la tabla 9.1 solo la fila de STRaND-1 se ha contrastado con sus fuentes en esta revisión; las demás proceden de la recopilación inicial y quedan pendientes de verificar.
 
 ### 9.3 Comparación de protocolos
 
@@ -745,18 +925,18 @@ La elección de esquema de modulación y de protocolo de enlace condiciona el pr
 
 | Esquema | Eficiencia espectral | Eb/N0 para BER 10⁻⁵ | Complejidad de receptor | Uso en CubeSats |
 |:---|:---|:---|:---|:---|
-| BPSK | 1 bit/símbolo | ~9,6 dB (coherente) | Alta: recuperación de portadora | Muy extendido a 9600 bps |
+| BPSK | 1 bit/símbolo | ~9,6 dB (coherente) | Alta: recuperación de portadora | Usado en varios CubeSats |
 | FSK | 1 bit/símbolo | ~13,4 dB (no coherente) | Baja: detección de energía | Extendido a 1200–9600 bps |
 | GFSK | 1 bit/símbolo | ~12,5 dB | Baja-media | Habitual en transceptores comerciales |
-| GMSK | 1 bit/símbolo | ~9,6 dB | Media-alta | AX.25 a 9600 bps |
+| GMSK | 1 bit/símbolo | ~9,6 dB (coherente, ideal) | Media-alta | AX.25 a 9600 bps |
 
-Los resultados de la sección 4 cuantifican esa diferencia sobre el mismo flujo de bits reales: BPSK alcanza BER nula desde 2 dB de SNR por muestra y FSK necesita 8 dB. BPSK y GMSK comparten eficiencia en potencia, pero GMSK añade envolvente constante, lo que permite saturar el amplificador —una ventaja apreciable con el presupuesto de energía de un 3U—. La contrapartida de BPSK es espectral, y el conformado RRC la resuelve: baja de 66,1 kHz a 11,2 kHz, por debajo del ancho de banda de FSK.
+Los valores de Eb/N0 de la tabla son cotas teóricas en AWGN; los de FSK, GFSK y GMSK con demodulación por discriminador de FM —la habitual en 9600 bit/s de radioaficionado— son mayores y dependen del receptor. BPSK y GMSK coherentes comparten eficiencia en potencia, pero GMSK añade envolvente constante, lo que permite saturar el amplificador —una ventaja apreciable con el presupuesto de energía de un 3U—. La contrapartida de BPSK es espectral, y el conformado RRC la resuelve: baja de 66,1 kHz a 11,2 kHz, por debajo del ancho de banda de FSK.
 
 **Capa de enlace y aplicación:**
 
 | Protocolo | Ámbito | Overhead | Detección de errores | Adecuación |
 |:---|:---|:---|:---|:---|
-| AX.25 | Enlace, radioaficionado | 16+ B por trama | FCS CRC-16/X-25 | Estándar de facto universitario; ineficiente en tramas cortas |
+| AX.25 | Enlace, radioaficionado | 16+ B por trama | FCS CRC-16/X-25 | Muy usado en CubeSats universitarios; ineficiente en tramas cortas |
 | CCSDS | Enlace y espacio profundo | Variable, mayor | Reed-Solomon, turbo, LDPC | Estándar de agencias; complejo para un 3U |
 | CSP | Red, interno del satélite | 4 B de cabecera | Delegada a capa inferior | Diseñado para CubeSats; ligero, direccionamiento tipo IP |
 | Baliza STRaND-1 | Enlace | 6 B de cabecera | CRC-ITT declarado | Overhead mínimo; sin interoperabilidad |
@@ -933,28 +1113,32 @@ El motor es independiente de la interfaz: no importa nada de la web y se gobiern
 
 ### 12.1 Hallazgos principales
 
-1. **BPSK supera a FSK** en el canal AWGN evaluado, consistente con la teoría de modulaciones binarias.
-2. **El conformado RRC reduce el ancho de banda ocupado en un factor de 5,9 sin coste en BER**, llevando la señal dentro de la canalización UHF de 25 kHz.
-3. **El código convolucional aporta ~4 dB de ganancia** en cuanto la sincronización sostiene el enlace (a −2 dB reduce la BER 29 veces), y exhibe el umbral característico del decodificador Viterbi de decisión dura cuando la tasa de error de entrada supera su capacidad de corrección.
-4. **El lazo de Costas recupera el error residual de Doppler de décimas de hercio**: la sensibilidad extrema al residual que mostraba el modelo de sincronización ideal desaparece, y el límite operativo pasa a ser el umbral de sincronización (deslizamientos de ciclo por debajo de ~−6 dB).
-5. **El enlace descendente UHF a 9600 bps es viable** con margen mínimo de 7,1 dB a 5° de elevación.
-6. **El límite de velocidad del rotor de azimut es tolerable** con antenas de haz ancho: 0,09 dB de pérdida en el peor instante de un paso casi cenital.
+1. **La modulación documentada de STRaND-1 es FSK a 9600 bit/s con NRZI; la BPSK del modelo es comparativa.** En los modelos de banda base, BPSK coherente necesita unos 3,8 dB menos de $E_b/N_0$ que FSK no coherente a la BER objetivo, que es la diferencia entre los dos márgenes de enlace que se informan.
+2. **El conformado RRC reduce el ancho de banda ocupado de ~66 kHz a ~11 kHz** y, con su filtro adaptado, permite a los lazos de sincronización sostener la curva teórica desde 3 dB de $E_b/N_0$.
+3. **La ganancia del código convolucional, medida a igual $E_b/N_0$ por bit de información, es la de la tabla de la sección 5.3**, menor que los «~4 dB» de versiones anteriores, que comparaban a igual SNR por muestra.
+4. **El Doppler orbital del paso analizado es de ±9,8 kHz con hasta 97 Hz/s**; el receptor modelado tolera residuales de decenas de hercios tras la precompensación.
+5. **El margen descendente predicho es positivo pero depende de supuestos**: la sensibilidad de la sección 7.3 muestra que la potencia de transmisión y el umbral del receptor real, ambos sin confirmar, pueden anularlo.
+6. **El límite de velocidad del rotor de azimut no limita el enlace** con una antena de 30° de haz.
 7. **Se decodificó telemetría real de STRaND-1 con la especificación de AMSAT-UK**: 32 754 balizas y 53 magnitudes, de las que 42 varían. Los magnetómetros están operativos (más de doscientos valores distintos por eje) y la batería fue medida de verdad entre 2016 y 2020, con el voltaje oscilando entre **6,31 y 8,94 V** como corresponde a ciclos de carga y descarga en órbita. El decodificador oficial de `satnogs-decoders` no sirve para este fin: lee un solo byte por canal y devuelve el campo `DATA_SIZE` en lugar de la medida.
 8. **El estado de calidad que asigna SatNOGS y el análisis de bytes de este trabajo coinciden**, obtenidos por caminos independientes: el 95,2 % de los frames de observaciones `good` son balizas reconocibles, frente al 0,2 % de las `bad`. Que las anomalías del satélite —reloj del OBC degradándose, cuentas ADC del EPS a cero— aparezcan precisamente en las balizas de observaciones `good` descarta que sean un defecto de recepción.
 9. **La telemetría fecha el fallo del subsistema de energía en febrero de 2021, tras tres meses de degradación.** El archivo histórico de SatNOGS DB no contiene ni una sola cuenta ADC a cero en las 753 lecturas de 2016 a octubre de 2020. La primera aparece el **27 de noviembre de 2020**, y durante tres meses el fallo es intermitente: 101 ceros en 5674 lecturas (1,8 %), repartidos por igual entre los ocho canales. La última lectura válida es del **31 de enero de 2021 a las 23:57:52 UTC**; desde el 24 de febrero de 2021 son cero las 8501 lecturas siguientes, sin una sola excepción, durante veinticuatro meses. En paralelo, el reloj del OBC pasa de sostener 3043 s entre reinicios en 2019 a quedarse fijo en 2 s en enero de 2023, cuando las balizas cesan pese a que las observaciones continúan hasta julio de 2026. El único subsistema coherente hasta el final fue el magnetómetro.
-10. **El eslabón débil de la cadena no está en la radio, sino en la interpretación.** El enlace tiene 7,1 dB de margen en el peor caso, las estaciones reciben correctamente el 95,2 % de las balizas en observaciones buenas y el formato está publicado desde 2013; aun así la telemetría llevaba años sin interpretarse porque la implementación de referencia leía mal un campo del paquete.
+10. **El eslabón débil de la cadena no está en la radio, sino en la interpretación.** El modelo predice margen positivo, las estaciones reciben correctamente el 95,2 % de las balizas en observaciones buenas y el formato está publicado desde 2013; aun así la telemetría llevaba años sin interpretarse porque la implementación de referencia leía mal un campo del paquete.
 11. **Una magnitud constante puede ser un canal muerto disfrazado de sistema sano.** Los 9,75 V de batería que STRaND-1 emitió durante sus dos últimos años no son una medida: son la ordenada al origen de la recta de calibración de AMSAT-UK, el valor que la ecuación devuelve cuando la cuenta ADC vale 0. Como las rectas son decrecientes, una cuenta nula no produce «cero» sino el extremo superior de la escala. Detectarlo exigió comparar con el archivo histórico; sin él, la lectura natural del dato habría sido «batería estable a 9,75 V».
 12. **Una sola trama no demuestra el estado de un canal.** Durante el trabajo se tomó una baliza de 2018 con cuenta ADC 1023 como prueba de que los convertidores funcionaban. No lo era: es una única lectura, 1023 es el tope de escala de un convertidor de 10 bits —el valor de riel— y cae fuera del rango que ese canal recorre en todos los demás años. El diagnóstico solo se sostiene sobre la dispersión de muestras suficientes, no sobre ejemplares escogidos.
 
 ### 12.2 Limitaciones del modelo
 
-- **Sincronización con umbral operativo:** la recuperación de portadora y temporización es real (Costas + Gardner, sección 5.4), pero por debajo de ~−6 dB los lazos pierden el enganche y la BER deja de ser interpretable como error de canal. Un receptor de vuelo añadiría una secuencia de adquisición (preámbulo) para bajar ese umbral; aquí el demodulador parte directamente de los datos.
+- **Sincronización con umbral operativo:** la recuperación de portadora y temporización es real (Costas + Gardner, sección 5.4), pero por debajo de unos 3 dB de $E_b/N_0$ los lazos pierden el enganche y la BER deja de ser interpretable como error de canal. Un receptor de vuelo añadiría una secuencia de adquisición (preámbulo) para bajar ese umbral; aquí el demodulador parte directamente de los datos.
 - **Sincronización de trama ideal:** el verificador de AX.25 comprueba el FCS sobre bytes recibidos reales, pero localiza las tramas por desplazamiento conocido; no hay búsqueda de banderas ni *bit stuffing*.
 - **FEC limitado a código convolucional:** no se implementaron LDPC ni turbo códigos, ni decisión blanda en el Viterbi.
 - **Canal sin multitrayecto completo:** se modelan Rice y Doppler, pero no reflexiones múltiples ni despolarización por rotación de Faraday.
 - **Modelo orbital por barrido genérico con órbita circular:** los barridos de elevación (link budget, estación terrena) siguen usando órbita circular y Tierra esférica. El propagador SGP4 con TLE reales (sección 8.1) se usa para pasos concretos, no para los barridos.
 - **Amplificador ideal:** no se modelan compresión AM-AM, AM-PM ni distorsión armónica del PA.
 - **FSK con tonos no ortogonales** para el detector de energía empleado ($\Delta f\cdot T = 0{,}5$), lo que penaliza su curva frente a la teórica.
+- **El receptor del modelo es BPSK**: no se ha simulado un demodulador FSK con discriminador como el que usan las estaciones reales, de modo que los umbrales medidos no son los del enlace de STRaND-1.
+- **Sin ruido de fase, no linealidad del amplificador ni desbalance I/Q.** No se han añadido porque no hay parámetros del transmisor de STRaND-1 que los sustenten; introducirlos con valores arbitrarios aumentaría la complejidad sin aumentar la validez.
+- **Sin modelo ionosférico.** En UHF la rotación de Faraday gira el plano de polarización una cantidad variable con el contenido electrónico; entre un monopolo lineal y una Yagi lineal eso produce desvanecimientos de polarización que aquí se representan solo con una reserva fija de 1 dB. El centelleo ionosférico, relevante en latitudes ecuatoriales como la de la estación hipotética, tampoco se modela. La atenuación por lluvia es despreciable a 437 MHz y no procede trasladarla de enlaces en bandas milimétricas.
+- **Adaptación de modulación y codificación: no aplicable.** La baliza es un enlace de un solo sentido sin canal de retorno operativo por el que el satélite conozca la calidad de recepción, así que no puede adaptar su forma de onda durante el paso. Una política adaptativa solo podría estudiarse como escenario de diseño de otro sistema.
 - **Un solo satélite:** los resultados corresponden a STRaND-1; generalizar requiere verificación independiente.
 
 ### 12.3 Trabajo futuro
@@ -968,17 +1152,19 @@ El motor es independiente de la interfaz: no importa nada de la web y se gobiern
 
 ## 13. Conclusiones
 
-1. Se caracterizó el subsistema de comunicaciones del CubeSat STRaND-1 en sus cuatro componentes: antena (monopolo λ/4, 0 dBi, UHF), transceptor (1 W a 437.568 MHz), módem (BPSK coherente y FSK a 9600 bps) y TT&C (balizas de 15,0 bytes de media, con la estructura HDLC que define la especificación de AMSAT-UK).
+1. Se caracterizó el subsistema de comunicaciones del CubeSat STRaND-1 en sus cuatro componentes: antena (monopolo UHF; ganancia supuesta de 0 dBi), transceptor (1 W nominal a 437.568 MHz), módem (FSK a 9600 bit/s con NRZI según AMSAT-UK y SatNOGS; BPSK coherente solo como modelo comparativo) y TT&C (balizas de 15,0 bytes de media, con la estructura HDLC que define la especificación de AMSAT-UK).
 
-2. El modelo en banda base reproduce los resultados esperados de la teoría de comunicaciones digitales, y la coincidencia entre el modelo básico y el avanzado en la región de SNR común valida ambas implementaciones de forma cruzada.
+2. El modelo en banda base reproduce la curva teórica de BPSK en AWGN dentro del intervalo de confianza cuando la sincronización es ideal, lo que valida el canal y la normalización de energía.
 
-3. El modelo avanzado demuestra tres efectos cuantificados: reducción de ancho de banda de 5,9× por conformado RRC sin coste en BER, ~4 dB de ganancia por codificación convolucional con su umbral de Viterbi, y una tolerancia al Doppler residual de décimas de hercio que justifica la necesidad de recuperación de portadora.
+3. El modelo avanzado cuantifica, bajo condiciones de canal comunes y con intervalos de confianza: la reducción del ancho de banda por conformado RRC, la ganancia del código convolucional (sección 5.3), el coste de la sincronización real y la tolerancia al Doppler residual.
 
-4. El link budget descendente muestra un margen mínimo de 7,1 dB a 5° de elevación y el ascendente de 23,3 dB, ambos por encima de los 3-6 dB recomendados por la literatura.
+4. El presupuesto de enlace descendente da margen positivo respecto del umbral teórico de FSK no coherente, tanto en el barrido por elevación como a lo largo de un paso SGP4, pero la conclusión depende de parámetros supuestos (sección 7.3). El ascendente es un escenario hipotético.
 
 5. El modelo de estación terrena sobre un paso completo de 15,0 minutos, con 12,4 minutos útiles sobre 5°, muestra que el límite de velocidad del rotor en azimut se evalúa contra una traza de círculo máximo y una antena de 30° de haz. Los valores vigentes —incluida la pérdida máxima de 0,01 dB— se regeneran desde `modelo_estacion_terrena.py` y `resultados_simulacion/estacion_terrena_seguimiento.json`.
 
-6. La comparación con 7 CubeSats reales muestra concordancia alta en los siete parámetros evaluados.
+6. La comparación con CubeSats de referencia sitúa el modelo en su contexto; solo los datos de STRaND-1 se han verificado en fuente (sección 9).
+
+6 bis. **Qué se ha demostrado y qué no.** Por simulación: el comportamiento del modelo BPSK de banda base y del presupuesto de enlace bajo supuestos declarados. Por observación de telemetría real: el contenido y la evolución de las balizas, la coincidencia de recepciones entre estaciones y una cota inferior de la pérdida de paquetes dentro de las ráfagas recibidas. **No se puede afirmar todavía:** la BER, la FER, la SNR ni el margen del enlace real de STRaND-1, ni el umbral de un receptor FSK real; faltan una captura IQ de un SDR y una estación instrumentada.
 
 7. Todos los scripts y flujogramas se desarrollaron con software libre y las tablas de este informe se generan automáticamente desde los datos, lo que hace el trabajo reproducible y auditable.
 
@@ -1001,8 +1187,14 @@ El motor es independiente de la interfaz: no importa nada de la web y se gobiern
 13. SatNOGS. (2026). *SatNOGS DB — STRaND-1 telemetry data*. https://db.satnogs.org/
 14. ISIS — Innovative Solutions in Space. *TRXUV Transceiver datasheet*.
 15. GomSpace. *NanoCom TRX Transceiver datasheet*.
-16. Álvarez, R., & Restrepo, C. (2020). Desarrollo de tecnología espacial en Colombia: retos y perspectivas para la ingeniería nacional. *Revista Colombiana de Tecnología Avanzada*, 1(35), 1–10.
-17. Gómez, J. A., & Llano, G. (2018). Introducción al diseño de sistemas de comunicación para pequeños satélites. *Ingeniería y Ciencia*, 14(27), 123–148.
+16. *(Pendiente de verificación: no localizada en la búsqueda del 2026-10-13; confirmar o retirar.)* Álvarez, R., & Restrepo, C. (2020). Desarrollo de tecnología espacial en Colombia: retos y perspectivas para la ingeniería nacional. *Revista Colombiana de Tecnología Avanzada*, 1(35), 1–10.
+17. *(Pendiente de verificación: no localizada en la búsqueda del 2026-10-13; confirmar o retirar.)* Gómez, J. A., & Llano, G. (2018). Introducción al diseño de sistemas de comunicación para pequeños satélites. *Ingeniería y Ciencia*, 14(27), 123–148.
+18. AMSAT-UK. (2013). *STRaND-1 Telemetry*. https://amsat-uk.org/satellites/telemetry/strand-1/strand-1-telemetry/ — «amateur radio AX.25 packet radio downlink on 437.568 MHz […] 9600 bps FSK modulated data with HDLC frame, NRZI encoding» (consultado el 2026-10-13).
+19. SatNOGS DB. *Transmisores de NORAD 39090*: «UHF 9k6 FSK TLM», 437,568 MHz, modo FSK, 9600 baudios, estado *inactive*. https://db.satnogs.org/api/transmitters/?satellite__norad_cat_id=39090 (consultado el 2026-10-13).
+20. eoPortal. *STRaND-1 (Surrey Training, Research and Nanosatellite Demonstrator 1)*. https://www.eoportal.org/satellite-missions/strand-1 — potencia de RF nominal de 1 W (0,25 W en modo baliza/CW), antenas monopolo, órbita de ~786 km (consultado el 2026-10-13). Cita 437,575 MHz como asignación del enlace descendente.
+21. Zurmely, R. (PY4ZBZ). *STRaND-1*. https://qsl.net/py4zbz/strand.htm — recepción documentada de la telemetría a 9600 baudios con módem G3RUH; fuente de radioaficionado, usada como evidencia complementaria de observación.
+22. Kenyon, S., Bridges, C. P., et al. (2011). STRaND-1: use of a $500 smartphone as the central avionics of a nanosatellite. *62nd International Astronautical Congress* (IAC-11, sesión B4.6B), Ciudad del Cabo. https://iafastro.directory/iac/archive/browse/IAC-11/B4/6B/10937/ *(No se ha podido consultar el texto completo; se cita como fuente primaria de la misión pendiente de revisión.)*
+23. Pauluzzi, D. R., & Beaulieu, N. C. (2000). A comparison of SNR estimation techniques for the AWGN channel. *IEEE Transactions on Communications*, 48(10), 1681–1691.
 
 ---
 ## Apéndice A: Estructura del proyecto

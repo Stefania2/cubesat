@@ -120,8 +120,9 @@ UTC con independencia de la zona del servidor.
 | Base local | Siembra inicial de la aplicación | 100 frames de `frames_STRAND1.csv` |
 | Histórico ampliado | Análisis y gemelo digital | 36.641 frames de 3.049 observaciones, entre noviembre de 2016 y julio de 2026 |
 
-El satélite de referencia es STRaND-1 (NORAD 39090), en UHF a 437.568 MHz. El modelo
-de simulación evalúa BPSK a 9600 bps y FSK como alternativa; el modo concreto de una
+El satélite de referencia es STRaND-1 (NORAD 39090), en UHF a 437.568 MHz. Su baliza está
+documentada como FSK a 9600 bit/s con AX.25 y NRZI; el modelo de simulación usa además BPSK
+coherente como modelo comparativo de banda base; el modo concreto de una
 observación se conserva en sus metadatos SatNOGS y no debe inferirse de una tabla fija.
 
 El informe técnico final es la fuente de resultados integrados. Las cifras se trazan a

@@ -27,8 +27,8 @@ from ..services.enlace_monitor import (
     enlace,
     espectro_enlace,
     estado_enlace,
+    integridad_enlace,
     telemetria_enlace,
-    validar_integridad,
 )
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ def _estado_snapshots() -> list[tuple[str, dict[str, Any]]]:
     paquetes: list[tuple[str, dict[str, Any]]] = [
         ("status_update", estado_enlace()),
         ("metrics_update", enlace.metricas_enlace()),
-        ("integrity_update", validar_integridad(BITS_RX_SIM)),
+        ("integrity_update", integridad_enlace()),
         ("telemetry_update", telemetria_enlace()),
     ]
     espec = espectro_enlace()
@@ -138,7 +138,7 @@ def constellation():
 
 @router.get("/integrity")
 def integrity():
-    return validar_integridad(BITS_RX_SIM)
+    return integridad_enlace()
 
 
 @router.get("/history")

@@ -2,6 +2,8 @@
 
 Proyecto aplicado de Ingenieria Electronica orientado a caracterizar el subsistema de comunicaciones de un CubeSat y documentar un modelo reproducible de transmision/recepcion de senales RF moduladas en BPSK y FSK.
 
+> **Modulacion real y modulacion del modelo.** La baliza UHF de STRaND-1 esta documentada como **FSK a 9600 bit/s con tramas AX.25 (HDLC) y codificacion NRZI** (AMSAT-UK; SatNOGS DB). Ninguna fuente consultada describe BPSK en este satelite. La BPSK coherente del modelo avanzado y de la cadena GNU Radio es un **modelo comparativo de banda base**. Los resultados de simulacion no son mediciones del enlace real. La auditoria completa esta en [`docs/AUDITORIA_GEMELO_RF.md`](docs/AUDITORIA_GEMELO_RF.md).
+
 El trabajo se desarrolla como referencia tecnica en espanol para apoyar futuros proyectos academicos de desarrollo satelital en Colombia.
 
 ## Objetivo
@@ -43,20 +45,27 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 - Calculo de BER y exportacion de senales IQ para GNU Radio.
 
 ### Modelo avanzado
-- Filtrado conformador RRC (Root Raised Cosine, α=0.35): reduce el ancho de banda ocupado al 99 % de ~66 kHz a ~11 kHz **sin coste en BER**, acercandose al limite teorico R(1+α)=12.96 kHz.
-- **Sincronizacion realista**: lazo de Costas (portadora, 80 Hz) y recuperacion Gardner (simbolo) con un desfase inicial de 0.35 muestras. Define un umbral de sincronizacion (~-6 dB) y elimina la sensibilidad al Doppler residual.
-- Desvanecimiento Rice (K=10 dB) con perfil Jakes para canal con componente LOS.
-- Sensibilidad al error residual de Doppler tras la pre-compensacion por TLE (0 a 0.2 Hz).
-- Codificacion convolutional (r=1/2, K=7, polinomios 171,133) con decodificacion Viterbi: ~4 dB de ganancia en cuanto la sincronizacion sostiene el enlace, con el umbral caracteristico del Viterbi de decision dura.
-- Construccion y verificacion de tramas AX.25 2.2 con FCS CRC-16/X-25 real.
-- 18 configuraciones x 8 puntos de SNR = 144 corridas.
+- BPSK de banda base (modelo comparativo) con filtrado conformador RRC (α=0.35) y filtro adaptado.
+- **Sincronizacion real**: lazo de Costas (portadora, 80 Hz) y recuperacion Gardner (simbolo) con un desfase inicial de 0.35 muestras; ambiguedad de fase resuelta con una palabra de sincronismo.
+- Desvanecimiento Rice (K = P_LOS/P_difusa = 10 dB, potencia media unitaria): **escenario hipotetico**, sin medidas de canal de STRaND-1.
+- Doppler **residual** tras la pre-compensacion por TLE (10, 50 y 100 Hz, y deriva de 97 Hz/s), con valores tomados del paso SGP4.
+- Codificacion convolucional (r=1/2, K=7, polinomios 171,133) con Viterbi de decision dura.
+- Tramas AX.25 2.2 con FCS CRC-16/X-25: tramas validas, invalidas y no recuperadas.
+- Todas las configuraciones se comparan **a igual Eb/N0 por bit de informacion, sobre los mismos bits, el mismo ruido y el mismo desvanecimiento** (semillas registradas), con varios ensayos por punto.
+- Metricas: BER, BER diferencial, PER y FER con intervalos de confianza de Wilson; N/A cuando no hay denominador.
+
+### Presupuesto en un paso SGP4, estimacion de SNR y recepcion real
+- `parametros_enlace.py`: fuente unica de los parametros del enlace, con la **procedencia** de cada uno (documentado, deducido, supuesto) y los umbrales teoricos por esquema.
+- `margen_paso_sgp4.py`: TLE -> SGP4 -> Doppler y su derivada -> residual -> rotor -> margen en el tiempo, con percentiles, intervalos de margen positivo y sensibilidad (uno a la vez y Monte Carlo).
+- `estimar_snr_iq.py`: estimador M2M4 de Es/N0 sobre las muestras IQ, contrastado con la SNR conocida (sesgo y dispersion por tamaño de ventana).
+- `telemetria_strand1/tools/analizar_recepcion.py`: metadatos disponibles, coincidencias entre estaciones (M0KSF / M0KSF-BB), ganancia por combinacion y perdida de paquetes por numero de secuencia.
 
 ### SGP4 y validacion SDR
 - `orbita_sgp4.py` + `simular_paso_sgp4.py`: paso orbital con el propagador SGP4 y el TLE de STRaND-1 versionado en `tle/` con su epoca.
 - `validar_captura_iq.py` + `generar_captura_iq_referencia.py`: formato inmutable de captura IQ (binario + manifiesto JSON) y una captura de referencia sintetizada desde la telemetria real con el Doppler SGP4 aplicado.
 
 ### Pruebas automatizadas
-- `pytest` con dependencias declaradas en `requirements.txt` (pytest, sgp4). Cubren sincronizacion, SGP4/TLE y validacion de captura IQ.
+- `pytest` con dependencias declaradas en `requirements.txt` (pytest, sgp4). Cubren el presupuesto de enlace contra casos calculados a mano, la curva BER en AWGN, la normalizacion del canal Rice, la reproducibilidad con semillas, el Doppler SGP4, los contadores AX.25/FCS, los denominadores de BER/PER/FER y la **coherencia entre resultados, informe, pagina estatica y frontend**.
 
 ### Flujogramas GNU Radio
 - `simulacion_visualizar_iq.grc`: visualizacion IQ con control interactivo de ruido AWGN (time/freq/constellation sinks).
@@ -70,33 +79,30 @@ Este repositorio contiene el desarrollo completo del proyecto de caracterizacion
 - Fecha por si solo el fallo de la instrumentacion de energia el 2021-02-24, con un salto de +2,57 V sobre una linea base de 7,18 V.
 
 ### Link budget
-- Calculo de margen de enlace descendente UHF (437.568 MHz, 9600 bps BPSK).
+- Calculo de margen de enlace descendente UHF (437.568 MHz, 9600 bit/s). El umbral se obtiene de la curva teorica de cada esquema: FSK no coherente (documentada) y BPSK coherente (modelo comparativo).
 - Barrido 5°-90° de elevacion con orbita LEO de 775 km (altura real de STRaND-1 segun TLE).
 - Temperatura de sistema referida a la entrada del receptor, incluyendo el ruido del cable de antena.
-- Resultados: margen de 7.1 dB (5°) a 18.0 dB (90°), superando los 3-6 dB recomendados.
+- La estacion terrena es hipotetica y la mayoria de los parametros son supuestos de diseño: un margen positivo es una prediccion, no una garantia de recepcion.
 
 ### Enlace ascendente
-- Simulacion de uplink para comandos a 1200 bps en 435 MHz.
+- Escenario **hipotetico** de uplink para comandos a 1200 bps en 435 MHz (el enlace ascendente real de STRaND-1 no esta caracterizado).
 - Potencia TX de 10W desde estacion terrena con Yagi de 15 dBi.
-- Margen de enlace: 23.3 dB (5°) a 34.2 dB (90°).
-- Tasa maxima sostenible con la Eb/N0 requerida: 253 kbps (5°) a 3.1 Mbps (cenit).
 
 ### Modelo de estacion terrena
-- Paso orbital completo sobre traza de circulo maximo: 15.0 min de horizonte a horizonte, 12.4 min utiles sobre 5°.
+- Paso orbital completo sobre traza de circulo maximo.
 - Seguimiento automatico de antena con velocidad limitada (5°/s az, 3°/s el).
 - Error de apuntamiento calculado fuera de boresight y perdida acotada al nivel de lobulo lateral.
 
 ### Dashboard de monitoreo (GNU Radio → FastAPI → WebSocket → Web)
 - Capa de monitoreo y visualizacion del enlace RF simulado **sin tocar la cadena de 18.776 bits** y sin `Unpack Bits`.
 - **Version canonica integrada en la plataforma** `telemetria_strand1/`: pagina `/enlace`, modulo `backend/app/services/enlace_monitor.py`, router `/api/enlace/*` + `WS /ws/enlace`, frontend `pages/EnlaceRF.tsx`. Arranca con `telemetria_strand1/arrancar.sh`.
-- El backend lanza la cadena GNU Radio, verifica la integridad de los 18.776 bits (diferencia + SHA-256), calcula BER, espectro (FFT Welch) y constelacion BPSK desde el tap IQ real, y re-decodifica 5.830 balizas reales con `strand_amsat`.
+- El backend lanza la cadena GNU Radio, compara los 18.776 bits (errores + SHA-256), calcula BER, espectro (FFT Welch) y constelacion BPSK desde el tap IQ de la simulacion, y re-decodifica las balizas reales con `strand_amsat`. El resultado de una corrida solo se muestra si consta su registro (SNR, semilla, fecha); en un despliegue sin GNU Radio la simulacion se declara no disponible.
 - Metodologia honesta: RSSI y FER se muestran como N/A con su explicacion (modelo baseband-equivalente, sin tramas AX.25/FEC); ningun valor se inventa.
 - Hay ademas una implementacion autonoma de referencia en `backend/` + `dashboard/` (scripts en `scripts/arrancar_dashboard.{sh,bat}`).
-- Resultado vigente: aunque la demanda instantanea de azimut alcanza 8.23 °/s frente a los 5 °/s del rotor, el seguimiento preposicionado produce un error maximo de 0.77° y una perdida maxima de 0.01 dB en la simulacion.
 
 ### Comparacion con CubeSats reales
 - Evaluacion de 7 CubeSats documentados: STRaND-1, Libertad 1, FACSAT-1, Delfi-C3, ESTCube-1, AAUSAT-II, ITUPSAT 1.
-- Concordancia alta en los 7 parametros evaluados (frecuencia, modulacion, tasa, potencia, margen, BER teorica y ancho de banda con conformado RRC).
+- Frecuencia, tasa y potencia nominal coinciden por construccion; la modulacion del satelite es FSK, no la BPSK del modelo. Solo la fila de STRaND-1 esta verificada en fuente; las demas quedan pendientes.
 - La tabla comparativa se construye leyendo los CSV de resultados, no con valores transcritos.
 
 ### Documentacion tecnica
@@ -270,59 +276,43 @@ Configuracion usada:
 
 ## Resultados principales
 
-### Modelo basico (AWGN)
+Las cifras de esta seccion las escribe `generar_resumen_web.py` a partir de `resultados_simulacion/`; no se editan a mano. Son **resultados de modelo**, no mediciones del enlace real.
 
-| Modulacion | SNR min BER=0 | BER a 0 dB | BER a 4 dB | Ancho banda (-20 dB) |
-| --- | ---: | ---: | ---: | ---: |
-| BPSK | 2 dB | 5.3e-5 | 0.0 | ~27.0 kHz |
-| FSK | 8 dB | 5.3e-2 | 3.9e-3 | ~11.8 kHz |
+<!-- RESULTADOS -->
+Corrida del modelo avanzado: 2026-10-13T19:28:29+00:00 · codigo `918e2c7+cambios sin confirmar` · semilla 20260701 · 6 ensayos de 18776 bits por punto.
 
-### Modelo avanzado (sincronizacion Costas+Gardner + RRC + fading + FEC)
+| Resultado | Valor | Tipo |
+| --- | --- | --- |
+| Margen descendente por elevacion (5°–90°), FSK no coherente | 3.7 – 14.7 dB | teorico |
+| Idem con BPSK coherente (modelo comparativo) | 7.5 – 18.4 dB | teorico |
+| Margen FSK en un paso SGP4 (culminacion 84°) | 4.8 – 15.8 dB, 100 % del tiempo positivo | simulado |
+| Margen minimo del paso con los supuestos variados (Monte Carlo, p5–p95) | -4.7 – 10.2 dB; positivo en el 72 % | simulado |
+| Doppler en el paso | -9.8 a +9.8 kHz, hasta 97 Hz/s | simulado |
+| Ancho de banda ocupado al 99 %, NRZ → RRC | 66.1 → 11.2 kHz | simulado |
+| Ganancia de codificacion a BER 0.001 (AWGN) | 1.3 dB (resolucion 1.5 dB) | simulado |
+| Ganancia de codificacion a FER 0.1 de tramas AX.25 (AWGN) | 3.0 dB | simulado |
+| Ganancia de codificacion con desvanecimiento Rice | no estimable: el barrido no encierra la BER objetivo en ambas curvas | simulado |
+| Error maximo de apuntamiento del rotor / perdida | 0.77° / 0.01 dB | simulado |
+| Margen ascendente (escenario hipotetico) | 23.2 – 34.2 dB | teorico |
+| Emisiones recibidas por dos o mas estaciones | 1993 de 28179 | derivado de telemetria real |
+| Ganancia por combinar estaciones en ventanas simultaneas | ×1.32 | derivado de telemetria real |
+| Perdida de paquetes dentro de rafagas (contador de secuencia) | 36.8 % (19311 de 30576) | derivado, bajo hipotesis |
+| FER empirica del enlace real | no disponible: falta el denominador | — |
 
-El barrido de SNR de este modelo (-10 a 4 dB) es mas bajo que el del modelo basico. Con sincronizacion realista el receptor define un umbral operativo alrededor de -6 dB: por encima, la BPSK con RRC deja de cometer errores a partir de 2 dB y a 0 dB coincide con el modelo basico (5.3e-5).
+BER y FER del modelo avanzado en AWGN (Eb/N0 por bit de informacion; receptor Costas + Gardner). «0 (< x)»: cero errores observados, con x como cota superior al 95 %.
 
-| Configuracion | BER a -8 dB | BER a -6 dB | BER a -4 dB | Ancho banda (99 %) |
-| --- | ---: | ---: | ---: | ---: |
-| BPSK rectangular (NRZ) | 5.7e-1 | 1.5e-1 | 9.0e-2 | ~66.1 kHz |
-| BPSK + RRC (α=0.35) | **6.2e-2** | **2.4e-2** | **6.8e-3** | **~11.2 kHz** |
-| BPSK rectangular (NRZ) + fading Rice | 4.2e-1 | 5.0e-1 | 8.0e-1 | ~66.1 kHz |
-| BPSK + FEC conv. (r=1/2) | 4.9e-1 | 4.4e-1 | 5.8e-2 | ~66.0 kHz |
-
-El NRZ sin filtro adaptado hace que los lazos de sincronizacion trabajen sobre ~9 dB mas de ruido y pierdan el enganche; el RRC con su filtro adaptado mantiene la BER del modelo de sincronizacion ideal y recupera los 11.2 kHz de ancho de banda. El FEC da su ganancia (~4 dB) en cuanto el lazo sostiene el enlace: a -2 dB reduce la BER de 4.5e-2 a 1.5e-3.
-
-Sensibilidad al residual de Doppler tras la pre-compensacion, sobre un registro de 1.96 s. **Con el lazo de Costas (80 Hz) el residual de 0.2 Hz se recupera** y deja de dominar la tabla; las filas se muestran para la configuracion NRZ, la mas exigente:
-
-| Residual | BER a -4 dB | BER a 0 dB | BER a 4 dB |
-| --- | ---: | ---: | ---: |
-| 0 Hz | 9.0e-2 | 1.7e-2 | 3.2e-4 |
-| 0.05 Hz | 9.5e-2 | 1.6e-2 | 7.5e-4 |
-| 0.1 Hz | 9.3e-2 | 1.6e-2 | 3.7e-4 |
-| 0.2 Hz | 5.0e-1 | 1.7e-2 | 4.8e-4 |
-
-Tramas AX.25 validadas por FCS: 0 a -4 dB, 17 a -2 dB, las 37 a partir de 0 dB.
-
-### Gemelo digital
-
-21833 eventos y 588 pases reconstruidos; 2250 dias de archivo comprimidos en 46,1 h de eje virtual.
-El detector fecha el fallo de la instrumentacion de energia el **2021-02-24 11:14:57**, con la
-desviacion tipica cayendo de 1,618 a 0,002 V: el valor **sube** a 9,7488 V, asi que ninguna alarma
-por bateria baja se disparara nunca.
-
-### Link budget descendente
-
-Margen de enlace: **7.1 dB** a 5° elevacion → **18.0 dB** en cenit.
-
-### Link budget ascendente (comandos 1200 bps)
-
-Margen de enlace: **23.3 dB** a 5° elevacion → **34.2 dB** en cenit (10W TX, 435 MHz).
-
-### Estacion terrena
-
-El modelo vigente produce un paso de 15.0 min horizonte a horizonte, con 12.4 min utiles sobre 5° y culminacion a 85°. El C/N0 promedio es **66.8 dB-Hz** (60.9 a 72.6 dB-Hz); el error maximo de apuntamiento es 0.77° y la perdida maxima es 0.01 dB. Estos valores proceden de `modelo_estacion_terrena.py` y su salida `resultados_simulacion/estacion_terrena_seguimiento.json`.
-
-### Comparacion con CubeSats reales
-
-Concordancia alta en los 7 parametros evaluados entre la simulacion y 7 CubeSats documentados.
+| Eb/N0 (dB) | BER teorica BPSK | BER sin codigo | BER con FEC | FER AX.25 (validas/tx) | FER AX.25 + FEC |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 0.0 | 7.9e-02 | 4.3e-01 | 5.0e-01 | 1.0e+00 (0/222) | 1.0e+00 |
+| 1.5 | 4.6e-02 | 2.6e-01 | 4.8e-01 | 1.0e+00 (0/222) | 1.0e+00 |
+| 3.0 | 2.3e-02 | 2.4e-02 | 4.8e-01 | 1.0e+00 (0/222) | 1.0e+00 |
+| 4.5 | 8.8e-03 | 9.2e-03 | 7.8e-02 | 1.0e+00 (0/222) | 3.0e-01 |
+| 6.0 | 2.4e-03 | 2.4e-03 | 1.1e-04 | 7.7e-01 (50/222) | 2.3e-02 |
+| 7.5 | 4.0e-04 | 4.5e-04 | 0 (< 3.4e-05) | 2.7e-01 (162/222) | 0 |
+| 9.0 | 3.4e-05 | 4.4e-05 | 0 (< 3.4e-05) | 2.7e-02 (216/222) | 0 |
+| 10.5 | 1.1e-06 | 0 (< 3.4e-05) | 0 (< 3.4e-05) | 0 (222/222) | 0 |
+| 12.0 | 9.0e-09 | 0 (< 3.4e-05) | 0 (< 3.4e-05) | 0 (222/222) | 0 |
+<!-- /RESULTADOS -->
 
 Graficas generadas:
 
@@ -358,14 +348,23 @@ python decodificar_frames_STRAND1.py     # 2. Decodifica a bytes -> frames_STRAN
 python generar_iq_bpsk_desde_bin.py      # 3. IQ BPSK sintetica para pruebas en GNU Radio
 python simular_enlace_rf_fsk_bpsk.py     # 4. Modelo basico BPSK/FSK + BER
 python simular_enlace_rf_bpsk_avanzado.py # 5. Modelo avanzado (tarda unos minutos por el Viterbi)
-python calcular_link_budget.py           # 6. Link budget descendente
-python simular_enlace_ascendente.py      # 7. Link budget ascendente
+python calcular_link_budget.py           # 6. Link budget descendente (FSK documentada y BPSK comparativa)
+python simular_enlace_ascendente.py      # 7. Link budget ascendente (escenario hipotetico)
 python modelo_estacion_terrena.py        # 8. Paso orbital con seguimiento
 python simular_paso_sgp4.py              # 9. Paso orbital con SGP4 y TLE versionado
-python generar_captura_iq_referencia.py  # 10. Captura IQ de referencia + manifiesto
-python validar_captura_iq.py captura/strand1_2026-08-09.json  # 11. Valida la captura
-python comparar_con_cubesats_reales.py   # 12. Comparacion con 7 CubeSats
-python generar_tablas_informe.py         # 13. Regenera las tablas del informe tecnico
+python margen_paso_sgp4.py               # 10. Margen y Doppler en el tiempo + sensibilidad
+python estimar_snr_iq.py                 # 11. Estimador M2M4 de SNR sobre IQ sintetico
+python generar_captura_iq_referencia.py  # 12. Captura IQ de referencia + manifiesto
+python validar_captura_iq.py captura/strand1_2026-08-09.json  # 13. Valida la captura
+python comparar_con_cubesats_reales.py   # 14. Comparacion con CubeSats de referencia
+python generar_tablas_informe.py         # 15. Regenera las 20 tablas del informe tecnico
+python generar_resumen_web.py            # 16. Regenera README, index.html y el resumen de la web
+```
+
+El paso 10 lee los umbrales del receptor simulado que escribe el paso 5; si se cambia el modelo avanzado hay que repetir 10, 15 y 16. El analisis de recepcion real necesita la base PostgreSQL local y se ejecuta aparte:
+
+```bash
+cd telemetria_strand1 && ../../strand_api/bin/python tools/analizar_recepcion.py
 ```
 
 Las pruebas automatizadas se ejecutan con:
@@ -426,9 +425,11 @@ Incluye:
 
 ## Limitaciones del modelo
 
-- **Umbral de sincronizacion:** La recuperacion de portadora y simbolo es real (Costas + Gardner), pero por debajo de ~-6 dB los lazos pierden el enganche y la BER deja de ser interpretable como error de canal. Un receptor de vuelo usaria un preambulo de adquisicion que aqui no se modela.
+- **El modelo es BPSK; la baliza real es FSK:** los umbrales del receptor simulado no son los de un receptor FSK real, cuyo valor no esta documentado.
+- **Umbral de sincronizacion:** La recuperacion de portadora y simbolo es real (Costas + Gardner), pero por debajo de ~3 dB de Eb/N0 los lazos pierden el enganche y la BER deja de ser interpretable como error de canal. Un receptor de vuelo usaria un preambulo de adquisicion que aqui no se modela.
 - **Sincronizacion de trama ideal:** El verificador AX.25 calcula el FCS real sobre los bytes recibidos, pero localiza las tramas por desplazamiento conocido; no hay busqueda de banderas ni bit stuffing.
-- **Canal sin multitrayecto completo:** Se modelan Rice y Doppler, pero no reflexiones multiples ni rotacion de Faraday.
+- **Canal hipotetico:** Los parametros del desvanecimiento Rice no proceden de medidas. No se modelan rotacion de Faraday ni centelleo ionosferico (solo una reserva fija de polarizacion), ni ruido de fase o desbalance I/Q.
+- **Sin validacion experimental:** no hay BER, FER, SNR ni margen medidos del enlace real de STRaND-1.
 - **FEC limitado a convolutional con decision dura:** No se implemento LDPC, turbo codigos ni decision blanda en el Viterbi.
 - **Barridos orbitales con orbita circular:** Los barridos de elevacion usan orbita circular y Tierra esferica; el propagador SGP4 con TLE reales se usa para pasos concretos (`orbita_sgp4.py`), no para los barridos.
 - **FSK con tonos no ortogonales** para el detector de energia empleado (Δf·T = 0.5), lo que penaliza su curva frente a la teorica.

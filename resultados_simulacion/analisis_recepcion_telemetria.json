@@ -1,0 +1,379 @@
+{
+  "tipo_de_dato": "derivado de telemetria real (SatNOGS); analisis observacional",
+  "generado_utc": "2026-10-13T19:35:26+00:00",
+  "base": "localhost:5432/strand1",
+  "criterio_misma_emision": "mismo contenido e instantes a ±2 s, de estaciones distintas",
+  "inventario": {
+    "frames": 36641,
+    "frames_con_observador": 34241,
+    "frames_con_station_id": 11721,
+    "frames_con_observation_id": 14543,
+    "contenidos_distintos": 13582,
+    "primer_frame_utc": "2016-11-30T16:39:41+00:00",
+    "ultimo_frame_utc": "2026-07-13T09:12:23+00:00",
+    "observaciones_por_fuente_y_estado": [
+      {
+        "fuente": "frame-metadata",
+        "estado": "(sin estado)",
+        "observaciones": 687,
+        "con_elevacion_maxima": 0,
+        "con_frecuencia": 0,
+        "con_modo": 0
+      },
+      {
+        "fuente": "satnogs-network",
+        "estado": "bad",
+        "observaciones": 1873,
+        "con_elevacion_maxima": 1873,
+        "con_frecuencia": 1873,
+        "con_modo": 1873
+      },
+      {
+        "fuente": "satnogs-network",
+        "estado": "good",
+        "observaciones": 488,
+        "con_elevacion_maxima": 488,
+        "con_frecuencia": 488,
+        "con_modo": 488
+      },
+      {
+        "fuente": "satnogs-network",
+        "estado": "unknown",
+        "observaciones": 1,
+        "con_elevacion_maxima": 1,
+        "con_frecuencia": 1,
+        "con_modo": 1
+      }
+    ],
+    "metadatos_disponibles": {
+      "por_trama": [
+        "contenido (hex)",
+        "instante (resolucion 1 s)",
+        "observador",
+        "station_id (parcial)",
+        "observation_id (parcial)"
+      ],
+      "por_observacion_network": [
+        "estado (good/bad/unknown, asignado en SatNOGS)",
+        "elevacion maxima del paso",
+        "inicio y fin",
+        "frecuencia y modo del transmisor"
+      ],
+      "no_disponibles": [
+        "SNR o RSSI por trama",
+        "elevacion en el instante de la trama",
+        "numero de tramas emitidas por el satelite",
+        "resultado del demodulador en las tramas no entregadas"
+      ]
+    }
+  },
+  "balizas": {
+    "total": 32754,
+    "con_observador": 30590,
+    "sin_observador_excluidas_del_analisis_por_estacion": 2164
+  },
+  "diversidad": {
+    "emisiones_distintas_recibidas": 28179,
+    "por_numero_de_estaciones": {
+      "1": 26186,
+      "2": 1697,
+      "3": 210,
+      "4_o_mas": 86
+    },
+    "emisiones_multiestacion": 1993,
+    "de_ellas_con_instante_identico": 750,
+    "ventanas_con_varias_estaciones": 231,
+    "emisiones_en_esas_ventanas": 15153,
+    "emisiones_de_la_mejor_estacion_de_cada_ventana": 11503,
+    "ganancia_por_combinacion": 1.317,
+    "nota": "Ganancia = emisiones distintas recuperadas entre todas las estaciones de una ventana / las recuperadas por la mejor estacion sola. Es un resultado observacional: no demuestra diversidad fisica del canal, porque las estaciones difieren en antena, receptor, horario y disponibilidad."
+  },
+  "par_M0KSF": {
+    "disponible": true,
+    "estaciones": [
+      "M0KSF",
+      "M0KSF-BB"
+    ],
+    "emisiones_totales": {
+      "M0KSF": 733,
+      "M0KSF-BB": 298
+    },
+    "ventanas_comunes": 30,
+    "en_ventanas_comunes": {
+      "solo_M0KSF": 249,
+      "solo_M0KSF-BB": 33,
+      "ambas": 215,
+      "union": 497
+    },
+    "fraccion_recibida_por_ambas": 0.433,
+    "ganancia_union_sobre_la_mejor": 1.071,
+    "interpretacion": "Una emision recibida por ambas no es una anomalia: es la misma trama oida dos veces. Solo cuentan como duplicado de ingesta las filas identicas en contenido, instante Y observador, que la clave unica de la tabla ya impide."
+  },
+  "exito_por_observacion": {
+    "tramos_elevacion_maxima_deg": [
+      "0-15",
+      "15-30",
+      "30-45",
+      "45-60",
+      "60-75",
+      "75-90"
+    ],
+    "filas": [
+      {
+        "estado_satnogs": "bad",
+        "elevacion_maxima_deg": "0-15",
+        "observaciones": 276,
+        "observaciones_con_baliza": 0,
+        "fraccion_con_baliza": 0.0,
+        "balizas": 0
+      },
+      {
+        "estado_satnogs": "bad",
+        "elevacion_maxima_deg": "15-30",
+        "observaciones": 304,
+        "observaciones_con_baliza": 0,
+        "fraccion_con_baliza": 0.0,
+        "balizas": 0
+      },
+      {
+        "estado_satnogs": "bad",
+        "elevacion_maxima_deg": "30-45",
+        "observaciones": 310,
+        "observaciones_con_baliza": 0,
+        "fraccion_con_baliza": 0.0,
+        "balizas": 0
+      },
+      {
+        "estado_satnogs": "bad",
+        "elevacion_maxima_deg": "45-60",
+        "observaciones": 304,
+        "observaciones_con_baliza": 0,
+        "fraccion_con_baliza": 0.0,
+        "balizas": 0
+      },
+      {
+        "estado_satnogs": "bad",
+        "elevacion_maxima_deg": "60-75",
+        "observaciones": 288,
+        "observaciones_con_baliza": 1,
+        "fraccion_con_baliza": 0.003,
+        "balizas": 6
+      },
+      {
+        "estado_satnogs": "bad",
+        "elevacion_maxima_deg": "75-90",
+        "observaciones": 391,
+        "observaciones_con_baliza": 0,
+        "fraccion_con_baliza": 0.0,
+        "balizas": 0
+      },
+      {
+        "estado_satnogs": "good",
+        "elevacion_maxima_deg": "0-15",
+        "observaciones": 55,
+        "observaciones_con_baliza": 39,
+        "fraccion_con_baliza": 0.709,
+        "balizas": 226
+      },
+      {
+        "estado_satnogs": "good",
+        "elevacion_maxima_deg": "15-30",
+        "observaciones": 79,
+        "observaciones_con_baliza": 51,
+        "fraccion_con_baliza": 0.646,
+        "balizas": 725
+      },
+      {
+        "estado_satnogs": "good",
+        "elevacion_maxima_deg": "30-45",
+        "observaciones": 99,
+        "observaciones_con_baliza": 71,
+        "fraccion_con_baliza": 0.717,
+        "balizas": 1548
+      },
+      {
+        "estado_satnogs": "good",
+        "elevacion_maxima_deg": "45-60",
+        "observaciones": 77,
+        "observaciones_con_baliza": 53,
+        "fraccion_con_baliza": 0.688,
+        "balizas": 951
+      },
+      {
+        "estado_satnogs": "good",
+        "elevacion_maxima_deg": "60-75",
+        "observaciones": 68,
+        "observaciones_con_baliza": 51,
+        "fraccion_con_baliza": 0.75,
+        "balizas": 1007
+      },
+      {
+        "estado_satnogs": "good",
+        "elevacion_maxima_deg": "75-90",
+        "observaciones": 110,
+        "observaciones_con_baliza": 86,
+        "fraccion_con_baliza": 0.782,
+        "balizas": 1472
+      },
+      {
+        "estado_satnogs": "unknown",
+        "elevacion_maxima_deg": "75-90",
+        "observaciones": 1,
+        "observaciones_con_baliza": 0,
+        "fraccion_con_baliza": 0.0,
+        "balizas": 0
+      }
+    ],
+    "nota": "«Fraccion con baliza» es una tasa de exito de OBSERVACION, no una FER. Una observacion sin balizas puede deberse al canal, pero tambien a que el satelite no emitio en ese paso, a la estacion, al detector o al decodificador. La elevacion es la maxima del paso, no la del instante de cada trama."
+  },
+  "cadencia_de_baliza": {
+    "disponible": true,
+    "intervalos_medidos": 10616,
+    "mediana_s": 2.0,
+    "mas_frecuentes_s": [
+      {
+        "intervalo_s": 1,
+        "veces": 2818
+      },
+      {
+        "intervalo_s": 0,
+        "veces": 1652
+      },
+      {
+        "intervalo_s": 2,
+        "veces": 1456
+      },
+      {
+        "intervalo_s": 13,
+        "veces": 699
+      },
+      {
+        "intervalo_s": 14,
+        "veces": 387
+      },
+      {
+        "intervalo_s": 3,
+        "veces": 364
+      },
+      {
+        "intervalo_s": 12,
+        "veces": 330
+      },
+      {
+        "intervalo_s": 15,
+        "veces": 321
+      }
+    ],
+    "conclusion": "La separacion entre balizas consecutivas no tiene un unico valor dominante (rafagas de 0-2 s y huecos de ~13-15 s): la cadencia no sirve para contar tramas ausentes. Para eso se usa el contador de secuencia."
+  },
+  "perdida_por_secuencia": {
+    "hipotesis": "contador de secuencia de 8 bits incrementado en 1 por paquete emitido",
+    "definicion": "perdida = 1 - paquetes distintos recibidos / (contador max - min + 1), por rafaga (misma estacion, huecos <= 30 s, saltos <= 32)",
+    "global": {
+      "rafagas": 1403,
+      "paquetes_emitidos_estimados": 30576,
+      "paquetes_recibidos": 19311,
+      "perdida": 0.3684
+    },
+    "por_año": {
+      "2016": {
+        "rafagas": 13,
+        "paquetes_emitidos_estimados": 198,
+        "paquetes_recibidos": 142,
+        "perdida": 0.2828
+      },
+      "2017": {
+        "rafagas": 4,
+        "paquetes_emitidos_estimados": 226,
+        "paquetes_recibidos": 84,
+        "perdida": 0.6283
+      },
+      "2018": {
+        "rafagas": 5,
+        "paquetes_emitidos_estimados": 264,
+        "paquetes_recibidos": 47,
+        "perdida": 0.822
+      },
+      "2019": {
+        "rafagas": 6,
+        "paquetes_emitidos_estimados": 136,
+        "paquetes_recibidos": 126,
+        "perdida": 0.0735
+      },
+      "2020": {
+        "rafagas": 294,
+        "paquetes_emitidos_estimados": 6289,
+        "paquetes_recibidos": 4805,
+        "perdida": 0.236
+      },
+      "2021": {
+        "rafagas": 500,
+        "paquetes_emitidos_estimados": 15382,
+        "paquetes_recibidos": 9529,
+        "perdida": 0.3805
+      },
+      "2022": {
+        "rafagas": 555,
+        "paquetes_emitidos_estimados": 8028,
+        "paquetes_recibidos": 4525,
+        "perdida": 0.4363
+      },
+      "2023": {
+        "rafagas": 26,
+        "paquetes_emitidos_estimados": 53,
+        "paquetes_recibidos": 53,
+        "perdida": 0.0
+      }
+    },
+    "por_elevacion_maxima_de_la_observacion": [
+      {
+        "elevacion_maxima_deg": "0-15",
+        "rafagas": 21,
+        "paquetes_emitidos_estimados": 385,
+        "paquetes_recibidos": 95,
+        "perdida": 0.7532
+      },
+      {
+        "elevacion_maxima_deg": "15-30",
+        "rafagas": 30,
+        "paquetes_emitidos_estimados": 852,
+        "paquetes_recibidos": 317,
+        "perdida": 0.6279
+      },
+      {
+        "elevacion_maxima_deg": "30-45",
+        "rafagas": 70,
+        "paquetes_emitidos_estimados": 936,
+        "paquetes_recibidos": 599,
+        "perdida": 0.36
+      },
+      {
+        "elevacion_maxima_deg": "45-60",
+        "rafagas": 61,
+        "paquetes_emitidos_estimados": 570,
+        "paquetes_recibidos": 359,
+        "perdida": 0.3702
+      },
+      {
+        "elevacion_maxima_deg": "60-75",
+        "rafagas": 88,
+        "paquetes_emitidos_estimados": 816,
+        "paquetes_recibidos": 568,
+        "perdida": 0.3039
+      },
+      {
+        "elevacion_maxima_deg": "75-90",
+        "rafagas": 139,
+        "paquetes_emitidos_estimados": 992,
+        "paquetes_recibidos": 636,
+        "perdida": 0.3589
+      }
+    ],
+    "transiciones_excluidas_por_contador_clavado": 3821,
+    "alcance": "Solo mide lo que falta ENTRE paquetes recibidos de una rafaga. No incluye lo perdido antes del primero ni despues del ultimo, ni los pasos sin recepcion: es una cota inferior de la perdida del paso, no su FER. La perdida no es atribuible solo al canal (tambien cuentan estacion, detector y decodificador)."
+  },
+  "fer_empirica": {
+    "disponible": false,
+    "motivo": "No existe denominador para un paso completo: SatNOGS solo registra las tramas demoduladas. Lo unico estimable es la perdida entre paquetes recibidos de una misma rafaga (perdida_por_secuencia)."
+  }
+}

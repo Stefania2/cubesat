@@ -7,12 +7,13 @@
       "formato": "3U",
       "frecuencia_mhz": 437.568,
       "banda": "UHF",
-      "modulacion": "BPSK",
+      "modulacion": "FSK",
       "tasa_bps": 9600,
       "potencia_tx_dbm": 30.0,
       "tipo_antena": "Monopolo",
       "ganancia_antena_dbi": 0.0,
-      "referencia": "Surrey Space Centre / Clyde Space"
+      "referencia": "AMSAT-UK; SatNOGS DB; eoPortal",
+      "verificado": true
     },
     {
       "nombre": "Libertad 1",
@@ -26,7 +27,8 @@
       "potencia_tx_dbm": 27.0,
       "tipo_antena": "Dipolo",
       "ganancia_antena_dbi": 2.0,
-      "referencia": "Universidad Sergio Arboleda / ESA"
+      "referencia": "Universidad Sergio Arboleda / ESA",
+      "verificado": false
     },
     {
       "nombre": "FACSAT-1",
@@ -40,7 +42,8 @@
       "potencia_tx_dbm": 30.0,
       "tipo_antena": "Monopolo",
       "ganancia_antena_dbi": 0.0,
-      "referencia": "FAC / GomSpace"
+      "referencia": "FAC / GomSpace",
+      "verificado": false
     },
     {
       "nombre": "Delfi-C3",
@@ -54,7 +57,8 @@
       "potencia_tx_dbm": 28.0,
       "tipo_antena": "Dipolo desplegable",
       "ganancia_antena_dbi": 2.0,
-      "referencia": "TU Delft"
+      "referencia": "TU Delft",
+      "verificado": false
     },
     {
       "nombre": "ESTCube-1",
@@ -68,7 +72,8 @@
       "potencia_tx_dbm": 30.0,
       "tipo_antena": "Monopolo",
       "ganancia_antena_dbi": 0.0,
-      "referencia": "Universidad de Tartu"
+      "referencia": "Universidad de Tartu",
+      "verificado": false
     },
     {
       "nombre": "AAUSAT-II",
@@ -82,7 +87,8 @@
       "potencia_tx_dbm": 28.0,
       "tipo_antena": "Monopolo",
       "ganancia_antena_dbi": 0.0,
-      "referencia": "Universidad de Aalborg"
+      "referencia": "Universidad de Aalborg",
+      "verificado": false
     },
     {
       "nombre": "ITUPSAT 1",
@@ -96,7 +102,8 @@
       "potencia_tx_dbm": 30.0,
       "tipo_antena": "Monopolo",
       "ganancia_antena_dbi": 0.0,
-      "referencia": "Universidad de Estambul"
+      "referencia": "Universidad de Estambul",
+      "verificado": false
     }
   ]
 }

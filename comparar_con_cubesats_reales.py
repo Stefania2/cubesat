@@ -52,6 +52,10 @@ class RealCubeSat:
     tipo_antena: str
     ganancia_antena_dbi: float
     referencia: str
+    # Solo la fila de STRaND-1 se ha contrastado con fuentes en la auditoria de
+    # 2026-10. Las demas proceden de la recopilacion inicial del proyecto y
+    # quedan pendientes de verificar una a una contra su fuente primaria.
+    verificado: bool = False
 
 
 @dataclass(frozen=True)
@@ -72,12 +76,15 @@ CUBESATS_REALES = [
         formato="3U",
         frecuencia_mhz=437.568,
         banda="UHF",
-        modulacion="BPSK",
+        # FSK 9600 con AX.25/HDLC y NRZI: AMSAT-UK y SatNOGS DB. Aqui figuraba
+        # «BPSK», que ninguna fuente respalda.
+        modulacion="FSK",
         tasa_bps=9600,
-        potencia_tx_dbm=30.0,
+        potencia_tx_dbm=30.0,       # eoPortal: 1 W nominal (0.25 W en modo baliza/CW)
         tipo_antena="Monopolo",
-        ganancia_antena_dbi=0.0,
-        referencia="Surrey Space Centre / Clyde Space",
+        ganancia_antena_dbi=0.0,    # supuesto: la ganancia no esta publicada
+        referencia="AMSAT-UK; SatNOGS DB; eoPortal",
+        verificado=True,
     ),
     RealCubeSat(
         nombre="Libertad 1",
@@ -375,100 +382,67 @@ def generar_tabla_comparativa(
         if sim.bw_rrc_hz
         else ""
     )
+    pendiente = "Valores de los demas satelites: recopilacion inicial, pendientes de verificar."
     metricas = [
         ComparisonMetric(
             parametro="Frecuencia de operacion",
             simulado=f"{FREQ_MHZ:.3f} MHz (UHF)",
-            real_referencia="STRaND-1: 437.568 MHz\n"
-                            "Libertad 1: 437.405 MHz\n"
-                            "FACSAT-1: 437.375 MHz\n"
-                            "Rango tipico CubeSat UHF: 435-438 MHz",
-            concordancia="Alta. La frecuencia usada coincide con la frecuencia\n"
-                          "real del STRaND-1 y esta dentro del rango tipico\n"
-                          "de la banda UHF para CubeSats.",
+            real_referencia="STRaND-1: 437.568 MHz (AMSAT-UK, SatNOGS DB)",
+            concordancia="Coincide por construccion: el modelo usa la frecuencia\n"
+                         "documentada del satelite.",
         ),
         ComparisonMetric(
             parametro="Modulacion",
-            simulado="BPSK y FSK",
-            real_referencia="STRaND-1: BPSK\n"
-                            "FACSAT-1: BPSK (GMSK)\n"
-                            "Delfi-C3: BPSK\n"
-                            "Libertad 1: AFSK\n"
-                            "AAUSAT-II: AFSK\n"
-                            "Se gun Bouwmeester & Guo (2010): BPSK es el\n"
-                            "esquema mas comun en CubeSats universitarios",
-            concordancia="Alta. BPSK es el esquema de modulacion mas usado\n"
-                          "en CubeSats universitarios (aprox. 45% de las misiones).\n"
-                          "FSK/AFSK se usa en misiones de menor tasa.",
+            simulado="BPSK coherente (modelo comparativo) y FSK de banda base",
+            real_referencia="STRaND-1: FSK 9600, AX.25/HDLC, NRZI (AMSAT-UK, SatNOGS DB)",
+            concordancia="Parcial. La familia FSK coincide; la BPSK del modelo avanzado\n"
+                         "NO es la modulacion del satelite. La desviacion y el filtrado\n"
+                         "del modulador real no estan documentados.",
         ),
         ComparisonMetric(
-            parametro="Tasa de simbolos (baudios)",
-            simulado=f"{SYM_RATE} bps",
-            real_referencia="STRaND-1: 9600 bps\n"
-                            "FACSAT-1: 9600 bps\n"
-                            "ESTCube-1: 9600 bps\n"
-                            "ITUPSAT 1: 9600 bps\n"
-                            "Libertad 1: 1200 bps\n"
-                            "Estandar de facto para CubeSats UHF: 9600 bps",
-            concordancia="Alta. 9600 bps es la tasa mas comun en CubeSats\n"
-                          "que usan BPSK en banda UHF (aprox. 60% de las misiones\n"
-                          "universitarias segun Bouwmeester & Guo).",
+            parametro="Tasa de bits",
+            simulado=f"{SYM_RATE} bit/s",
+            real_referencia="STRaND-1: 9600 bit/s (AMSAT-UK, SatNOGS DB)",
+            concordancia="Coincide por construccion.",
         ),
         ComparisonMetric(
             parametro="Potencia de transmision",
             simulado="1 W (30 dBm)",
-            real_referencia="STRaND-1: 1 W\n"
-                            "FACSAT-1: 1 W\n"
-                            "ESTCube-1: 1 W\n"
-                            "ITUPSAT 1: 1 W\n"
-                            "Libertad 1: 0.5 W\n"
-                            "Rango tipico CubeSat 1U: 0.5-2 W",
-            concordancia="Alta. 1 W es la potencia de transmision estandar\n"
-                          "para CubeSats 1U/3U en banda UHF.",
+            real_referencia="STRaND-1: 1 W nominal; 0.25 W en modo baliza/CW (eoPortal)",
+            concordancia="Coincide con el valor nominal. El modo en que se emite la\n"
+                         "telemetria no esta confirmado: -6 dB entra en la sensibilidad.",
         ),
         ComparisonMetric(
             parametro="BER vs SNR - BPSK",
-            simulado=f"BER ~{sim.ber_bpsk_0db:.1e} a SNR=0 dB\n"
-                     f"BER ~0 a SNR >= {sim.snr_bpsk_ber_cero:.0f} dB (con {bits} bits)",
-            real_referencia="BPSK teorica: BER ~3.9e-4 a Eb/N0=4 dB\n"
-                            "BPSK tipica en CubeSats requiere Eb/N0 ~10 dB\n"
-                            "para BER < 1e-5 con margen de implementacion",
-            concordancia="Esperada dentro del modelo. La simulacion muestra\n"
-                          "comportamiento coherente con la teoria. La BER cero\n"
-                          f"a partir de {sim.snr_bpsk_ber_cero:.0f} dB se debe al numero finito de\n"
-                          f"bits evaluados ({bits}). Con mas bits se observarian\n"
-                          "errores a SNR mayores.",
+            simulado=f"BER {sim.ber_bpsk_0db:.1e} a SNR por muestra de 0 dB (Eb/N0 9.03 dB)\n"
+                     f"0 errores en {bits} bits desde {sim.snr_bpsk_ber_cero:.0f} dB",
+            real_referencia="Teoria BPSK coherente: BER 3.4e-5 a Eb/N0 = 9 dB",
+            concordancia="Compatible con la teoria dentro del intervalo de confianza de\n"
+                         f"una muestra de {bits} bits. No es una comparacion con el\n"
+                         "satelite: no existe BER medida del enlace real.",
         ),
         ComparisonMetric(
             parametro="Margen de enlace (link budget)",
             simulado=f"{sim.margen_min_db:.1f} dB a elev={sim.margen_min_elev:.0f} deg\n"
-                     f"{sim.margen_max_db:.1f} dB a elev={sim.margen_max_elev:.0f} deg",
-            real_referencia="Margen tipico requerido: 3-6 dB\n"
-                            "CubeSats universitarios: 5-15 dB tipico\n"
-                            "FACSAT-1 reporta ~8 dB margen minimo\n"
-                            "Libertad 1 reporto ~6 dB",
-            concordancia="Alta. El margen simulado supera el minimo recomendado\n"
-                          "de 3 dB incluso a elevacion de 5 grados. Los valores\n"
-                          "son consistentes con lo reportado en literatura para\n"
-                          "CubeSats con estaciones terrenas de radioaficionado.",
+                     f"{sim.margen_max_db:.1f} dB a elev={sim.margen_max_elev:.0f} deg\n"
+                     "(FSK no coherente, umbral teorico)",
+            real_referencia="Sin dato publicado del margen de STRaND-1.\n"
+                            "Criterio de diseño habitual: 3-6 dB (Larson & Wertz)",
+            concordancia="No comparable con una medida. El valor es una prediccion con\n"
+                         "estacion hipotetica y parametros supuestos (ver sensibilidad).",
         ),
         ComparisonMetric(
             parametro="Ancho de banda estimado",
             simulado=f"BPSK rectangular: ~{sim.bw_bpsk_hz / 1000:.1f} kHz (-20 dB)\n"
                      f"FSK: ~{sim.bw_fsk_hz / 1000:.1f} kHz (-20 dB)"
                      + bw_rrc_txt,
-            real_referencia="BPSK 9600 bps: ancho de banda nulo ~19.2 kHz\n"
-                            "FSK con desviacion 2400 Hz: BW ~14.4 kHz\n"
-                            "Carson rule: BW_BPSK = 2*R = 19.2 kHz\n"
-                            "Carson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz\n"
-                            "Con RRC: BW = R*(1+α) = 12.96 kHz",
-            concordancia="Alta con conformado de pulso. El pulso rectangular\n"
-                          "excede la regla de Carson por los lobulos laterales\n"
-                          "del sinc²; al aplicar el filtro RRC del modelo\n"
-                          "avanzado el ancho de banda converge al valor teorico\n"
-                          "R*(1+α) y cabe en la canalizacion UHF de 25 kHz.",
+            real_referencia="Canalizacion UHF amateur: 25 kHz\n"
+                            "Con RRC: R*(1+α) = 12.96 kHz (teorico)",
+            concordancia="El modelo con RRC cabe en el canal. El ancho de banda real\n"
+                         "de la emision de STRaND-1 no se ha medido en este trabajo.",
         ),
     ]
+    _ = pendiente
 
     with (output_dir / "comparacion_parametros_cubesats_reales.csv").open(
         "w", newline="", encoding="utf-8"

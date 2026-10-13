@@ -9,13 +9,14 @@ haya, cada parametro se devuelve con estado `not_decoded` y el motivo.
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import func, select
+from sqlalchemy import func, select, tuple_
 from sqlalchemy.orm import Session
 
 from ..config import settings
 from ..database import get_db
 from ..models import DecodedField, Frame, ProtocolDefinition
 from ..schemas import ParametroTelemetria, TelemetriaOut
+from ..services.strand_amsat import FUENTE_CALIBRACION, calibraciones
 
 router = APIRouter(prefix="/api/telemetry", tags=["telemetry"])
 
@@ -261,6 +262,53 @@ def _aviso_campo(
     return None
 
 
+# Alias de la interfaz: `battery_voltage` reune las dos baterias.
+ALIAS_CALIBRACION = {"battery_voltage": "battery_0_voltage"}
+CAMPOS_ESTRUCTURALES = ("seq_no", "node_channel", "i2c_node_address")
+
+
+def _validacion_campo(nombre: str, apariciones: int, minimo: float | None,
+                      en_cuenta_cero: int, cal: dict | None) -> dict:
+    """Estado de validacion de una magnitud y por que.
+
+    No decide si el satelite esta sano: dice cuanto se puede confiar en que el
+    numero mostrado sea una medida fisica.
+    """
+    if nombre in CAMPOS_ESTRUCTURALES:
+        return {"estado": "estructural",
+                "detalle": "Campo del protocolo (secuencia, nodo o canal), no una magnitud fisica."}
+    if nombre.endswith("_adc"):
+        return {"estado": "dato_crudo",
+                "detalle": "Cuenta del convertidor tal como llego, sin interpretar."}
+    if cal is None:
+        return {"estado": "sin_calibrar",
+                "detalle": "La hoja de AMSAT-UK no publica ecuacion para este campo: el valor "
+                           "es el entero recibido, sin unidad fisica verificada."}
+    fraccion = en_cuenta_cero / apariciones if apariciones else 0.0
+    if fraccion >= 0.5:
+        return {
+            "estado": "canal_sin_medida",
+            "fraccion_en_cuenta_cero": round(fraccion, 3),
+            "detalle": (
+                f"{100 * fraccion:.0f} % de las lecturas valen exactamente "
+                f"{cal['valor_con_cuenta_cero']:g} {cal['unidad']}, que es la ordenada de la "
+                "recta de calibracion: la cuenta del ADC es 0. No es una medida de "
+                f"{cal['unidad']}; el canal no esta midiendo."),
+        }
+    if minimo is not None and minimo < 0 and cal["unidad"] in ("V", "mV", "mA"):
+        return {
+            "estado": "pendiente_de_validacion",
+            "fraccion_en_cuenta_cero": round(fraccion, 3),
+            "detalle": (
+                "Hay valores negativos: la recta de calibracion cruza el cero dentro del "
+                "rango del convertidor. Sin la especificacion del sensor no se puede decidir "
+                "si son medidas validas o cuentas fuera de su dominio util."),
+        }
+    return {"estado": "calibrado",
+            "fraccion_en_cuenta_cero": round(fraccion, 3),
+            "detalle": "Convertido con la recta publicada; rango no contrastado con otra fuente."}
+
+
 @router.get("/campos")
 def campos_decodificados(db: Session = Depends(get_db)):
     """Inventario de los campos realmente presentes en las balizas decodificadas.
@@ -298,6 +346,23 @@ def campos_decodificados(db: Session = Depends(get_db)):
         .order_by(func.count(DecodedField.id).desc())
     ).all()
 
+    tabla_cal = calibraciones()
+
+    def _cal(nombre: str) -> dict | None:
+        return tabla_cal.get(ALIAS_CALIBRACION.get(nombre, nombre))
+
+    # Lecturas que valen exactamente la ordenada de su recta (cuenta ADC = 0).
+    pares = [(f[0], _cal(f[0])["valor_con_cuenta_cero"]) for f in filas if _cal(f[0])]
+    pares += [("battery_voltage", tabla_cal["battery_1_voltage"]["valor_con_cuenta_cero"])]
+    en_cero: dict[str, int] = {}
+    if pares:
+        for nombre, n in db.execute(
+            select(DecodedField.field_name, func.count(DecodedField.id))
+            .where(tuple_(DecodedField.field_name, DecodedField.value_numeric).in_(pares))
+            .group_by(DecodedField.field_name)
+        ).all():
+            en_cero[nombre] = n
+
     campos = []
     for (nombre, apariciones, distintos_num, distintos_txt,
          minimo, maximo, p05, p95, fuera_dominio, desde, hasta) in filas:
@@ -319,6 +384,18 @@ def campos_decodificados(db: Session = Depends(get_db)):
             # solo en los campos `*_adc` hay un criterio objetivo, porque su
             # dominio esta definido por el fondo de escala del convertidor.
             "aviso": _aviso_campo(nombre, maximo, p95, fuera_dominio),
+            # Procedencia de la conversion y cuanto puede sostenerse el valor.
+            "unidad": (_cal(nombre) or {}).get("unidad"),
+            "conversion": (_cal(nombre) or {}).get("conversion"),
+            "origen": (
+                f"nodo I2C {_cal(nombre)['nodo_i2c']}, canal {_cal(nombre)['canal']}; "
+                f"{_cal(nombre)['tipo_original']}. {FUENTE_CALIBRACION}"
+                if _cal(nombre) else None),
+            "validacion": (
+                {"estado": "texto", "detalle": "Estado textual, sin escala numerica."}
+                if textual else
+                _validacion_campo(nombre, apariciones, minimo, en_cero.get(nombre, 0),
+                                  _cal(nombre))),
             "desde": desde.isoformat() if desde else None,
             "hasta": hasta.isoformat() if hasta else None,
             "constante": distintos <= 1,

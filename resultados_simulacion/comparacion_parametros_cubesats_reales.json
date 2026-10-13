@@ -5,44 +5,44 @@
     {
       "parametro": "Frecuencia de operacion",
       "simulado": "437.568 MHz (UHF)",
-      "real_referencia": "STRaND-1: 437.568 MHz\nLibertad 1: 437.405 MHz\nFACSAT-1: 437.375 MHz\nRango tipico CubeSat UHF: 435-438 MHz",
-      "concordancia": "Alta. La frecuencia usada coincide con la frecuencia\nreal del STRaND-1 y esta dentro del rango tipico\nde la banda UHF para CubeSats."
+      "real_referencia": "STRaND-1: 437.568 MHz (AMSAT-UK, SatNOGS DB)",
+      "concordancia": "Coincide por construccion: el modelo usa la frecuencia\ndocumentada del satelite."
     },
     {
       "parametro": "Modulacion",
-      "simulado": "BPSK y FSK",
-      "real_referencia": "STRaND-1: BPSK\nFACSAT-1: BPSK (GMSK)\nDelfi-C3: BPSK\nLibertad 1: AFSK\nAAUSAT-II: AFSK\nSe gun Bouwmeester & Guo (2010): BPSK es el\nesquema mas comun en CubeSats universitarios",
-      "concordancia": "Alta. BPSK es el esquema de modulacion mas usado\nen CubeSats universitarios (aprox. 45% de las misiones).\nFSK/AFSK se usa en misiones de menor tasa."
+      "simulado": "BPSK coherente (modelo comparativo) y FSK de banda base",
+      "real_referencia": "STRaND-1: FSK 9600, AX.25/HDLC, NRZI (AMSAT-UK, SatNOGS DB)",
+      "concordancia": "Parcial. La familia FSK coincide; la BPSK del modelo avanzado\nNO es la modulacion del satelite. La desviacion y el filtrado\ndel modulador real no estan documentados."
     },
     {
-      "parametro": "Tasa de simbolos (baudios)",
-      "simulado": "9600 bps",
-      "real_referencia": "STRaND-1: 9600 bps\nFACSAT-1: 9600 bps\nESTCube-1: 9600 bps\nITUPSAT 1: 9600 bps\nLibertad 1: 1200 bps\nEstandar de facto para CubeSats UHF: 9600 bps",
-      "concordancia": "Alta. 9600 bps es la tasa mas comun en CubeSats\nque usan BPSK en banda UHF (aprox. 60% de las misiones\nuniversitarias segun Bouwmeester & Guo)."
+      "parametro": "Tasa de bits",
+      "simulado": "9600 bit/s",
+      "real_referencia": "STRaND-1: 9600 bit/s (AMSAT-UK, SatNOGS DB)",
+      "concordancia": "Coincide por construccion."
     },
     {
       "parametro": "Potencia de transmision",
       "simulado": "1 W (30 dBm)",
-      "real_referencia": "STRaND-1: 1 W\nFACSAT-1: 1 W\nESTCube-1: 1 W\nITUPSAT 1: 1 W\nLibertad 1: 0.5 W\nRango tipico CubeSat 1U: 0.5-2 W",
-      "concordancia": "Alta. 1 W es la potencia de transmision estandar\npara CubeSats 1U/3U en banda UHF."
+      "real_referencia": "STRaND-1: 1 W nominal; 0.25 W en modo baliza/CW (eoPortal)",
+      "concordancia": "Coincide con el valor nominal. El modo en que se emite la\ntelemetria no esta confirmado: -6 dB entra en la sensibilidad."
     },
     {
       "parametro": "BER vs SNR - BPSK",
-      "simulado": "BER ~5.3e-05 a SNR=0 dB\nBER ~0 a SNR >= 2 dB (con 18776 bits)",
-      "real_referencia": "BPSK teorica: BER ~3.9e-4 a Eb/N0=4 dB\nBPSK tipica en CubeSats requiere Eb/N0 ~10 dB\npara BER < 1e-5 con margen de implementacion",
-      "concordancia": "Esperada dentro del modelo. La simulacion muestra\ncomportamiento coherente con la teoria. La BER cero\na partir de 2 dB se debe al numero finito de\nbits evaluados (18776). Con mas bits se observarian\nerrores a SNR mayores."
+      "simulado": "BER 5.3e-05 a SNR por muestra de 0 dB (Eb/N0 9.03 dB)\n0 errores en 18776 bits desde 2 dB",
+      "real_referencia": "Teoria BPSK coherente: BER 3.4e-5 a Eb/N0 = 9 dB",
+      "concordancia": "Compatible con la teoria dentro del intervalo de confianza de\nuna muestra de 18776 bits. No es una comparacion con el\nsatelite: no existe BER medida del enlace real."
     },
     {
       "parametro": "Margen de enlace (link budget)",
-      "simulado": "7.1 dB a elev=5 deg\n18.0 dB a elev=90 deg",
-      "real_referencia": "Margen tipico requerido: 3-6 dB\nCubeSats universitarios: 5-15 dB tipico\nFACSAT-1 reporta ~8 dB margen minimo\nLibertad 1 reporto ~6 dB",
-      "concordancia": "Alta. El margen simulado supera el minimo recomendado\nde 3 dB incluso a elevacion de 5 grados. Los valores\nson consistentes con lo reportado en literatura para\nCubeSats con estaciones terrenas de radioaficionado."
+      "simulado": "3.7 dB a elev=5 deg\n14.7 dB a elev=90 deg\n(FSK no coherente, umbral teorico)",
+      "real_referencia": "Sin dato publicado del margen de STRaND-1.\nCriterio de diseño habitual: 3-6 dB (Larson & Wertz)",
+      "concordancia": "No comparable con una medida. El valor es una prediccion con\nestacion hipotetica y parametros supuestos (ver sensibilidad)."
     },
     {
       "parametro": "Ancho de banda estimado",
-      "simulado": "BPSK rectangular: ~27.0 kHz (-20 dB)\nFSK: ~11.8 kHz (-20 dB)\nBPSK + RRC (α=0.35): ~11.2 kHz (99 % ocupado)",
-      "real_referencia": "BPSK 9600 bps: ancho de banda nulo ~19.2 kHz\nFSK con desviacion 2400 Hz: BW ~14.4 kHz\nCarson rule: BW_BPSK = 2*R = 19.2 kHz\nCarson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz\nCon RRC: BW = R*(1+α) = 12.96 kHz",
-      "concordancia": "Alta con conformado de pulso. El pulso rectangular\nexcede la regla de Carson por los lobulos laterales\ndel sinc²; al aplicar el filtro RRC del modelo\navanzado el ancho de banda converge al valor teorico\nR*(1+α) y cabe en la canalizacion UHF de 25 kHz."
+      "simulado": "BPSK rectangular: ~27.0 kHz (-20 dB)\nFSK: ~11.8 kHz (-20 dB)\nBPSK + RRC (α=0.35): ~11.1 kHz (99 % ocupado)",
+      "real_referencia": "Canalizacion UHF amateur: 25 kHz\nCon RRC: R*(1+α) = 12.96 kHz (teorico)",
+      "concordancia": "El modelo con RRC cabe en el canal. El ancho de banda real\nde la emision de STRaND-1 no se ha medido en este trabajo."
     }
   ]
 }

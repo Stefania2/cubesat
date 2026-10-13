@@ -116,6 +116,23 @@ export interface CampoDecodificado {
   p95: number | null
   /** Aviso sobre el extremo del campo, o null si no hay nada que señalar. */
   aviso: string | null
+  /** Unidad y recta de calibración publicada; null si el campo no tiene. */
+  unidad?: string | null
+  conversion?: string | null
+  origen?: string | null
+  /** Cuánto puede sostenerse el valor como medida física. */
+  validacion?: {
+    estado:
+      | 'calibrado'
+      | 'canal_sin_medida'
+      | 'pendiente_de_validacion'
+      | 'sin_calibrar'
+      | 'dato_crudo'
+      | 'estructural'
+      | 'texto'
+    detalle: string
+    fraccion_en_cuenta_cero?: number
+  }
   desde: string | null
   hasta: string | null
   constante: boolean

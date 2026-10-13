@@ -4,12 +4,24 @@ Modelo de simulacion del enlace RF CubeSat para BPSK y FSK.
 El script toma los frames reales ya exportados del proyecto, genera una cadena
 baseband equivalente, agrega ruido AWGN y mide BER para varios valores de SNR.
 Tambien exporta muestras IQ limpias para inspeccion en GNU Radio.
+
+Lectura de los resultados:
+  - El eje es la SNR **por muestra** (ruido en todo el ancho de muestreo). Con
+    8 muestras por simbolo, Eb/N0 = SNR + 9.03 dB; el CSV incluye esa columna.
+  - Sincronizacion ideal y una sola realizacion de ruido por punto: con 18 776
+    bits, «0 errores» solo acota la BER por debajo de ~2e-4 (IC 95 %).
+  - La FSK del modelo (tonos a ±2400 Hz, Δf·T = 0.5, detector de energia) NO
+    es la forma de onda de STRaND-1, cuyo modulador FSK a 9600 bit/s no tiene
+    desviacion documentada. Con esa separacion los tonos no son ortogonales
+    para deteccion no coherente, lo que penaliza la curva. La comparacion es
+    entre dos modelos, no un veredicto sobre el enlace real.
 """
 
 from __future__ import annotations
 
 import csv
 import json
+import math
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -132,6 +144,7 @@ def run_simulation(bits: np.ndarray) -> list[dict[str, float | int | str]]:
                 {
                     "modulacion": name,
                     "snr_db": snr_db,
+                    "ebn0_db": round(snr_db + 10.0 * math.log10(SAMPLES_PER_SYMBOL), 2),
                     "bits_evaluados": int(min(len(bits), len(recovered))),
                     "errores_bit": errors,
                     "ber": ber,
@@ -173,7 +186,7 @@ def write_outputs(bits: np.ndarray, rows: list[dict[str, float | int | str]]) ->
         plt.semilogy(snr, ber, marker="o", label=modulation)
 
     plt.title("BER del enlace RF simulado con telemetria STRaND-1")
-    plt.xlabel("SNR (dB)")
+    plt.xlabel("SNR por muestra (dB) · Eb/N0 = SNR + 9.03 dB")
     plt.ylabel("BER")
     plt.grid(True, which="both", linestyle=":")
     plt.legend()

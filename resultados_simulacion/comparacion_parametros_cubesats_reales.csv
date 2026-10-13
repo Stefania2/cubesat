@@ -1,58 +1,23 @@
 Parametro,Simulado,Referencia real,Concordancia
-Frecuencia de operacion,437.568 MHz (UHF),"STRaND-1: 437.568 MHz
-Libertad 1: 437.405 MHz
-FACSAT-1: 437.375 MHz
-Rango tipico CubeSat UHF: 435-438 MHz","Alta. La frecuencia usada coincide con la frecuencia
-real del STRaND-1 y esta dentro del rango tipico
-de la banda UHF para CubeSats."
-Modulacion,BPSK y FSK,"STRaND-1: BPSK
-FACSAT-1: BPSK (GMSK)
-Delfi-C3: BPSK
-Libertad 1: AFSK
-AAUSAT-II: AFSK
-Se gun Bouwmeester & Guo (2010): BPSK es el
-esquema mas comun en CubeSats universitarios","Alta. BPSK es el esquema de modulacion mas usado
-en CubeSats universitarios (aprox. 45% de las misiones).
-FSK/AFSK se usa en misiones de menor tasa."
-Tasa de simbolos (baudios),9600 bps,"STRaND-1: 9600 bps
-FACSAT-1: 9600 bps
-ESTCube-1: 9600 bps
-ITUPSAT 1: 9600 bps
-Libertad 1: 1200 bps
-Estandar de facto para CubeSats UHF: 9600 bps","Alta. 9600 bps es la tasa mas comun en CubeSats
-que usan BPSK en banda UHF (aprox. 60% de las misiones
-universitarias segun Bouwmeester & Guo)."
-Potencia de transmision,1 W (30 dBm),"STRaND-1: 1 W
-FACSAT-1: 1 W
-ESTCube-1: 1 W
-ITUPSAT 1: 1 W
-Libertad 1: 0.5 W
-Rango tipico CubeSat 1U: 0.5-2 W","Alta. 1 W es la potencia de transmision estandar
-para CubeSats 1U/3U en banda UHF."
-BER vs SNR - BPSK,"BER ~5.3e-05 a SNR=0 dB
-BER ~0 a SNR >= 2 dB (con 18776 bits)","BPSK teorica: BER ~3.9e-4 a Eb/N0=4 dB
-BPSK tipica en CubeSats requiere Eb/N0 ~10 dB
-para BER < 1e-5 con margen de implementacion","Esperada dentro del modelo. La simulacion muestra
-comportamiento coherente con la teoria. La BER cero
-a partir de 2 dB se debe al numero finito de
-bits evaluados (18776). Con mas bits se observarian
-errores a SNR mayores."
-Margen de enlace (link budget),"7.1 dB a elev=5 deg
-18.0 dB a elev=90 deg","Margen tipico requerido: 3-6 dB
-CubeSats universitarios: 5-15 dB tipico
-FACSAT-1 reporta ~8 dB margen minimo
-Libertad 1 reporto ~6 dB","Alta. El margen simulado supera el minimo recomendado
-de 3 dB incluso a elevacion de 5 grados. Los valores
-son consistentes con lo reportado en literatura para
-CubeSats con estaciones terrenas de radioaficionado."
+Frecuencia de operacion,437.568 MHz (UHF),"STRaND-1: 437.568 MHz (AMSAT-UK, SatNOGS DB)","Coincide por construccion: el modelo usa la frecuencia
+documentada del satelite."
+Modulacion,BPSK coherente (modelo comparativo) y FSK de banda base,"STRaND-1: FSK 9600, AX.25/HDLC, NRZI (AMSAT-UK, SatNOGS DB)","Parcial. La familia FSK coincide; la BPSK del modelo avanzado
+NO es la modulacion del satelite. La desviacion y el filtrado
+del modulador real no estan documentados."
+Tasa de bits,9600 bit/s,"STRaND-1: 9600 bit/s (AMSAT-UK, SatNOGS DB)",Coincide por construccion.
+Potencia de transmision,1 W (30 dBm),STRaND-1: 1 W nominal; 0.25 W en modo baliza/CW (eoPortal),"Coincide con el valor nominal. El modo en que se emite la
+telemetria no esta confirmado: -6 dB entra en la sensibilidad."
+BER vs SNR - BPSK,"BER 5.3e-05 a SNR por muestra de 0 dB (Eb/N0 9.03 dB)
+0 errores en 18776 bits desde 2 dB",Teoria BPSK coherente: BER 3.4e-5 a Eb/N0 = 9 dB,"Compatible con la teoria dentro del intervalo de confianza de
+una muestra de 18776 bits. No es una comparacion con el
+satelite: no existe BER medida del enlace real."
+Margen de enlace (link budget),"3.7 dB a elev=5 deg
+14.7 dB a elev=90 deg
+(FSK no coherente, umbral teorico)","Sin dato publicado del margen de STRaND-1.
+Criterio de diseño habitual: 3-6 dB (Larson & Wertz)","No comparable con una medida. El valor es una prediccion con
+estacion hipotetica y parametros supuestos (ver sensibilidad)."
 Ancho de banda estimado,"BPSK rectangular: ~27.0 kHz (-20 dB)
 FSK: ~11.8 kHz (-20 dB)
-BPSK + RRC (α=0.35): ~11.2 kHz (99 % ocupado)","BPSK 9600 bps: ancho de banda nulo ~19.2 kHz
-FSK con desviacion 2400 Hz: BW ~14.4 kHz
-Carson rule: BW_BPSK = 2*R = 19.2 kHz
-Carson rule: BW_FSK = 2*(fd + R/2) = 14.4 kHz
-Con RRC: BW = R*(1+α) = 12.96 kHz","Alta con conformado de pulso. El pulso rectangular
-excede la regla de Carson por los lobulos laterales
-del sinc²; al aplicar el filtro RRC del modelo
-avanzado el ancho de banda converge al valor teorico
-R*(1+α) y cabe en la canalizacion UHF de 25 kHz."
+BPSK + RRC (α=0.35): ~11.1 kHz (99 % ocupado)","Canalizacion UHF amateur: 25 kHz
+Con RRC: R*(1+α) = 12.96 kHz (teorico)","El modelo con RRC cabe en el canal. El ancho de banda real
+de la emision de STRaND-1 no se ha medido en este trabajo."

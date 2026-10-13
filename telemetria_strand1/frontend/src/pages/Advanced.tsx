@@ -91,6 +91,11 @@ function FilaRegla({ regla, onCambio }: { regla: AnomalyRule; onCambio: () => vo
 export function Advanced() {
   const anomalias = useApi(() => api.anomalies(), [])
   const estado = useApi(() => api.status(), [])
+  // El numero de balizas sale de la misma fuente que el Dashboard. Esta nota
+  // decia, en texto fijo, que ningun frame recibido era una baliza: era cierto
+  // antes de corregir el decodificador y se quedo asi mientras el Dashboard ya
+  // contaba decenas de miles.
+  const telemetria = useApi(() => api.telemetry(), [])
   const [ingiriendo, setIngiriendo] = useState(false)
   const [aviso, setAviso] = useState<string | null>(null)
 
@@ -119,11 +124,18 @@ export function Advanced() {
       >
         <div className="space-y-5">
           <Nota>
-            <strong className="font-semibold">Sin límites físicos arbitrarios.</strong> Las reglas no
-            evalúan magnitudes como voltaje o temperatura: el decodificador de la baliza está
-            cargado, pero ningún frame recibido es una baliza, así que esas magnitudes no existen en
-            los datos. Operan sobre propiedades de los bytes y de las marcas de tiempo, que sí son
-            ciertas. Todos los umbrales son editables aquí abajo.
+            <strong className="font-semibold">Sin límites físicos arbitrarios.</strong> Las reglas
+            de esta página no evalúan magnitudes como voltaje o temperatura: operan sobre
+            propiedades de los bytes y de las marcas de tiempo, que son ciertas para cualquier
+            frame.{' '}
+            {telemetria.error
+              ? 'No se pudo consultar el recuento de balizas decodificadas.'
+              : !telemetria.data
+                ? 'Consultando el recuento de balizas…'
+                : telemetria.data.balizas > 0
+                  ? `${numero(telemetria.data.balizas)} de los ${numero(estado.data?.frames)} frames son balizas de STRaND-1 decodificadas; sus magnitudes se analizan en Telemetry y en el Gemelo digital, no aquí, porque el proyecto no dispone de rangos de operación documentados contra los que marcar una alarma.`
+                  : 'Ningún frame almacenado es una baliza decodificada, así que no hay magnitudes que evaluar.'}{' '}
+            Todos los umbrales son editables aquí abajo.
           </Nota>
 
           {anomalias.error ? (
@@ -150,7 +162,11 @@ export function Advanced() {
                       {numero(resumen?.[k] ?? 0)}
                     </div>
                     <div className="mt-1 text-xs text-ink-soft">
-                      {k === 'unknown' ? 'frames sin clasificar' : 'frames'}
+                      {k === 'unknown'
+                        ? 'frames sin clasificar'
+                        : k === 'normal'
+                          ? 'frames sin ningún hallazgo'
+                          : 'hallazgos (cada uno puede abarcar varios frames)'}
                     </div>
                   </Card>
                 ))}
@@ -238,7 +254,7 @@ export function Advanced() {
             },
             {
               titulo: 'Telemetría decodificada',
-              desc: 'Vacío mientras no exista una definición de protocolo validada.',
+              desc: 'Campos de las balizas decodificadas con el protocolo validado.',
               set: 'telemetry-decoded',
             },
           ].map((c) => (

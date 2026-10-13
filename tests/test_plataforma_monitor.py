@@ -67,13 +67,62 @@ def test_telemetria_decodifica_balizas_reales():
     assert t["nota"] and "strand_amsat" in t["nota"]
 
 
-def test_telemetria_tiene_tension_real_de_bateria():
+def test_bateria_en_cuenta_cero_se_marca_sin_medida():
+    # La ultima baliza trae cuenta ADC = 0, que la recta convierte en 9.7488 V:
+    # es la ordenada de la calibracion, no una tension. Antes este test daba
+    # ese valor por «tension real» y el panel lo pintaba como NORMAL.
     t = enl.telemetria_enlace()
     bat = next(p for p in t["parametros"] if p["key"] == "battery_0_voltage")
-    assert bat["disponible"] is True
-    assert abs(float(bat["value"]) - 9.7488) < 0.01
     assert bat["unit"] == "V"
-    assert bat["status"] in ("NORMAL", "ALERTA")
+    assert abs(float(bat["value"]) - 9.7488) < 1e-9
+    assert bat["status"] == "SIN_MEDIDA"
+    assert "ordenada" in bat["nota"]
+
+
+def test_ningun_parametro_se_marca_normal_sin_limites_documentados():
+    t = enl.telemetria_enlace()
+    assert {p["status"] for p in t["parametros"]} <= {"DECODIFICADO", "SIN_MEDIDA"}
+
+
+def test_salida_sin_registro_no_se_presenta_como_resultado(tmp_path, monkeypatch):
+    # Reproduce el fallo de la web: un bits_rx_sim.bin heredado, con un bit
+    # distinto, aparecia como «discrepancia» sin haber simulado nada.
+    tx = enl.cargar_bits(enl.BITS_TX)
+    rx = tx.copy()
+    rx[0] ^= 1
+    monkeypatch.setattr(enl, "BITS_RX_SIM", tmp_path / "bits_rx_sim.bin")
+    monkeypatch.setattr(enl, "CORRIDA_META", tmp_path / "corrida.json")
+    enl.BITS_RX_SIM.write_bytes(rx.tobytes())
+    check = enl.integridad_enlace()
+    assert check["valido"] is None and check["diferencia"] is None
+    assert check["procedencia"] == "archivo_sin_registro"
+
+
+def test_corrida_registrada_informa_snr_y_errores(tmp_path, monkeypatch):
+    import json
+
+    tx = enl.cargar_bits(enl.BITS_TX)
+    rx = tx.copy()
+    rx[0] ^= 1
+    monkeypatch.setattr(enl, "BITS_RX_SIM", tmp_path / "bits_rx_sim.bin")
+    monkeypatch.setattr(enl, "CORRIDA_META", tmp_path / "corrida.json")
+    enl.BITS_RX_SIM.write_bytes(rx.tobytes())
+    enl.CORRIDA_META.write_text(json.dumps({
+        "timestamp_utc": "2026-10-13T00:00:00+00:00", "snr_db": 8.0, "semilla": 11,
+        "sha256_rx": enl.sha256_bits(rx)}))
+    check = enl.integridad_enlace()
+    assert check["diferencia"] == 1 and check["snr_db"] == 8.0
+    assert check["procedencia"] == "corrida_anterior"
+    assert "errores de canal" in check["mensaje"]
+
+
+def test_en_un_despliegue_sin_gnuradio_la_simulacion_se_declara_no_disponible(monkeypatch):
+    monkeypatch.setenv("VERCEL", "1")
+    c = enl.config_enlace()
+    assert c["simulacion_disponible"] is False
+    assert "GNU Radio" in c["simulacion_no_disponible_motivo"]
+    with pytest.raises(RuntimeError):
+        enl.EnlaceRunner().iniciar(8.0)
 
 
 def test_telemetria_excluye_conteos_adc():
