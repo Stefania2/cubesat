@@ -70,10 +70,14 @@ const vacio = {
 type Accion =
   | { tipo: 'ws'; valor: boolean }
   | { tipo: 'set'; clave: keyof typeof vacio; valor: any }
+  | { tipo: 'punto'; valor: any }
 
 function reducer(s: typeof vacio, a: Accion): typeof vacio {
   if (a.tipo === 'ws') return { ...s, conectado: a.valor }
   if (a.tipo === 'set') return { ...s, [a.clave]: a.valor }
+  // Un punto por Eb/N0: repetir la misma corrida (misma semilla) no añade nada.
+  if (a.tipo === 'punto')
+    return { ...s, history: [...s.history.filter((h) => h.snr_db !== a.valor.snr_db), a.valor] }
   return s
 }
 
@@ -82,6 +86,9 @@ function useEnlace() {
   const [error, setError] = useState<string | null>(null)
   const [ocupado, setOcupado] = useState(false)
   const wsRef = useRef<WebSocket | null>(null)
+  // Falso donde el backend no mantiene un proceso persistente (despliegue sin
+  // servidor): alli no hay WebSocket y no tiene sentido reintentar la conexion.
+  const tiempoReal = useRef(true)
 
   useEffect(() => {
     let vivo = true
@@ -100,6 +107,10 @@ function useEnlace() {
             fetch('/api/enlace/log').then((r) => r.json()),
           ])
         if (!vivo) return
+        if (config?.tiempo_real === false) {
+          tiempoReal.current = false
+          wsRef.current?.close()
+        }
         for (const [k, v] of Object.entries({
           status, metrics, integrity, telemetry, spectrum, constellation, config, history, logs,
         }) as [keyof typeof vacio, any][]) {
@@ -120,7 +131,7 @@ function useEnlace() {
     let ws: WebSocket | null = null
     let reintentos = 0
     const conectar = () => {
-      if (!vivo) return
+      if (!vivo || !tiempoReal.current) return
       const proto = window.location.protocol === 'https:' ? 'wss' : 'ws'
       const candidato = new WebSocket(`${proto}://${window.location.host}/ws/enlace`)
       ws = candidato
@@ -191,7 +202,26 @@ function useEnlace() {
         try { json = JSON.parse(cuerpo) } catch { json = null }
       }
       if (!r.ok) throw new Error(json?.detail || `${r.status} ${r.statusText}`.trim())
-      dispatch({ tipo: 'set', clave: 'status', valor: json })
+      const paquete = json?.paquete as Record<string, any> | undefined
+      if (paquete) {
+        // Motor sin proceso persistente: el resultado completo llega aqui. No
+        // se vuelve a pedir, porque la siguiente peticion puede atenderla otra
+        // instancia que no tiene esta corrida.
+        for (const clave of ['status', 'metrics', 'integrity', 'spectrum', 'constellation'] as const) {
+          dispatch({ tipo: 'set', clave, valor: paquete[clave] })
+        }
+        dispatch({ tipo: 'punto', valor: {
+          timestamp: paquete.status?.timestamp, snr_db: paquete.metrics?.snr_db, ber: paquete.metrics?.ber,
+        } })
+      } else if (action === 'reset') {
+        for (const clave of ['metrics', 'integrity', 'spectrum', 'constellation'] as const) {
+          dispatch({ tipo: 'set', clave, valor: null })
+        }
+        dispatch({ tipo: 'set', clave: 'history', valor: [] })
+        dispatch({ tipo: 'set', clave: 'status', valor: { link_status: 'OFFLINE', sim_status: 'IDLE' } })
+      } else {
+        dispatch({ tipo: 'set', clave: 'status', valor: json })
+      }
     } catch (e) {
       setError(String(e))
     } finally {
@@ -255,6 +285,9 @@ export function EnlaceRF() {
   const { state, error, ocupado, simular } = useEnlace()
   const { status, metrics, integrity, telemetry, spectrum, constellation, config, history, conectado } = state
 
+  const [snr, setSnr] = useState<number | null>(null)
+  const snrElegida = snr ?? config?.snr_default_db ?? 8
+  const numpy = config?.motor === 'numpy'
   const enMarcha = status?.sim_status === 'RUNNING'
   // undefined mientras carga la configuracion: no se habilita ni se niega nada.
   const simulable = config ? config.simulacion_disponible !== false : false
@@ -268,7 +301,8 @@ export function EnlaceRF() {
           STRAND-1 Ground Station{' '}
           <span className="enlace-sub">RF Communication Link Monitoring</span>
           <div className="enlace-sub2">
-            GNU Radio → FastAPI → WebSocket · {fmt(config?.frecuencia_hz, 0)} Hz ·{' '}
+            {numpy ? 'Réplica NumPy de la cadena GNU Radio → FastAPI' : 'GNU Radio → FastAPI → WebSocket'} ·{' '}
+            {fmt(config?.frecuencia_hz, 0)} Hz ·{' '}
             {((config?.tasa_bits_bps ?? 0) / 1000).toFixed(1)} kbps BPSK (modelo) · 18.776 bits
           </div>
           <div className="enlace-sub2">
@@ -278,14 +312,29 @@ export function EnlaceRF() {
         <div className="enlace-chips">
           <Chip label={`Enlace: ${status?.link_status ?? 'OFFLINE'}`} tono={tonoLink} />
           <Chip label={`Simulación: ${status?.sim_status ?? 'IDLE'}`} tono={tonoSim} />
-          <Chip label={`WebSocket: ${conectado ? 'conectado' : 'desconectado'}`} tono={conectado ? 'verde' : 'rojo'} />
+          {config?.tiempo_real === false ? (
+            <Chip label="Resultados por petición (sin WebSocket en este despliegue)" tono="gris" />
+          ) : (
+            <Chip label={`WebSocket: ${conectado ? 'conectado' : 'desconectado'}`} tono={conectado ? 'verde' : 'rojo'} />
+          )}
         </div>
         <div className="enlace-controles">
           <button className="enlace-btn enlace-btn-primario" disabled={enMarcha || ocupado || !simulable}
             title={config?.simulacion_no_disponible_motivo ?? undefined}
-            onClick={() => simular('start', config?.snr_default_db)}>
-            ▶ Iniciar simulación
+            onClick={() => simular('start', snrElegida)}>
+            {ocupado ? '… Simulando' : '▶ Iniciar simulación'}
           </button>
+          <label className="enlace-config">
+            Eb/N0{' '}
+            <select className="enlace-btn" value={snrElegida} disabled={enMarcha || ocupado}
+                    aria-label="Eb/N0 de la simulación"
+                    onChange={(e) => setSnr(Number(e.target.value))}>
+              {Array.from({ length: (config?.snr_max_db ?? 12) - (config?.snr_min_db ?? 0) + 1 },
+                          (_, i) => (config?.snr_min_db ?? 0) + i).map((v) => (
+                <option key={v} value={v}>{v} dB</option>
+              ))}
+            </select>
+          </label>
           <button className="enlace-btn" disabled={!enMarcha || ocupado} onClick={() => simular('stop')}>
             ■ Detener
           </button>
@@ -293,12 +342,17 @@ export function EnlaceRF() {
             ↺ Reset
           </button>
           <span className="enlace-config">
-            SNR {fmt(config?.snr_min_db, 0)}–{fmt(config?.snr_max_db, 0)} dB · RRC α={config?.rolloff}
+            RRC α={config?.rolloff}
           </span>
         </div>
       </header>
 
       {error && <div className="enlace-banner">{error}</div>}
+      {config?.motor_nota && (
+        <div className="enlace-fuente" style={{ marginBottom: 10 }}>
+          Motor de simulación: {config.motor_nota}
+        </div>
+      )}
       {config?.simulacion_disponible === false && (
         <div className="enlace-banner">
           Simulación no disponible en esta instancia: {config.simulacion_no_disponible_motivo} Los
@@ -311,7 +365,8 @@ export function EnlaceRF() {
         <Metrica etiqueta="Eb/N0 configurada" valor={fmt(metrics?.snr_db, 1)} unidad="dB"
           nota="Valor impuesto a la simulación, no estimado de la señal" />
         <Metrica etiqueta="BER medido (empírico)" valor={metrics?.ber} tono="ok"
-          nota={berNota(metrics?.ber as number | null)} />
+          nota={berNota(metrics?.ber as number | null)
+            + (metrics?.ber_teorica != null ? ` · teoría BPSK: ${Number(metrics.ber_teorica).toExponential(2)}` : '')} />
         <Metrica etiqueta="RSSI" valor={null} unidad="dBm" nota={metrics?.nota_rssi} />
         <Metrica etiqueta="FER" valor={null} nota={metrics?.nota_fer} />
         <Metrica etiqueta="Potencia relativa (tap IQ)" valor={fmt(metrics?.potencia_relativa_dbfs, 1)} unidad="dBFs"
@@ -356,7 +411,7 @@ export function EnlaceRF() {
 
       <section className="enlace-grid enlace-grid-dos">
         <div className="enlace-panel">
-          <h3 className="enlace-panel-titulo">Espectro (FFT Welch · tap IQ real)</h3>
+          <h3 className="enlace-panel-titulo">Espectro (FFT Welch · tap IQ de la simulación)</h3>
           {grafica(spectrum, (s) => {
             const datos = (s.datos || []).filter((_: any, i: number) => i % Math.max(1, Math.floor(s.datos.length / 600)) === 0)
             return (
@@ -381,15 +436,15 @@ export function EnlaceRF() {
         </div>
 
         <div className="enlace-panel">
-          <h3 className="enlace-panel-titulo">Constelación BPSK (tap a tasa de símbolo)</h3>
+          <h3 className="enlace-panel-titulo">Constelación BPSK (tras el filtro adaptado, en el instante de símbolo)</h3>
           {grafica(constellation, (s) => (
             <ResponsiveContainer width="100%" height={230}>
               <ScatterChart margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
                 <CartesianGrid stroke="#1f2b3a" strokeDasharray="3 3" />
-                <XAxis type="number" dataKey="i" domain={['dataMin - 0.15', 'dataMax + 0.15']}
-                  tickCount={7} tick={{ fill: '#8aa4c0', fontSize: 11 }} />
-                <YAxis type="number" dataKey="q" domain={['dataMin - 0.15', 'dataMax + 0.15']}
-                  tickCount={7} tick={{ fill: '#8aa4c0', fontSize: 11 }} width={48} />
+                <XAxis type="number" dataKey="i" domain={[-2, 2]} allowDataOverflow
+                  ticks={[-2, -1, 0, 1, 2]} tick={{ fill: '#8aa4c0', fontSize: 11 }} />
+                <YAxis type="number" dataKey="q" domain={[-2, 2]} allowDataOverflow
+                  ticks={[-2, -1, 0, 1, 2]} tick={{ fill: '#8aa4c0', fontSize: 11 }} width={48} />
                 <Tooltip contentStyle={{ background: '#0d1520', border: '1px solid #22313f' }}
                   formatter={(v: any) => [v.toFixed(4), '']} />
                 <ReferenceLine x={0} stroke="#3a6ea5" strokeDasharray="4 4" />
@@ -404,7 +459,7 @@ export function EnlaceRF() {
 
       <section className="enlace-grid">
         <div className="enlace-panel">
-          <h3 className="enlace-panel-titulo">BER medido vs SNR (historial de la sesión)</h3>
+          <h3 className="enlace-panel-titulo">BER medido frente a Eb/N0 (corridas de esta sesión)</h3>
           {history.length ? (
             <ResponsiveContainer width="100%" height={200}>
               <ScatterChart margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
@@ -469,8 +524,8 @@ export function EnlaceRF() {
       </section>
 
       <footer className="enlace-pie">
-        Enlace RF simulado en GNU Radio 3.10 (BPSK de banda base, modelo comparativo; la baliza
-        real es FSK 9600). BER, espectro y constelación son salidas de esa simulación; la telemetría
+        Enlace RF simulado {numpy ? 'con la réplica en NumPy de la cadena GNU Radio' : 'en GNU Radio 3.10'}{' '}
+        (BPSK de banda base, modelo comparativo; la baliza real es FSK 9600). BER, espectro y constelación son salidas de esa simulación; la telemetría
         es histórica real, re-decodificada. RSSI y FER se muestran como N/A porque esta cadena no
         tiene potencia RF ni tramas AX.25/FEC; la FER del modelo avanzado está en «Simulación RF».
       </footer>

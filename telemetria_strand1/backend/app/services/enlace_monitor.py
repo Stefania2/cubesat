@@ -20,7 +20,9 @@ import asyncio
 import hashlib
 import json
 import logging
+import math
 import os
+import tempfile
 from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,6 +30,7 @@ from typing import Any, Callable
 
 import numpy as np
 
+from . import cadena_numpy
 from .strand_amsat import calibraciones, decodificar
 
 logger = logging.getLogger(__name__)
@@ -37,7 +40,13 @@ logger = logging.getLogger(__name__)
 # ─────────────────────────────────────────────────────────────────────────────
 RAIZ_CUBESAT = Path(__file__).resolve().parents[4]  # .../cubesat
 RAIZ_PROYECTO = Path(__file__).resolve().parents[5]  # .../proyecto_grado
-ESTADO_DIR = Path(__file__).resolve().parents[2] / "_estado_enlace"
+# En un despliegue sin servidor el codigo es de solo lectura: el estado de la
+# corrida va al directorio temporal, que es lo unico escribible (y efimero).
+ESTADO_DIR = (
+    Path(tempfile.gettempdir()) / "_estado_enlace"
+    if os.environ.get("VERCEL")
+    else Path(__file__).resolve().parents[2] / "_estado_enlace"
+)
 
 BITS_TX = RAIZ_CUBESAT / "frames_STRAND1_bits.bin"  # 18.776 bytes, 1 byte = 1 bit
 CADENA_GR = RAIZ_CUBESAT / "cadena_strand1_awgn.py"  # cadena GNU Radio validada
@@ -137,13 +146,31 @@ def leer_corrida() -> dict[str, Any] | None:
         return None
 
 
+MOTOR_GNURADIO = "gnuradio"
+MOTOR_NUMPY = "numpy"
+NOTAS_MOTOR = {
+    MOTOR_GNURADIO: "Cadena GNU Radio 3.10 (cadena_strand1_awgn.py), ejecutada como subproceso.",
+    MOTOR_NUMPY: (
+        "Replica en NumPy de la cadena GNU Radio (mismos coeficientes RRC, misma señal "
+        "transmitida y mismo demodulador; el ruido tiene el mismo nivel pero otra realizacion). "
+        "Se usa porque esta instancia no tiene GNU Radio instalado."),
+}
+
+
+def motor_simulacion() -> str:
+    """Que ejecuta la simulacion en esta instancia.
+
+    GNU Radio donde esta instalado (la instalacion local); la replica en NumPy
+    donde no lo esta. Antes un despliegue sin GNU Radio dejaba la pagina sin
+    simulacion alguna.
+    """
+    if os.environ.get("VERCEL") or not CADENA_GR.exists():
+        return MOTOR_NUMPY
+    return MOTOR_GNURADIO
+
+
 def simulacion_disponible() -> tuple[bool, str | None]:
-    """Si esta instancia puede lanzar la cadena GNU Radio, y si no, por que."""
-    if os.environ.get("VERCEL"):
-        return False, ("Esta instancia es un despliegue sin GNU Radio: la simulacion solo se "
-                       "puede ejecutar en la instalacion local.")
-    if not CADENA_GR.exists():
-        return False, f"No existe la cadena GNU Radio ({CADENA_GR.name})."
+    """Si esta instancia puede simular el enlace, y si no, por que."""
     if not BITS_TX.exists():
         return False, f"No existe el archivo de bits de entrada ({BITS_TX.name})."
     return True, None
@@ -236,14 +263,18 @@ def _leer_iq(ruta: Path = IQ_SIM) -> np.ndarray | None:
 def _welch(senal: np.ndarray, nfft: int = FFT_NFFT):
     ventana = np.hanning(nfft)
     bloques = max(1, (senal.size - nfft) // (nfft // 2))
-    acc = np.zeros(nfft, dtype=np.complex128)
+    # Welch promedia POTENCIAS. Aqui se sumaban los espectros complejos y se
+    # elevaba al cuadrado al final: las fases aleatorias de cada bloque se
+    # cancelaban entre si y el resultado no era una densidad espectral, sino
+    # ruido sin forma (no se distinguia la banda de la señal).
+    acc = np.zeros(nfft, dtype=np.float64)
     for b in range(bloques):
         inicio = b * (nfft // 2)
         trozo = senal[inicio:inicio + nfft]
         if trozo.size < nfft:
             trozo = np.pad(trozo, (0, nfft - trozo.size))
-        acc += np.fft.fftshift(np.fft.fft(trozo * ventana))
-    psd = (np.abs(acc) ** 2) / (bloques * nfft)
+        acc += np.abs(np.fft.fftshift(np.fft.fft(trozo * ventana))) ** 2
+    psd = acc / (bloques * np.sum(ventana ** 2))
     psd_db = 10.0 * np.log10(psd + 1e-12)
     f = np.fft.fftshift(np.fft.fftfreq(nfft, 1 / SAMPLE_RATE))
     return f, psd_db
@@ -264,7 +295,7 @@ def espectro_enlace() -> dict[str, Any]:
     paso = max(1, len(f) // FFT_MAX_PUNTOS)
     return {
         "disponible": True,
-        "fuente": "Tap IQ real de cadena_strand1_awgn.py (canal tras AWGN)",
+        "fuente": f"Tap IQ del canal tras AWGN ({motor_simulacion()})",
         "frecuencia_central_hz": 0.0,
         "ancho_banda_hz": SAMPLE_RATE,
         "datos": [
@@ -282,14 +313,20 @@ def constelacion_enlace() -> dict[str, Any]:
             "fuente": None,
             "nota": "Constelacion no disponible — ejecuta la simulacion primero",
         }
-    en_simbolo = iq[::SAMPLES_PER_SYMBOL]
+    # La constelacion se toma DESPUES del filtro adaptado y en el instante de
+    # simbolo, que es donde decide el receptor. Antes se muestreaba el canal en
+    # bruto cada 8 muestras: sin filtro adaptado y sin alinear, eso es una nube
+    # sin forma aunque el enlace no cometa errores.
+    taps = cadena_numpy.TAPS
+    filtrada = np.convolve(iq, taps)[: iq.size] / float(np.sum(taps ** 2))
+    en_simbolo = filtrada[cadena_numpy.RETARDO::SAMPLES_PER_SYMBOL]
     if en_simbolo.size > CONST_PUNTOS:
         idx = np.linspace(0, en_simbolo.size - 1, CONST_PUNTOS).astype(int)
         en_simbolo = en_simbolo[idx]
     sel = en_simbolo if en_simbolo.size else iq[:CONST_PUNTOS]
     return {
         "disponible": True,
-        "fuente": "Muestras IQ del canal muestreadas a tasa de simbolo (tap real)",
+        "fuente": f"Salida del filtro adaptado en el instante de simbolo ({motor_simulacion()})",
         "puntos": [
             {"i": round(float(z.real), 4), "q": round(float(z.imag), 4)} for z in sel
         ],
@@ -448,8 +485,8 @@ class EnlaceRunner:
         disponible, motivo = simulacion_disponible()
         if not disponible:
             raise RuntimeError(motivo)
-        if not BITS_TX.exists():
-            raise RuntimeError(f"No existe el archivo de bits de entrada: {BITS_TX}")
+        if motor_simulacion() != MOTOR_GNURADIO:
+            raise RuntimeError("Esta instancia no tiene GNU Radio: usa simular_numpy().")
         if not CADENA_GR.exists():
             raise RuntimeError(f"No existe la cadena GNU Radio: {CADENA_GR}")
         ESTADO_DIR.mkdir(parents=True, exist_ok=True)
@@ -524,6 +561,35 @@ class EnlaceRunner:
         if al_finalizar:
             await al_finalizar(rc)
 
+    def simular_numpy(self, snr_db: float) -> dict[str, Any]:
+        """Corrida completa con la replica en NumPy, de forma sincrona.
+
+        Devuelve el resultado entero en la respuesta. En un despliegue sin
+        servidor la siguiente peticion puede caer en otra instancia que no
+        tiene estos archivos, asi que el cliente no debe volver a pedirlos.
+        """
+        disponible, motivo = simulacion_disponible()
+        if not disponible:
+            raise RuntimeError(motivo)
+        ESTADO_DIR.mkdir(parents=True, exist_ok=True)
+        tx = cargar_bits(BITS_TX)
+        rx, iq = cadena_numpy.simular(tx, snr_db, SEED)
+        BITS_RX_SIM.write_bytes(rx.tobytes())
+        iq.tofile(IQ_SIM)
+        self._snr_actual = snr_db
+        self._resultado = {"rc": 0, "stderr": "", "stdout": ""}
+        self._estado = "STOPPED"
+        self.log.append({"timestamp": ahora_iso(), "nivel": "INFO",
+                         "mensaje": f"Corrida NumPy (Eb/N0 {snr_db} dB, semilla {SEED})"})
+        metricas = self.calcular_metricas(snr_db)
+        return {
+            "status": estado_enlace(),
+            "metrics": metricas,
+            "integrity": integridad_enlace(),
+            "spectrum": espectro_enlace(),
+            "constellation": constelacion_enlace(),
+        }
+
     def detener(self) -> None:
         if self._proceso and self._proceso.returncode is None:
             try:
@@ -596,7 +662,7 @@ class EnlaceRunner:
         # archivos de estado tienen SNR, semilla y fecha conocidas.
         CORRIDA_META.write_text(json.dumps({
             "timestamp_utc": ahora_iso(), "snr_db": snr_db, "semilla": SEED,
-            "cadena": CADENA_GR.name, "sha256_rx": sha256_bits(rx),
+            "cadena": CADENA_GR.name, "motor": motor_simulacion(), "sha256_rx": sha256_bits(rx),
             "bits_comparados": n, "errores_bit": errores,
         }, indent=2), encoding="utf-8")
         self.corrio_en_esta_sesion = True
@@ -615,6 +681,9 @@ class EnlaceRunner:
                 "ber": ber,
                 "bits_comparados": n,
                 "errores_bit": errores,
+                "ber_teorica": 0.5 * math.erfc(math.sqrt(10.0 ** (snr_db / 10.0))),
+                "motor": motor_simulacion(),
+                "semilla": SEED,
                 "potencia_relativa_dbfs": potencia,
                 "ruido_estimado": ruido,
                 "frames_recibidos": FRAMES_ESPERADOS,
@@ -673,6 +742,11 @@ def config_enlace() -> dict[str, Any]:
     disponible, motivo = simulacion_disponible()
     return {
         "simulacion_disponible": disponible,
+        "motor": motor_simulacion(),
+        "motor_nota": NOTAS_MOTOR[motor_simulacion()],
+        # Sin proceso persistente no hay WebSocket: el resultado llega en la
+        # propia respuesta de la simulacion.
+        "tiempo_real": not os.environ.get("VERCEL"),
         "simulacion_no_disponible_motivo": motivo,
         "modulacion_nota": MODULACION_NOTA,
         "modulacion": MODULACION,

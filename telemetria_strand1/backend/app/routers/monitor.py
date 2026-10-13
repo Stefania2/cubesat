@@ -153,6 +153,16 @@ def log_ruta():
 
 @router.post("/simulate")
 async def simulate(req: SimularEnlace):
+    if req.action == "start" and enl.motor_simulacion() == enl.MOTOR_NUMPY:
+        # Sin GNU Radio: la replica en NumPy corre dentro de la peticion y el
+        # resultado completo viaja en la respuesta.
+        try:
+            paquete = await asyncio.to_thread(enlace.simular_numpy, req.snr_db)
+        except RuntimeError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        await difundir_todo()
+        return {"estado": enlace.estado, "snr_db": enlace.snr_actual,
+                "motor": enl.MOTOR_NUMPY, "paquete": paquete}
     if req.action == "start":
         try:
             enlace.iniciar(req.snr_db)

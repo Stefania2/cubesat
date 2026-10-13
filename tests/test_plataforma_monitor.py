@@ -116,13 +116,54 @@ def test_corrida_registrada_informa_snr_y_errores(tmp_path, monkeypatch):
     assert "errores de canal" in check["mensaje"]
 
 
-def test_en_un_despliegue_sin_gnuradio_la_simulacion_se_declara_no_disponible(monkeypatch):
+def test_en_un_despliegue_sin_gnuradio_se_simula_con_la_replica_numpy(tmp_path, monkeypatch):
+    # Antes la pagina quedaba sin simulacion en el despliegue. Ahora corre la
+    # replica en NumPy, y lo dice.
     monkeypatch.setenv("VERCEL", "1")
+    for nombre, archivo in (("ESTADO_DIR", ""), ("BITS_RX_SIM", "bits_rx_sim.bin"),
+                            ("IQ_SIM", "iq_sim.c64"), ("CORRIDA_META", "corrida.json")):
+        monkeypatch.setattr(enl, nombre, tmp_path / archivo if archivo else tmp_path)
     c = enl.config_enlace()
-    assert c["simulacion_disponible"] is False
-    assert "GNU Radio" in c["simulacion_no_disponible_motivo"]
+    assert c["simulacion_disponible"] is True
+    assert c["motor"] == "numpy" and "NumPy" in c["motor_nota"]
+    assert c["tiempo_real"] is False
+
+    corredor = enl.EnlaceRunner()
+    monkeypatch.setattr(enl, "enlace", corredor)
     with pytest.raises(RuntimeError):
-        enl.EnlaceRunner().iniciar(8.0)
+        corredor.iniciar(8.0)                 # el subproceso GNU Radio no aplica aqui
+    paquete = corredor.simular_numpy(6.0)
+    m = paquete["metrics"]
+    assert m["motor"] == "numpy" and m["snr_db"] == 6.0 and m["bits_comparados"] == 18_776
+    assert m["ber"] == m["errores_bit"] / 18_776
+    assert 0.3 * m["ber_teorica"] < m["ber"] < 3 * m["ber_teorica"]
+    assert m["fer"] is None and m["rssi_dbm"] is None
+    assert paquete["integrity"]["procedencia"] == "sesion_actual"
+    assert paquete["integrity"]["diferencia"] == m["errores_bit"]
+    assert paquete["spectrum"]["disponible"] and paquete["constellation"]["disponible"]
+    assert paquete["status"]["sim_status"] == "STOPPED"
+
+
+def test_constelacion_y_espectro_tienen_la_forma_de_una_bpsk(tmp_path, monkeypatch):
+    monkeypatch.setenv("VERCEL", "1")
+    for nombre, archivo in (("ESTADO_DIR", ""), ("BITS_RX_SIM", "bits_rx_sim.bin"),
+                            ("IQ_SIM", "iq_sim.c64"), ("CORRIDA_META", "corrida.json")):
+        monkeypatch.setattr(enl, nombre, tmp_path / archivo if archivo else tmp_path)
+    corredor = enl.EnlaceRunner()
+    monkeypatch.setattr(enl, "enlace", corredor)
+    paquete = corredor.simular_numpy(12.0)
+
+    # Tras el filtro adaptado los simbolos caen en +-1 sobre el eje I.
+    i = np.array([p["i"] for p in paquete["constellation"]["puntos"]])
+    q = np.array([p["q"] for p in paquete["constellation"]["puntos"]])
+    assert np.abs(i).mean() == pytest.approx(1.0, abs=0.05)
+    assert np.abs(np.abs(i) - 1.0).mean() < 0.3 and abs(q.mean()) < 0.1
+
+    # La densidad espectral es mayor dentro de la banda de la señal que fuera.
+    datos = paquete["spectrum"]["datos"]
+    f = np.array([d["freq_hz"] for d in datos])
+    p = np.array([d["power_db"] for d in datos])
+    assert p[np.abs(f) < 4000].mean() > p[np.abs(f) > 15000].mean() + 6.0
 
 
 def test_telemetria_excluye_conteos_adc():
