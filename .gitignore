@@ -27,3 +27,7 @@ dashboard/dist/
 dashboard/node_modules/
 .vercel
 .env*
+
+# Enlace local a las dependencias del frontend: roto fuera de esta maquina y
+# hace fallar el build de GitHub Pages (Jekyll no admite symlinks colgantes).
+dashboard/node_modules
