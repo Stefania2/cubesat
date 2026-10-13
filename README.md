@@ -6,18 +6,16 @@ Proyecto aplicado de Ingenieria Electronica orientado a caracterizar el subsiste
 
 El trabajo se desarrolla como referencia tecnica en espanol para apoyar futuros proyectos academicos de desarrollo satelital en Colombia.
 
-## Objetivo
+## Objetivo general
 
-Caracterizar y simular el subsistema electronico de comunicaciones de un CubeSat de observacion mediante herramientas de software libre, usando telemetria real y un modelo digital de enlace RF que permita analizar modulacion, canal, recepcion y tasa de error de bit.
+Simular el enlace de radiofrecuencia (RF) de un CubeSat de observación mediante herramientas de software libre, utilizando telemetría real y un modelo digital que permita analizar la modulación, el canal, la recepción y la tasa de error de bit (BER, Bit Error Rate).
 
 ## Objetivos especificos
 
-1. Caracterizar los componentes de comunicaciones de STRaND-1 —antena, transceptor, modem y telemetria, seguimiento y comando (TT&C)— como caso de referencia para un CubeSat de observacion.
-2. Obtener, conservar y procesar telemetria real de SatNOGS, pasando de tramas hexadecimales a bytes, campos decodificados y diagnosticos verificables del estado del satelite.
-3. Implementar un modelo reproducible de enlace digital equivalente en banda base para comparar BPSK y FSK mediante BER, espectro y archivos IQ de apoyo para GNU Radio.
-4. Evaluar mejoras y restricciones del enlace mediante conformado RRC, desvanecimiento Rice, Doppler residual, codificacion convolucional, verificacion AX.25, presupuesto de enlace y seguimiento de estacion terrena.
-5. Validar la coherencia del modelo frente a parametros documentados de CubeSats reales y generar las tablas del informe directamente desde los resultados.
-6. Presentar la telemetria y el gemelo digital con trazabilidad: distinguir los datos crudos de sus interpretaciones y explicitar la edad y las anomalías de cada lectura.
+1. Caracterizar los componentes de comunicaciones de STRaND-1 —antena, transceptor, módem y sistema de telemetría, seguimiento y comando (TT&C, Telemetry, Tracking and Command)— como referencia para un CubeSat de observación.
+2. Implementar un modelo reproducible de enlace digital en banda base para las modulaciones BPSK (Binary Phase Shift Keying) y FSK (Frequency Shift Keying), con BER (Bit Error Rate), espectro y archivos IQ (componentes In-phase y Quadrature) compatibles con GNU Radio.
+3. Evaluar el comportamiento del enlace bajo conformado RRC (Root Raised Cosine), desvanecimiento Rice, Doppler residual, codificación convolucional, verificación AX.25 (Amateur X.25), presupuesto de enlace y seguimiento de estación terrenal.
+4. Integrar el modelo digital del enlace RF (Radio Frequency) con la telemetría real de STRaND-1 para el análisis conjunto de las condiciones de comunicación y la tasa de error de bit (BER, Bit Error Rate).
 
 ## Delimitacion del alcance
 

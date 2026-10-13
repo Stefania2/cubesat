@@ -29,16 +29,14 @@ Los CubeSats se han consolidado como plataformas accesibles para misiones espaci
 
 ### 1.1 Objetivo general
 
-Caracterizar y simular el subsistema electrónico de comunicaciones de un CubeSat de observación mediante herramientas de software libre, usando telemetría real y un modelo digital de enlace RF que permita analizar modulación, canal, recepción y tasa de error de bit.
+Simular el enlace de radiofrecuencia (RF) de un CubeSat de observación mediante herramientas de software libre, utilizando telemetría real y un modelo digital que permita analizar la modulación, el canal, la recepción y la tasa de error de bit (BER, Bit Error Rate).
 
 ### 1.2 Objetivos específicos
 
-1. Caracterizar antena, transceptor, módem y TT&C de STRaND-1 como caso de referencia.
-2. Obtener, conservar y decodificar telemetría real de SatNOGS hasta campos físicos y diagnósticos verificables del estado del satélite.
-3. Implementar un modelo digital equivalente en banda base para comparar BPSK y FSK mediante BER, espectro y señales IQ de apoyo para GNU Radio.
-4. Evaluar el enlace con conformado RRC, desvanecimiento, Doppler residual, FEC, AX.25, presupuesto de enlace y seguimiento de estación terrena.
-5. Contrastar el modelo con parámetros documentados de CubeSats reales y generar las tablas del informe desde las salidas de los scripts.
-6. Hacer trazable la interpretación de la telemetría en una plataforma web y un gemelo digital, distinguiendo datos crudos, datos procesados, valores decodificados e inferencias.
+1. Caracterizar los componentes de comunicaciones de STRaND-1 —antena, transceptor, módem y sistema de telemetría, seguimiento y comando (TT&C, Telemetry, Tracking and Command)— como referencia para un CubeSat de observación.
+2. Implementar un modelo reproducible de enlace digital en banda base para las modulaciones BPSK (Binary Phase Shift Keying) y FSK (Frequency Shift Keying), con BER (Bit Error Rate), espectro y archivos IQ (componentes In-phase y Quadrature) compatibles con GNU Radio.
+3. Evaluar el comportamiento del enlace bajo conformado RRC (Root Raised Cosine), desvanecimiento Rice, Doppler residual, codificación convolucional, verificación AX.25 (Amateur X.25), presupuesto de enlace y seguimiento de estación terrenal.
+4. Integrar el modelo digital del enlace RF (Radio Frequency) con la telemetría real de STRaND-1 para el análisis conjunto de las condiciones de comunicación y la tasa de error de bit (BER, Bit Error Rate).
 
 ### 1.3 Alcance y trazabilidad
 
