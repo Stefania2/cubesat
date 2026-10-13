@@ -78,6 +78,19 @@ def tabla_ber_basico() -> str:
     return tabla_md(["SNR por muestra (dB)", "Eb/N0 (dB)", "BER BPSK", "BER FSK"], filas)
 
 
+def tabla_ber_cadena_gnuradio() -> str:
+    """Barrido de la cadena GNU Radio minima (`barrido_ber_strand1.py`)."""
+    filas = []
+    for r in leer_csv("ber_strand1_sweep.csv"):
+        errores, bits = int(r["errores_totales"]), int(r["bits_totales"])
+        # Mismo criterio que el resto del informe: un cero lleva su cota al 95 %.
+        emp = f"0 (< {3.84 / bits:.1e})" if errores == 0 else f"{float(r['ber_empirica']):.2e}"
+        filas.append([f"{float(r['snr_db']):.0f}", str(errores), str(bits), emp,
+                      f"{float(r['ber_teorica']):.2e}"])
+    return tabla_md(["Eb/N0 (dB)", "Errores", "Bits comparados", "BER medida", "BER teorica BPSK"],
+                    filas)
+
+
 def tabla_ancho_banda_basico() -> str:
     anchos = {r["modulacion"]: float(r["ancho_banda_estimado_hz"])
               for r in leer_csv("resultados_ber_fsk_bpsk.csv")}
@@ -410,6 +423,7 @@ def tabla_concordancia() -> str:
 TABLAS = {
     "ber_basico": tabla_ber_basico,
     "ancho_banda_basico": tabla_ancho_banda_basico,
+    "ber_cadena_gnuradio": tabla_ber_cadena_gnuradio,
     "procedencia": tabla_procedencia,
     "avanzado_principal": tabla_avanzado_principal,
     "avanzado_rice": tabla_avanzado_rice,
@@ -454,7 +468,7 @@ def actualizar_informe() -> int:
 
 
 def main() -> None:
-    faltan = [n for n in ("resultados_ber_fsk_bpsk.csv", "resultados_simulacion_avanzada.csv",
+    faltan = [n for n in ("resultados_ber_fsk_bpsk.csv", "ber_strand1_sweep.csv", "resultados_simulacion_avanzada.csv",
                           "link_budget_resultados.csv", "link_budget_completo.json",
                           "enlace_ascendente_resultados.json",
                           "estacion_terrena_seguimiento.json",

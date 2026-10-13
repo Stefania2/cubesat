@@ -17,7 +17,7 @@
 
 ## Resumen
 
-Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN —la modulación documentada del satélite es FSK a 9600 bit/s con NRZI; la BPSK es un modelo comparativo—; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi, tramas AX.25 verificadas por FCS y sincronización realista de portadora y símbolo con lazos de Costas y Gardner; (4) flujogramas en GNU Radio para visualización IQ y demodulación; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo, complementado con una ruta SGP4 con TLE real versionado y con el formato de validación para capturas IQ de un SDR; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida; y (9) un gemelo digital que reconstruye el estado del satélite a partir de esos registros, lo reproduce en un eje temporal comprimido y lo representa en tres dimensiones, con detección de anomalías que fecha por sí sola el fallo de la instrumentación de energía y con la edad de cada lectura siempre a la vista. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
+Este informe documenta el desarrollo de un modelo reproducible para la caracterización del subsistema electrónico de comunicaciones de un CubeSat, usando como referencia el satélite STRaND-1 (NORAD 39090). El trabajo integra: (1) procesamiento de telemetría real descargada de SatNOGS —36 641 tramas de 3049 observaciones, de noviembre de 2016 a julio de 2026—, con la decodificación de 32 754 balizas según la especificación publicada por AMSAT-UK, su conversión a magnitudes físicas y el diagnóstico del estado del satélite a partir de ellas, que permite fechar entre noviembre de 2020 y febrero de 2021 la degradación y el fallo definitivo de la instrumentación de su subsistema de energía; (2) simulación de enlace RF en banda base para modulaciones BPSK y FSK bajo canal AWGN —la modulación documentada del satélite es FSK a 9600 bit/s con NRZI; la BPSK es un modelo comparativo—; (3) un modelo avanzado que añade conformado de pulso RRC, desvanecimiento Rice, error residual de Doppler, codificación convolucional con decodificación Viterbi, tramas AX.25 verificadas por FCS y sincronización realista de portadora y símbolo con lazos de Costas y Gardner; (4) flujogramas en GNU Radio para visualización IQ y demodulación, y una cadena mínima validada cuya réplica en NumPy permite ejecutar el monitor del enlace también donde no hay GNU Radio; (5) cálculo de link budget descendente y ascendente en UHF; (6) un modelo de estación terrena con seguimiento automático sobre un paso orbital completo, complementado con una ruta SGP4 con TLE real versionado y con el formato de validación para capturas IQ de un SDR; (7) comparación con parámetros documentados de 7 CubeSats reales y con los protocolos de enlace habituales en la industria; y (8) una plataforma web —FastAPI, React y PostgreSQL— que ingiere, decodifica y presenta la telemetría con un modelo de datos por capas que impide estructuralmente mostrar una interpretación como si fuera una medida; y (9) un gemelo digital que reconstruye el estado del satélite a partir de esos registros, lo reproduce en un eje temporal comprimido y lo representa en tres dimensiones, con detección de anomalías que fecha por sí sola el fallo de la instrumentación de energía y con la edad de cada lectura siempre a la vista. Todos los scripts, flujogramas y componentes se desarrollan con herramientas de software libre.
 
 El resultado central es que la cadena completa —señal RF, demodulación, bits, tramas, paquetes, variables y estado del sistema— puede recorrerse íntegramente con datos de una red abierta de estaciones voluntarias, y que el eslabón que falla no es el enlace, sino la interpretación de los bytes.
 
@@ -40,7 +40,7 @@ Simular el enlace de radiofrecuencia (RF) de un CubeSat de observación mediante
 
 ### 1.3 Alcance y trazabilidad
 
-El trabajo es una caracterización académica reproducible, no la construcción, operación ni reparación física de un satélite. La simulación RF es un modelo equivalente en banda base: no sustituye una captura UHF real ni certifica un receptor de vuelo. La recuperación de portadora y de temporización de símbolo se implementa con lazos de Costas y Gardner (sección 5.4); la de trama sigue localizando las tramas por desplazamiento conocido. La validación contra capturas IQ reales de un SDR queda como trabajo futuro, aunque se define el formato para conservarlas (sección 8.2).
+El trabajo es una caracterización académica reproducible, no la construcción, operación ni reparación física de un satélite. La simulación RF es un modelo equivalente en banda base: no sustituye una captura UHF real ni certifica un receptor de vuelo. La recuperación de portadora y de temporización de símbolo se implementa con lazos de Costas y Gardner (sección 5.7); la de trama sigue localizando las tramas por desplazamiento conocido. La validación contra capturas IQ reales de un SDR queda como trabajo futuro, aunque se define el formato para conservarlas (sección 8.2).
 
 **Modulación real y modulación del modelo.** La modulación documentada del enlace descendente de STRaND-1 es **FSK a 9600 bit/s con tramas AX.25 (HDLC) y codificación NRZI** (AMSAT-UK; registro de transmisores de SatNOGS DB, hoy marcado *inactive*; recepción documentada por PY4ZBZ con módem G3RUH). Ninguna fuente consultada describe BPSK en este satélite. La BPSK coherente del modelo avanzado y de la cadena GNU Radio es, por tanto, un **modelo comparativo de banda base** elegido para estudiar conformado de pulso, sincronización y codificación; sus umbrales no son los del receptor FSK real. No están documentados —y aquí se tratan como incertidumbre— la desviación de frecuencia, el filtrado del modulador, el uso de aleatorizador G3RUH a bordo, la ganancia de la antena y el umbral de Eb/N0 de un receptor real. `parametros_enlace.py` es la fuente única de los parámetros del enlace y declara la procedencia de cada uno (documentado, deducido de datos o supuesto de diseño).
 
@@ -690,9 +690,52 @@ Visualiza en tiempo real las señales IQ generadas en la simulación, con contro
 
 Cadena de transmisión BPSK completa desde los bytes de telemetría real hasta la demodulación, con cinco sinks visuales (tiempo, espectro, constelación, histograma y conteo de errores).
 
-### 6.3 Limitaciones de la implementación GNU Radio
+### 6.3 Cadena mínima validada (`cadena_strand1_awgn`)
 
-- El flujograma de visualización asume temporización y fase ideales: no incluye los lazos de Costas y Gardner que sí implementa el modelo Python (sección 5.4). Sirve para inspeccionar la señal y la constelación, no para medir la robustez de la sincronización.
+`cadena_strand1_awgn.grc` y su `.py` son la cadena GNU Radio que alimenta el monitor del enlace (sección 10.4). Trabaja sobre los 18 776 bits de telemetría, un bit por byte y sin `Unpack Bits`:
+
+`bits → 11 símbolos de cola → {0,1} a {−1,+1} → interpolación ×8 con RRC (α = 0,35; 89 coeficientes) → ruido gaussiano complejo → parte real → filtro adaptado RRC → muestreo cada 8 muestras con el retardo conjunto de 88 → decisor`
+
+No lleva lazos de sincronización: la alineación es fija. La amplitud del ruido se calibra para que el parámetro de entrada sea $E_b/N_0$. `barrido_ber_strand1.py` la ejecuta de 0 a 12 dB con tres semillas por punto:
+
+<!-- TABLA:ber_cadena_gnuradio -->
+| Eb/N0 (dB) | Errores | Bits comparados | BER medida | BER teorica BPSK |
+|:---|---:|---:|---:|---:|
+| 0 | 4542 | 56328 | 8.06e-02 | 7.86e-02 |
+| 1 | 3237 | 56328 | 5.75e-02 | 5.63e-02 |
+| 2 | 2174 | 56328 | 3.86e-02 | 3.75e-02 |
+| 3 | 1317 | 56328 | 2.34e-02 | 2.29e-02 |
+| 4 | 726 | 56328 | 1.29e-02 | 1.25e-02 |
+| 5 | 364 | 56328 | 6.46e-03 | 5.95e-03 |
+| 6 | 143 | 56328 | 2.54e-03 | 2.39e-03 |
+| 7 | 49 | 56328 | 8.70e-04 | 7.73e-04 |
+| 8 | 9 | 56328 | 1.60e-04 | 1.91e-04 |
+| 9 | 1 | 56328 | 1.78e-05 | 3.36e-05 |
+| 10 | 0 | 56328 | 0 (< 6.8e-05) | 3.87e-06 |
+| 11 | 0 | 56328 | 0 (< 6.8e-05) | 2.61e-07 |
+| 12 | 0 | 56328 | 0 (< 6.8e-05) | 9.01e-09 |
+<!-- /TABLA:ber_cadena_gnuradio -->
+
+La BER medida sigue la curva teórica de BPSK coherente, $Q(\sqrt{2E_b/N_0})$, dentro de lo que permite la muestra. Es la validación de la cadena y de su calibración de ruido; como en el resto del informe, un cero observado se escribe con la cota superior que la muestra permite afirmar.
+
+### 6.4 Réplica en NumPy de la cadena
+
+GNU Radio no puede instalarse en un despliegue sin servidor, de modo que allí la página del monitor quedaba sin simulación. `telemetria_strand1/backend/app/services/cadena_numpy.py` reproduce la cadena anterior bloque a bloque, y `tests/test_cadena_numpy.py` la contrasta con GNU Radio donde está instalado:
+
+| Elemento | Relación con GNU Radio | Comprobación |
+|:---|:---|:---|
+| Coeficientes RRC | Transcripción de `firdes.root_raised_cosine` | Diferencia máxima < 10⁻⁶ (medida: 4·10⁻⁸, la precisión de `float32`) |
+| Señal transmitida | La misma | El tap IQ de GNU Radio menos la señal de NumPy es solo ruido, con el nivel previsto |
+| Demodulador | El mismo | Sobre las muestras IQ de GNU Radio entrega exactamente los mismos 18 776 bits |
+| Nivel de ruido | El mismo: cada cuadratura con desviación $v/\sqrt{2}$ | Medido sobre el tap IQ de la cadena real |
+| Realización del ruido | **Distinta**: otro generador aleatorio | La BER coincide estadísticamente, no bit a bit |
+
+La réplica no sustituye a GNU Radio: donde está instalado se sigue ejecutando la cadena original como subproceso. La interfaz indica en cada momento qué motor produjo el resultado.
+
+### 6.5 Limitaciones de la implementación GNU Radio
+
+- La cadena mínima (6.3) y su réplica (6.4) no tienen sincronización, desvanecimiento ni tramas: miden BER en AWGN con alineación fija. La robustez de la sincronización y la FER se estudian en el modelo avanzado (sección 5).
+- El flujograma de visualización asume temporización y fase ideales: no incluye los lazos de Costas y Gardner que sí implementa el modelo Python (sección 5.7). Sirve para inspeccionar la señal y la constelación, no para medir la robustez de la sincronización.
 - El bloque `Integrate` asume alineación perfecta de los límites de símbolo con la ventana de integración.
 - Los archivos `.py` versionados contienen un ajuste manual (`import gnuradio.qtgui` en lugar de `import gnuradio`) necesario para que se ejecuten fuera de GRC. Al regenerarlos desde el `.grc` hay que reaplicarlo.
 
@@ -953,7 +996,8 @@ Las secciones anteriores producen resultados en forma de tablas y figuras estát
 |:---|:---|:---|
 | Almacenamiento | PostgreSQL | Persistencia de frames, observaciones, campos decodificados y reglas |
 | API | FastAPI (Python 3.14) | 17 endpoints REST, documentación OpenAPI automática en `/docs` |
-| Interfaz | React + TypeScript + Vite | Ocho pantallas, sin dependencias de servicios externos |
+| Interfaz | React + TypeScript + Vite | Nueve pantallas, sin dependencias de servicios externos |
+| Despliegue público | Vercel (interfaz y API como función Python) y Neon (PostgreSQL) | Instancia de solo lectura en https://cubesatstrand-1.vercel.app; la ingesta y los cambios de umbrales solo existen en la instalación local |
 | Ingesta | `tools/` | Descarga de SatNOGS Network y del archivo histórico de SatNOGS DB |
 
 Los routers de la API separan las responsabilidades por dominio: `frames` (datos crudos y sus métricas), `observations` (metadatos de la red), `telemetry` (parámetros decodificados), `decoder` (decodificación bajo demanda de un hexadecimal arbitrario), `anomalies` (reglas configurables de umbral), `export` (descarga en CSV y JSON de cada conjunto) y `analytics`.
@@ -988,7 +1032,34 @@ La tabla de campos decodificados añade dos columnas que un panel convencional o
 - **Valores distintos.** Un campo que nunca cambia no está midiendo nada. La interfaz lo etiqueta `Constante` en lugar de presentarlo como una lectura estable, que es exactamente la confusión que produjo el «9,75 V de batería» de la sección 3.6.
 - **Rango típico (percentiles 5 y 95)** junto al mínimo y el máximo. Cuando el máximo queda más de un orden de magnitud por encima del percentil 95, se marca con un aviso que explica el caso concreto: en los campos `*_adc` el criterio es objetivo —una cuenta por encima de 1023 no cabe en un convertidor de 10 bits—, y en el resto se declara que puede tratarse de una cola larga real o de una trama con bytes alterados, sin zanjar cuál, porque estas balizas no llevan CRC con el que distinguirlas.
 
-### 10.4 Uso docente
+### 10.4 Monitor del enlace RF simulado
+
+La pantalla «Enlace RF» ejecuta la cadena BPSK de la sección 6.3 sobre los 18 776 bits de telemetría y muestra el resultado de esa corrida. Es una **simulación de banda base**: la BPSK es el modelo comparativo del proyecto, no la modulación de la baliza, y la página lo dice en su cabecera.
+
+| Indicador | Qué es | Origen |
+|:---|:---|:---|
+| $E_b/N_0$ | Valor **impuesto** a la simulación (0 a 12 dB, seleccionable); no se estima de la señal | Parámetro de la corrida |
+| BER medida | Bits erróneos / 18 776, junto a la BER teórica de BPSK | Comparación de los bits recuperados con los transmitidos |
+| Integridad | Bits de entrada, recuperados y erróneos, con SHA-256 de ambos flujos | Ídem |
+| Espectro | Densidad espectral por el método de Welch | Tap IQ del canal tras el ruido |
+| Constelación | Símbolos tras el filtro adaptado, en el instante de decisión | Tap IQ del canal |
+| BER frente a $E_b/N_0$ | Una corrida por punto, acumuladas en la sesión | Corridas del usuario |
+| RSSI | **N/A**: un modelo de banda base no tiene potencia de RF | — |
+| FER | **N/A**: esta cadena no lleva tramas; la FER se mide en el modelo avanzado (sección 5.6) | — |
+| Telemetría decodificada | Balizas reales re-decodificadas: dato **histórico**, no producido por la simulación | `telemetria_decodificada_good.csv` |
+
+**Dos motores, rotulados.** En la instalación local la cadena es GNU Radio, lanzada como subproceso, y los resultados se difunden por WebSocket. En el despliegue público no hay GNU Radio ni proceso persistente: la corrida la hace la réplica en NumPy de la sección 6.4 dentro de la propia petición, y la respuesta lleva el resultado completo. La semilla es fija, de modo que una misma $E_b/N_0$ da siempre el mismo resultado.
+
+**Un resultado solo se muestra si consta su corrida.** Cada ejecución registra $E_b/N_0$, semilla, motor, fecha y la huella de los bits recibidos. Una salida que quede en disco de otra sesión, sin ese registro, no se presenta como resultado; un bit distinto se describe como un error de canal a la $E_b/N_0$ de esa corrida, no como un fallo de la cadena. (La versión anterior mostraba «discrepancia de 1 bit» sin haber simulado nada: leía un archivo heredado de una corrida de otro día.)
+
+**Dos correcciones de representación**, detectadas al poner la página en marcha en el despliegue:
+
+- El **espectro** sumaba los espectros complejos de los bloques y elevaba al cuadrado al final. Las fases de cada bloque se cancelan entre sí, y lo que se dibujaba era ruido sin forma. Welch promedia potencias: corregido, la banda de la señal sobresale del suelo de ruido, y una prueba lo exige (más de 6 dB entre el centro y fuera de banda).
+- La **constelación** muestreaba el canal en bruto cada ocho muestras, sin filtro adaptado ni alineación: una nube sin estructura aunque el enlace no cometiera errores. Ahora se toma tras el filtro adaptado y en el instante de símbolo, que es donde decide el receptor, y los símbolos caen en ±1.
+
+Ninguna de las dos afectaba a la BER ni a la integridad, que se calculan sobre los bits; sí a la lectura que un usuario hacía de las gráficas.
+
+### 10.5 Uso docente
 
 El interés didáctico de la plataforma no está en mostrar telemetría, sino en **hacer visible el razonamiento que la valida**. Un estudiante puede:
 
@@ -1127,7 +1198,7 @@ El motor es independiente de la interfaz: no importa nada de la web y se gobiern
 
 ### 12.2 Limitaciones del modelo
 
-- **Sincronización con umbral operativo:** la recuperación de portadora y temporización es real (Costas + Gardner, sección 5.4), pero por debajo de unos 3 dB de $E_b/N_0$ los lazos pierden el enganche y la BER deja de ser interpretable como error de canal. Un receptor de vuelo añadiría una secuencia de adquisición (preámbulo) para bajar ese umbral; aquí el demodulador parte directamente de los datos.
+- **Sincronización con umbral operativo:** la recuperación de portadora y temporización es real (Costas + Gardner, sección 5.7), pero por debajo de unos 3 dB de $E_b/N_0$ los lazos pierden el enganche y la BER deja de ser interpretable como error de canal. Un receptor de vuelo añadiría una secuencia de adquisición (preámbulo) para bajar ese umbral; aquí el demodulador parte directamente de los datos.
 - **Sincronización de trama ideal:** el verificador de AX.25 comprueba el FCS sobre bytes recibidos reales, pero localiza las tramas por desplazamiento conocido; no hay búsqueda de banderas ni *bit stuffing*.
 - **FEC limitado a código convolucional:** no se implementaron LDPC ni turbo códigos, ni decisión blanda en el Viterbi.
 - **Canal sin multitrayecto completo:** se modelan Rice y Doppler, pero no reflexiones múltiples ni despolarización por rotación de Faraday.
@@ -1224,6 +1295,17 @@ cubesat/
 │   ├── anomalias.py                      # Z-score robusto y regla de canal enrielado
 │   ├── demo_fases_2_4.py                 # Demostracion del motor de datos
 │   └── demo_pico.py                      # Demostracion del fallo de febrero de 2021
+├── parametros_enlace.py                  # Parametros del enlace con su procedencia (fuente unica)
+├── margen_paso_sgp4.py                   # Margen y Doppler en un paso SGP4, con sensibilidad
+├── estimar_snr_iq.py                     # Estimador M2M4 de SNR sobre IQ
+├── generar_resumen_web.py                # Lleva los resultados a README, index.html y la web
+├── cadena_strand1_awgn.grc / .py         # GNU Radio: cadena minima validada (seccion 6.3)
+├── ber_strand1.py / barrido_ber_strand1.py  # BER de la cadena minima y su barrido
+├── telemetria_strand1/                   # Plataforma web (secciones 10 y 11)
+│   ├── backend/app/services/cadena_numpy.py   # Replica en NumPy de la cadena minima (6.4)
+│   ├── backend/app/services/enlace_monitor.py # Monitor del enlace RF (10.4)
+│   ├── frontend/src/pages/                    # Pantallas, entre ellas EnlaceRF y GemeloDigital
+│   └── tools/analizar_recepcion.py            # Coincidencias y perdida de paquetes (3.7)
 ├── simulacion_visualizar_iq.grc / .py    # GNU Radio: visualizacion IQ
 ├── simulacion_cadena_completa.grc / .py  # GNU Radio: cadena BPSK completa
 ├── orbita_sgp4.py                        # Propagacion SGP4 + geometria estacion-satelite
@@ -1233,6 +1315,13 @@ cubesat/
 ├── tle/strand1_2026-08-09.tle            # TLE de STRaND-1 con su epoca
 ├── captura/                              # Par inmutable: IQ de referencia + manifiesto
 ├── tests/                                # Pruebas automatizadas (pytest)
+│   ├── test_presupuesto_enlace.py        # Ecuaciones y unidades contra casos calculados a mano
+│   ├── test_modelo_avanzado.py           # Canal, codigo, AX.25, metricas, reproducibilidad
+│   ├── test_paso_sgp4.py                 # Doppler, signo y serie de margen
+│   ├── test_cadena_numpy.py              # Replica NumPy frente a GNU Radio
+│   ├── test_plataforma_monitor.py        # Monitor del enlace RF
+│   ├── test_gemelo_rediseno.py           # Validacion de lecturas; 1U frente a 3U
+│   ├── test_coherencia_resultados.py     # Resultados = informe = README = web
 │   ├── test_orbita_sgp4.py
 │   ├── test_sincronizacion.py
 │   └── test_validar_captura_iq.py
@@ -1244,11 +1333,18 @@ cubesat/
 │   ├── CARACTERIZACION_COMPONENTES_COMMS.md
 │   ├── ANALISIS_TELEMETRIA_SALUD_CUBESAT.md   # Cadena RF -> estado del satelite
 │   ├── FORMATO_CAPTURA_SDR.md            # Formato de captura IQ + manifiesto
+│   ├── AUDITORIA_GEMELO_RF.md            # Auditoria: hallazgos, trazabilidad y pendientes
+│   ├── REDISENO_GEMELO_DIGITAL.md        # Rediseño de la pagina del gemelo digital
 │   └── INFORME_TECNICO_FINAL.md
 └── resultados_simulacion/
     ├── configuracion_modelo_rf.json
     ├── resultados_ber_fsk_bpsk.csv / curva_ber_fsk_bpsk.png
     ├── strand1_bpsk_iq_clean_complex64.bin / strand1_fsk_iq_clean_complex64.bin
+    ├── ber_strand1_sweep.csv / .png      # Barrido de la cadena GNU Radio minima (6.3)
+    ├── margen_paso_sgp4.json / _serie.csv / .png   # Margen y Doppler en el paso (7.3)
+    ├── estimacion_snr_iq.json / .png     # Estimador de SNR (5.8)
+    ├── analisis_recepcion_telemetria.json          # Recepcion real (3.7)
+    ├── umbrales_receptor_simulado.json
     ├── resultados_simulacion_avanzada.csv / .json
     ├── simulacion_avanzada_resultados.png / espectro_rrc_comparacion.png
     ├── paso_sgp4_strand1.json            # Geometria SGP4 del paso (seccion 8.1)

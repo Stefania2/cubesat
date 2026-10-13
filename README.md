@@ -19,7 +19,7 @@ Simular el enlace de radiofrecuencia (RF) de un CubeSat de observación mediante
 
 ## Delimitacion del alcance
 
-El proyecto es una caracterizacion y simulacion academica reproducible; no construye ni opera un satelite, ni repara fisicamente STRaND-1. El enlace RF se modela como un equivalente digital en banda base: no se sintetiza ni se recibe una portadora UHF real. La sincronizacion de portadora y simbolo se recupera con lazos de Costas y Gardner (ver seccion 5.4 del informe), y la de trama se localiza por desplazamiento conocido. La validacion con capturas IQ de un SDR en un paso real queda como trabajo futuro; el repositorio define el formato para conservarlas y una captura de referencia sintetizada. Por tanto, los resultados validan el modelo y sus decisiones de diseño dentro de esas condiciones, no certifican por si solos un receptor de vuelo.
+El proyecto es una caracterizacion y simulacion academica reproducible; no construye ni opera un satelite, ni repara fisicamente STRaND-1. El enlace RF se modela como un equivalente digital en banda base: no se sintetiza ni se recibe una portadora UHF real. La sincronizacion de portadora y simbolo se recupera con lazos de Costas y Gardner (ver seccion 5.7 del informe), y la de trama se localiza por desplazamiento conocido. La validacion con capturas IQ de un SDR en un paso real queda como trabajo futuro; el repositorio define el formato para conservarlas y una captura de referencia sintetizada. Por tanto, los resultados validan el modelo y sus decisiones de diseño dentro de esas condiciones, no certifican por si solos un receptor de vuelo.
 
 ## Trazabilidad y fuente de resultados
 
