@@ -1044,24 +1044,25 @@ Se evaluaron Z-score, IQR, umbral dinámico, Isolation Forest y métodos de seri
 
 La ventana es de 51 lecturas, no de un intervalo fijo, porque el muestreo es irregular. Cuando esas 51 lecturas abarcan más de 30 días la referencia no es comparable y el punto se marca `sin_referencia` en lugar de contrastarse con un pasado ajeno.
 
-Sobre `battery_voltage`, las 5 269 lecturas se reparten en 2 818 con el canal enrielado, 1 875 normales, 247 anomalías, 210 sin referencia y 119 advertencias. Cada etiqueta gobierna un estado del modelo 3D: `NOMINAL`, `ADVERTENCIA`, `CRITICO`, `INSTRUMENTACION_PERDIDA` y `SIN_REFERENCIA`.
+Sobre `battery_voltage`, las 5 269 lecturas se reparten en 2 818 con el canal enrielado, 1 875 normales, 247 anomalías, 210 sin referencia y 119 advertencias. Cada etiqueta se traduce en un diagnóstico del canal (`NOMINAL`, `ADVERTENCIA`, `CRITICO`, `INSTRUMENTACION_PERDIDA` o `SIN_REFERENCIA`), que la interfaz muestra junto al instante reproducido.
 
 ### 11.5 El modelo 3D y la regla que lo gobierna
 
-El modelo es un 3U a escala con cuerpo, cuatro paneles, dos antenas de latiguillo y tres testigos de subsistema, en React Three Fiber. La regla que lo rige es una sola: **ningún elemento visual se mueve si no hay una lectura que lo mueva.**
+El modelo representa la configuración general que describe el documento de la misión (Kenyon, Bridges *et al.*, 2011): chasis 3U, **dos** paneles solares de 30 × 10 cm abisagrados en las aristas largas, dos paneles menores montados en el cuerpo, un monopolo VHF y otro UHF que salen por el costado y la pila de tarjetas PC104. La versión anterior dibujaba cuatro paneles desplegados y dos latiguillos UHF, que no corresponden al documento; se ha rehecho. La forma y el orden de las tarjetas en la pila **no están documentados** y se rotulan en la interfaz como esquemáticos: no es un modelo CAD ni de fabricación.
+
+La regla que lo rige sigue siendo una sola: **ningún color de estado sin un dato que lo respalde.**
 
 | Elemento | Lo gobierna | Sin dato |
 |---|---|---|
-| Color del cuerpo | etiqueta de anomalía | gris de «sin referencia» |
-| Brillo de cada panel | corriente del panel, en mA | **gris**, no verde |
-| Testigos de subsistema | corriente del interruptor | apagado |
-| Opacidad | edad de la lectura | 25 % |
-| Inclinación | magnetómetros (dato real) | sin inclinar |
-| Giro | **sintético**, rotulado en la interfaz | — |
+| Marco de cada tarjeta | sus lecturas vigentes: cian si hay medida, ámbar si la cuenta ADC es 0 | gris neutro |
+| Intensidad del marco | antigüedad de la lectura | apagado |
+| Paneles desplegables | nada: la correspondencia entre canales de corriente y paneles no está documentada | color fijo |
+| Orientación del satélite | nada: **STRaND-1 no transmite actitud** | sin orientación |
+| Despliegue, vista explotada y giro | controles de presentación, rotulados como conceptuales | — |
 
-El gris de «sin dato» tiene que ser visible, porque la mayor parte del tiempo el satélite no está diciendo nada. Un panel pintado de verde por omisión convertiría el gemelo en una animación decorativa.
+Dos cosas se han retirado respecto de la versión anterior. La **inclinación derivada del magnetómetro**: el magnetómetro mide el campo en ejes cuerpo y por sí solo no determina la actitud, de modo que inclinar el modelo con sus cuentas —sin calibrar, y con un 15,3 % de lecturas de `magnetometer_y` fuera del rango del sensor— presentaba como orientación algo que no lo es. Y el **color del cuerpo según el diagnóstico**: el diagnóstico es el de un canal, no el del satélite, y ahora se muestra como tal junto al instante reproducido.
 
-La rotación es el único elemento sintético, y la interfaz lo declara: **STRaND-1 no transmite actitud**. La inclinación sí procede de los magnetómetros, que fijan dos de los tres grados de libertad; el giro restante es un barrido constante. Conviene además filtrar `magnetometer_y`, cuyo **15,3 %** de lecturas desborda los ±10⁶ y llega a ±2,1 · 10⁹, cifras que no caben en el sensor.
+La página separa cinco clases de dato —histórico real, referencia documental, derivado, conceptual y no disponible— y declara en la cabecera que reproduce un archivo, sin enlace en vivo. Los parámetros que la baliza no trae (temperaturas, corriente de batería, RSSI, posición, actitud, estado de despliegue) aparecen como no disponibles con su motivo. Los resultados del estudio estructural de un CubeSat 1U (Cruz-Martínez *et al.*, 2022) se muestran en un apartado propio, «Modelo estructural de referencia CubeSat 1U», rotulado como otro satélite: no se aplican a STRaND-1, del que el proyecto no tiene análisis estructural. El detalle del rediseño está en `docs/REDISENO_GEMELO_DIGITAL.md`.
 
 ### 11.6 Demostración: el fallo de febrero de 2021
 
@@ -1191,8 +1192,9 @@ El motor es independiente de la interfaz: no importa nada de la web y se gobiern
 19. SatNOGS DB. *Transmisores de NORAD 39090*: «UHF 9k6 FSK TLM», 437,568 MHz, modo FSK, 9600 baudios, estado *inactive*. https://db.satnogs.org/api/transmitters/?satellite__norad_cat_id=39090 (consultado el 2026-10-13).
 20. eoPortal. *STRaND-1 (Surrey Training, Research and Nanosatellite Demonstrator 1)*. https://www.eoportal.org/satellite-missions/strand-1 — potencia de RF nominal de 1 W (0,25 W en modo baliza/CW), antenas monopolo, órbita de ~786 km (consultado el 2026-10-13). Cita 437,575 MHz como asignación del enlace descendente.
 21. Zurmely, R. (PY4ZBZ). *STRaND-1*. https://qsl.net/py4zbz/strand.htm — recepción documentada de la telemetría a 9600 baudios con módem G3RUH; fuente de radioaficionado, usada como evidencia complementaria de observación.
-22. Kenyon, S., Bridges, C. P., et al. (2011). STRaND-1: use of a $500 smartphone as the central avionics of a nanosatellite. *62nd International Astronautical Congress* (IAC-11, sesión B4.6B), Ciudad del Cabo. https://iafastro.directory/iac/archive/browse/IAC-11/B4/6B/10937/ *(No se ha podido consultar el texto completo; se cita como fuente primaria de la misión pendiente de revisión.)*
+22. Kenyon, S., Bridges, C. P., et al. (2011). STRaND-1: Use of a $500 smartphone as the central avionics of a nanosatellite. *62nd International Astronautical Congress*, Ciudad del Cabo, IAC-11-B4.6B.8. Documento de diseño previo al lanzamiento: describe chasis, potencia, OBC, smartphone, radio (AX.25, 1 W nominal, 437,575/145,860 MHz previstos), actitud y propulsión; no especifica modulación ni tasa.
 23. Pauluzzi, D. R., & Beaulieu, N. C. (2000). A comparison of SNR estimation techniques for the AWGN channel. *IEEE Transactions on Communications*, 48(10), 1681–1691.
+24. Cruz-Martínez, E. F., Martínez-Calzada, V., & Saldaña-Heredia, A. (2022). Diseño estructural de un nanosatélite tipo CubeSat. *Rev. INGENIERÍA: Ciencia, Tecnología e Innovación*, 9(1), 45-56. https://doi.org/10.26495/icti.v9i1.2165 — estructura de **1U**; referencia comparativa, no aplicable a STRaND-1.
 
 ---
 ## Apéndice A: Estructura del proyecto

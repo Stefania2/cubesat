@@ -232,6 +232,25 @@ export interface GemeloResumen {
   velocidades: number[]
   campo_por_defecto: string
   magnitudes: { campo: string; unidad: string }[]
+  /** Procedencia de los datos y estado de la fuente (no hay enlace en vivo). */
+  fuente?: string
+  fuente_calibracion?: string
+  tipo_dato?: string
+  en_vivo?: boolean
+  nota_conexion?: string
+}
+
+/** Cuánto puede sostenerse una lectura como medida física. */
+export interface ValidacionLectura {
+  estado:
+    | 'calibrado'
+    | 'canal_sin_medida'
+    | 'pendiente_de_validacion'
+    | 'sin_calibrar'
+    | 'dato_crudo'
+    | 'decodificado'
+  detalle: string
+  conversion?: string
 }
 
 export interface LecturaGemelo {
@@ -241,6 +260,7 @@ export interface LecturaGemelo {
   medida_en: string
   edad_s: number
   frescura: 'fresca' | 'vieja' | 'obsoleta'
+  validacion?: ValidacionLectura
 }
 
 export interface EstadoGemelo {
@@ -251,6 +271,8 @@ export interface EstadoGemelo {
   campo_gobernante: string
   etiqueta: EtiquetaAnomalia
   estado_cubesat: EstadoCubeSat
+  tipo_dato?: string
+  nota_estado?: string
   lecturas: LecturaGemelo[]
 }
 
@@ -268,7 +290,11 @@ export interface SerieGemelo {
   n_total: number
   n_enviados: number
   submuestreo: number
-  estadisticas: { media: number; minimo: number; maximo: number }
+  /** Lecturas dentro del intervalo pedido (igual a n_total si no se acota). */
+  n_en_intervalo?: number
+  inicio_serie?: string
+  fin_serie?: string
+  estadisticas: { media: number; minimo: number; maximo: number } | null
   puntos: PuntoSerie[]
 }
 
@@ -308,10 +334,21 @@ export interface EventosGemelo {
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
+  const opciones = {
     ...init,
     headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
-  })
+  }
+  let res: Response
+  try {
+    res = await fetch(`${BASE}${path}`, opciones)
+  } catch (e) {
+    // Fallo de red, no de la API: tipicamente una conexion en reposo que el
+    // servidor ya habia cerrado. Las lecturas son idempotentes, asi que se
+    // reintenta una vez; una escritura nunca se repite sola.
+    if ((init?.method ?? 'GET').toUpperCase() !== 'GET') throw e
+    await new Promise((r) => setTimeout(r, 300))
+    res = await fetch(`${BASE}${path}`, opciones)
+  }
   if (!res.ok) {
     let detalle = `${res.status} ${res.statusText}`
     try {
@@ -350,8 +387,17 @@ export const api = {
   gemeloResumen: () => request<GemeloResumen>('/api/gemelo/resumen'),
   gemeloEstado: (indice: number, campo: string) =>
     request<EstadoGemelo>(`/api/gemelo/estado?indice=${indice}&campo=${encodeURIComponent(campo)}`),
-  gemeloSerie: (campo: string) =>
-    request<SerieGemelo>(`/api/gemelo/serie/${encodeURIComponent(campo)}`),
+  gemeloSerie: (campo: string, desde?: string, hasta?: string) => {
+    const q = new URLSearchParams()
+    if (desde) q.set('desde', desde)
+    if (hasta) q.set('hasta', hasta)
+    const cola = q.toString() ? `?${q}` : ''
+    return request<SerieGemelo>(`/api/gemelo/serie/${encodeURIComponent(campo)}${cola}`)
+  },
+  gemeloIndice: (t: string) =>
+    request<{ indice: number; momento: string; total: number }>(
+      `/api/gemelo/indice?t=${encodeURIComponent(t)}`,
+    ),
   gemeloEventos: (campo: string) =>
     request<EventosGemelo>(`/api/gemelo/eventos/${encodeURIComponent(campo)}`),
   anomalies: () => request<AnomalyReport>('/api/anomalies'),

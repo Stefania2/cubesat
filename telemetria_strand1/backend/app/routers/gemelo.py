@@ -47,6 +47,8 @@ if str(RAIZ_REPO) not in sys.path:
 
 from gemelo_digital import anomalias, datos, estado, reproduccion  # noqa: E402
 
+from ..services.strand_amsat import FUENTE_CALIBRACION, calibraciones  # noqa: E402
+
 router = APIRouter(prefix="/api/gemelo", tags=["gemelo digital"])
 
 # Magnitud que gobierna el estado visual del CubeSat mientras no se pida otra.
@@ -58,6 +60,57 @@ MAX_PUNTOS_SERIE = 4000
 
 
 log = logging.getLogger(__name__)
+
+# Procedencia comun a todo lo que sirve este router. El gemelo reproduce un
+# ARCHIVO: no hay enlace en vivo con el satelite, y la interfaz debe decirlo.
+FUENTE_DATOS = ("Balizas de STRaND-1 recibidas por la red SatNOGS (DB y Network), "
+                "decodificadas con la especificacion de AMSAT-UK")
+TIPO_DATO = "historico real"
+
+# Valor que cada recta de calibracion devuelve con cuenta ADC = 0. Una lectura
+# que vale exactamente eso no es una medida: el canal no esta midiendo.
+_CAL = calibraciones()
+ORDENADAS: dict[str, tuple[float, ...]] = {
+    nombre: (cal["valor_con_cuenta_cero"],) for nombre, cal in _CAL.items()
+}
+# `battery_voltage` reune las dos baterias, cada una con su recta.
+ORDENADAS["battery_voltage"] = (
+    _CAL["battery_0_voltage"]["valor_con_cuenta_cero"],
+    _CAL["battery_1_voltage"]["valor_con_cuenta_cero"],
+)
+
+
+def validacion_lectura(campo: str, valor: float, unidad: str) -> dict:
+    """Cuanto puede sostenerse una lectura como medida fisica.
+
+    No altera el valor: lo acompaña. El dato historico se sirve tal cual.
+    """
+    if campo.endswith("_adc"):
+        return {"estado": "dato_crudo", "detalle": "Cuenta del convertidor, sin interpretar."}
+    if campo in ORDENADAS:
+        cal = _CAL.get(campo) or _CAL["battery_0_voltage"]
+        if any(valor == o for o in ORDENADAS[campo]):
+            return {
+                "estado": "canal_sin_medida",
+                "detalle": f"Vale exactamente la ordenada de la recta de calibracion "
+                           f"({valor:g} {unidad}): la cuenta del ADC es 0. No es una medida.",
+                "conversion": cal["conversion"],
+            }
+        if valor < 0 and unidad in ("V", "mV", "mA"):
+            return {
+                "estado": "pendiente_de_validacion",
+                "detalle": "Valor negativo: la recta de calibracion cruza el cero dentro del rango "
+                           "del convertidor. Sin la especificacion del sensor no se puede decidir "
+                           "si es una medida valida.",
+                "conversion": cal["conversion"],
+            }
+        return {"estado": "calibrado",
+                "detalle": "Convertido con la recta publicada; rango no contrastado con otra fuente.",
+                "conversion": cal["conversion"]}
+    if unidad in ("cuenta", ""):
+        return {"estado": "sin_calibrar",
+                "detalle": "La hoja de AMSAT-UK no publica ecuacion: es el entero recibido."}
+    return {"estado": "decodificado", "detalle": "Valor decodificado segun la especificacion."}
 
 # Nivel 6 de zlib: deja el estado en 1,4 MB frente a 13,8 sin comprimir, y lo
 # descomprime en 0,03 s. El nivel 1 baja el tiempo de compresion pero sube a
@@ -189,8 +242,30 @@ def resumen() -> dict:
         "duracion_virtual_s": round(rep.duracion_virtual_s, 1),
         "velocidades": list(reproduccion.VELOCIDADES),
         "campo_por_defecto": CAMPO_POR_DEFECTO,
+        # Procedencia y estado de la fuente. `en_vivo` es siempre falso: la
+        # ultima baliza decodificada es de `fin` y no hay ingesta continua.
+        "fuente": FUENTE_DATOS,
+        "fuente_calibracion": FUENTE_CALIBRACION,
+        "tipo_dato": TIPO_DATO,
+        "en_vivo": False,
+        "nota_conexion": "Reproduccion de un archivo historico. No existe enlace en tiempo "
+                         "real con el satelite: la fecha del cursor es la de la baliza, no la actual.",
         "magnitudes": [{"campo": m, "unidad": unidades.get(m, "")} for m in _magnitudes()],
     }
+
+
+@router.get("/indice")
+def indice_en(t: str) -> dict:
+    """Evento vigente en un instante: el ultimo cuya marca de tiempo es <= t.
+
+    Permite llevar el cursor a una fecha exacta (un punto de la grafica, el
+    inicio de un evento) sin aproximarla por proporcion.
+    """
+    est = _estado()
+    instante = _instante(t, "t")
+    i = int(pd.DatetimeIndex(est.index).searchsorted(instante, side="right")) - 1
+    i = min(max(i, 0), len(est) - 1)
+    return {"indice": i, "momento": pd.Timestamp(est.index[i]).isoformat(), "total": len(est)}
 
 
 @router.get("/estado")
@@ -214,6 +289,9 @@ def estado_en(indice: int = Query(0, ge=0),
         "campo_gobernante": campo,
         "etiqueta": etiqueta,
         "estado_cubesat": anomalias.estado_cubesat(etiqueta),
+        "tipo_dato": TIPO_DATO,
+        "nota_estado": "Diagnostico estadistico del canal gobernante (mediana movil y MAD), "
+                       "no un estado operativo declarado por el satelite.",
         "lecturas": [
             {
                 "campo": l.campo,
@@ -222,16 +300,45 @@ def estado_en(indice: int = Query(0, ge=0),
                 "medida_en": l.medida_en.isoformat(),
                 "edad_s": round(l.edad_s, 1),
                 "frescura": l.frescura,
+                "validacion": validacion_lectura(l.campo, l.valor, l.unidad),
             }
             for l in lecturas
         ],
     }
 
 
+def _instante(valor: str | None, nombre: str) -> pd.Timestamp | None:
+    if not valor:
+        return None
+    try:
+        t = pd.Timestamp(valor)
+    except (ValueError, TypeError) as exc:
+        raise HTTPException(status_code=422, detail=f"«{nombre}» no es una fecha ISO valida") from exc
+    return t.tz_localize("UTC") if t.tzinfo is None else t.tz_convert("UTC")
+
+
 @router.get("/serie/{campo}")
-def serie(campo: str) -> dict:
-    """Serie temporal de una magnitud, ya clasificada, para la grafica."""
-    clas = _clasificacion(campo)
+def serie(campo: str, desde: str | None = None, hasta: str | None = None) -> dict:
+    """Serie temporal de una magnitud, ya clasificada, para la grafica.
+
+    `desde` y `hasta` acotan la VISTA (fechas ISO). La clasificacion (mediana
+    movil, z, etiqueta) se calcula siempre sobre la serie completa, de modo que
+    cambiar el intervalo no altera ningun registro ni su diagnostico: solo
+    decide cuales se envian. Las estadisticas devueltas son las del intervalo.
+    """
+    completa = _clasificacion(campo)
+    t0, t1 = _instante(desde, "desde"), _instante(hasta, "hasta")
+    clas = completa
+    if t0 is not None:
+        clas = clas[clas.index >= t0]
+    if t1 is not None:
+        clas = clas[clas.index <= t1]
+    if clas.empty:
+        return {"campo": campo, "unidad": _unidades().get(campo, ""), "n_total": len(completa),
+                "n_en_intervalo": 0, "n_enviados": 0, "submuestreo": 1, "desde": desde,
+                "hasta": hasta, "estadisticas": None, "puntos": [],
+                "inicio_serie": completa.index[0].isoformat(),
+                "fin_serie": completa.index[-1].isoformat()}
 
     # Se submuestrea por paso fijo, no por agregacion: promediar borraria justo
     # los picos que la grafica debe ensenar.
@@ -242,7 +349,13 @@ def serie(campo: str) -> dict:
     return {
         "campo": campo,
         "unidad": _unidades().get(campo, ""),
-        "n_total": len(clas),
+        "n_total": len(completa),
+        "n_en_intervalo": len(clas),
+        "desde": desde,
+        "hasta": hasta,
+        "inicio_serie": completa.index[0].isoformat(),
+        "fin_serie": completa.index[-1].isoformat(),
+        "validacion": validacion_lectura(campo, float("nan"), _unidades().get(campo, "")),
         "n_enviados": len(vista),
         "submuestreo": paso,
         "estadisticas": {

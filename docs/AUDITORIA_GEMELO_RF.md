@@ -269,8 +269,10 @@ Requieren fuentes externas, datos reales o una decisión de la autora.
    Hasta entonces la web pública sigue mostrando la versión anterior.
 2. **Descripción del repositorio en GitHub.** Dice «análsis de telemetria». No está en ningún
    archivo: se cambia en *Settings → About* del repositorio.
-3. **Publicación de la misión** (Kenyon, Bridges *et al.*, IAC 2011): conseguir el texto completo
-   para confirmar transceptor, módem, desviación y potencia en modo telemetría.
+3. **Publicación de la misión** (Kenyon, Bridges *et al.*, IAC-11-B4.6B.8): consultada después de
+   esta auditoría. Confirma AX.25, 1 W nominal (0,25 W en baliza/CW) y las frecuencias previstas,
+   pero **no especifica modulación, tasa ni desviación**: esas siguen dependiendo de AMSAT-UK y
+   SatNOGS.
 4. **Umbral de un receptor FSK real.** Simular un demodulador con discriminador de FM y
    aleatorizador G3RUH, o medirlo. Hoy es la mayor incertidumbre del margen.
 5. **Captura IQ real de un SDR** de un paso de STRaND-1, con el manifiesto ya definido. Permitiría
