@@ -279,7 +279,7 @@ Configuracion usada:
 Las cifras de esta seccion las escribe `generar_resumen_web.py` a partir de `resultados_simulacion/`; no se editan a mano. Son **resultados de modelo**, no mediciones del enlace real.
 
 <!-- RESULTADOS -->
-Corrida del modelo avanzado: 2026-10-13T19:28:29+00:00 · codigo `918e2c7+cambios sin confirmar` · semilla 20260701 · 6 ensayos de 18776 bits por punto.
+Corrida del modelo avanzado: 2026-10-13T19:51:25+00:00 · codigo `d7dca58` · semilla 20260701 · 6 ensayos de 18776 bits por punto.
 
 | Resultado | Valor | Tipo |
 | --- | --- | --- |

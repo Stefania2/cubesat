@@ -541,9 +541,9 @@ Todas las configuraciones se comparan bajo las mismas reglas:
 <!-- TABLA:procedencia -->
 | Elemento | Valor |
 |:---|:---|
-| Commit del codigo | 918e2c7+cambios sin confirmar |
-| Fecha de la simulacion avanzada (UTC) | 2026-10-13T19:28:29+00:00 |
-| Fecha del analisis del paso SGP4 (UTC) | 2026-10-13T19:28:48+00:00 |
+| Commit del codigo | d7dca58 |
+| Fecha de la simulacion avanzada (UTC) | 2026-10-13T19:51:25+00:00 |
+| Fecha del analisis del paso SGP4 (UTC) | 2026-10-13T19:51:31+00:00 |
 | Semilla base | 20260701 |
 | Semillas por corrida | ruido = (semilla_base, 1, ensayo, indice_EbN0); desvanecimiento = (semilla_base, 2, ensayo). Comunes a todas las configuraciones: comparacion pareada. |
 | Ensayos por punto | 6 |

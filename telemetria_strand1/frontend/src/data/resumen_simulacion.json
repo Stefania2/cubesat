@@ -1,9 +1,9 @@
 {
  "procedencia": {
   "generado_por": "generar_resumen_web.py",
-  "commit_resultados": "918e2c7+cambios sin confirmar",
-  "simulacion_avanzada_utc": "2026-10-13T19:28:29+00:00",
-  "paso_sgp4_utc": "2026-10-13T19:28:48+00:00",
+  "commit_resultados": "d7dca58",
+  "simulacion_avanzada_utc": "2026-10-13T19:51:25+00:00",
+  "paso_sgp4_utc": "2026-10-13T19:51:31+00:00",
   "recepcion_utc": "2026-10-13T19:35:26+00:00",
   "semilla_base": 20260701,
   "ensayos_por_punto": 6,

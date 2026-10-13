@@ -129,7 +129,7 @@ consultar; queda como pendiente.
 | `estimar_snr_iq.py` | Estimador M2M4 de Es/N0 sobre IQ, contrastado con la SNR conocida |
 | `telemetria_strand1/tools/analizar_recepcion.py` | Metadatos disponibles, coincidencias entre estaciones, ganancia por combinación, pérdida por secuencia (solo lectura, base local) |
 | `generar_resumen_web.py` | Único camino de un número hasta la web, el README e `index.html` |
-| `tests/test_presupuesto_enlace.py`, `test_modelo_avanzado.py`, `test_paso_sgp4.py`, `test_coherencia_resultados.py` | 122 pruebas nuevas |
+| `tests/test_presupuesto_enlace.py`, `test_modelo_avanzado.py`, `test_paso_sgp4.py`, `test_coherencia_resultados.py` | 119 pruebas nuevas (más 4 en `test_plataforma_monitor.py`) |
 
 **Modificados**
 
@@ -158,7 +158,7 @@ añaden campos). No se ha modificado ningún dato original ni la base de datos.
 
 ```bash
 cd cubesat
-../strand/bin/python -m pytest          # 152 pasan (30 anteriores + 122 nuevas), ~19 s
+../strand/bin/python -m pytest          # 153 pasan (eran 30), ~19 s
 cd telemetria_strand1/frontend && npm run build    # tsc -b && vite build: sin errores
 ```
 

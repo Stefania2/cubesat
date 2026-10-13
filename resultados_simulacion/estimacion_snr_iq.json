@@ -1,7 +1,7 @@
 {
   "tipo_de_dato": "simulado: caracteriza al estimador sobre IQ sintetico, no al canal real",
-  "generado_utc": "2026-10-13T19:28:38+00:00",
-  "commit": "918e2c7+cambios sin confirmar",
+  "generado_utc": "2026-10-13T19:51:58+00:00",
+  "commit": "d7dca58",
   "metodo": "M2M4 sobre la salida del filtro adaptado RRC a tasa de simbolo",
   "magnitud": "Es/N0 (= Eb/N0 en BPSK sin codificar)",
   "semilla": 20261014,

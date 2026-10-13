@@ -1,8 +1,8 @@
 {
   "metadatos": {
     "tipo_de_dato": "simulado (modelo de banda base; no es una medicion del enlace real)",
-    "generado_utc": "2026-10-13T19:28:29+00:00",
-    "commit": "918e2c7+cambios sin confirmar",
+    "generado_utc": "2026-10-13T19:51:25+00:00",
+    "commit": "d7dca58",
     "modulacion_del_modelo": "BPSK coherente (modelo comparativo; la modulacion documentada de STRaND-1 es FSK 9600 con NRZI)",
     "entrada": {
       "archivo": "frames_STRAND1_gnuradio.bin",
