@@ -141,6 +141,27 @@
     "unidad": "dB",
     "procedencia": "supuesto",
     "fuente": "valor tipico de diseño (Larson & Wertz, SMAD); no es un dato de STRaND-1 (reserva de implementacion del demodulador)"
+   },
+   {
+    "clave": "tasa_simbolo_baud",
+    "valor": 9600,
+    "unidad": "baud",
+    "procedencia": "deducido",
+    "fuente": "tasa de bits con modulación binaria (1 bit por símbolo)"
+   },
+   {
+    "clave": "t_sys_k",
+    "valor": 371.3,
+    "unidad": "K",
+    "procedencia": "deducido",
+    "fuente": "temperatura de antena, pérdida del cable y figura de ruido del receptor, referidas a la entrada del receptor"
+   },
+   {
+    "clave": "eb_n0_requerida_db",
+    "valor": 15.35,
+    "unidad": "dB",
+    "procedencia": "deducido",
+    "fuente": "curva teórica de FSK no coherente a BER 1e-05 (13.35 dB) + reserva de implementación (2.0 dB); modelo comparativo BPSK: 11.59 dB"
    }
   ]
  },

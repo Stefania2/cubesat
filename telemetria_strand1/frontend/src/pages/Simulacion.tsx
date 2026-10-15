@@ -271,6 +271,26 @@ function TablaCurvas() {
   )
 }
 
+const NOMBRES_PARAMETRO: Record<string, string> = {
+  frecuencia_hz: 'Frecuencia del enlace descendente',
+  tasa_bit_bps: 'Tasa de bits',
+  tasa_simbolo_baud: 'Tasa de símbolo',
+  altura_orbital_km: 'Altura orbital',
+  p_tx_dbm: 'Potencia de transmisión del satélite',
+  g_tx_dbi: 'Ganancia de la antena del satélite',
+  l_tx_db: 'Pérdidas en la línea de transmisión del satélite',
+  g_rx_dbi: 'Ganancia de la antena de la estación',
+  l_rx_db: 'Pérdidas en el cable de la estación',
+  nf_rx_db: 'Figura de ruido del receptor',
+  t_ant_k: 'Temperatura de ruido de la antena',
+  t_sys_k: 'Temperatura de ruido del sistema',
+  l_atm_db: 'Pérdida atmosférica',
+  l_pol_db: 'Pérdida por polarización',
+  l_point_db: 'Pérdida por apuntamiento',
+  l_impl_db: 'Pérdida de implementación del demodulador',
+  eb_n0_requerida_db: 'Eb/N0 requerida',
+}
+
 function TablaParametros() {
   return (
     <div className="overflow-x-auto">
@@ -286,7 +306,7 @@ function TablaParametros() {
         <tbody>
           {lb.parametros.map((p) => (
             <tr key={p.clave} className="border-b border-line/60 align-top">
-              <td className="py-2 pr-3 font-mono text-xs">{p.clave}</td>
+              <td className="py-2 pr-3">{NOMBRES_PARAMETRO[p.clave] ?? p.clave}</td>
               <td className="py-2 pr-3 text-right tnum font-medium whitespace-nowrap">
                 {p.valor.toLocaleString('es-CO')} {p.unidad}
               </td>

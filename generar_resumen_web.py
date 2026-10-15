@@ -95,7 +95,22 @@ def construir() -> dict:
             "parametros": [
                 {"clave": k, "valor": v["valor"], "unidad": v["unidad"],
                  "procedencia": v["procedencia"], "fuente": v["fuente"]}
-                for k, v in lb["procedencia"].items()],
+                for k, v in lb["procedencia"].items()] + [
+                # Magnitudes derivadas de las anteriores que usa el link budget.
+                {"clave": "tasa_simbolo_baud", "valor": lb["parametros"]["symbol_rate_bps"],
+                 "unidad": "baud", "procedencia": "deducido",
+                 "fuente": "tasa de bits con modulación binaria (1 bit por símbolo)"},
+                {"clave": "t_sys_k", "valor": lb["resultados"][0]["t_sys_k"],
+                 "unidad": "K", "procedencia": "deducido",
+                 "fuente": "temperatura de antena, pérdida del cable y figura de ruido del receptor, "
+                           "referidas a la entrada del receptor"},
+                {"clave": "eb_n0_requerida_db", "valor": lb["resultados"][0]["eb_n0_requerida_db"],
+                 "unidad": "dB", "procedencia": "deducido",
+                 "fuente": f"curva teórica de FSK no coherente a BER {lb['parametros']['ber_target']:.0e} "
+                           f"({lb['esquemas']['fsk_no_coherente']['eb_n0_teorica_db']} dB) + reserva de implementación "
+                           f"({lb['parametros']['l_impl_db']} dB); "
+                           f"modelo comparativo BPSK: {lb['resultados'][0]['eb_n0_requerida_bpsk_db']} dB"},
+            ],
         },
         "paso_sgp4": {
             "tipo": SIMULADO,
