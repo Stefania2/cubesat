@@ -1,5 +1,12 @@
 import { useState } from 'react'
-import { GraficaBarras, GraficaFrames, Leyenda, SERIES, type PuntoSerie } from '../components/charts'
+import {
+  GraficaBarras,
+  GraficaFrames,
+  GraficaRanking,
+  Leyenda,
+  SERIES,
+  type PuntoSerie,
+} from '../components/charts'
 import {
   Card,
   CardHeader,
@@ -15,12 +22,67 @@ import { etiquetaBucket, fechaHoraUTC, numero } from '../lib/format'
 
 type Rango = '24h' | '7d' | '30d' | 'all'
 
+/** Longitud máxima del eje de la distribución. Por encima solo hay una cola
+ *  de frames raros que aplastaría el eje; se cuentan aparte, no se ocultan. */
+const MAX_BYTES_EJE = 64
+const ESTACIONES_EN_GRAFICA = 10
+
+function Conmutador<T extends string>({
+  opciones,
+  valor,
+  onChange,
+}: {
+  opciones: { valor: T; etiqueta: string }[]
+  valor: T
+  onChange: (v: T) => void
+}) {
+  return (
+    <div className="flex gap-1.5" role="group">
+      {opciones.map((o) => (
+        <button
+          key={o.valor}
+          aria-pressed={o.valor === valor}
+          onClick={() => onChange(o.valor)}
+          className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
+            o.valor === valor
+              ? 'border-navy bg-navy text-on-accent'
+              : 'border-line bg-panel text-ink-soft hover:border-navy hover:text-navy'
+          }`}
+        >
+          {o.etiqueta}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function resumirLongitudes(longitudes: { bytes: number; frames: number }[]) {
+  const total = longitudes.reduce((t, l) => t + l.frames, 0)
+  const porBytes = new Map(longitudes.map((l) => [l.bytes, l.frames]))
+  const eje = Array.from({ length: MAX_BYTES_EJE }, (_, i) => ({
+    bytes: i + 1,
+    frames: porBytes.get(i + 1) ?? 0,
+  }))
+  const cola = longitudes.filter((l) => l.bytes > MAX_BYTES_EJE)
+  const dominantes = [...longitudes].sort((a, b) => b.frames - a.frames).slice(0, 3)
+  return {
+    eje,
+    fuera: cola.reduce((t, l) => t + l.frames, 0),
+    maximo: Math.max(...longitudes.map((l) => l.bytes)),
+    dominantes: dominantes.map((d) => d.bytes).sort((a, b) => a - b),
+    porcentajeDominantes: total ? (100 * dominantes.reduce((t, d) => t + d.frames, 0)) / total : 0,
+  }
+}
+
 export function Analytics() {
   const [rango, setRango] = useState<Rango>('all')
   const serie = useApi(() => api.series(rango), [rango])
   const dist = useApi(() => api.distribucion(), [])
   const estaciones = useApi(() => api.estaciones(), [])
   const telemetria = useApi(() => api.telemetry(), [])
+  const [escala, setEscala] = useState<'lineal' | 'log'>('lineal')
+  const [vistaEstaciones, setVistaEstaciones] = useState<'grafica' | 'tabla'>('grafica')
+  const longitudes = dist.data ? resumirLongitudes(dist.data.longitudes) : null
 
   const puntos: PuntoSerie[] =
     serie.data?.puntos.map((p) => ({
@@ -83,8 +145,8 @@ export function Analytics() {
               <EmptyState titulo="Sin datos en el rango seleccionado" />
             ) : (
               <>
-                <GraficaFrames datos={puntos} alto={320} />
-                <div className="mt-4 border-t border-line pt-4">
+                <GraficaFrames datos={puntos} alto={340} zoom />
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
                   <Leyenda
                     items={[
                       { color: SERIES.recibidos, label: 'Recibidos' },
@@ -92,6 +154,11 @@ export function Analytics() {
                       { color: SERIES.decodificados, label: 'Decodificados' },
                     ]}
                   />
+                  {puntos.length > 12 && (
+                    <span className="text-xs text-ink-soft">
+                      Arrastra los extremos de la barra inferior para acotar el intervalo.
+                    </span>
+                  )}
                 </div>
               </>
             )}
@@ -102,18 +169,40 @@ export function Analytics() {
               <CardHeader
                 title="Distribución de longitudes"
                 description="Tamaño de los frames recibidos, en bytes."
+                actions={
+                  <Conmutador
+                    opciones={[
+                      { valor: 'lineal', etiqueta: 'Lineal' },
+                      { valor: 'log', etiqueta: 'Logarítmica' },
+                    ]}
+                    valor={escala}
+                    onChange={setEscala}
+                  />
+                }
               />
-              {dist.loading || !dist.data ? (
+              {dist.error ? (
+                <ErrorState mensaje={dist.error} onReintentar={dist.recargar} />
+              ) : !longitudes ? (
                 <Skeleton className="h-[260px] w-full" />
               ) : (
-                <GraficaBarras
-                  datos={dist.data.longitudes}
-                  claveX="bytes"
-                  claveY="frames"
-                  etiquetaX="Bytes por frame"
-                  etiquetaY="Frames"
-                  sufijoTooltip=" bytes"
-                />
+                <>
+                  <GraficaBarras
+                    datos={longitudes.eje}
+                    claveX="bytes"
+                    claveY="frames"
+                    etiquetaX="Bytes por frame"
+                    etiquetaY={escala === 'log' ? 'Frames (log)' : 'Frames'}
+                    sufijoTooltip=" bytes"
+                    escalaLog={escala === 'log'}
+                  />
+                  <p className="mt-3 text-xs leading-snug text-ink-soft">
+                    El {longitudes.porcentajeDominantes.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % de
+                    los frames mide {longitudes.dominantes.join(', ').replace(/, (\d+)$/, ' o $1')} bytes; la escala
+                    logarítmica deja ver el resto.
+                    {longitudes.fuera > 0 &&
+                      ` ${numero(longitudes.fuera)} frames de más de ${MAX_BYTES_EJE} bytes (hasta ${longitudes.maximo}) quedan fuera del eje.`}
+                  </p>
+                </>
               )}
             </Card>
 
@@ -121,11 +210,38 @@ export function Analytics() {
               <CardHeader
                 title="Frames por estación terrena"
                 description="Estaciones de la red SatNOGS que aportaron datos."
+                actions={
+                  <Conmutador
+                    opciones={[
+                      { valor: 'grafica', etiqueta: 'Gráfica' },
+                      { valor: 'tabla', etiqueta: 'Tabla' },
+                    ]}
+                    valor={vistaEstaciones}
+                    onChange={setVistaEstaciones}
+                  />
+                }
               />
-              {estaciones.loading || !estaciones.data ? (
+              {estaciones.error ? (
+                <ErrorState mensaje={estaciones.error} onReintentar={estaciones.recargar} />
+              ) : estaciones.loading || !estaciones.data ? (
                 <Skeleton className="h-[260px] w-full" />
+              ) : vistaEstaciones === 'grafica' ? (
+                <>
+                  <GraficaRanking
+                    datos={estaciones.data.slice(0, ESTACIONES_EN_GRAFICA)}
+                    claveNombre="observer"
+                    claveValor="frames"
+                    detalle={(e) => `Último frame: ${fechaHoraUTC(e.ultimo).slice(0, 10)}`}
+                  />
+                  {estaciones.data.length > ESTACIONES_EN_GRAFICA && (
+                    <p className="mt-3 text-xs text-ink-soft">
+                      Las {ESTACIONES_EN_GRAFICA} estaciones con más frames de {estaciones.data.length}; la
+                      tabla las muestra todas.
+                    </p>
+                  )}
+                </>
               ) : (
-                <div className="max-h-[260px] overflow-y-auto">
+                <div className="tabla-scroll max-h-[300px]">
                   <table className="tabla w-full text-sm">
                     <thead>
                       <tr className="border-b border-line">

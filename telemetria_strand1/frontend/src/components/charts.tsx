@@ -4,10 +4,13 @@
  *  no depende solo del color. */
 
 import {
+  Area,
   Bar,
   BarChart,
+  Brush,
   CartesianGrid,
   Cell,
+  ComposedChart,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -84,10 +87,26 @@ export interface PuntoSerie {
   decodificados: number
 }
 
-export function GraficaFrames({ datos, alto = 300 }: { datos: PuntoSerie[]; alto?: number }) {
+/** Serie de frames. `zoom` añade una barra para acotar el intervalo visible,
+ *  útil en el histórico (más de cien meses en un solo eje). */
+export function GraficaFrames({
+  datos,
+  alto = 300,
+  zoom = false,
+}: {
+  datos: PuntoSerie[]
+  alto?: number
+  zoom?: boolean
+}) {
   return (
     <ResponsiveContainer width="100%" height={alto}>
-      <LineChart data={datos} margin={{ top: 8, right: 12, bottom: 4, left: -8 }}>
+      <ComposedChart data={datos} margin={{ top: 8, right: 12, bottom: 4, left: -8 }}>
+        <defs>
+          <linearGradient id="relleno-recibidos" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={SERIES.recibidos} stopOpacity={0.28} />
+            <stop offset="100%" stopColor={SERIES.recibidos} stopOpacity={0} />
+          </linearGradient>
+        </defs>
         <CartesianGrid vertical={false} strokeDasharray="0" />
         <XAxis
           dataKey="etiqueta"
@@ -129,12 +148,15 @@ export function GraficaFrames({ datos, alto = 300 }: { datos: PuntoSerie[]; alto
             )
           }}
         />
-        <Line
+        {/* El área solo da peso visual a la serie principal; las otras dos
+            quedan como líneas para no tapar la diferencia entre ellas. */}
+        <Area
           type="monotone"
           dataKey="recibidos"
           name="Recibidos"
           stroke={SERIES.recibidos}
           strokeWidth={2}
+          fill="url(#relleno-recibidos)"
           dot={false}
           isAnimationActive={false}
           activeDot={{ r: 4, strokeWidth: 2, stroke: '#0B121C' }}
@@ -163,7 +185,17 @@ export function GraficaFrames({ datos, alto = 300 }: { datos: PuntoSerie[]; alto
           isAnimationActive={false}
           activeDot={{ r: 4, strokeWidth: 2, stroke: '#0B121C' }}
         />
-      </LineChart>
+        {zoom && datos.length > 12 && (
+          <Brush
+            dataKey="etiqueta"
+            height={18}
+            travellerWidth={6}
+            stroke="#2E5A78"
+            fill="#0B121C"
+            tickFormatter={() => ''}
+          />
+        )}
+      </ComposedChart>
     </ResponsiveContainer>
   )
 }
@@ -180,6 +212,7 @@ export function GraficaBarras({
   alto = 260,
   colores,
   sufijoTooltip = '',
+  escalaLog = false,
 }: {
   datos: Record<string, any>[]
   claveX: string
@@ -190,10 +223,15 @@ export function GraficaBarras({
   alto?: number
   colores?: string[]
   sufijoTooltip?: string
+  /** Eje Y logarítmico. Los ceros no existen en log: esas barras se omiten. */
+  escalaLog?: boolean
 }) {
+  const filas = escalaLog
+    ? datos.map((d) => ({ ...d, [claveY]: d[claveY] > 0 ? d[claveY] : null }))
+    : datos
   return (
     <ResponsiveContainer width="100%" height={alto}>
-      <BarChart data={datos} margin={{ top: 8, right: 12, bottom: etiquetaX ? 20 : 4, left: -8 }}>
+      <BarChart data={filas} margin={{ top: 8, right: 12, bottom: etiquetaX ? 20 : 4, left: -8 }}>
         <CartesianGrid vertical={false} strokeDasharray="0" />
         <XAxis
           dataKey={claveX}
@@ -212,7 +250,11 @@ export function GraficaBarras({
           tickLine={false}
           tick={EJE.tick}
           allowDecimals={false}
-          width={etiquetaY ? 60 : 44}
+          width={etiquetaY ? (escalaLog ? 72 : 60) : 44}
+          scale={escalaLog ? 'log' : 'auto'}
+          ticks={escalaLog ? [1, 10, 100, 1000, 10000, 100000] : undefined}
+          domain={escalaLog ? [1, (max: number) => 10 ** Math.ceil(Math.log10(Math.max(max, 10)))] : [0, 'auto']}
+          allowDataOverflow={escalaLog}
           label={
             etiquetaY
               ? { value: etiquetaY, angle: -90, position: 'insideLeft', offset: 14, style: { fill: '#93A4B8', fontSize: 11 } }
@@ -247,8 +289,67 @@ export function GraficaBarras({
           isAnimationActive={false}
         >
           {colores &&
-            datos.map((_, i) => <Cell key={i} fill={colores[i % colores.length]} />)}
+            filas.map((_, i) => <Cell key={i} fill={colores[i % colores.length]} />)}
         </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  )
+}
+
+/* ── Barras horizontales (ranking) ────────────────────────────────────────── */
+
+export function GraficaRanking({
+  datos,
+  claveNombre,
+  claveValor,
+  alto,
+  detalle,
+}: {
+  datos: Record<string, any>[]
+  claveNombre: string
+  claveValor: string
+  alto?: number
+  /** Línea extra del tooltip (por ejemplo, la fecha del último frame). */
+  detalle?: (fila: Record<string, any>) => string
+}) {
+  return (
+    <ResponsiveContainer width="100%" height={alto ?? datos.length * 26 + 16}>
+      <BarChart data={datos} layout="vertical" margin={{ top: 0, right: 40, bottom: 0, left: 0 }}>
+        <XAxis type="number" hide />
+        <YAxis
+          type="category"
+          dataKey={claveNombre}
+          axisLine={false}
+          tickLine={false}
+          tick={{ ...EJE.tick, fontFamily: 'JetBrains Mono, monospace', fontSize: 10.5 }}
+          width={118}
+        />
+        <Tooltip
+          cursor={{ fill: '#0E2233' }}
+          content={({ active, payload }) => {
+            if (!active || !payload?.length) return null
+            const fila = payload[0].payload as Record<string, any>
+            return (
+              <CajaTooltip
+                titulo={String(fila[claveNombre])}
+                filas={
+                  <>
+                    <FilaTooltip color={SERIES.recibidos} nombre="Frames" valor={fila[claveValor]} />
+                    {detalle && <div className="text-xs text-ink-soft">{detalle(fila)}</div>}
+                  </>
+                }
+              />
+            )
+          }}
+        />
+        <Bar
+          dataKey={claveValor}
+          fill={SERIES.recibidos}
+          radius={[0, 4, 4, 0]}
+          barSize={14}
+          isAnimationActive={false}
+          label={{ position: 'right', fill: '#93A4B8', fontSize: 11 }}
+        />
       </BarChart>
     </ResponsiveContainer>
   )
