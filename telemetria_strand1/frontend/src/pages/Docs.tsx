@@ -199,6 +199,64 @@ export function Docs() {
               </table>
             </div>
           </Card>
+
+          <Card>
+            <CardHeader
+              title="Tecnologías"
+              description="Con qué está construida la plataforma y dónde se ejecuta."
+            />
+            <div className="grid gap-5 lg:grid-cols-3">
+              {[
+                {
+                  grupo: 'Backend · Python',
+                  items: [
+                    ['FastAPI', 'API REST (/api/...) y WebSocket de «Enlace RF»'],
+                    ['Uvicorn', 'Servidor ASGI en local'],
+                    ['SQLAlchemy + psycopg', 'Acceso a la base de datos'],
+                    ['PostgreSQL', 'Base de datos de tramas; en producción, Neon'],
+                    ['Pydantic', 'Validación de datos y configuración'],
+                    ['httpx', 'Cliente HTTP para SatNOGS'],
+                    ['pandas', 'Exportaciones CSV y JSON'],
+                    ['satnogsdecoders', 'Decodificador oficial de la baliza (AMSAT-UK)'],
+                    ['Redis (opcional)', 'Caché del estado del gemelo digital'],
+                  ],
+                },
+                {
+                  grupo: 'Frontend · TypeScript',
+                  items: [
+                    ['React + TypeScript', 'Interfaz'],
+                    ['Vite', 'Compilación y servidor de desarrollo'],
+                    ['Tailwind CSS', 'Estilos'],
+                    ['React Router', 'Navegación entre páginas'],
+                    ['Recharts', 'Gráficas'],
+                    ['Three.js + React Three Fiber', 'Modelo 3D del CubeSat en el gemelo digital'],
+                  ],
+                },
+                {
+                  grupo: 'Despliegue y simulación',
+                  items: [
+                    ['Vercel', 'Sirve el frontend estático y el backend como función Python, en el mismo dominio y en solo lectura'],
+                    ['Neon', 'PostgreSQL en la nube'],
+                    ['NumPy, SciPy, Matplotlib', 'Simulaciones del enlace RF'],
+                    ['sgp4', 'Propagación orbital desde el TLE'],
+                    ['GNU Radio', 'Cadena de modulación y demodulación'],
+                  ],
+                },
+              ].map((g) => (
+                <div key={g.grupo}>
+                  <div className="label-caps mb-2">{g.grupo}</div>
+                  <dl className="space-y-2 text-sm">
+                    {g.items.map(([t, d]) => (
+                      <div key={t}>
+                        <dt className="font-medium text-ink">{t}</dt>
+                        <dd className="text-xs text-ink-soft">{d}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              ))}
+            </div>
+          </Card>
         </div>
       </Section>
     </>
