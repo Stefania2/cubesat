@@ -9,12 +9,22 @@ import {
   EmptyState,
   ErrorState,
   LinkButton,
+  MetricCard,
   Nota,
   Section,
   Skeleton,
 } from '../components/ui'
 import { api, useApi, type Frame } from '../lib/api'
 import { fechaHoraUTC, magnitud, numero, truncarHex } from '../lib/format'
+
+/** Línea superior de cada parámetro según su capa: verde si está decodificado,
+ *  cian si es una medida sobre los bytes, gris si no hay valor. */
+const TONO_PARAMETRO: Record<string, 'ok' | 'info' | 'warning' | 'critical' | 'muted'> = {
+  decoded: 'ok',
+  measured: 'info',
+  partially_decoded: 'warning',
+  error: 'critical',
+}
 
 /* ── Explorador de frames ─────────────────────────────────────────────────── */
 
@@ -370,23 +380,21 @@ export function Telemetry() {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {data.parametros.map((p) => (
-                <Card key={p.key} className="min-w-0">
-                  <div className="label-caps">{p.label}</div>
-                  <div className="mt-2 flex items-baseline gap-1.5">
-                    <span
-                      className={`text-2xl font-bold leading-none tnum ${
-                        p.status === 'decoded' || p.status === 'measured'
-                          ? 'text-navy-dark'
-                          : 'text-ink-mute'
-                      }`}
-                    >
-                      {typeof p.value === 'number' ? magnitud(p.value) : (p.value ?? 'Not decoded')}
-                    </span>
-                    {p.value !== null && p.unit && (
-                      <span className="text-sm font-medium text-ink-soft">{p.unit}</span>
-                    )}
-                  </div>
-
+                <MetricCard
+                  key={p.key}
+                  etiqueta={p.label}
+                  tono={TONO_PARAMETRO[p.status] ?? 'muted'}
+                  valor={
+                    p.status === 'decoded' || p.status === 'measured' ? (
+                      typeof p.value === 'number' ? magnitud(p.value) : (p.value ?? 'Not decoded')
+                    ) : (
+                      <span className="text-ink-mute">
+                        {typeof p.value === 'number' ? magnitud(p.value) : (p.value ?? 'Not decoded')}
+                      </span>
+                    )
+                  }
+                  unidad={p.value !== null ? (p.unit ?? undefined) : undefined}
+                >
                   {p.history.length > 1 ? (
                     <div className="mt-3">
                       <Sparkline datos={p.history} />
@@ -402,7 +410,7 @@ export function Telemetry() {
                   {p.reason && (
                     <p className="mt-2 text-[11px] leading-snug text-ink-soft">{p.reason}</p>
                   )}
-                </Card>
+                </MetricCard>
               ))}
             </div>
           </div>

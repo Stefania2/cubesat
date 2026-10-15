@@ -1,4 +1,4 @@
-import { Badge, Card, LinkButton, Nota, Section } from '../components/ui'
+import { Badge, Card, LinkButton, MetricCard, Nota, Section } from '../components/ui'
 import resumen from '../data/resumen_simulacion.json'
 
 /* ── Página del proyecto de simulación RF ──────────────────────────────────
@@ -59,7 +59,11 @@ const ETIQUETA: Record<Tipo, string> = {
 }
 
 function EtiquetaTipo({ tipo }: { tipo: Tipo }) {
-  return <Badge tono={TONO[tipo]}>{ETIQUETA[tipo]}</Badge>
+  return (
+    <Badge tono={TONO[tipo]} conPunto={false}>
+      {ETIQUETA[tipo]}
+    </Badge>
+  )
 }
 
 /* ── Datos derivados del resumen (solo selección y formato) ───────────────── */
@@ -354,14 +358,11 @@ export function Simulacion() {
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {METRICAS.map((m) => (
-              <Card key={m.etiqueta} className="min-w-0">
-                <div className="text-2xl font-bold leading-none text-navy-dark tnum">{m.valor}</div>
-                <div className="label-caps mt-2">{m.etiqueta}</div>
-                <p className="mt-1 text-xs text-ink-soft">{m.nota}</p>
-                <div className="mt-2">
+              <MetricCard key={m.etiqueta} etiqueta={m.etiqueta} valor={m.valor} detalle={m.nota}>
+                <div className="mt-3">
                   <EtiquetaTipo tipo={m.tipo} />
                 </div>
-              </Card>
+              </MetricCard>
             ))}
           </div>
         </div>

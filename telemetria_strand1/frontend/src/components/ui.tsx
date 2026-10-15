@@ -172,13 +172,16 @@ export function Badge({
   tono = 'info',
   children,
   icono,
+  conPunto = true,
 }: {
   tono?: keyof typeof ESTILOS_BADGE | string
   children?: ReactNode
   icono?: ReactNode
+  /** false cuando el tono clasifica (procedencia, tipo) y no es un estado. */
+  conPunto?: boolean
 }) {
   const estilo = ESTILOS_BADGE[tono] ?? ESTILOS_BADGE.info
-  const punto = PUNTO_BADGE[tono]
+  const punto = conPunto ? PUNTO_BADGE[tono] : undefined
   return (
     <span
       className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-0.5 text-xs font-medium ${estilo}`}
