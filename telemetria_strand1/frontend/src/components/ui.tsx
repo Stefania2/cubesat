@@ -30,10 +30,66 @@ export function CardHeader({
   return (
     <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
       <div className="min-w-0">
-        <h3 className="text-base font-semibold text-navy-dark">{title}</h3>
+        <h3 className="flex items-center gap-2 text-base font-semibold text-navy-dark">
+          <span className="h-3.5 w-0.5 shrink-0 rounded-full bg-navy" aria-hidden />
+          {title}
+        </h3>
         {description && <p className="mt-1 text-sm text-ink-soft">{description}</p>}
       </div>
       {actions && <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>}
+    </div>
+  )
+}
+
+/* ── Tarjeta de métrica ───────────────────────────────────────────────────── */
+
+const ACENTO_METRICA = {
+  info: 'from-navy/80',
+  ok: 'from-ok/80',
+  warning: 'from-warn/80',
+  critical: 'from-danger/80',
+  muted: 'from-ink-mute/60',
+} as const
+
+/** Valor numérico destacado. El tono solo pinta la línea superior: el número
+ *  conserva siempre el color de máxima legibilidad, y el estado lo dice el
+ *  texto de `detalle`, no el color. */
+export function MetricCard({
+  etiqueta,
+  valor,
+  unidad,
+  detalle,
+  tono = 'info',
+  cargando,
+  children,
+}: {
+  etiqueta: string
+  valor: ReactNode
+  unidad?: string
+  detalle?: ReactNode
+  tono?: keyof typeof ACENTO_METRICA
+  cargando?: boolean
+  children?: ReactNode
+}) {
+  return (
+    <div className="card relative min-w-0 overflow-hidden p-5">
+      <div
+        className={`absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r ${ACENTO_METRICA[tono]} to-transparent`}
+        aria-hidden
+      />
+      <div className="label-caps">{etiqueta}</div>
+      {cargando ? (
+        <Skeleton className="mt-2.5 h-8 w-24" />
+      ) : (
+        <div className="mt-2 flex items-baseline gap-1.5">
+          <span className="text-[1.75rem] font-semibold leading-none tracking-tight tnum text-navy-dark">
+            {valor}
+          </span>
+          {unidad && <span className="text-sm font-medium text-ink-soft">{unidad}</span>}
+        </div>
+      )}
+      {detalle && <div className="mt-2 text-xs text-ink-soft">{detalle}</div>}
+      {children}
     </div>
   )
 }
@@ -88,6 +144,17 @@ const ESTILOS_BADGE: Record<string, string> = {
   info: 'bg-blue-light text-blue border-blue/20',
 }
 
+/** Punto de color de los estados con significado operativo (óptimo, alerta,
+ *  fallo). Las capas neutras —sin clasificar, medido— no llevan punto. */
+const PUNTO_BADGE: Record<string, string> = {
+  decoded: 'bg-ok',
+  normal: 'bg-ok',
+  partially_decoded: 'bg-warn',
+  warning: 'bg-warn',
+  error: 'bg-danger',
+  critical: 'bg-danger',
+}
+
 const ETIQUETAS: Record<string, string> = {
   decoded: 'Decoded',
   measured: 'Medido',
@@ -111,10 +178,14 @@ export function Badge({
   icono?: ReactNode
 }) {
   const estilo = ESTILOS_BADGE[tono] ?? ESTILOS_BADGE.info
+  const punto = PUNTO_BADGE[tono]
   return (
     <span
       className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-0.5 text-xs font-medium ${estilo}`}
     >
+      {!icono && punto && (
+        <span className={`size-1.5 shrink-0 rounded-full ${punto}`} aria-hidden />
+      )}
       {icono}
       {children ?? ETIQUETAS[tono] ?? tono}
     </span>

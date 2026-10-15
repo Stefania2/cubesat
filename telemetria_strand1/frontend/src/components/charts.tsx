@@ -101,12 +101,12 @@ export function GraficaFrames({ datos, alto = 300 }: { datos: PuntoSerie[]; alto
           tickLine={false}
           tick={EJE.tick}
           allowDecimals={false}
-          width={44}
+          width={60}
           label={{
             value: 'Frames',
             angle: -90,
             position: 'insideLeft',
-            offset: 16,
+            offset: 14,
             style: { fill: '#93A4B8', fontSize: 11 },
           }}
         />
@@ -212,10 +212,10 @@ export function GraficaBarras({
           tickLine={false}
           tick={EJE.tick}
           allowDecimals={false}
-          width={44}
+          width={etiquetaY ? 60 : 44}
           label={
             etiquetaY
-              ? { value: etiquetaY, angle: -90, position: 'insideLeft', offset: 16, style: { fill: '#93A4B8', fontSize: 11 } }
+              ? { value: etiquetaY, angle: -90, position: 'insideLeft', offset: 14, style: { fill: '#93A4B8', fontSize: 11 } }
               : undefined
           }
         />

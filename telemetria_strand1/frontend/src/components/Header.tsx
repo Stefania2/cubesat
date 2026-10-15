@@ -33,10 +33,10 @@ export function Header({ status }: { status: Status | null }) {
         <NavLink to="/" className="flex items-center gap-3" onClick={() => setAbierto(false)}>
           <Logo />
           <div className="leading-tight">
-            <div className="text-[15px] font-bold tracking-tight text-navy-dark">
+            <div className="whitespace-nowrap text-[15px] font-bold tracking-tight text-navy-dark">
               STRAND-1 TELEMETRY
             </div>
-            <div className="hidden text-[11px] text-ink-soft sm:block">
+            <div className="hidden text-[11px] text-ink-soft sm:block lg:hidden 2xl:block">
               Satellite Telemetry Analysis &amp; Monitoring
             </div>
           </div>

@@ -7,6 +7,7 @@ import {
   CardHeader,
   EmptyState,
   ErrorState,
+  MetricCard,
   Nota,
   Section,
   Skeleton,
@@ -33,25 +34,15 @@ function KpiCard({
   valor,
   detalle,
   cargando,
+  tono,
 }: {
   etiqueta: string
   valor: string
   detalle: string
   cargando?: boolean
+  tono?: 'info' | 'ok' | 'muted'
 }) {
-  return (
-    <Card className="min-w-0">
-      <div className="label-caps">{etiqueta}</div>
-      {cargando ? (
-        <Skeleton className="mt-2 h-8 w-20" />
-      ) : (
-        <div className="mt-1.5 text-[1.75rem] font-bold leading-none tracking-tight tnum text-navy-dark">
-          {valor}
-        </div>
-      )}
-      <div className="mt-2 text-xs text-ink-soft">{detalle}</div>
-    </Card>
-  )
+  return <MetricCard etiqueta={etiqueta} valor={valor} detalle={detalle} cargando={cargando} tono={tono} />
 }
 
 /* ── Pestaña de análisis ──────────────────────────────────────────────────── */
@@ -293,6 +284,7 @@ export function Dashboard({ status }: { status: Status | null }) {
                 valor={numero(kpis.data?.frames_decodificados)}
                 detalle={`${kpis.data?.porcentaje_decodificado ?? 0}% del total`}
                 cargando={kpis.loading}
+                tono="ok"
               />
               <KpiCard
                 etiqueta="Observaciones"
@@ -311,6 +303,7 @@ export function Dashboard({ status }: { status: Status | null }) {
                 valor={fechaUTC(kpis.data?.ultimo_frame)}
                 detalle={horaUTC(kpis.data?.ultimo_frame)}
                 cargando={kpis.loading}
+                tono="muted"
               />
             </div>
 
