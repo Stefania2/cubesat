@@ -37,12 +37,12 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
   render() {
     if (this.state.error) {
       return (
-        <div className="mx-auto max-w-2xl rounded-lg border border-line bg-white p-8 text-center">
+        <div className="mx-auto max-w-2xl rounded-lg border border-line bg-panel p-8 text-center">
           <h2 className="mb-2 text-xl font-semibold text-ink">Algo salió mal en esta página</h2>
           <p className="mb-4 text-sm text-ink-soft">
             Recarga con Ctrl+Shift+R. Si persiste, el error fue:
           </p>
-          <pre className="overflow-auto rounded bg-gray-50 p-3 text-left text-xs text-red-700">
+          <pre className="overflow-auto rounded bg-blue-lighter p-3 text-left text-xs text-danger">
             {String(this.state.error?.message || this.state.error)}
           </pre>
         </div>
@@ -54,7 +54,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
 
 function Footer() {
   return (
-    <footer className="mt-12 border-t border-line bg-white">
+    <footer className="mt-12 border-t border-line bg-panel">
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-5 text-xs text-ink-soft sm:px-6">
         <span>
           STRAND-1 Telemetry · Datos de la red SatNOGS · NORAD 39090

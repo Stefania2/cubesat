@@ -76,7 +76,7 @@ function ResumenAnalisis() {
           {data.estados.map((e) => (
             <div key={e.estado} className="flex items-center gap-3">
               <Badge tono={e.estado} />
-              <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
+              <div className="h-2 flex-1 overflow-hidden rounded-full bg-line">
                 <div
                   className="h-full rounded-full bg-navy"
                   style={{ width: `${(e.frames / total) * 100}%` }}
@@ -172,7 +172,7 @@ function ResumenTelemetria() {
         {data.parametros.map((p) => (
           <Card key={p.key} className="min-w-0">
             <div className="label-caps">{p.label}</div>
-            <div className="mt-1.5 text-xl font-semibold text-slate-400">
+            <div className="mt-1.5 text-xl font-semibold text-ink-mute">
               {p.value ?? 'Not decoded'}
             </div>
             <div className="mt-2">
@@ -239,8 +239,8 @@ export function Dashboard({ status }: { status: Status | null }) {
                         onClick={() => setRango(r.valor)}
                         className={`rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
                           rango === r.valor
-                            ? 'border-navy bg-navy text-white'
-                            : 'border-line bg-white text-ink-soft hover:border-navy hover:text-navy'
+                            ? 'border-navy bg-navy text-on-accent'
+                            : 'border-line bg-panel text-ink-soft hover:border-navy hover:text-navy'
                         }`}
                       >
                         {r.etiqueta}

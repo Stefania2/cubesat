@@ -17,7 +17,7 @@ const NAV = [
 
 function Logo() {
   return (
-    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-navy text-[13px] font-bold tracking-tight text-white">
+    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-navy text-[13px] font-bold tracking-tight text-on-accent">
       RF
     </div>
   )
@@ -28,7 +28,7 @@ export function Header({ status }: { status: Status | null }) {
   const activo = status !== null
 
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-white">
+    <header className="sticky top-0 z-30 border-b border-line bg-panel/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1400px] items-center gap-4 px-4 py-3 sm:px-6">
         <NavLink to="/" className="flex items-center gap-3" onClick={() => setAbierto(false)}>
           <Logo />
@@ -49,9 +49,9 @@ export function Header({ status }: { status: Status | null }) {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                `whitespace-nowrap rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-navy text-white'
+                    ? 'bg-navy text-on-accent'
                     : 'text-ink-soft hover:bg-blue-light hover:text-navy'
                 }`
               }
@@ -65,15 +65,18 @@ export function Header({ status }: { status: Status | null }) {
           <div className="hidden items-center gap-1.5 sm:flex">
             <StatusDot tono={activo ? 'normal' : 'critical'} />
             <span
-              className={`text-[11px] font-semibold tracking-wide ${
+              className={`whitespace-nowrap text-[11px] font-semibold tracking-wide ${
                 activo ? 'text-ok' : 'text-danger'
               }`}
             >
-              {activo ? 'SYSTEM ACTIVE' : 'API OFFLINE'}
+              {activo ? 'API ONLINE' : 'API OFFLINE'}
             </span>
           </div>
-          <div className="hidden rounded-md border border-line bg-blue-lighter px-2.5 py-1 text-[11px] font-semibold text-navy md:block">
-            NORAD {status?.norad_id ?? 39090}
+          <div
+            className="hidden whitespace-nowrap rounded-md border border-line bg-blue-lighter px-2.5 py-1 text-[11px] font-semibold text-navy md:block"
+            title="STRaND-1 está inactivo: los datos son un archivo histórico, no telemetría en vivo"
+          >
+            NORAD {status?.norad_id ?? 39090} <span className="text-ink-soft">· ARCHIVO</span>
           </div>
 
           <button
@@ -90,7 +93,7 @@ export function Header({ status }: { status: Status | null }) {
       </div>
 
       {abierto && (
-        <nav className="border-t border-line bg-white px-4 py-2 lg:hidden">
+        <nav className="border-t border-line bg-panel px-4 py-2 lg:hidden">
           {NAV.map((item) => (
             <NavLink
               key={item.to}
@@ -99,7 +102,7 @@ export function Header({ status }: { status: Status | null }) {
               onClick={() => setAbierto(false)}
               className={({ isActive }) =>
                 `block rounded-md px-3 py-2 text-sm font-medium ${
-                  isActive ? 'bg-navy text-white' : 'text-ink-soft'
+                  isActive ? 'bg-navy text-on-accent' : 'text-ink-soft'
                 }`
               }
             >

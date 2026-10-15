@@ -1,6 +1,7 @@
-/** Gráficas. Paleta validada con el comprobador de la guía de visualización:
- *  #1B5C8F / #5BA9D6 / #178A52 superan banda de luminosidad, suelo de croma,
- *  separación CVD, piso de visión normal y contraste sobre blanco. */
+/** Gráficas sobre el tema oscuro. Las series repiten los tokens
+ *  --color-series-* de index.css (cian / violeta / verde, todas por encima de
+ *  6,5:1 sobre el panel); la serie intermedia va además discontinua, así que
+ *  no depende solo del color. */
 
 import {
   Bar,
@@ -17,18 +18,18 @@ import {
 import type { ReactNode } from 'react'
 
 export const SERIES = {
-  recibidos: '#1B5C8F',
-  procesados: '#5BA9D6',
-  decodificados: '#178A52',
+  recibidos: '#38BDF8',
+  procesados: '#A78BFA',
+  decodificados: '#34D399',
 } as const
 
-const EJE = { stroke: '#D8E0E7', tick: { fill: '#607080', fontSize: 11 } }
+const EJE = { stroke: '#22324A', tick: { fill: '#93A4B8', fontSize: 11 } }
 
 /* ── Tooltip común ────────────────────────────────────────────────────────── */
 
 function CajaTooltip({ titulo, filas }: { titulo: string; filas: ReactNode }) {
   return (
-    <div className="rounded-lg border border-line bg-white px-3 py-2 shadow-lg">
+    <div className="rounded-lg border border-line bg-panel px-3 py-2 shadow-lg shadow-black/40">
       <div className="mb-1.5 text-xs font-semibold text-navy-dark">{titulo}</div>
       <div className="space-y-1">{filas}</div>
     </div>
@@ -106,11 +107,11 @@ export function GraficaFrames({ datos, alto = 300 }: { datos: PuntoSerie[]; alto
             angle: -90,
             position: 'insideLeft',
             offset: 16,
-            style: { fill: '#607080', fontSize: 11 },
+            style: { fill: '#93A4B8', fontSize: 11 },
           }}
         />
         <Tooltip
-          cursor={{ stroke: '#607080', strokeWidth: 1, strokeDasharray: '3 3' }}
+          cursor={{ stroke: '#93A4B8', strokeWidth: 1, strokeDasharray: '3 3' }}
           content={({ active, payload, label }) => {
             if (!active || !payload?.length) return null
             return (
@@ -136,7 +137,7 @@ export function GraficaFrames({ datos, alto = 300 }: { datos: PuntoSerie[]; alto
           strokeWidth={2}
           dot={false}
           isAnimationActive={false}
-          activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff' }}
+          activeDot={{ r: 4, strokeWidth: 2, stroke: '#0B121C' }}
         />
         {/* Trazo discontinuo como codificación secundaria: "procesados" coincide
             exactamente con "recibidos" siempre que todos los frames tengan bytes
@@ -150,7 +151,7 @@ export function GraficaFrames({ datos, alto = 300 }: { datos: PuntoSerie[]; alto
           strokeDasharray="6 4"
           dot={false}
           isAnimationActive={false}
-          activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff' }}
+          activeDot={{ r: 4, strokeWidth: 2, stroke: '#0B121C' }}
         />
         <Line
           type="monotone"
@@ -160,7 +161,7 @@ export function GraficaFrames({ datos, alto = 300 }: { datos: PuntoSerie[]; alto
           strokeWidth={2}
           dot={false}
           isAnimationActive={false}
-          activeDot={{ r: 4, strokeWidth: 2, stroke: '#fff' }}
+          activeDot={{ r: 4, strokeWidth: 2, stroke: '#0B121C' }}
         />
       </LineChart>
     </ResponsiveContainer>
@@ -202,7 +203,7 @@ export function GraficaBarras({
           minTickGap={12}
           label={
             etiquetaX
-              ? { value: etiquetaX, position: 'insideBottom', offset: -12, style: { fill: '#607080', fontSize: 11 } }
+              ? { value: etiquetaX, position: 'insideBottom', offset: -12, style: { fill: '#93A4B8', fontSize: 11 } }
               : undefined
           }
         />
@@ -214,12 +215,12 @@ export function GraficaBarras({
           width={44}
           label={
             etiquetaY
-              ? { value: etiquetaY, angle: -90, position: 'insideLeft', offset: 16, style: { fill: '#607080', fontSize: 11 } }
+              ? { value: etiquetaY, angle: -90, position: 'insideLeft', offset: 16, style: { fill: '#93A4B8', fontSize: 11 } }
               : undefined
           }
         />
         <Tooltip
-          cursor={{ fill: '#EAF3F8' }}
+          cursor={{ fill: '#0E2233' }}
           content={({ active, payload, label }) => {
             if (!active || !payload?.length) return null
             return (

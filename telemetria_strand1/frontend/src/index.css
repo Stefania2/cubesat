@@ -1,36 +1,43 @@
 @import 'tailwindcss';
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Sistema de diseño: plataforma de ingeniería aeroespacial.
-   Fondo claro, tarjetas blancas, azul marino dominante. Sin modo oscuro:
-   la aplicación se compromete deliberadamente con un único aspecto claro.
+   Sistema de diseño: centro de control, solo oscuro.
+   Fondo espacial casi negro, paneles semitransparentes con borde sutil y un
+   único acento cian. Los nombres de token se conservan (navy, blue…) para no
+   tocar las páginas: lo que cambia es su papel.
+     navy        → acento (botón principal, pestaña activa, enlaces e IDs)
+     navy-dark   → títulos (el texto más brillante)
+     blue-light / blue-lighter → superficies hundidas (chips, cabeceras, notas)
+   Todas las parejas texto/fondo superan WCAG AA; el texto principal, 15:1.
    ────────────────────────────────────────────────────────────────────────── */
 
 @theme {
-  --color-navy: #123b63;
-  --color-navy-dark: #102a43;
-  --color-blue: #1e5a8a;
-  --color-blue-light: #eaf3f8;
-  --color-blue-lighter: #f4f8fb;
-  --color-canvas: #f3f5f7;
-  --color-ink: #17202a;
-  --color-ink-soft: #607080;
-  --color-line: #d8e0e7;
+  --color-navy: #22d3ee;
+  --color-navy-dark: #f5f8fc;
+  --color-blue: #38bdf8;
+  --color-blue-light: #0e2233;
+  --color-blue-lighter: #0f1825;
+  --color-canvas: #05080f;
+  --color-panel: #0b121c;
+  --color-on-accent: #04131a;
+  --color-ink: #e3eaf3;
+  --color-ink-soft: #93a4b8;
+  --color-ink-mute: #6b7d92;
+  --color-line: #22324a;
 
-  --color-ok: #178a52;
-  --color-ok-bg: #e8f6ef;
-  --color-warn: #c98a00;
-  --color-warn-bg: #fff6dd;
-  --color-danger: #c0392b;
-  --color-danger-bg: #fdedec;
+  --color-ok: #34d399;
+  --color-ok-bg: #0b2a20;
+  --color-warn: #fbbf24;
+  --color-warn-bg: #2a2008;
+  --color-danger: #f87171;
+  --color-danger-bg: #2c1215;
 
-  /* Series de gráfica. Difieren ligeramente del azul de marca: los dos azules
-     del brief (#123B63 y #1E5A8A) quedan a ΔE 10.9, por debajo del piso de 15,
-     y no se distinguen en un trazo fino. Estos tres pasos superan las seis
-     comprobaciones de contraste y visión cromática sobre fondo blanco. */
-  --color-series-1: #1b5c8f;
-  --color-series-2: #5ba9d6;
-  --color-series-3: #178a52;
+  /* Series de gráfica sobre fondo oscuro: cian para el flujo de datos, violeta
+     para la serie intermedia (además va discontinua) y verde para lo
+     decodificado. Todas superan 6,5:1 sobre el panel. */
+  --color-series-1: #38bdf8;
+  --color-series-2: #a78bfa;
+  --color-series-3: #34d399;
 
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -41,8 +48,15 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  html {
+    color-scheme: dark;
+  }
+
   body {
     background-color: var(--color-canvas);
+    /* Halo tenue en la parte alta: profundidad sin distraer de los datos. */
+    background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgb(34 211 238 / 0.07), transparent 70%);
+    background-attachment: fixed;
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'tnum';
@@ -63,9 +77,11 @@
 
 @layer components {
   .card {
-    background: #fff;
+    background: rgb(11 18 28 / 0.72);
     border: 1px solid var(--color-line);
     border-radius: 0.75rem;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03);
+    backdrop-filter: blur(8px);
   }
 
   .label-caps {
@@ -80,7 +96,7 @@
 /* Recharts: rejilla y ejes recesivos, tal como pide la guía de visualización. */
 .recharts-cartesian-grid line {
   stroke: var(--color-line);
-  stroke-opacity: 0.7;
+  stroke-opacity: 0.6;
 }
 
 .recharts-cartesian-axis-line,

@@ -25,7 +25,7 @@ function Pipeline({ pasos }: { pasos: DecodeResult['pipeline'] }) {
             className={`min-w-[130px] rounded-lg border px-3 py-2.5 ${
               p.estado === 'ok'
                 ? 'border-ok/25 bg-ok-bg'
-                : 'border-line bg-white'
+                : 'border-line bg-panel'
             }`}
           >
             <div className="flex items-center gap-1.5">
@@ -63,10 +63,10 @@ function VolcadoBytes({ bytes }: { bytes: string[] }) {
       <div className="flex flex-wrap gap-1">
         {bytes.map((b, i) => (
           <div key={i} className="flex flex-col items-center">
-            <span className="rounded border border-line bg-white px-1.5 py-1 font-mono text-xs font-medium text-navy-dark">
+            <span className="rounded border border-line bg-panel px-1.5 py-1 font-mono text-xs font-medium text-navy-dark">
               {b}
             </span>
-            <span className="mt-0.5 font-mono text-[9px] tnum text-slate-400">{i}</span>
+            <span className="mt-0.5 font-mono text-[9px] tnum text-ink-mute">{i}</span>
           </div>
         ))}
       </div>
@@ -80,7 +80,7 @@ function Resultado({ etiqueta, valor, tono }: { etiqueta: string; valor: string;
       <span className="label-caps">{etiqueta}</span>
       <span
         className={`text-sm font-semibold tnum ${
-          tono === 'muted' ? 'text-slate-400' : 'text-navy-dark'
+          tono === 'muted' ? 'text-ink-mute' : 'text-navy-dark'
         }`}
       >
         {valor}
@@ -148,7 +148,7 @@ export function Decoder() {
               onChange={(e) => setHex(e.target.value)}
               rows={5}
               spellCheck={false}
-              className="w-full resize-y rounded-lg border border-line bg-blue-lighter p-3 font-mono text-sm text-ink focus:border-blue focus:bg-white focus:outline-none"
+              className="w-full resize-y rounded-lg border border-line bg-blue-lighter p-3 font-mono text-sm text-ink focus:border-blue focus:bg-panel focus:outline-none"
               placeholder="50 2D 7A 71 1E 04 F8"
             />
             <div className="mt-3 flex flex-wrap items-center gap-3">

@@ -58,7 +58,7 @@ export function FramesTable({
                     }
                   }}
                   placeholder="Buscar HEX…"
-                  className="w-40 rounded-lg border border-line px-3 py-2 font-mono text-xs placeholder:font-sans placeholder:text-slate-400 focus:border-blue focus:outline-none"
+                  className="w-40 rounded-lg border border-line px-3 py-2 font-mono text-xs placeholder:font-sans placeholder:text-ink-mute focus:border-blue focus:outline-none"
                 />
                 <select
                   value={estado}
@@ -66,7 +66,7 @@ export function FramesTable({
                     setEstado(e.target.value)
                     setPagina(0)
                   }}
-                  className="rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink focus:border-blue focus:outline-none"
+                  className="rounded-lg border border-line bg-panel px-3 py-2 text-sm text-ink focus:border-blue focus:outline-none"
                 >
                   <option value="">Todos los estados</option>
                   <option value="unclassified">Unclassified</option>
@@ -377,7 +377,7 @@ export function Telemetry() {
                       className={`text-2xl font-bold leading-none tnum ${
                         p.status === 'decoded' || p.status === 'measured'
                           ? 'text-navy-dark'
-                          : 'text-slate-400'
+                          : 'text-ink-mute'
                       }`}
                     >
                       {typeof p.value === 'number' ? magnitud(p.value) : (p.value ?? 'Not decoded')}

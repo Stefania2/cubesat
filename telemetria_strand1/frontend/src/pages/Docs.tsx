@@ -52,25 +52,25 @@ export function Docs() {
             <div className="grid gap-4 sm:grid-cols-2">
               <Capa
                 nombre="RAW DATA"
-                color="#123B63"
+                color="#22D3EE"
                 descripcion="El hexadecimal tal como lo entregó SatNOGS. No se altera nunca."
                 ejemplo="raw_hex: 502D7A711E04F8"
               />
               <Capa
                 nombre="PROCESSED DATA"
-                color="#5BA9D6"
+                color="#A78BFA"
                 descripcion="Métricas calculadas sobre los bytes. Ciertas sin conocer el protocolo."
                 ejemplo="byte_count: 7 · entropy: 2.81 bits/byte"
               />
               <Capa
                 nombre="DECODED TELEMETRY"
-                color="#178A52"
+                color="#34D399"
                 descripcion="Valores físicos. Solo existen si una definición de protocolo validada dice cómo extraerlos."
                 ejemplo="(vacío: decodificador cargado, ninguna baliza recibida)"
               />
               <Capa
                 nombre="UNKNOWN DATA"
-                color="#607080"
+                color="#6B7D92"
                 descripcion="El estado por defecto. Un frame sin estructura reconocida se queda aquí."
                 ejemplo="status: unclassified · protocol: null"
               />

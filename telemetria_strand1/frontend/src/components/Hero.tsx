@@ -7,15 +7,15 @@ import type { Status } from '../lib/api'
 function CubeSatIcon() {
   return (
     <svg viewBox="0 0 120 80" className="h-16 w-auto" role="img" aria-label="CubeSat 3U">
-      <g fill="none" stroke="#1B5C8F" strokeWidth="1.6" strokeLinejoin="round">
-        <rect x="48" y="24" width="24" height="32" rx="2" fill="#EAF3F8" />
-        <path d="M48 32h24M48 40h24M48 48h24" strokeWidth="1" stroke="#9FBDD4" />
-        <path d="M48 30 L18 22 L18 44 L48 52" fill="#F4F8FB" />
-        <path d="M72 30 L102 22 L102 44 L72 52" fill="#F4F8FB" />
-        <path d="M24 26v16M32 28v14M40 30v12" strokeWidth="0.9" stroke="#9FBDD4" />
-        <path d="M96 26v16M88 28v14M80 30v12" strokeWidth="0.9" stroke="#9FBDD4" />
+      <g fill="none" stroke="#22D3EE" strokeWidth="1.6" strokeLinejoin="round">
+        <rect x="48" y="24" width="24" height="32" rx="2" fill="#0E2233" />
+        <path d="M48 32h24M48 40h24M48 48h24" strokeWidth="1" stroke="#2E5A78" />
+        <path d="M48 30 L18 22 L18 44 L48 52" fill="#0F1825" />
+        <path d="M72 30 L102 22 L102 44 L72 52" fill="#0F1825" />
+        <path d="M24 26v16M32 28v14M40 30v12" strokeWidth="0.9" stroke="#2E5A78" />
+        <path d="M96 26v16M88 28v14M80 30v12" strokeWidth="0.9" stroke="#2E5A78" />
         <path d="M60 24V12" strokeLinecap="round" />
-        <circle cx="60" cy="10" r="2.5" fill="#178A52" stroke="#178A52" />
+        <circle cx="60" cy="10" r="2.5" fill="#34D399" stroke="#34D399" />
       </g>
     </svg>
   )
@@ -43,7 +43,7 @@ export function Hero({ status }: { status: Status | null }) {
   return (
     <section className="mb-10 grid gap-6 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
       <div className="flex flex-col justify-center">
-        <span className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-white px-3 py-1 text-[11px] font-semibold tracking-wide text-navy">
+        <span className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-line bg-panel px-3 py-1 text-[11px] font-semibold tracking-wide text-navy">
           STRAND-1 • NORAD {status?.norad_id ?? 39090}
         </span>
         <h1 className="text-3xl font-bold leading-[1.15] tracking-tight text-navy-dark sm:text-4xl lg:text-[2.75rem]">

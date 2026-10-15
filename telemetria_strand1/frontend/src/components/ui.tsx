@@ -78,9 +78,9 @@ const ESTILOS_BADGE: Record<string, string> = {
   // distingue en color de los que dependen de un protocolo validado.
   measured: 'bg-blue-light text-blue border-blue/20',
   partially_decoded: 'bg-warn-bg text-warn border-warn/25',
-  unclassified: 'bg-slate-100 text-slate-600 border-slate-300',
-  not_decoded: 'bg-slate-100 text-slate-600 border-slate-300',
-  not_available: 'bg-slate-100 text-slate-600 border-slate-300',
+  unclassified: 'bg-blue-lighter text-ink-soft border-line',
+  not_decoded: 'bg-blue-lighter text-ink-soft border-line',
+  not_available: 'bg-blue-lighter text-ink-soft border-line',
   error: 'bg-danger-bg text-danger border-danger/25',
   critical: 'bg-danger-bg text-danger border-danger/25',
   warning: 'bg-warn-bg text-warn border-warn/25',
@@ -130,7 +130,7 @@ export function StatusDot({ tono = 'normal' }: { tono?: string }) {
       : tono === 'warning'
         ? 'bg-warn'
         : tono === 'muted'
-          ? 'bg-slate-400'
+          ? 'bg-ink-mute'
           : 'bg-ok'
   return <span className={`inline-block size-2 shrink-0 rounded-full ${color}`} aria-hidden />
 }
@@ -141,11 +141,11 @@ type VarianteBoton = 'primary' | 'secondary' | 'ghost'
 
 const ESTILOS_BOTON: Record<VarianteBoton, string> = {
   primary:
-    'bg-navy text-white border-navy hover:bg-navy-dark hover:border-navy-dark',
+    'bg-navy text-on-accent border-navy hover:brightness-110',
   secondary:
-    'bg-white text-navy border-navy hover:bg-blue-light',
+    'bg-panel text-navy border-navy hover:bg-blue-light',
   ghost:
-    'bg-white text-ink-soft border-line hover:border-navy hover:text-navy',
+    'bg-panel text-ink-soft border-line hover:border-navy hover:text-navy',
 }
 
 export function Button({
@@ -209,8 +209,8 @@ export function Tabs<T extends string>({
             onClick={() => onChange(o.valor)}
             className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
               activo
-                ? 'border-navy bg-navy text-white'
-                : 'border-line bg-white text-navy hover:border-navy'
+                ? 'border-navy bg-navy text-on-accent'
+                : 'border-line bg-panel text-navy hover:border-navy'
             }`}
           >
             {o.etiqueta}
@@ -224,7 +224,7 @@ export function Tabs<T extends string>({
 /* ── Estados de carga, error y vacío ──────────────────────────────────────── */
 
 export function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`animate-pulse rounded-md bg-slate-200/70 ${className}`} />
+  return <div className={`animate-pulse rounded-md bg-line/70 ${className}`} />
 }
 
 export function ErrorState({ mensaje, onReintentar }: { mensaje: string; onReintentar?: () => void }) {

@@ -19,7 +19,7 @@ function Campo({ etiqueta, valor }: { etiqueta: string; valor: string | number |
   return (
     <div>
       <div className="label-caps">{etiqueta}</div>
-      <div className={`mt-0.5 text-sm ${vacio ? 'text-slate-400' : 'font-medium text-ink'}`}>
+      <div className={`mt-0.5 text-sm ${vacio ? 'text-ink-mute' : 'font-medium text-ink'}`}>
         {vacio ? 'Not available' : valor}
       </div>
     </div>

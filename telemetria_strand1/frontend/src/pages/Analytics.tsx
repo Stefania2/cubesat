@@ -40,7 +40,7 @@ export function Analytics() {
             <select
               value={rango}
               onChange={(e) => setRango(e.target.value as Rango)}
-              className="rounded-lg border border-line bg-white px-3 py-2 text-sm focus:border-blue focus:outline-none"
+              className="rounded-lg border border-line bg-panel px-3 py-2 text-sm focus:border-blue focus:outline-none"
             >
               <option value="24h">24 horas</option>
               <option value="7d">7 días</option>
@@ -127,7 +127,7 @@ export function Analytics() {
               ) : (
                 <div className="max-h-[260px] overflow-y-auto">
                   <table className="w-full text-sm">
-                    <thead className="sticky top-0 bg-white">
+                    <thead className="sticky top-0 bg-panel">
                       <tr className="border-b border-line">
                         <th className="label-caps py-2 text-left">Estación</th>
                         <th className="label-caps py-2 text-right">Frames</th>
