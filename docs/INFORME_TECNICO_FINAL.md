@@ -500,6 +500,10 @@ El desarrollo completo de esta cadena —de la señal RF al estado del satélite
 | 12 | 21.03 | 0 (sin errores) | 0 (sin errores) |
 <!-- /TABLA:ber_basico -->
 
+![Figura 1](../resultados_simulacion/curva_ber_fsk_bpsk.png)
+
+*Figura 1. BER del modelo básico frente a la SNR por muestra, para BPSK y FSK (`simular_enlace_rf_fsk_bpsk.py`). Resultado simulado, con una realización de ruido por punto. Los puntos sin errores se dibujan en el piso de resolución de la muestra (un error entre los bits evaluados), no en cero.*
+
 ### 4.3 Análisis
 
 *Cómo leer esta comparación.* El eje es la SNR **por muestra**; con 8 muestras por símbolo, Eb/N0 = SNR + 9,03 dB (segunda columna de la tabla). Cada punto es una única realización de ruido sobre 18 776 bits, así que «0 errores» solo acota la BER por debajo de ≈2·10⁻⁴ con un 95 % de confianza. Y la FSK de este modelo (tonos a ±2400 Hz, detector de energía) **no es la forma de onda de STRaND-1**: es un modelo de banda base de la misma familia. La comparación es entre dos modelos, no un veredicto sobre el enlace real.
@@ -569,7 +573,15 @@ Todas las configuraciones se comparan bajo las mismas reglas:
 | 12.0 | 2.97 | 9.01e-09 | 0 (< 3.4e-05) | 0 (< 3.4e-05) | 1.40e-03 | 0 (< 3.4e-05) |
 <!-- /TABLA:avanzado_principal -->
 
+![Figura 2](../resultados_simulacion/simulacion_avanzada_resultados.png)
+
+*Figura 2. Resultados del modelo avanzado (`simular_enlace_rf_bpsk_avanzado.py`). Arriba a la izquierda, validación en AWGN y coste de la sincronización (esta sección); arriba a la derecha, código convolucional a igual Eb/N0 por bit de información (secciones 5.3 y 5.4); abajo a la izquierda, Doppler residual (sección 5.5); abajo a la derecha, FER de tramas AX.25 (sección 5.6). Las bandas son el intervalo de confianza de Wilson al 95 %; el triángulo marca un punto sin errores, dibujado en su cota superior. Resultado simulado.*
+
 Con sincronización ideal el modelo reproduce la curva teórica $Q(\sqrt{2E_b/N_0})$ dentro del intervalo de confianza en todo el barrido: es la validación del canal y de la normalización de energía. Con los lazos reales, la BPSK con RRC sigue esa curva desde 3 dB y se aparta por debajo, donde los lazos pierden el enganche. El pulso rectangular sin filtro adaptado obliga a los lazos a trabajar sobre todo el ancho de banda de muestreo y no se sostiene hasta valores mucho más altos: la ventaja del RRC no es solo espectral (el ancho de banda ocupado al 99 % pasa de ~66 kHz a ~11 kHz) sino de sincronización. Con el código, el receptor trabaja con 3 dB menos de energía por símbolo de canal a igual $E_b/N_0$, y su umbral de sincronización sube en consecuencia.
+
+![Figura 3](../resultados_simulacion/espectro_rrc_comparacion.png)
+
+*Figura 3. Espectro de la BPSK con pulso rectangular (izquierda) y con conformado RRC, α = 0,35 (derecha), sobre la misma secuencia de bits (`simular_enlace_rf_bpsk_avanzado.py`). Resultado simulado.*
 
 ### 5.3 Ganancia de codificación
 
@@ -669,6 +681,10 @@ Fijar la SNR de una simulación no es estimarla. `estimar_snr_iq.py` estima $E_s
 | rice | gardner | 12 | 1024 | 64/64 | 7.82 | -4.18 | 0.76 |
 <!-- /TABLA:estimador_snr -->
 
+![Figura 4](../resultados_simulacion/estimacion_snr_iq.png)
+
+*Figura 4. Sesgo (izquierda) y desviación típica entre ventanas (derecha) del estimador M2M4 de Es/N0 sobre IQ sintético, para canal AWGN y Rice y ventanas de 64 y 1024 símbolos (`estimar_snr_iq.py`). Resultado simulado.*
+
 En AWGN el sesgo es de décimas de dB y la dispersión cae con el tamaño de la ventana; con 64 símbolos y baja SNR una parte de las ventanas no tiene solución real y se informa como no válida. Con desvanecimiento, la variación de amplitud dentro de la ventana se interpreta como ruido y el estimador **subestima** la SNR, tanto más cuanto mayor es esta. El resultado caracteriza al estimador sobre IQ **sintético**; no es una medida del canal real.
 
 ---
@@ -715,6 +731,10 @@ No lleva lazos de sincronización: la alineación es fija. La amplitud del ruido
 | 11 | 0 | 56328 | 0 (< 6.8e-05) | 2.61e-07 |
 | 12 | 0 | 56328 | 0 (< 6.8e-05) | 9.01e-09 |
 <!-- /TABLA:ber_cadena_gnuradio -->
+
+![Figura 5](../resultados_simulacion/ber_strand1_sweep.png)
+
+*Figura 5. BER de la cadena mínima en GNU Radio frente a la curva teórica de BPSK coherente (`barrido_ber_strand1.py`). Los puntos sin errores no aparecen: quedan fuera de una escala logarítmica. Resultado simulado.*
 
 La BER medida sigue la curva teórica de BPSK coherente, $Q(\sqrt{2E_b/N_0})$, dentro de lo que permite la muestra. Es la validación de la cadena y de su calibración de ruido; como en el resto del informe, un cero observado se escribe con la cota superior que la muestra permite afirmar.
 
@@ -801,6 +821,10 @@ donde $L$ es la pérdida del cable entre la antena y el LNA. Los cables no solo 
 | 90 | 775.0 | 143.05 | -103.05 | 69.85 | 30.02 | 14.67 | 18.43 |
 <!-- /TABLA:link_budget -->
 
+![Figura 6](../resultados_simulacion/link_budget_margen_enlace.png)
+
+*Figura 6. Presupuesto del enlace descendente frente a la elevación: pérdida total, potencia recibida, Eb/N0 con los dos umbrales teóricos y margen respecto a FSK no coherente (`calcular_link_budget.py`). Valor teórico calculado con una estación hipotética; la línea de «sensibilidad típica» es una referencia de diseño, no la de un receptor caracterizado.*
+
 Con el umbral teórico de FSK no coherente, el margen a 5° de elevación queda dentro del intervalo de 3-6 dB que la literatura recomienda como reserva (Larson & Wertz) y crece hacia el cenit; con el umbral de BPSK es unos 3,8 dB mayor, que es la diferencia entre las dos curvas a la BER objetivo. La versión anterior de este informe daba un único margen (7,1 dB a 5°) calculado con el umbral de BPSK y lo presentaba como el del satélite. **Un margen positivo en este cálculo no garantiza la recepción real:** la estación es hipotética, la mayoría de los parámetros son supuestos y el umbral de un receptor FSK real (discriminador de FM) no está documentado. La sección 7.3 cuantifica cuánto depende la conclusión de esos supuestos.
 
 ### 7.2 Enlace ascendente
@@ -824,6 +848,10 @@ Con el umbral teórico de FSK no coherente, el margen a 5° de elevación queda 
 | 90 | 775.0 | 143.00 | 76.97 | 46.18 | 34.18 | 3142 |
 <!-- /TABLA:uplink -->
 
+![Figura 7](../resultados_simulacion/enlace_ascendente_resultados.png)
+
+*Figura 7. Enlace ascendente hipotético frente a la elevación: potencia recibida a bordo, Eb/N0, margen y tasa máxima sostenible (`simular_enlace_ascendente.py`). Valor teórico calculado; no representa el enlace ascendente real de STRaND-1.*
+
 En este escenario el ascendente dispone de mucho más margen que el descendente por la combinación de mayor potencia transmitida (10 W frente a 1 W), antena directiva en el extremo transmisor y una tasa ocho veces menor. La columna de tasa máxima indica la velocidad que agotaría ese margen manteniendo la Eb/N0 requerida: entre 253 kbps y 3,1 Mbps. No es una capacidad de Shannon, sino la tasa límite del enlace con el esquema de modulación y el objetivo de BER fijados.
 
 ### 7.3 Margen y Doppler a lo largo de un paso SGP4
@@ -845,6 +873,10 @@ En este escenario el ascendente dispone de mucho más margen que el descendente 
 | Residual con error de tiempo de 2 s | max 194.2 Hz · rms 80.5 Hz |
 | Error de apuntamiento maximo del rotor | 0.20° (0.00 dB) |
 <!-- /TABLA:doppler_paso -->
+
+![Figura 8](../resultados_simulacion/margen_paso_sgp4.png)
+
+*Figura 8. Paso SGP4 analizado: elevación y distancia, Doppler y su derivada, Eb/N0 disponible frente a los umbrales, y margen de FSK no coherente frente a la elevación (`margen_paso_sgp4.py`). Resultado de modelo a partir de un TLE real; no es una medida del enlace.*
 
 Convención de signo: $f_D = -v_r f/c$, con $v_r < 0$ en acercamiento, de modo que el Doppler es positivo al inicio del paso y negativo al final. SGP4 entrega el estado en TEME y la rotación a terrestre se hace con GMST sobre el elipsoide WGS-84, sin movimiento polar ni refracción. El *residual* se calcula restando al Doppler del paso el que predice el mismo TLE desplazado en el tiempo: es un modelo del error a lo largo de la traza, y los desplazamientos evaluados son escenarios, no una medida del error real del TLE.
 
@@ -901,6 +933,10 @@ La potencia transmitida domina: si la telemetría se emite en el modo de 0,25 W 
 | Perdida por apuntamiento maxima | 0.01 dB |
 <!-- /TABLA:estacion_terrena -->
 
+![Figura 9](../resultados_simulacion/estacion_terrena_seguimiento.png)
+
+*Figura 9. Seguimiento de un paso casi cenital sobre órbita circular: elevación y azimut del satélite y de la antena, pérdida por apuntamiento y C/N0 (`modelo_estacion_terrena.py`). Resultado de modelo.*
+
 El hallazgo relevante es dinámico: cerca de la culminación de un paso casi cenital el azimut del satélite cambia más deprisa de lo que el rotor modelado (5 °/s) puede seguir. Con la antena preposicionada en el punto de adquisición, el error máximo fuera de boresight y la pérdida asociada son los de la tabla anterior, despreciables con un haz de 30°. La conclusión práctica es que la Yagi modelada tolera el límite de velocidad; una antena más directiva debe evaluarse de nuevo con el cálculo del error angular verdadero y no con una resta directa de azimutes.
 
 ### 8.1 Paso orbital con SGP4 y TLE real
@@ -955,6 +991,10 @@ Como no se dispone aún de una recepción física, se genera una **captura de re
 | Margen de enlace (link budget) | 3.7 dB a elev=5 deg<br>14.7 dB a elev=90 deg<br>(FSK no coherente, umbral teorico) | Sin dato publicado del margen de STRaND-1. | No comparable con una medida. El valor es una prediccion con estacion hipotetica y parametros supuestos (ver sensibilidad). |
 | Ancho de banda estimado | BPSK rectangular: ~27.0 kHz (-20 dB)<br>FSK: ~11.8 kHz (-20 dB)<br>BPSK + RRC (α=0.35): ~11.1 kHz (99 % ocupado) | Canalizacion UHF amateur: 25 kHz | El modelo con RRC cabe en el canal. El ancho de banda real de la emision de STRaND-1 no se ha medido en este trabajo. |
 <!-- /TABLA:concordancia -->
+
+![Figura 10](../resultados_simulacion/comparacion_ber_teorica_vs_simulada.png)
+
+*Figura 10. BER del modelo básico frente a las curvas teóricas (`comparar_con_cubesats_reales.py`). Los puntos rotulados «simulada (STRaND-1)» son salidas del modelo alimentado con bits de telemetría real, no medidas del enlace del satélite; los puntos sin errores se dibujan en el límite inferior del eje. La separación de la FSK simulada respecto a su curva teórica se explica en la sección 4.3.*
 
 La columna *Relación* describe qué puede afirmarse de cada parámetro. Frecuencia, tasa y potencia nominal coinciden **por construcción** —el modelo las toma de la documentación—; la modulación coincide solo en la familia FSK; el margen y la BER no son comparables con medidas porque no existen. De la tabla 9.1 solo la fila de STRaND-1 se ha contrastado con sus fuentes en esta revisión; las demás proceden de la recopilación inicial y quedan pendientes de verificar.
 
