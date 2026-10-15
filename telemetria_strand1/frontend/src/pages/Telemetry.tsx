@@ -119,8 +119,8 @@ export function FramesTable({
           <EmptyState titulo="Ningún frame coincide con el filtro" />
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[860px] border-collapse text-sm">
+        <div className="tabla-scroll">
+          <table className="tabla w-full min-w-[860px] border-collapse text-sm">
             <thead>
               <tr className="border-y border-line bg-blue-lighter">
                 {['Frame ID', 'Observation ID', 'Timestamp', 'Station', 'Raw HEX', 'Bytes', 'Frame Type', 'Status'].map(
@@ -244,8 +244,8 @@ function CamposDeLaBaliza() {
         como medida física: «Canal sin medida» son canales cuya cuenta de ADC es 0, que la recta de
         calibración convierte en su ordenada (9,75 V; 508–528 mA) sin que nada se esté midiendo.
       </p>
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[860px] text-sm">
+      <div className="tabla-scroll">
+        <table className="tabla w-full min-w-[860px] text-sm">
           <thead>
             <tr className="border-b border-line text-left label-caps">
               <th className="py-2 pr-3">Campo</th>

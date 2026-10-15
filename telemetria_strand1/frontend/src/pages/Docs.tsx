@@ -171,7 +171,7 @@ export function Docs() {
               description="El backend expone su documentación interactiva en /docs (OpenAPI)."
             />
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[520px] text-sm">
+              <table className="tabla w-full min-w-[520px] text-sm">
                 <thead>
                   <tr className="border-b border-line">
                     <th className="label-caps py-2 text-left">Endpoint</th>

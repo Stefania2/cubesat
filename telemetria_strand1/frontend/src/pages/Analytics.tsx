@@ -126,8 +126,8 @@ export function Analytics() {
                 <Skeleton className="h-[260px] w-full" />
               ) : (
                 <div className="max-h-[260px] overflow-y-auto">
-                  <table className="w-full text-sm">
-                    <thead className="sticky top-0 bg-panel">
+                  <table className="tabla w-full text-sm">
+                    <thead>
                       <tr className="border-b border-line">
                         <th className="label-caps py-2 text-left">Estación</th>
                         <th className="label-caps py-2 text-right">Frames</th>

@@ -185,7 +185,7 @@ export function Advanced() {
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
-                    <table className="w-full min-w-[640px] text-sm">
+                    <table className="tabla w-full min-w-[640px] text-sm">
                       <thead>
                         <tr className="border-y border-line bg-blue-lighter">
                           <th className="label-caps px-4 py-2.5 text-left">Severidad</th>

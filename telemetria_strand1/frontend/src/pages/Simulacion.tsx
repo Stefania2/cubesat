@@ -238,7 +238,7 @@ function TablaCurvas() {
   const rice = curva('ax25', 'rice')
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[820px] text-sm">
+      <table className="tabla w-full min-w-[820px] text-sm">
         <thead>
           <tr className="border-b border-line text-left label-caps">
             <th className="py-2 pr-3 text-right">Eb/N0</th>
@@ -297,8 +297,8 @@ const NOMBRES_PARAMETRO: Record<string, string> = {
 
 function TablaParametros() {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[720px] text-sm">
+    <div className="tabla-scroll">
+      <table className="tabla w-full min-w-[720px] text-sm">
         <thead>
           <tr className="border-b border-line text-left label-caps">
             <th className="py-2 pr-3">Parámetro</th>

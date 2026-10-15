@@ -89,6 +89,49 @@
     border-color: #2e4562;
   }
 
+  /* Tablas de datos. La cabecera queda fija dentro de su contenedor con
+     scroll (.tabla-scroll): un `sticky` no puede pegarse al scroll de la
+     página si un ancestro tiene overflow, así que las tablas largas se
+     desplazan dentro de su propia caja. La línea bajo la cabecera es una
+     sombra porque los bordes de un <tr> no acompañan al `sticky`. */
+  .tabla-scroll {
+    max-height: 70vh;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .tabla thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--color-blue-lighter);
+    box-shadow: inset 0 -1px 0 var(--color-line);
+  }
+
+  /* Margen lateral para que el sombreado de filas no pegue el texto al borde;
+     las tablas que ya fijan su padding con utilidades (px-4) lo conservan. */
+  .tabla th:first-child,
+  .tabla td:first-child {
+    padding-left: 0.75rem;
+  }
+
+  .tabla th:last-child,
+  .tabla td:last-child {
+    padding-right: 0.75rem;
+  }
+
+  .tabla tbody tr:nth-child(even) {
+    background: rgb(255 255 255 / 0.035);
+  }
+
+  .tabla tbody tr {
+    transition: background-color 120ms ease;
+  }
+
+  .tabla tbody tr:hover {
+    background: rgb(34 211 238 / 0.06);
+  }
+
   .label-caps {
     font-size: 0.6875rem;
     font-weight: 600;
