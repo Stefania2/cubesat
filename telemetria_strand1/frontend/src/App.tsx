@@ -1,7 +1,6 @@
-import { Suspense, lazy } from 'react'
 import { Component } from 'react'
 import type { ErrorInfo, ReactNode } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Header } from './components/Header'
 import { Dashboard } from './pages/Dashboard'
 import { Observations } from './pages/Observations'
@@ -11,23 +10,7 @@ import { Simulacion } from './pages/Simulacion'
 import { Analytics } from './pages/Analytics'
 import { Advanced } from './pages/Advanced'
 import { Docs } from './pages/Docs'
-import { Skeleton } from './components/ui'
 import { api, useApi } from './lib/api'
-
-/**
- * El gemelo digital se carga de forma diferida porque arrastra Three.js --- mas
- * de la mitad del peso de la aplicacion --- y solo hace falta en esa pagina.
- * Quien entre a consultar tramas o el link budget no descarga el motor 3D.
- *
- * `lazy` exige exportacion por defecto, y esta pagina exporta con nombre; de
- * ahi el remapeo en el `then`.
- */
-const GemeloDigital = lazy(() =>
-  import('./pages/GemeloDigital').then((m) => ({ default: m.GemeloDigital })),
-)
-
-/** El HMTA tambien se carga en diferido: es la pagina mas larga de la app. */
-const Salud = lazy(() => import('./pages/Salud').then((m) => ({ default: m.Salud })))
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -55,15 +38,21 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
   }
 }
 
+/** /salud?seccion=eps lleva al inicio conservando la sección elegida. */
+function RedirigirSalud() {
+  const { search } = useLocation()
+  return <Navigate to={{ pathname: '/', search, hash: '#salud' }} replace />
+}
+
 function Footer() {
   return (
     <footer className="mt-12 border-t border-line bg-panel">
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-5 text-xs text-ink-soft sm:px-6">
         <span>
-          STRAND-1 Telemetry · Datos de la red SatNOGS · NORAD 39090
+          STRaND-1 · Telemetría · Datos de la red SatNOGS · NORAD 39090
         </span>
         <span>
-          Los parámetros sin protocolo validado se muestran como «Not decoded», nunca estimados.
+          Cuando un dato no existe, la plataforma lo dice: nunca se inventa.
         </span>
       </div>
     </footer>
@@ -86,24 +75,9 @@ export default function App() {
             <Route path="/simulacion" element={<Simulacion />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/advanced" element={<Advanced />} />
-            <Route
-              path="/gemelo"
-              element={
-                <Suspense fallback={<Skeleton className="h-96" />}>
-                  <GemeloDigital />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/salud"
-              element={
-                <ErrorBoundary>
-                  <Suspense fallback={<Skeleton className="h-96" />}>
-                    <Salud />
-                  </Suspense>
-                </ErrorBoundary>
-              }
-            />
+            {/* El gemelo y la salud viven ahora en el inicio; los enlaces antiguos siguen valiendo. */}
+            <Route path="/gemelo" element={<Navigate to={{ pathname: '/', hash: '#gemelo' }} replace />} />
+            <Route path="/salud" element={<RedirigirSalud />} />
             <Route path="/docs" element={<Docs />} />
           </Routes>
         </main>

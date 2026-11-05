@@ -504,7 +504,7 @@ export function EnlaceRF() {
             <table className="enlace-tabla">
               <thead>
                 <tr>
-                  <th>Timestamp</th><th>Estación</th><th>Bytes</th><th>Payload</th><th>Dec.</th>
+                  <th>Fecha y hora</th><th>Estación</th><th>Bytes</th><th>Contenido</th><th>Desc.</th>
                 </tr>
               </thead>
               <tbody>

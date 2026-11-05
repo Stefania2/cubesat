@@ -96,7 +96,7 @@ export function Analytics() {
     <>
       <Section
         title="Análisis de Telemetría"
-        description="Series temporales y distribuciones sobre el conjunto de frames recibidos."
+        description="Series temporales y distribuciones sobre el conjunto de tramas recibidas."
         actions={
           <div className="flex flex-wrap gap-2">
             <select
@@ -121,19 +121,18 @@ export function Analytics() {
               <strong className="font-semibold">
                 Las gráficas de parámetros físicos están vacías a propósito.
               </strong>{' '}
-              Battery Voltage, Temperature, OBC Uptime y System Status requieren una definición de
-              protocolo validada para poder representarse frente al tiempo. Mientras no exista, esta
-              pantalla analiza lo que sí es verificable: volumen de frames, longitudes, entropía y
-              reparto por estación.
+              Aquí no se miden voltajes ni temperaturas (eso está en «Salud del satélite», en el
+              inicio): esta pantalla analiza los propios mensajes. Cuántas tramas llegaron, de qué
+              tamaño, cuánta variedad de datos traen (entropía) y qué estaciones las recibieron.
             </Nota>
           )}
 
           <Card>
             <CardHeader
-              title="Frames a lo largo del tiempo"
+              title="Tramas a lo largo del tiempo"
               description={
                 serie.data
-                  ? `${numero(serie.data.total_en_rango)} frames · agrupados por ${serie.data.granularidad}`
+                  ? `${numero(serie.data.total_en_rango)} tramas · agrupadas por ${serie.data.granularidad}`
                   : undefined
               }
             />
@@ -168,7 +167,7 @@ export function Analytics() {
             <Card>
               <CardHeader
                 title="Distribución de longitudes"
-                description="Tamaño de los frames recibidos, en bytes."
+                description="Tamaño de las tramas recibidas, en bytes."
                 actions={
                   <Conmutador
                     opciones={[
@@ -190,17 +189,17 @@ export function Analytics() {
                     datos={longitudes.eje}
                     claveX="bytes"
                     claveY="frames"
-                    etiquetaX="Bytes por frame"
-                    etiquetaY={escala === 'log' ? 'Frames (log)' : 'Frames'}
+                    etiquetaX="Bytes por trama"
+                    etiquetaY={escala === 'log' ? 'Tramas (escala log)' : 'Tramas'}
                     sufijoTooltip=" bytes"
                     escalaLog={escala === 'log'}
                   />
                   <p className="mt-3 text-xs leading-snug text-ink-soft">
                     El {longitudes.porcentajeDominantes.toLocaleString('es-ES', { maximumFractionDigits: 1 })} % de
-                    los frames mide {longitudes.dominantes.join(', ').replace(/, (\d+)$/, ' o $1')} bytes; la escala
+                    las tramas mide {longitudes.dominantes.join(', ').replace(/, (\d+)$/, ' o $1')} bytes; la escala
                     logarítmica deja ver el resto.
                     {longitudes.fuera > 0 &&
-                      ` ${numero(longitudes.fuera)} frames de más de ${MAX_BYTES_EJE} bytes (hasta ${longitudes.maximo}) quedan fuera del eje.`}
+                      ` ${numero(longitudes.fuera)} tramas de más de ${MAX_BYTES_EJE} bytes (hasta ${longitudes.maximo}) quedan fuera del eje.`}
                   </p>
                 </>
               )}
@@ -208,7 +207,7 @@ export function Analytics() {
 
             <Card>
               <CardHeader
-                title="Frames por estación terrena"
+                title="Tramas por estación terrena"
                 description="Estaciones de la red SatNOGS que aportaron datos."
                 actions={
                   <Conmutador
@@ -231,11 +230,11 @@ export function Analytics() {
                     datos={estaciones.data.slice(0, ESTACIONES_EN_GRAFICA)}
                     claveNombre="observer"
                     claveValor="frames"
-                    detalle={(e) => `Último frame: ${fechaHoraUTC(e.ultimo).slice(0, 10)}`}
+                    detalle={(e) => `Última trama: ${fechaHoraUTC(e.ultimo).slice(0, 10)}`}
                   />
                   {estaciones.data.length > ESTACIONES_EN_GRAFICA && (
                     <p className="mt-3 text-xs text-ink-soft">
-                      Las {ESTACIONES_EN_GRAFICA} estaciones con más frames de {estaciones.data.length}; la
+                      Las {ESTACIONES_EN_GRAFICA} estaciones con más tramas de {estaciones.data.length}; la
                       tabla las muestra todas.
                     </p>
                   )}
@@ -246,7 +245,7 @@ export function Analytics() {
                     <thead>
                       <tr className="border-b border-line">
                         <th className="label-caps py-2 text-left">Estación</th>
-                        <th className="label-caps py-2 text-right">Frames</th>
+                        <th className="label-caps py-2 text-right">Tramas</th>
                         <th className="label-caps py-2 text-right">Último</th>
                       </tr>
                     </thead>

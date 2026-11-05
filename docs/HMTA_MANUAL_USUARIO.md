@@ -1,7 +1,7 @@
 # Manual de usuario — Supervisión de salud de STRaND-1
 
-Este manual explica, sin dar nada por sabido, cómo usar la página **Salud** de la plataforma
-STRaND-1 Telemetry. Si buscas los detalles técnicos, están en
+Este manual explica, sin dar nada por sabido, cómo usar la sección **Salud y supervisión del
+satélite** de la plataforma STRaND-1 Telemetría. Si buscas los detalles técnicos, están en
 [`HMTA_MODULO_SALUD.md`](HMTA_MODULO_SALUD.md).
 
 ---
@@ -25,8 +25,13 @@ Dos cosas importantes desde el principio:
 
 ## 2. Cómo abrirla
 
-En la barra superior de la plataforma, pulsa **Salud**. Si la plataforma está en tu ordenador,
-la dirección es `http://localhost:5173/salud`.
+Está en la página de **Inicio**, debajo del satélite en 3D (el gemelo digital). Puedes bajar
+hasta ella o pulsar el botón «Salud del satélite» al principio de la página. Si la plataforma
+está en tu ordenador, la dirección es `http://localhost:5173/#salud`; la antigua
+`/salud` te lleva al mismo sitio.
+
+En la pestaña **Observaciones** de la barra superior puedes ver, en un globo terrestre en 3D,
+cómo pasaba STRaND-1 sobre las antenas de SatNOGS que lo escucharon.
 
 La primera vez puede tardar unos minutos: tiene que descargar todo el archivo. Después va
 rápido.

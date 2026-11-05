@@ -120,21 +120,21 @@ export function Advanced() {
     <>
       <Section
         title="Detección de anomalías"
-        description="Sobre hechos verificables de los frames: duplicados, corrupción, longitud, entropía y huecos temporales."
+        description="Sobre hechos verificables de las tramas: duplicados, corrupción, longitud, entropía y huecos temporales."
       >
         <div className="space-y-5">
           <Nota>
             <strong className="font-semibold">Sin límites físicos arbitrarios.</strong> Las reglas
             de esta página no evalúan magnitudes como voltaje o temperatura: operan sobre
             propiedades de los bytes y de las marcas de tiempo, que son ciertas para cualquier
-            frame.{' '}
+            trama.{' '}
             {telemetria.error
               ? 'No se pudo consultar el recuento de balizas decodificadas.'
               : !telemetria.data
                 ? 'Consultando el recuento de balizas…'
                 : telemetria.data.balizas > 0
                   ? `${numero(telemetria.data.balizas)} de los ${numero(estado.data?.frames)} frames son balizas de STRaND-1 decodificadas; sus magnitudes se analizan en Telemetry y en el Gemelo digital, no aquí, porque el proyecto no dispone de rangos de operación documentados contra los que marcar una alarma.`
-                  : 'Ningún frame almacenado es una baliza decodificada, así que no hay magnitudes que evaluar.'}{' '}
+                  : 'Ninguna trama almacenada es una baliza descifrada, así que no hay magnitudes que evaluar.'}{' '}
             Todos los umbrales son editables aquí abajo.
           </Nota>
 
@@ -163,10 +163,10 @@ export function Advanced() {
                     </div>
                     <div className="mt-1 text-xs text-ink-soft">
                       {k === 'unknown'
-                        ? 'frames sin clasificar'
+                        ? 'tramas sin clasificar'
                         : k === 'normal'
-                          ? 'frames sin ningún hallazgo'
-                          : 'hallazgos (cada uno puede abarcar varios frames)'}
+                          ? 'tramas sin ningún hallazgo'
+                          : 'hallazgos (cada uno puede abarcar varias tramas)'}
                     </div>
                   </Card>
                 ))}
@@ -191,7 +191,7 @@ export function Advanced() {
                           <th className="label-caps px-4 py-2.5 text-left">Severidad</th>
                           <th className="label-caps px-4 py-2.5 text-left">Regla</th>
                           <th className="label-caps px-4 py-2.5 text-left">Detalle</th>
-                          <th className="label-caps px-4 py-2.5 text-right">Frames</th>
+                          <th className="label-caps px-4 py-2.5 text-right">Tramas</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -243,12 +243,12 @@ export function Advanced() {
               set: 'observations',
             },
             {
-              titulo: 'Frames RAW',
+              titulo: 'Tramas en bruto (tal como llegaron)',
               desc: 'Hexadecimal tal como lo entregó SatNOGS, sin métricas derivadas.',
               set: 'frames-raw',
             },
             {
-              titulo: 'Frames procesados',
+              titulo: 'Tramas procesadas',
               desc: 'Longitud, entropía, bytes distintos y clasificación.',
               set: 'frames-processed',
             },
@@ -280,7 +280,7 @@ export function Advanced() {
 
       <Section
         title="Ingesta de datos"
-        description="Estado del sistema y descarga de frames nuevos desde SatNOGS DB."
+        description="Estado del sistema y descarga de tramas nuevas desde SatNOGS DB."
       >
         <div className="grid gap-5 lg:grid-cols-2">
           <Card>
@@ -307,10 +307,10 @@ export function Advanced() {
           <Card>
             <CardHeader
               title="Descargar de SatNOGS"
-              description="Añade frames nuevos sin duplicar los ya almacenados."
+              description="Añade tramas nuevas sin duplicar las ya guardadas."
             />
             <Button onClick={ingerir} disabled={ingiriendo}>
-              {ingiriendo ? 'Descargando…' : 'Descargar frames nuevos'}
+              {ingiriendo ? 'Descargando…' : 'Descargar tramas nuevas'}
             </Button>
             {aviso && (
               <div className="mt-4">
@@ -319,7 +319,7 @@ export function Advanced() {
             )}
             <p className="mt-4 text-xs text-ink-soft">
               La ingesta es idempotente: la clave (hex, timestamp, observador) evita insertar dos
-              veces el mismo frame, de modo que se puede repetir sin ensuciar el conjunto.
+              veces la misma trama, de modo que se puede repetir sin ensuciar el conjunto.
             </p>
           </Card>
         </div>

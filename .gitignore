@@ -34,3 +34,6 @@ dashboard/node_modules
 
 # Registro de eventos del HMTA (SQLite local, regenerable)
 health_monitor/_datos/
+
+# Avance de la descarga de geometría de SatNOGS (se retoma desde aquí)
+telemetria_strand1/backend/app/data/.geometria_avance.json

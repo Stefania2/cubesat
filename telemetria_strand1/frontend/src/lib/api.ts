@@ -539,6 +539,56 @@ export interface EventosSalud {
   eventos: AlertaSalud[]
 }
 
+/* ── Pases de las observaciones (3D) ───────────────────────────────────────── */
+
+export interface PaseResumen {
+  observation_id: number
+  station_name: string | null
+  status: string | null
+  start: string
+  end: string
+  max_elevation_deg: number | null
+  frame_count: number
+}
+
+export interface ListaPases {
+  total: number
+  con_tramas: number
+  estaciones: number
+  items: PaseResumen[]
+  /** false mientras la descarga de SatNOGS Network no haya recorrido todo el archivo. */
+  completo: boolean
+  fuente: string | null
+}
+
+export interface PasoObservacion {
+  observation_id: number
+  estado_satnogs: string | null
+  inicio: string
+  fin: string
+  elevacion_max_satnogs: number | null
+  elevacion_max_calculada: number
+  estacion: { id: number; nombre: string; lat: number; lng: number; alt_m: number }
+  tle: { linea1: string; linea2: string; epoca: string; antiguedad_dias: number }
+  azimut_salida: number | null
+  azimut_puesta: number | null
+  paso_s: number
+  puntos: {
+    t: string
+    lat: number
+    lon: number
+    alt_km: number
+    az: number
+    el: number
+    dist_km: number
+    doppler_hz: number
+    en_ventana: boolean
+  }[]
+  orbita: { lat: number; lon: number; alt_km: number }[]
+  tramas: { t: string; estado: string }[]
+  procedencia: Record<string, string>
+}
+
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -636,6 +686,8 @@ export const api = {
   saludPid: (ts: number) => request<InformePid>(`/api/salud/pid?ts=${ts}`),
   saludHistorial: () => request<{ fuente: string; meses: MesHistorial[] }>('/api/salud/historial'),
   saludEventos: () => request<EventosSalud>('/api/salud/eventos?limite=200'),
+  pases: () => request<ListaPases>('/api/observations/pasos?limit=3000'),
+  paso: (id: number) => request<PasoObservacion>(`/api/observations/${id}/paso`),
 }
 
 /** Hook de carga con estados de carga y error explícitos. */

@@ -43,7 +43,7 @@ const HUECO_DIAS = 7
 type Pestana = 'monitor' | 'subsistemas' | 'estructura' | 'procedencia'
 
 const PESTANAS: { id: Pestana; texto: string }[] = [
-  { id: 'monitor', texto: 'Monitor' },
+  { id: 'monitor', texto: 'Reproducción' },
   { id: 'subsistemas', texto: 'Subsistemas' },
   { id: 'estructura', texto: 'Estructura' },
   { id: 'procedencia', texto: 'Procedencia y discrepancias' },
@@ -263,7 +263,7 @@ export function GemeloDigital() {
               {ultimaRespuesta && ` · último dato válido hace ${edadLegible(Math.max(0, ahora - ultimaRespuesta) / 1000)}`}
             </span>
           ) : (
-            <span className="gd-chip gd-t-cian"><span className="gd-punto" /> API de datos: responde</span>
+            <span className="gd-chip gd-t-cian"><span className="gd-punto" /> Datos: conectados</span>
           )}
         </div>
       </header>

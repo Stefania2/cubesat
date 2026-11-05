@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Hero } from '../components/Hero'
 import { GraficaFrames, Leyenda, SERIES, type PuntoSerie } from '../components/charts'
 import {
@@ -24,7 +26,7 @@ const RANGOS: { valor: Rango; etiqueta: string }[] = [
   { valor: '24h', etiqueta: '24 horas' },
   { valor: '7d', etiqueta: '7 días' },
   { valor: '30d', etiqueta: '30 días' },
-  { valor: 'all', etiqueta: 'Histórico' },
+  { valor: 'all', etiqueta: 'Todo' },
 ]
 
 /* ── Tarjeta KPI ──────────────────────────────────────────────────────────── */
@@ -45,6 +47,8 @@ function KpiCard({
   return <MetricCard etiqueta={etiqueta} valor={valor} detalle={detalle} cargando={cargando} tono={tono} />
 }
 
+const SEVERIDAD = { critical: 'Crítico', warning: 'Aviso', normal: 'Normal', unknown: 'Sin evaluar' } as const
+
 /* ── Pestaña de análisis ──────────────────────────────────────────────────── */
 
 function ResumenAnalisis() {
@@ -60,8 +64,8 @@ function ResumenAnalisis() {
     <div className="grid gap-5 lg:grid-cols-2">
       <Card>
         <CardHeader
-          title="Clasificación de frames"
-          description="Estado de decodificación del conjunto completo."
+          title="¿Cuántos mensajes se pudieron leer?"
+          description="Cada mensaje (trama) recibido se intenta descifrar con el formato publicado por AMSAT-UK."
         />
         <div className="space-y-3">
           {data.estados.map((e) => (
@@ -97,8 +101,8 @@ function ResumenAnalisis() {
 
       <Card>
         <CardHeader
-          title="Detección de anomalías"
-          description="Sobre metadatos verificables: duplicados, longitud, entropía y huecos."
+          title="Revisión automática de los mensajes"
+          description="Busca mensajes repetidos, demasiado cortos, sin variedad de datos o huecos largos sin recibir nada."
         />
         {anomalias.loading || !anomalias.data ? (
           <Skeleton className="h-40 w-full" />
@@ -107,7 +111,7 @@ function ResumenAnalisis() {
             <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {(['critical', 'warning', 'normal', 'unknown'] as const).map((k) => (
                 <div key={k} className="rounded-lg border border-line px-3 py-2.5">
-                  <div className="label-caps">{k}</div>
+                  <div className="label-caps">{SEVERIDAD[k]}</div>
                   <div className="mt-1 text-xl font-bold tnum text-navy-dark">
                     {numero(anomalias.data!.resumen[k] ?? 0)}
                   </div>
@@ -156,7 +160,7 @@ function ResumenTelemetria() {
               ? 'Protocolo validado, pero ninguna baliza recibida.'
               : `${numero(data.balizas)} balizas decodificadas según AMSAT-UK.`}
         </strong>{' '}
-        {data.nota} Los frames se conservan en crudo y sus métricas de byte son reales; ningún valor
+        {data.nota} Los mensajes se conservan tal como llegaron y sus métricas de byte son reales; ningún valor
         se rellena por estimación, y los que se muestran llevan la ecuación de calibración publicada.
       </Nota>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -164,7 +168,7 @@ function ResumenTelemetria() {
           <Card key={p.key} className="min-w-0">
             <div className="label-caps">{p.label}</div>
             <div className="mt-1.5 text-xl font-semibold text-ink-mute">
-              {p.value ?? 'Not decoded'}
+              {p.value ?? 'Sin dato'}
             </div>
             <div className="mt-2">
               <Badge tono={p.status} />
@@ -178,9 +182,34 @@ function ResumenTelemetria() {
 
 /* ── Página ───────────────────────────────────────────────────────────────── */
 
+// El gemelo y la salud arrastran three.js y bastante código: se cargan en
+// diferido para que la cabecera del inicio aparezca enseguida.
+const GemeloDigital = lazy(() =>
+  import('./GemeloDigital').then((m) => ({ default: m.GemeloDigital })),
+)
+const Salud = lazy(() => import('./Salud').then((m) => ({ default: m.Salud })))
+
+function Bloque({ id, titulo, children, intro }: { id: string; titulo: string; intro: string; children: ReactNode }) {
+  return (
+    <section id={id} className="mb-12 scroll-mt-20">
+      <h2 className="text-xl font-semibold tracking-tight text-navy-dark sm:text-2xl">{titulo}</h2>
+      <p className="mb-5 mt-1.5 max-w-3xl text-sm text-ink-soft">{intro}</p>
+      <Suspense fallback={<Skeleton className="h-96" />}>{children}</Suspense>
+    </section>
+  )
+}
+
 export function Dashboard({ status }: { status: Status | null }) {
   const [rango, setRango] = useState<Rango>('all')
   const [pestana, setPestana] = useState<Pestana>('frames')
+  const { hash } = useLocation()
+
+  // /gemelo y /salud redirigen aquí con #gemelo o #salud.
+  useEffect(() => {
+    if (!hash) return
+    const t = window.setTimeout(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' }), 400)
+    return () => window.clearTimeout(t)
+  }, [hash])
 
   const kpis = useApi(() => api.kpis(), [])
   const serie = useApi(() => api.series(rango), [rango])
@@ -197,29 +226,54 @@ export function Dashboard({ status }: { status: Status | null }) {
     <>
       <Hero status={status} />
 
+      <nav className="mb-10 flex flex-wrap gap-2 text-sm" aria-label="Secciones del inicio">
+        {[['#gemelo', 'El satélite en 3D'], ['#salud', 'Salud del satélite'], ['#mensajes', 'Mensajes recibidos']].map(([h, t]) => (
+          <a key={h} href={h} className="rounded-lg border border-line bg-panel px-3 py-1.5 font-medium text-navy hover:border-navy">
+            {t}
+          </a>
+        ))}
+      </nav>
+
+      <Bloque
+        id="gemelo"
+        titulo="El satélite en 3D: gemelo digital"
+        intro="Un «gemelo digital» es una copia del satélite en el ordenador que se mueve y cambia con sus datos reales. Pulsa reproducir para recorrer los años de mensajes recibidos y ver cómo cambiaban sus mediciones. Las piezas se colorean según su estado."
+      >
+        <GemeloDigital />
+      </Bloque>
+
+      <Bloque
+        id="salud"
+        titulo="Salud y supervisión del satélite"
+        intro="Aquí se revisa, parte por parte, si el satélite funcionaba bien: su energía, su temperatura, sus comunicaciones, su computador y su orientación. Cada dato dice de dónde sale y qué significa."
+      >
+        <Salud embebido />
+      </Bloque>
+
       <Section
-        title="Resultados de telemetría"
-        description="Resumen de los frames recibidos, procesados y decodificados a partir de observaciones de STRAND-1."
+        title="Mensajes recibidos"
+        description="Cada vez que una estación de SatNOGS oía a STRaND-1 guardaba sus mensajes, llamados «tramas». Aquí se cuentan los que llegaron y los que se pudieron descifrar."
         actions={
           <Tabs
             valor={pestana}
             onChange={setPestana}
             opciones={[
-              { valor: 'frames', etiqueta: 'Frames' },
+              { valor: 'frames', etiqueta: 'Tramas' },
               { valor: 'telemetria', etiqueta: 'Telemetría' },
               { valor: 'analisis', etiqueta: 'Análisis' },
             ]}
           />
         }
       >
+        <div id="mensajes" className="scroll-mt-20" />
         {pestana === 'frames' && (
           <div className="space-y-5">
             <Card>
               <CardHeader
-                title="Frames de telemetría procesados"
+                title="Tramas recibidas a lo largo del tiempo"
                 description={
                   serie.data
-                    ? `${numero(serie.data.total_en_rango)} frames · agrupados por ${serie.data.granularidad}`
+                    ? `${numero(serie.data.total_en_rango)} tramas · agrupadas por ${serie.data.granularidad}`
                     : undefined
                 }
                 actions={
@@ -246,8 +300,8 @@ export function Dashboard({ status }: { status: Status | null }) {
                 <Skeleton className="h-[300px] w-full" />
               ) : puntos.length === 0 ? (
                 <EmptyState
-                  titulo="Sin frames en este rango"
-                  descripcion="El conjunto es histórico; prueba con «Histórico» para ver la serie completa."
+                  titulo="No hay tramas en este periodo"
+                  descripcion="Los datos son antiguos: prueba con «Todo» para ver la serie completa."
                 />
               ) : (
                 <>
@@ -255,17 +309,15 @@ export function Dashboard({ status }: { status: Status | null }) {
                   <div className="mt-4 border-t border-line pt-4">
                     <Leyenda
                       items={[
-                        { color: SERIES.recibidos, label: 'Recibidos' },
-                        { color: SERIES.procesados, label: 'Procesados', discontinua: true },
-                        { color: SERIES.decodificados, label: 'Decodificados' },
+                        { color: SERIES.recibidos, label: 'Recibidas' },
+                        { color: SERIES.procesados, label: 'Procesadas', discontinua: true },
+                        { color: SERIES.decodificados, label: 'Descifradas' },
                       ]}
                     />
                     <p className="mt-3 text-xs text-ink-soft">
-                      «Procesados» son frames con bytes analizables y métricas calculadas; cuando
-                      todos los recibidos traen bytes, su línea queda superpuesta a la de
-                      «Recibidos». «Decodificados» son los que la definición de protocolo validada
-                      logró interpretar, entera o parcialmente; el resto quedó sin clasificar o dio
-                      error de decodificación.
+                      «Procesadas» son las tramas cuyos bytes se pudieron analizar; si coinciden con
+                      las recibidas, las dos líneas se superponen. «Descifradas» son las que se
+                      pudieron leer, entera o parcialmente, con el formato publicado del satélite.
                     </p>
                   </div>
                 </>
@@ -274,32 +326,32 @@ export function Dashboard({ status }: { status: Status | null }) {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <KpiCard
-                etiqueta="Frames procesados"
+                etiqueta="Tramas procesadas"
                 valor={numero(kpis.data?.frames_procesados)}
-                detalle="Telemetría recibida"
+                detalle="Mensajes recibidos"
                 cargando={kpis.loading}
               />
               <KpiCard
-                etiqueta="Frames decodificados"
+                etiqueta="Tramas descifradas"
                 valor={numero(kpis.data?.frames_decodificados)}
-                detalle={`${kpis.data?.porcentaje_decodificado ?? 0}% del total`}
+                detalle={`${kpis.data?.porcentaje_decodificado ?? 0} % del total`}
                 cargando={kpis.loading}
                 tono="ok"
               />
               <KpiCard
                 etiqueta="Observaciones"
                 valor={numero(kpis.data?.observaciones)}
-                detalle="Datos disponibles"
+                detalle="Pases escuchados"
                 cargando={kpis.loading}
               />
               <KpiCard
                 etiqueta="Estaciones"
                 valor={numero(kpis.data?.estaciones)}
-                detalle="Ground stations"
+                detalle="Antenas en tierra"
                 cargando={kpis.loading}
               />
               <KpiCard
-                etiqueta="Último frame"
+                etiqueta="Última trama"
                 valor={fechaUTC(kpis.data?.ultimo_frame)}
                 detalle={horaUTC(kpis.data?.ultimo_frame)}
                 cargando={kpis.loading}
@@ -309,7 +361,7 @@ export function Dashboard({ status }: { status: Status | null }) {
 
             {kpis.data && (
               <p className="text-xs text-ink-soft">
-                Fuente: {kpis.data.fuente}. Rango temporal {fechaUTC(kpis.data.primer_frame)} –{' '}
+                Fuente: {kpis.data.fuente}. Desde {fechaUTC(kpis.data.primer_frame)} hasta{' '}
                 {fechaUTC(kpis.data.ultimo_frame)}.
               </p>
             )}

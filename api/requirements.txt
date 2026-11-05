@@ -16,5 +16,7 @@ pydantic==2.12.4
 pydantic-settings==2.13.0
 httpx==0.28.1
 pandas==3.0.3
+# Propagacion de los pases de las observaciones (orbita_sgp4.py, /api/observations/{id}/paso)
+sgp4==2.27
 python-multipart==0.0.20
 redis==6.4.0

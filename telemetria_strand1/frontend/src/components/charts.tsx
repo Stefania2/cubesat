@@ -122,7 +122,7 @@ export function GraficaFrames({
           allowDecimals={false}
           width={60}
           label={{
-            value: 'Frames',
+            value: 'Tramas',
             angle: -90,
             position: 'insideLeft',
             offset: 14,
@@ -282,7 +282,7 @@ export function GraficaBarras({
         {/* Radio 4px en el extremo de dato, anclado a la línea base. */}
         <Bar
           dataKey={claveY}
-          name="Frames"
+          name="Tramas"
           fill={color}
           radius={[4, 4, 0, 0]}
           maxBarSize={38}
@@ -334,7 +334,7 @@ export function GraficaRanking({
                 titulo={String(fila[claveNombre])}
                 filas={
                   <>
-                    <FilaTooltip color={SERIES.recibidos} nombre="Frames" valor={fila[claveValor]} />
+                    <FilaTooltip color={SERIES.recibidos} nombre="Tramas" valor={fila[claveValor]} />
                     {detalle && <div className="text-xs text-ink-soft">{detalle(fila)}</div>}
                   </>
                 }

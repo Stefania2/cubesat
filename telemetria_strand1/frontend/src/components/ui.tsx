@@ -156,15 +156,15 @@ const PUNTO_BADGE: Record<string, string> = {
 }
 
 const ETIQUETAS: Record<string, string> = {
-  decoded: 'Decoded',
+  decoded: 'Descifrada',
   measured: 'Medido',
-  partially_decoded: 'Partially Decoded',
-  unclassified: 'Unclassified',
-  not_decoded: 'Not decoded',
-  not_available: 'Not available',
+  partially_decoded: 'Descifrada en parte',
+  unclassified: 'Sin clasificar',
+  not_decoded: 'Sin descifrar',
+  not_available: 'No disponible',
   error: 'Error',
-  critical: 'Critical',
-  warning: 'Warning',
+  critical: 'Crítico',
+  warning: 'Aviso',
   normal: 'Normal',
 }
 

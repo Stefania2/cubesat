@@ -4,16 +4,14 @@ import { StatusDot } from './ui'
 import type { Status } from '../lib/api'
 
 const NAV = [
-  { to: '/', label: 'Dashboard', end: true },
-  { to: '/observations', label: 'Observations' },
-  { to: '/telemetry', label: 'Telemetry' },
+  { to: '/', label: 'Inicio', end: true },
+  { to: '/observations', label: 'Observaciones' },
+  { to: '/telemetry', label: 'Telemetría' },
   { to: '/enlace', label: 'Enlace RF' },
-  { to: '/simulacion', label: 'Simulación RF' },
-  { to: '/analytics', label: 'Analytics' },
-  { to: '/advanced', label: 'Advanced' },
-  { to: '/gemelo', label: 'Gemelo digital' },
-  { to: '/salud', label: 'Salud' },
-  { to: '/docs', label: 'Docs' },
+  { to: '/simulacion', label: 'Simulación' },
+  { to: '/analytics', label: 'Análisis' },
+  { to: '/advanced', label: 'Avanzado' },
+  { to: '/docs', label: 'Documentación' },
 ]
 
 function Logo() {
@@ -35,10 +33,10 @@ export function Header({ status }: { status: Status | null }) {
           <Logo />
           <div className="leading-tight">
             <div className="whitespace-nowrap text-[15px] font-bold tracking-tight text-navy-dark">
-              STRAND-1 TELEMETRY
+              STRaND-1 TELEMETRÍA
             </div>
             <div className="hidden text-[11px] text-ink-soft sm:block lg:hidden 2xl:block">
-              Satellite Telemetry Analysis &amp; Monitoring
+              Análisis y supervisión de un satélite
             </div>
           </div>
         </NavLink>
@@ -70,7 +68,7 @@ export function Header({ status }: { status: Status | null }) {
                 activo ? 'text-ok' : 'text-danger'
               }`}
             >
-              {activo ? 'API ONLINE' : 'API OFFLINE'}
+              {activo ? 'SERVIDOR EN LÍNEA' : 'SIN CONEXIÓN'}
             </span>
           </div>
           <div

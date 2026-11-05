@@ -51,9 +51,9 @@ export function FramesTable({
     <Card padding={false}>
       <div className="p-5 sm:p-6">
         <CardHeader
-          title="Explorador de Frames"
+          title="Explorador de tramas"
           description={
-            data ? `${numero(data.total)} frames en la base de datos` : 'Cargando frames…'
+            data ? `${numero(data.total)} tramas guardadas` : 'Cargando tramas…'
           }
           actions={
             !compacto ? (
@@ -79,9 +79,9 @@ export function FramesTable({
                   className="rounded-lg border border-line bg-panel px-3 py-2 text-sm text-ink focus:border-blue focus:outline-none"
                 >
                   <option value="">Todos los estados</option>
-                  <option value="unclassified">Unclassified</option>
-                  <option value="partially_decoded">Partially Decoded</option>
-                  <option value="decoded">Decoded</option>
+                  <option value="unclassified">Sin clasificar</option>
+                  <option value="partially_decoded">Descifrada en parte</option>
+                  <option value="decoded">Descifrada</option>
                   <option value="error">Error</option>
                 </select>
                 <Button
@@ -116,14 +116,14 @@ export function FramesTable({
         </div>
       ) : !data || data.items.length === 0 ? (
         <div className="px-5 pb-5 sm:px-6">
-          <EmptyState titulo="Ningún frame coincide con el filtro" />
+          <EmptyState titulo="Ninguna trama coincide con el filtro" />
         </div>
       ) : (
         <div className="tabla-scroll">
           <table className="tabla w-full min-w-[860px] border-collapse text-sm">
             <thead>
               <tr className="border-y border-line bg-blue-lighter">
-                {['Frame ID', 'Observation ID', 'Timestamp', 'Station', 'Raw HEX', 'Bytes', 'Frame Type', 'Status'].map(
+                {['Trama nº', 'Observación nº', 'Fecha y hora', 'Estación', 'Bytes en hexadecimal', 'Bytes', 'Tipo', 'Estado'].map(
                   (h) => (
                     <th
                       key={h}
@@ -330,10 +330,10 @@ export function Telemetry() {
         actions={
           <div className="flex gap-2">
             <LinkButton href={api.exportUrl('telemetry-decoded', 'csv')} download>
-              Export CSV
+              Descargar CSV
             </LinkButton>
             <LinkButton href={api.exportUrl('telemetry-decoded', 'json')} download>
-              Export JSON
+              Descargar JSON
             </LinkButton>
           </div>
         }
@@ -349,7 +349,7 @@ export function Telemetry() {
                 <strong className="font-semibold">
                   El formato de telemetría de STRAND-1 no está identificado.
                 </strong>{' '}
-                {data.nota} Los frames se muestran en crudo y todas sus métricas de byte son reales,
+                {data.nota} Las tramas se muestran tal como llegaron y todas sus métricas de byte son reales,
                 pero ningún parámetro físico se estima: mostrarlos supondría inventar el significado
                 de los bytes. Registra una definición de protocolo validada para que esta sección se
                 rellene.
@@ -357,7 +357,7 @@ export function Telemetry() {
             ) : data.balizas === 0 ? (
               <Nota tono="warning">
                 <strong className="font-semibold">
-                  Hay decodificador oficial, pero ningún frame recibido es una baliza.
+                  Hay decodificador oficial, pero ninguna trama recibida es una baliza.
                 </strong>{' '}
                 {data.nota} Las celdas se quedan vacías por eso, no por falta de protocolo: el
                 decodificador está cargado y listo, y en cuanto entre una baliza válida estos
@@ -373,7 +373,7 @@ export function Telemetry() {
                 ninguna: esos se muestran como cuenta cruda, no en µT. Un parámetro sin valor
                 significa que su canal no aparece en las balizas recibidas. La entropía va aparte,
                 marcada como <strong className="font-semibold">Medido</strong>: se calcula sobre los
-                bytes de cada frame sin suponer ningún formato, de modo que tiene valor incluso
+                bytes de cada trama sin suponer ningún formato, de modo que tiene valor incluso
                 cuando no hay protocolo con el que decodificar nada.
               </Nota>
             )}
@@ -386,10 +386,10 @@ export function Telemetry() {
                   tono={TONO_PARAMETRO[p.status] ?? 'muted'}
                   valor={
                     p.status === 'decoded' || p.status === 'measured' ? (
-                      typeof p.value === 'number' ? magnitud(p.value) : (p.value ?? 'Not decoded')
+                      typeof p.value === 'number' ? magnitud(p.value) : (p.value ?? 'Sin dato')
                     ) : (
                       <span className="text-ink-mute">
-                        {typeof p.value === 'number' ? magnitud(p.value) : (p.value ?? 'Not decoded')}
+                        {typeof p.value === 'number' ? magnitud(p.value) : (p.value ?? 'Sin dato')}
                       </span>
                     )
                   }
@@ -425,15 +425,15 @@ export function Telemetry() {
       </Section>
 
       <Section
-        title="Explorador de Frames"
+        title="Explorador de tramas"
         description="Los datos crudos tal como los entrega SatNOGS, con las métricas calculadas sobre sus bytes."
         actions={
           <div className="flex gap-2">
             <LinkButton href={api.exportUrl('frames-raw', 'csv')} download>
-              Download Frames
+              Descargar tramas en bruto
             </LinkButton>
             <LinkButton href={api.exportUrl('frames-processed', 'csv')} download>
-              Export procesados
+              Descargar tramas procesadas
             </LinkButton>
           </div>
         }

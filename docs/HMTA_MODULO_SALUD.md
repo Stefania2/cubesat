@@ -56,7 +56,7 @@ una línea de import y otra de `include_router` en `backend/app/main.py`, la rut
         └── pid_reference  G1/G2 · P/PI/PID Ziegler–Nichols · ZOH + Tustin
                                 │
 telemetria_strand1/backend/app/routers/salud.py   →  /api/salud/*
-telemetria_strand1/frontend/src/pages/Salud.tsx   →  /salud
+telemetria_strand1/frontend/src/pages/Salud.tsx   →  sección #salud del Inicio (/salud redirige)
 ```
 
 El paquete vive en la raíz del repositorio, junto a `gemelo_digital/`, y el router lo alcanza

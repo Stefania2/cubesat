@@ -71,7 +71,7 @@ export function Docs() {
               <Capa
                 nombre="UNKNOWN DATA"
                 color="#6B7D92"
-                descripcion="El estado por defecto. Un frame sin estructura reconocida se queda aquí."
+                descripcion="El estado por defecto. Una trama sin estructura reconocida se queda aquí."
                 ejemplo="status: unclassified · protocol: null"
               />
             </div>
@@ -93,7 +93,7 @@ export function Docs() {
               <li className="flex gap-2.5">
                 <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-navy" />
                 <span>
-                  El propio SatNOGS DB entrega estos frames con el campo{' '}
+                  El propio SatNOGS DB entrega estas tramas con el campo{' '}
                   <code className="font-mono text-xs">decoded</code> vacío, lo que es consistente con
                   la ausencia de un decodificador validado en la red.
                 </span>
@@ -101,7 +101,7 @@ export function Docs() {
               <li className="flex gap-2.5">
                 <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-navy" />
                 <span>
-                  Los frames del conjunto van de 1 a 64 bytes, con longitudes muy dispares. Sin
+                  Las tramas del conjunto van de 1 a 64 bytes, con longitudes muy dispares. Sin
                   cabecera identificada no hay forma fiable de alinear campos.
                 </span>
               </li>
@@ -181,7 +181,7 @@ export function Docs() {
                 <tbody className="font-mono text-xs">
                   {[
                     ['GET /api/frames', 'Listado paginado con filtros'],
-                    ['GET /api/frames/kpis', 'Métricas del dashboard'],
+                    ['GET /api/frames/kpis', 'Métricas del inicio'],
                     ['GET /api/frames/series', 'Serie temporal por rango'],
                     ['GET /api/observations', 'Observaciones y sus metadatos'],
                     ['POST /api/observations/sync', 'Completa metadatos desde SatNOGS Network'],

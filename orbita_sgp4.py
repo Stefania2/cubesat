@@ -168,6 +168,37 @@ def propagate_point(
     )
 
 
+def subsatellite_point(tle: Tle, timestamp: datetime) -> dict:
+    """Posicion terrestre del satelite: ECEF (km) y latitud, longitud y altura WGS-84.
+
+    Misma cadena que `propagate_point` (SGP4 en TEME, rotacion por GMST), sin
+    estacion: es lo que hace falta para dibujar el satelite sobre el globo.
+    """
+    utc = timestamp.astimezone(timezone.utc)
+    sat = Satrec.twoline2rv(tle.line1, tle.line2)
+    second = utc.second + utc.microsecond / 1e6
+    jd, fr = jday(utc.year, utc.month, utc.day, utc.hour, utc.minute, second)
+    error, position_eci, _ = sat.sgp4(jd, fr)
+    if error:
+        raise RuntimeError(SGP4_ERRORS.get(error, f"error SGP4 {error}"))
+    x, y, z = _rotate_z(tuple(position_eci), -_gmst_rad(jd + fr))
+    # Latitud geodesica por iteracion (converge en 3-4 pasos a orbitas LEO).
+    e2 = WGS84_F * (2.0 - WGS84_F)
+    p = math.hypot(x, y)
+    lat = math.atan2(z, p * (1.0 - e2))
+    for _ in range(6):
+        n = WGS84_A_KM / math.sqrt(1.0 - e2 * math.sin(lat) ** 2)
+        alt = p / math.cos(lat) - n
+        lat = math.atan2(z, p * (1.0 - e2 * n / (n + alt)))
+    n = WGS84_A_KM / math.sqrt(1.0 - e2 * math.sin(lat) ** 2)
+    alt = p / math.cos(lat) - n
+    return {"timestamp_utc": utc.isoformat().replace("+00:00", "Z"),
+            "ecef_km": (round(x, 3), round(y, 3), round(z, 3)),
+            "lat_deg": round(math.degrees(lat), 4),
+            "lon_deg": round(math.degrees(math.atan2(y, x)), 4),
+            "alt_km": round(alt, 3)}
+
+
 def propagate_window(
     tle: Tle,
     observer: Observer,

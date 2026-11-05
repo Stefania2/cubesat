@@ -47,16 +47,19 @@ export function Hero({ status }: { status: Status | null }) {
           STRAND-1 • NORAD {status?.norad_id ?? 39090}
         </span>
         <h1 className="text-3xl font-bold leading-[1.15] tracking-tight text-navy-dark sm:text-4xl lg:text-[2.75rem]">
-          Telemetría y análisis de datos de STRAND-1
+          STRaND-1: un satélite del tamaño de una barra de pan
         </h1>
         <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-ink-soft">
-          Plataforma para la recopilación, procesamiento, decodificación y análisis histórico
-          de telemetría obtenida mediante observaciones de la red SatNOGS.
+          STRaND-1 es un pequeño satélite británico (un <em>CubeSat</em>) lanzado en 2013. Mientras
+          funcionó, enviaba por radio mensajes con datos sobre sí mismo: el voltaje de sus
+          baterías, la energía de sus paneles solares y más. Antenas de aficionados de todo el
+          mundo, la red SatNOGS, guardaron esos mensajes. Aquí puedes verlo en 3D, revisar su
+          salud y seguirlo pasando sobre las estaciones que lo escucharon.
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
-          <Button onClick={() => navigate('/telemetry')}>Explorar telemetría</Button>
+          <Button onClick={() => document.querySelector('#gemelo')?.scrollIntoView({ behavior: 'smooth' })}>Ver el satélite en 3D</Button>
           <Button variante="secondary" onClick={() => navigate('/observations')}>
-            Ver observaciones
+            Verlo pasar sobre una antena
           </Button>
         </div>
       </div>
@@ -64,21 +67,21 @@ export function Hero({ status }: { status: Status | null }) {
       <div className="card p-6">
         <div className="mb-5 flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-bold tracking-tight text-navy-dark">STRAND-1</h2>
+            <h2 className="text-lg font-bold tracking-tight text-navy-dark">Ficha del satélite</h2>
             <p className="mt-0.5 text-xs text-ink-soft">
-              Surrey Training, Research and Nanosatellite Demonstrator
+              STRaND-1 · Universidad de Surrey y SSTL (Reino Unido)
             </p>
           </div>
           <CubeSatIcon />
         </div>
         <div className="grid gap-0 sm:grid-cols-2 sm:gap-x-6">
-          <Dato etiqueta="NORAD ID" valor={String(status?.norad_id ?? 39090)} />
-          <Dato etiqueta="Transmitter" valor="UHF 9k6 FSK TLM" />
-          <Dato etiqueta="Frequency" valor={frecuenciaMHz(437_568_000)} />
-          <Dato etiqueta="Mode" valor="FSK 9600" />
-          <Dato etiqueta="Estado en SatNOGS DB" valor="inactive" />
+          <Dato etiqueta="Número NORAD (su «matrícula»)" valor={String(status?.norad_id ?? 39090)} />
+          <Dato etiqueta="Tamaño" valor="CubeSat 3U (10 × 10 × 34 cm)" />
+          <Dato etiqueta="Frecuencia de radio" valor={frecuenciaMHz(437_568_000)} />
+          <Dato etiqueta="Velocidad de envío" valor="9600 bits por segundo" />
+          <Dato etiqueta="Estado actual" valor="Inactivo (ya no transmite)" />
           <Dato
-            etiqueta="Frames en base"
+            etiqueta="Mensajes guardados"
             valor={status ? status.frames.toLocaleString('es-ES') : '—'}
           />
         </div>

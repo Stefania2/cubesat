@@ -24,12 +24,12 @@ router = APIRouter(prefix="/api/telemetry", tags=["telemetry"])
 # su baliza. Estan aqui para dar estructura a la interfaz, NO como afirmacion de
 # que estos bytes existan en el frame o de que tengan estos valores.
 CATALOGO = [
-    {"key": "battery_voltage", "label": "Battery Voltage", "unit": "V"},
-    {"key": "obc_uptime", "label": "OBC Uptime", "unit": "s"},
-    {"key": "magnetometer_x", "label": "Magnetometer X", "unit": "µT"},
-    {"key": "magnetometer_y", "label": "Magnetometer Y", "unit": "µT"},
-    {"key": "magnetometer_z", "label": "Magnetometer Z", "unit": "µT"},
-    {"key": "system_status", "label": "System Status", "unit": None},
+    {"key": "battery_voltage", "label": "Voltaje de la batería", "unit": "V"},
+    {"key": "obc_uptime", "label": "Tiempo del computador de a bordo", "unit": "s"},
+    {"key": "magnetometer_x", "label": "Magnetómetro X", "unit": "µT"},
+    {"key": "magnetometer_y", "label": "Magnetómetro Y", "unit": "µT"},
+    {"key": "magnetometer_z", "label": "Magnetómetro Z", "unit": "µT"},
+    {"key": "system_status", "label": "Estado del sistema", "unit": None},
 ]
 
 # «Battery Current» y «Temperature» estaban en este catalogo y se retiraron: la

@@ -9,6 +9,8 @@
 !/health_monitor
 /health_monitor/validacion_matlab
 !/parametros_enlace.py
+!/orbita_sgp4.py
+!/geometria_orbital.py
 !/resultados_simulacion
 /resultados_simulacion/*
 !/resultados_simulacion/ber_strand1_sweep.csv

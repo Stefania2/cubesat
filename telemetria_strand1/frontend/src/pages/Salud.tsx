@@ -898,7 +898,7 @@ function leerUrl() {
   }
 }
 
-export function Salud() {
+export function Salud({ embebido = false }: { embebido?: boolean }) {
   const inicial = useMemo(leerUrl, [])
   const [pestana, setPestana] = useState<Pestana>(inicial.pestana)
   const [tecnico, setTecnico] = useState(inicial.tecnico)
@@ -911,7 +911,7 @@ export function Salud() {
     if (periodo !== 'ultimo') q.set('periodo', periodo)
     if (tecnico) q.set('nivel', 'tecnico')
     const cola = q.toString()
-    window.history.replaceState(null, '', `${window.location.pathname}${cola ? `?${cola}` : ''}`)
+    window.history.replaceState(null, '', `${window.location.pathname}${cola ? `?${cola}` : ''}${window.location.hash}`)
   }, [pestana, fuente, periodo, tecnico])
   const escenarios = useApi(() => api.saludEscenarios(), [])
   const p = PERIODOS.find((x) => x.id === periodo)!
@@ -946,7 +946,7 @@ export function Salud() {
         </div>
       )}
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
+        <div className={embebido ? 'hidden' : ''}>
           <div className="label-caps">STRaND-1 · NORAD 39090 · HMTA</div>
           <h1 className="mt-1 text-2xl font-semibold tracking-tight text-navy-dark sm:text-3xl">
             Supervisión de salud del satélite
