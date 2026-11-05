@@ -99,6 +99,42 @@ def cargar_campos(env_file: Path = ENV_POR_DEFECTO, solo_fisicos: bool = True) -
     return df.astype({"field_name": "category", "unit": "category"})
 
 
+def cargar_estados(env_file: Path = ENV_POR_DEFECTO) -> pd.DataFrame:
+    """Campos de texto: el estado de los diez interruptores y `system_status`.
+
+    `cargar_campos` solo trae valores numericos, y el estado de un interruptor
+    (ON, OFF, OFF por sobrecorriente...) llega como texto.
+    """
+    return _leer(
+        """
+        select d.timestamp, d.field_name, d.value_text, f.station_id
+        from decoded_fields d
+        join frames f on f.id = d.frame_id
+        where d.value_text is not null
+        order by d.timestamp
+        """,
+        env_file,
+    )
+
+
+def cargar_secuencias(env_file: Path = ENV_POR_DEFECTO) -> pd.DataFrame:
+    """Contador de secuencia de 8 bits de cada baliza, con su observador.
+
+    Es lo que permite estimar paquetes perdidos dentro de una rafaga (ver
+    `telemetria_strand1/tools/analizar_recepcion.py`).
+    """
+    return _leer(
+        """
+        select d.timestamp, d.value_numeric as seq_no, coalesce(f.observer, '') as observer
+        from decoded_fields d
+        join frames f on f.id = d.frame_id
+        where d.field_name = 'seq_no'
+        order by d.timestamp
+        """,
+        env_file,
+    )
+
+
 def cargar_observaciones(env_file: Path = ENV_POR_DEFECTO) -> pd.DataFrame:
     """Una fila por pase observado: contexto del enlace, no telemetria."""
     df = _leer(

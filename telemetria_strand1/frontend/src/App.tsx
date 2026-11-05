@@ -26,6 +26,9 @@ const GemeloDigital = lazy(() =>
   import('./pages/GemeloDigital').then((m) => ({ default: m.GemeloDigital })),
 )
 
+/** El HMTA tambien se carga en diferido: es la pagina mas larga de la app. */
+const Salud = lazy(() => import('./pages/Salud').then((m) => ({ default: m.Salud })))
+
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null }
   static getDerivedStateFromError(error: Error) {
@@ -89,6 +92,16 @@ export default function App() {
                 <Suspense fallback={<Skeleton className="h-96" />}>
                   <GemeloDigital />
                 </Suspense>
+              }
+            />
+            <Route
+              path="/salud"
+              element={
+                <ErrorBoundary>
+                  <Suspense fallback={<Skeleton className="h-96" />}>
+                    <Salud />
+                  </Suspense>
+                </ErrorBoundary>
               }
             />
             <Route path="/docs" element={<Docs />} />

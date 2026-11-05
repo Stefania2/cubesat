@@ -6,6 +6,13 @@
 !/vercel.json
 !/api
 !/gemelo_digital
+!/health_monitor
+/health_monitor/validacion_matlab
+!/parametros_enlace.py
+!/resultados_simulacion
+/resultados_simulacion/*
+!/resultados_simulacion/ber_strand1_sweep.csv
+!/resultados_simulacion/link_budget_completo.json
 !/frames_STRAND1_bits.bin
 !/telemetria_strand1
 /telemetria_strand1/*

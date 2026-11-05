@@ -331,6 +331,214 @@ export interface EventosGemelo {
  * que figurar ademas en `cors_origins` del backend, o el navegador rechazara
  * las respuestas.
  */
+/* ── Salud del satélite (HMTA) ─────────────────────────────────────────────── */
+
+export type EstadoSalud = 'NORMAL' | 'ADVERTENCIA' | 'CRITICO' | 'DESCONOCIDO'
+export type Procedencia = 'REAL' | 'SIMULADO' | 'ESTIMADO' | 'DOCUMENTADO' | 'NO_DISPONIBLE'
+
+export interface PuntoSalud {
+  t: string
+  v: number | null
+  valida: boolean
+  motivo: string | null
+}
+
+export interface HallazgoSalud {
+  variable: string
+  tipo: string
+  lecturas: number
+  primera: string
+  ultima: string
+  explicacion: string
+}
+
+export interface IndicadorSalud {
+  clave: string
+  nombre: string
+  unidad: string | null
+  que_es: string
+  por_que_importa: string
+  procedencia: Procedencia
+  estado: EstadoSalud
+  estado_motivo: string
+  valor: number | string | null
+  valor_fecha: string | null
+  referencia: string
+  rango_documentado: [number, number] | null
+  estadisticas: Record<string, any>
+  validacion: Record<string, any>
+  hallazgos: HallazgoSalud[]
+  tendencia: Record<string, any> | null
+  serie: PuntoSalud[]
+  notas: string[]
+  fuente: string
+}
+
+export interface NoDisponibleSalud {
+  clave: string
+  nombre: string
+  unidad: string | null
+  que_es: string
+  por_que_importa: string
+  motivo: string
+  disponibilidad: string
+  notas: string[]
+  nodo_canal: string | null
+}
+
+export interface AlertaSalud {
+  id: string
+  subsistema: string
+  variable: string
+  nivel: EstadoSalud
+  mecanismo: string
+  inicio: string
+  fin: string
+  que_ocurrio: string
+  componente: string
+  valor_registrado: number | string | null
+  unidad: string | null
+  valor_referencia: number | string | null
+  referencia: string
+  por_que_importa: string
+  informacion_adicional: string
+  procedencia: Procedencia
+  lecturas: number
+  registrado_utc?: string
+}
+
+export interface SubsistemaSalud {
+  clave: string
+  nombre: string
+  explicacion: string
+  estado: EstadoSalud
+  resumen: string
+  indicadores: IndicadorSalud[]
+  no_disponibles: NoDisponibleSalud[]
+  alertas: AlertaSalud[]
+  procedencias: Procedencia[]
+  extra: Record<string, any>
+  notas: string[]
+}
+
+export interface PuntoTY {
+  t: number
+  y: number
+}
+
+export interface ComparacionModelo {
+  planta: string
+  controlador: string
+  procedencia_medida: Procedencia
+  rms_residuo_normalizado: number
+  tolerancia: number
+  sobrepaso_medido_pct: number
+  sobrepaso_modelo_pct: number
+  fuera_de_tolerancia: boolean
+  referencia: PuntoTY[]
+  medida: PuntoTY[]
+}
+
+export interface InformeSalud {
+  proyecto: string
+  solo_supervision: boolean
+  generado_utc: string
+  procedencia: Procedencia
+  fuente: string
+  descripcion_fuente: string
+  escenario: string | null
+  simulado: boolean
+  periodo: { desde: string | null; hasta: string | null; ventana_dias: number | null }
+  ultima_actualizacion: string | null
+  ultima_trama: string | null
+  antiguedad_dias: number | null
+  vigencia: string
+  estado_general: EstadoSalud
+  estado_general_texto: string
+  indicadores_por_procedencia: Record<string, number>
+  subsistemas: Record<string, SubsistemaSalud>
+  anomalias: {
+    clave: string
+    nombre: string
+    explicacion: string
+    estado: EstadoSalud
+    resumen: {
+      total: number
+      por_nivel: Record<string, number>
+      por_mecanismo: Record<string, number>
+      por_subsistema: Record<string, number>
+    }
+    mecanismos: Record<string, string>
+    comparacion_modelo: ComparacionModelo | null
+    validacion: HallazgoSalud[]
+    alertas: AlertaSalud[]
+  }
+  alertas_recientes: AlertaSalud[]
+}
+
+export interface MetricasPid {
+  estable_discreto: boolean
+  estable_continuo: boolean
+  max_modulo_polo_z: number
+  max_parte_real_polo_s: number
+  sobrepaso_pct: number | null
+  tiempo_subida_s: number | null
+  tiempo_pico_s: number | null
+  tiempo_asentamiento_s: number | null
+  error_estacionario: number | null
+  valor_final: number | null
+}
+
+export interface ControladorPid {
+  controlador: 'P' | 'PI' | 'PID'
+  sintonia: { Kp: number; Ti: number | null; Td: number | null; metodo: string }
+  metricas: MetricasPid
+  margenes: {
+    margen_ganancia_db: number | null
+    margen_fase_deg: number | null
+    w_cruce_ganancia: number | null
+    w_cruce_fase: number | null
+  }
+  polos_discretos: { re: number; im: number; modulo: number }[]
+  respuesta: PuntoTY[]
+}
+
+export interface InformePid {
+  procedencia: Procedencia
+  ts_s: number
+  n_filtro_derivativo: number
+  discretizacion: string
+  entrada: string
+  banda_asentamiento: number
+  limitaciones: string[]
+  modelos: {
+    planta: string
+    expresion: string
+    descripcion: string
+    ganancia_ultima: { Ku: number; wu_rad_s: number; Pu_s: number }
+    controladores: ControladorPid[]
+  }[]
+}
+
+export interface MesHistorial {
+  mes: string
+  variable: string
+  lecturas: number
+  validas: number
+  fraccion_valida: number
+  mediana_valida: number | null
+  motivo_dominante: string | null
+  procedencia: Procedencia
+}
+
+export interface EventosSalud {
+  persistente: boolean
+  ruta: string
+  total: number
+  nota: string | null
+  eventos: AlertaSalud[]
+}
+
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -412,6 +620,22 @@ export const api = {
       { method: 'POST' },
     ),
   exportUrl: (conjunto: string, formato: 'json' | 'csv') => `/api/export/${conjunto}.${formato}`,
+  saludResumen: (hasta?: string, ventanaDias?: number) => {
+    const q = new URLSearchParams()
+    if (hasta) q.set('hasta', hasta)
+    if (ventanaDias) q.set('ventana_dias', String(ventanaDias))
+    const cola = q.toString() ? `?${q}` : ''
+    return request<InformeSalud>(`/api/salud/resumen${cola}`)
+  },
+  saludEscenarios: () =>
+    request<{ escenarios: { nombre: string; descripcion: string }[]; nota: string }>(
+      '/api/salud/escenarios',
+    ),
+  saludEscenario: (nombre: string) =>
+    request<InformeSalud>(`/api/salud/escenario/${encodeURIComponent(nombre)}`),
+  saludPid: (ts: number) => request<InformePid>(`/api/salud/pid?ts=${ts}`),
+  saludHistorial: () => request<{ fuente: string; meses: MesHistorial[] }>('/api/salud/historial'),
+  saludEventos: () => request<EventosSalud>('/api/salud/eventos?limite=200'),
 }
 
 /** Hook de carga con estados de carga y error explícitos. */

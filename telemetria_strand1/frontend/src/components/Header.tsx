@@ -12,6 +12,7 @@ const NAV = [
   { to: '/analytics', label: 'Analytics' },
   { to: '/advanced', label: 'Advanced' },
   { to: '/gemelo', label: 'Gemelo digital' },
+  { to: '/salud', label: 'Salud' },
   { to: '/docs', label: 'Docs' },
 ]
 

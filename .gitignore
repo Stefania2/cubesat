@@ -31,3 +31,6 @@ dashboard/node_modules/
 # Enlace local a las dependencias del frontend: roto fuera de esta maquina y
 # hace fallar el build de GitHub Pages (Jekyll no admite symlinks colgantes).
 dashboard/node_modules
+
+# Registro de eventos del HMTA (SQLite local, regenerable)
+health_monitor/_datos/
