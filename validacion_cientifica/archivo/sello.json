@@ -1,0 +1,92 @@
+{
+  "mision": "STRaND-1",
+  "norad_id": 39090,
+  "sellado_utc": "2026-11-17T17:44:31Z",
+  "origen": "PostgreSQL local (copia de trabajo) · tablas frames, observations, decoded_fields; catálogo de TLE de backend/app/data/geometria_observaciones.json y tle/",
+  "origen_de_los_datos": "Red SatNOGS (DB y Network); decodificación AMSAT-UK en la plataforma",
+  "formato": "JSON Lines, UTF-8, claves ordenadas, sin espacios; fechas UTC ISO 8601 con microsegundos; null = dato ausente. gzip sin fecha ni nombre.",
+  "huella": "SHA-256 del contenido sin comprimir (sha256_contenido) y del .gz (sha256_gz)",
+  "ficheros": {
+    "tramas_originales": {
+      "capa": "ORIGINAL",
+      "filas": 36641,
+      "sha256_contenido": "dafeb4bb249890a164054aa66ab1be9834f9d7ab668202557df8d248acc21a50",
+      "sha256_gz": "32157048c0842a4baa7a1d2b6e44098853d549e3ae39d3eac734aa29640c9178",
+      "bytes_gz": 516362,
+      "bytes_contenido": 10704399
+    },
+    "observaciones": {
+      "capa": "ORIGINAL",
+      "filas": 3049,
+      "sha256_contenido": "f6a2998984bae2b7e83097b2c5f4a8c20e16c8c4bfbebb2cb971e04be46b25f0",
+      "sha256_gz": "2adf333d7ecd428854c20003d2374c50ffc99cc5ba24d9b1dd3e1bd48983bfa4",
+      "bytes_gz": 79303,
+      "bytes_contenido": 1214090
+    },
+    "tramas_clasificacion": {
+      "capa": "PROCESADA",
+      "filas": 36641,
+      "sha256_contenido": "3a0e52b7487b979e57567bf9c51f65e2daa82b878a460923474ba9a481ebf425",
+      "sha256_gz": "33d4e0a9e5c9e7e2728eb71079de4e7e331cabc25d6a239903502fb485adcc8d",
+      "bytes_gz": 192940,
+      "bytes_contenido": 7033469
+    },
+    "campos_decodificados": {
+      "capa": "PROCESADA",
+      "filas": 198349,
+      "sha256_contenido": "e739bafa2c6bc84e7ce725151fd10f7e0d315d36fe4fc47792912ab99ce3d95b",
+      "sha256_gz": "ab5d5af6ebad6808724b38d4696bd2f4d5aa36723c9a05a83622a7cbc396b24b",
+      "bytes_gz": 1831539,
+      "bytes_contenido": 40062793
+    },
+    "catalogo_tle": {
+      "capa": "ORIGINAL",
+      "filas": 1671,
+      "sha256_contenido": "2f514f737adcd97f9d3b1573347638d2cb637bda8fc79f46a64ae5649778a28a",
+      "sha256_gz": "b6d613492bf8b3fe7817e02f235b302acd1ca02007a11dd4a15f9b22644e9195",
+      "bytes_gz": 73962,
+      "bytes_contenido": 541353
+    }
+  },
+  "versiones_al_sellar": {
+    "aplicacion": {
+      "modulo_validacion": "1.0.0",
+      "commit": "370d0de1c9e9a348b1a348f8d0d1283126298c25",
+      "cambios_sin_confirmar": true,
+      "nota": "El commit identifica la base del código; si hay cambios sin confirmar, la identidad exacta son las huellas de «codigo»."
+    },
+    "python": "3.14.4",
+    "bibliotecas": {
+      "sgp4": "2.27",
+      "sgp4_acelerado_cpp": true,
+      "numpy": "2.5.1",
+      "pandas": "3.0.3"
+    },
+    "codigo": {
+      "decodificador_amsat": {
+        "fichero": "telemetria_strand1/backend/app/services/strand_amsat.py",
+        "sha256": "8a6d28b953fbe1d1eae99541b498e9f95e4a8bdcbcdf2ce21753d52a5582b745"
+      },
+      "mapeo_parametros": {
+        "fichero": "telemetria_strand1/backend/app/services/strand_telemetry.py",
+        "sha256": "81d898c7e5282ffa81a5c3249a958aa6d8594630c4fffac7c6c1cf4178e113fd"
+      },
+      "propagador_sgp4_plataforma": {
+        "fichero": "orbita_sgp4.py",
+        "sha256": "715bd3258d099ccfb2c588594fc27deb3e0721744f4dcefecae61c4ff121fcdf"
+      },
+      "reconstruccion_estado": {
+        "fichero": "gemelo_digital/estado.py",
+        "sha256": "e7cd66e91ecdabbc6b129fd293aa4e651e3a681c1f23097345ba38db63072023"
+      },
+      "diagnostico_estadistico": {
+        "fichero": "gemelo_digital/anomalias.py",
+        "sha256": "30d21e1493cf52dd5e5cee2288e3afa5b3a1625e14d8b0c7de26c45e7dfe0730"
+      },
+      "validacion_cientifica": {
+        "fichero": "validacion_cientifica/reconstruccion.py",
+        "sha256": "a8862e45a47a2ad283b4b6d1c8a787486699da369b4e177fdf314ff1a4f0db8b"
+      }
+    }
+  }
+}

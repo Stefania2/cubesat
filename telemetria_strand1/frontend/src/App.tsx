@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { Component, Suspense, lazy } from 'react'
 import type { ErrorInfo, ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Header } from './components/Header'
@@ -11,6 +11,10 @@ import { Analytics } from './pages/Analytics'
 import { Advanced } from './pages/Advanced'
 import { Docs } from './pages/Docs'
 import { api, useApi } from './lib/api'
+
+const ValidacionCientifica = lazy(() =>
+  import('./pages/ValidacionCientifica').then((m) => ({ default: m.ValidacionCientifica })),
+)
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null }
@@ -78,6 +82,16 @@ export default function App() {
             {/* El gemelo y la salud viven ahora en el inicio; los enlaces antiguos siguen valiendo. */}
             <Route path="/gemelo" element={<Navigate to={{ pathname: '/', hash: '#gemelo' }} replace />} />
             <Route path="/salud" element={<RedirigirSalud />} />
+            <Route
+              path="/validacion"
+              element={
+                <ErrorBoundary>
+                  <Suspense fallback={<p className="text-sm text-ink-soft">Cargando validación científica…</p>}>
+                    <ValidacionCientifica />
+                  </Suspense>
+                </ErrorBoundary>
+              }
+            />
             <Route path="/docs" element={<Docs />} />
           </Routes>
         </main>

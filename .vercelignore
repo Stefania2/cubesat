@@ -8,6 +8,10 @@
 !/gemelo_digital
 !/health_monitor
 /health_monitor/validacion_matlab
+# Validacion cientifica: el archivo sellado viaja con el despliegue para que
+# las reconstrucciones no dependan de la base ni de SatNOGS.
+!/validacion_cientifica
+!/tle
 !/parametros_enlace.py
 !/orbita_sgp4.py
 !/geometria_orbital.py

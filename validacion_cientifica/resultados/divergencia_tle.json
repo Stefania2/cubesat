@@ -1,0 +1,104 @@
+{
+ "generado_utc": "2026-11-17T17:44:34Z",
+ "tle_en_catalogo": 1671,
+ "catalogo_sha256": "2f514f737adcd97f9d3b1573347638d2cb637bda8fc79f46a64ae5649778a28a",
+ "epoca_min": "2023-06-07T19:16:24.295872Z",
+ "epoca_max": "2026-08-09T10:55:44.461344Z",
+ "max_dias_estudiados": 30.0,
+ "tramos": [
+  {
+   "desde_dias": 0,
+   "hasta_dias": 0.5,
+   "pares": 1336,
+   "mediana_km": 0.044,
+   "p95_km": 0.179,
+   "max_km": 2.732
+  },
+  {
+   "desde_dias": 0.5,
+   "hasta_dias": 1,
+   "pares": 2564,
+   "mediana_km": 0.09,
+   "p95_km": 0.34,
+   "max_km": 3.804
+  },
+  {
+   "desde_dias": 1,
+   "hasta_dias": 2,
+   "pares": 5652,
+   "mediana_km": 0.134,
+   "p95_km": 0.592,
+   "max_km": 7.97
+  },
+  {
+   "desde_dias": 2,
+   "hasta_dias": 3,
+   "pares": 7092,
+   "mediana_km": 0.231,
+   "p95_km": 1.172,
+   "max_km": 12.693
+  },
+  {
+   "desde_dias": 3,
+   "hasta_dias": 5,
+   "pares": 10110,
+   "mediana_km": 0.341,
+   "p95_km": 2.264,
+   "max_km": 23.598
+  },
+  {
+   "desde_dias": 5,
+   "hasta_dias": 7,
+   "pares": 12212,
+   "mediana_km": 0.498,
+   "p95_km": 4.862,
+   "max_km": 37.946
+  },
+  {
+   "desde_dias": 7,
+   "hasta_dias": 10,
+   "pares": 16846,
+   "mediana_km": 1.412,
+   "p95_km": 10.864,
+   "max_km": 69.182
+  },
+  {
+   "desde_dias": 10,
+   "hasta_dias": 14,
+   "pares": 21940,
+   "mediana_km": 3.936,
+   "p95_km": 22.679,
+   "max_km": 125.782
+  },
+  {
+   "desde_dias": 14,
+   "hasta_dias": 21,
+   "pares": 39164,
+   "mediana_km": 11.625,
+   "p95_km": 54.39,
+   "max_km": 292.912
+  },
+  {
+   "desde_dias": 21,
+   "hasta_dias": 30,
+   "pares": 48420,
+   "mediana_km": 29.231,
+   "p95_km": 117.862,
+   "max_km": 498.839
+  }
+ ],
+ "criterios": {
+  "geometria_estacion": {
+   "descripcion": "Azimut y elevación vistos desde una estación (resolución de SatNOGS: 1°)",
+   "tolerancia_km": 13.5,
+   "antiguedad_admisible_dias": 10
+  },
+  "trazado_globo": {
+   "descripcion": "Punto subsatélite sobre el globo 3D (1° de arco geocéntrico)",
+   "tolerancia_km": 124.8,
+   "antiguedad_admisible_dias": 30
+  }
+ },
+ "metodo": "Propagación de cada TLE histórico de STRaND-1 a la época de los TLE de los 30 días siguientes (y viceversa); norma de la diferencia de posición TEME. Percentil 95 por tramo de antigüedad.",
+ "naturaleza": "estimado"
+}

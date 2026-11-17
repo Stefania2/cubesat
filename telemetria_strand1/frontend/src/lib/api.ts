@@ -589,6 +589,33 @@ export interface PasoObservacion {
   procedencia: Record<string, string>
 }
 
+export type EstadoValidacion = 'VALIDATED' | 'FAILED' | 'WARNING' | 'NOT_VERIFIED' | 'NOT_AVAILABLE'
+
+export interface ResultadoValidacion {
+  id: string
+  modulo: string
+  nombre: string
+  estado: EstadoValidacion
+  esperado: unknown
+  obtenido: unknown
+  tolerancia: unknown
+  detalle: string
+  referencia: string | null
+  ejecutado_utc: string | null
+  origen?: string
+  nota_origen?: string
+}
+
+export interface ValResumen {
+  secciones: Record<string, ResultadoValidacion[]>
+  recuento: Record<EstadoValidacion | 'total', number>
+  generado_utc: string
+  pruebas_automatizadas: Record<string, any>
+  recuento_pruebas_automatizadas: Record<string, number> | null
+  versiones: Record<string, any>
+  sello: Record<string, any> | null
+}
+
 const BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -688,6 +715,25 @@ export const api = {
   saludEventos: () => request<EventosSalud>('/api/salud/eventos?limite=200'),
   pases: () => request<ListaPases>('/api/observations/pasos?limit=3000'),
   paso: (id: number) => request<PasoObservacion>(`/api/observations/${id}/paso`),
+  // ── Validación científica (/api/validacion) ──
+  valResumen: () => request<ValResumen>('/api/validacion/resumen'),
+  valProcedencia: () => request<Record<string, any>>('/api/validacion/procedencia'),
+  valTrama: (id: number) => request<Record<string, any>>(`/api/validacion/procedencia/trama/${id}`),
+  valOrbital: (t?: string) =>
+    request<Record<string, any>>(`/api/validacion/orbital${t ? `?t=${encodeURIComponent(t)}` : ''}`),
+  valTelemetria: () => request<Record<string, any>>('/api/validacion/telemetria'),
+  valTemporal: (t: string) => request<Record<string, any>>(`/api/validacion/temporal?t=${encodeURIComponent(t)}`),
+  valDiagnosticos: () => request<Record<string, any>>('/api/validacion/diagnosticos'),
+  valReconstruccion: (t: string) =>
+    request<Record<string, any>>(`/api/validacion/reconstruccion?t=${encodeURIComponent(t)}`),
+  valVerificarManifest: (manifest: string) =>
+    request<{ resultados: ResultadoValidacion[]; recuento: Record<string, number> }>(
+      '/api/validacion/manifest/verificar',
+      { method: 'POST', body: manifest },
+    ),
+  valPruebas: () => request<Record<string, any>>('/api/validacion/pruebas'),
+  valUrl: (ruta: string, t: string, extra = '') =>
+    `${BASE}/api/validacion/${ruta}?t=${encodeURIComponent(t)}${extra}`,
 }
 
 /** Hook de carga con estados de carga y error explícitos. */

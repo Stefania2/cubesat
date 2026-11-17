@@ -1,0 +1,528 @@
+{
+ "ejecutado_utc": "2026-11-17T18:02:33Z",
+ "commit": "370d0de1c9e9a348b1a348f8d0d1283126298c25",
+ "cambios_sin_confirmar": true,
+ "alcance": "tests/test_validacion_cientifica.py",
+ "python": "3.14.4",
+ "codigo_salida_pytest": 0,
+ "recuento": {
+  "VALIDATED": 50,
+  "FAILED": 0,
+  "WARNING": 0,
+  "NOT_VERIFIED": 1,
+  "NOT_AVAILABLE": 0,
+  "total": 51
+ },
+ "casos": [
+  {
+   "id": "tests.test_validacion_cientifica::test_tle_versionado_supera_todas_las_comprobaciones",
+   "estado": "VALIDATED",
+   "duracion_s": 0.02,
+   "categoria": "unitaria · TLE",
+   "esperado": "\"todas las comprobaciones de formato superadas\"",
+   "obtenido": "{\"longitud\": {\"ok\": true, \"detalle\": \"69 y 69 columnas (se esperan 69)\"}, \"numero_de_linea\": {\"ok\": true, \"detalle\": \"las líneas empiezan por «1 » y «2 »\"}, \"catalogo_coincide\": {\"ok\": true, \"detalle\": \"línea 1: 39090, línea 2: 39090\"}, \"norad\": {\"ok\": true, \"detalle\": \"catálogo 39090, se espera 39090\"}, \"checksum_linea_1\": {\"ok\": true, \"detalle\": \"declarado 0, calculado 0\"}, \"checksum_linea_2\": {",
+   "tolerancia": "ninguna (formato fijo)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_checksum_detecta_un_digito_alterado",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": "unitaria · TLE",
+   "esperado": "\"checksum_linea_2 = False\"",
+   "obtenido": "[false, \"declarado 1, calculado 2\"]",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_checksum_cuenta_el_signo_menos_como_uno",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_tle_de_otro_satelite_se_rechaza",
+   "estado": "VALIDATED",
+   "duracion_s": 0.003,
+   "categoria": "unitaria · TLE",
+   "esperado": "\"norad=False\"",
+   "obtenido": "[false, \"catálogo 00005, se espera 39090\"]",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_catalogo_historico_integro",
+   "estado": "VALIDATED",
+   "duracion_s": 0.073,
+   "categoria": "unitaria · TLE",
+   "esperado": "\"1671 TLE válidos\"",
+   "obtenido": "{\"validos\": 1671, \"invalidos\": []}",
+   "tolerancia": "ninguna",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sgp4_reproduce_los_vectores_de_vallado[0]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.018,
+   "categoria": "unitaria · SGP4 (referencia independiente)",
+   "esperado": "\"vectores r, v de tcppver.out (Vallado et al. 2006)\"",
+   "obtenido": "{\"puntos_comparados\": 666, \"max_diff_posicion_km\": 1.1545034794835374e-07, \"max_diff_velocidad_km_s\": 4.996953961722284e-10, \"peor_caso\": [\"20413\", 1844335.0]}",
+   "tolerancia": "2e-07 km y km/s por componente (resolución de impresión del fichero)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sgp4_reproduce_los_vectores_de_vallado[1]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": "unitaria · SGP4 (referencia independiente)",
+   "esperado": "\"vectores r, v de tcppver.out (Vallado et al. 2006)\"",
+   "obtenido": "{\"puntos_comparados\": 666, \"max_diff_posicion_km\": 1.1544580047484487e-07, \"max_diff_velocidad_km_s\": 4.996829616743526e-10, \"peor_caso\": [\"20413\", 1844335.0]}",
+   "tolerancia": "2e-07 km y km/s por componente (resolución de impresión del fichero)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sgp4_cpp_y_python_puro_coinciden_en_strand1",
+   "estado": "VALIDATED",
+   "duracion_s": 0.015,
+   "categoria": "unitaria · SGP4",
+   "esperado": "\"misma posición\"",
+   "obtenido": "{\"propagaciones\": 248, \"max_diff_posicion_km\": 1.256605670213462e-11}",
+   "tolerancia": "1e-06 km (1 mm)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_repetibilidad_bit_a_bit",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": "unitaria · SGP4",
+   "esperado": "\"resultados idénticos bit a bit\"",
+   "obtenido": "\"5 ejecuciones idénticas\"",
+   "tolerancia": "0 (cálculo determinista, misma versión)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_registro_de_propagacion_completo",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": "unitaria · SGP4",
+   "esperado": "[\"epoca_tle_utc\", \"fuente_tle\", \"implementacion_sgp4\", \"instante_propagacion_utc\", \"marco_referencia\", \"norad_id\", \"posicion_km\", \"tle\", \"unidades\", \"velocidad_km_s\"]",
+   "obtenido": "[\"antiguedad_tle_dias\", \"codigo_error_sgp4\", \"epoca_tle_utc\", \"fuente_tle\", \"implementacion_sgp4\", \"instante_propagacion_utc\", \"marco_referencia\", \"norad_id\", \"posicion_km\", \"rapidez_km_s\", \"terrestre\", \"tle\", \"unidades\", \"velocidad_km_s\"]",
+   "tolerancia": "todas presentes",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_transformaciones_de_coordenadas[ORB-D1]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.05,
+   "categoria": "unitaria · coordenadas",
+   "esperado": "{\"r_itrf_km\": [-1033.479383, 7901.2952754, 6380.3565958], \"v_itrf_km_s\": [-3.22563652, -2.87245145, 5.531924446]}",
+   "obtenido": "{\"r_itrf_km\": [-1033.4793830375102, 7901.295275388602, 6380.356595751133], \"v_itrf_km_s\": [-3.2256365212613622, -2.8724514495263254, 5.531924446303698], \"max_diff_pos_km\": 4.8867150326259434e-08, \"max_diff_vel_km_s\": 1.2613621258594776e-09}",
+   "tolerancia": "0.001 km y 1e-6 km/s por componente",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_transformaciones_de_coordenadas[ORB-D2]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.054,
+   "categoria": "unitaria · coordenadas",
+   "esperado": "\"error ≤ cota analítica 0.553 km\"",
+   "obtenido": "{\"error_km\": 0.26175427391232603}",
+   "tolerancia": "0.553 km = |UT1−UTC|max·ω⊕·r_xy + polo_max·|r|",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_transformaciones_de_coordenadas[ORB-D3]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.05,
+   "categoria": "unitaria · coordenadas",
+   "esperado": "\"misma latitud y altura\"",
+   "obtenido": "{\"puntos\": 571, \"max_diff_lat_deg\": 4.999645413050757e-05, \"max_diff_altura_km\": 0.0004995760430119844, \"max_diff_ecef_km\": 0.000499980537256306}",
+   "tolerancia": "medio paso de redondeo de la plataforma: 5e-5° y 5e-4 km",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_geodesica_casos_analiticos",
+   "estado": "VALIDATED",
+   "duracion_s": 0.0,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_conversion_bateria_0_segun_amsat[0-9.7488]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.004,
+   "categoria": "unitaria · unidades",
+   "esperado": "9.7488",
+   "obtenido": "[9.7488, \"V\"]",
+   "tolerancia": "exacta (misma expresión)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_conversion_bateria_0_segun_amsat[300-6.913799999999999]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": "unitaria · unidades",
+   "esperado": "6.913799999999999",
+   "obtenido": "[6.913799999999999, \"V\"]",
+   "tolerancia": "exacta (misma expresión)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_conversion_bateria_0_segun_amsat[1023-0.08144999999999847]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": "unitaria · unidades",
+   "esperado": "0.08144999999999847",
+   "obtenido": "[0.08144999999999847, \"V\"]",
+   "tolerancia": "exacta (misma expresión)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_cuenta_fuera_del_dominio_de_10_bits_no_produce_valor_fisico",
+   "estado": "VALIDATED",
+   "duracion_s": 0.0,
+   "categoria": "unitaria · unidades",
+   "esperado": "\"sin battery_0_voltage\"",
+   "obtenido": "[\"battery_0_voltage_adc\", \"i2c_node_address\", \"node_channel\", \"seq_no\"]",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_zscore_robusto_contra_calculo_directo",
+   "estado": "VALIDATED",
+   "duracion_s": 0.008,
+   "categoria": "unitaria · estadística",
+   "esperado": "-0.7159746342951698",
+   "obtenido": "-0.7159746342951698",
+   "tolerancia": "1e-12",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_ventanas_incompletas",
+   "estado": "VALIDATED",
+   "duracion_s": 0.004,
+   "categoria": "unitaria · estadística",
+   "esperado": "\"NaN con < 25 lecturas; mediana de las disponibles con 25-50\"",
+   "obtenido": "{\"nan_hasta_lectura\": 24, \"mediana_lectura_25\": 3.0}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_canal_enrielado_con_dos_valores_alternos",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sha256_vector_fips",
+   "estado": "VALIDATED",
+   "duracion_s": 0.0,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_serializacion_canonica_y_gzip_deterministas",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_tiempo_sin_zona_se_rechaza",
+   "estado": "VALIDATED",
+   "duracion_s": 0.0,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_archivo_sellado_integro",
+   "estado": "VALIDATED",
+   "duracion_s": 0.163,
+   "categoria": "integración · procedencia",
+   "esperado": "\"VALIDATED ×4\"",
+   "obtenido": "[\"VALIDATED\", \"VALIDATED\", \"VALIDATED\", \"VALIDATED\", \"VALIDATED\"]",
+   "tolerancia": "igualdad SHA-256",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_archivo_conserva_los_tipos_originales",
+   "estado": "VALIDATED",
+   "duracion_s": 0.186,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_procesamiento_de_telemetria_reproduce_la_capa_procesada",
+   "estado": "VALIDATED",
+   "duracion_s": 2.354,
+   "categoria": "integración · telemetría",
+   "esperado": "\"cada valor almacenado = valor recalculado desde raw_hex con el código vigente\"",
+   "obtenido": "{\"valores_comparados\": 198349, \"distintos\": 0, \"sin_equivalente\": 0, \"ejemplos\": []}",
+   "tolerancia": "igualdad exacta (mismo float)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_controles_de_telemetria_sin_fallos",
+   "estado": "VALIDATED",
+   "duracion_s": 0.094,
+   "categoria": "integración · telemetría",
+   "esperado": "\"ningún FAILED\"",
+   "obtenido": "{\"TEL-CONV\": \"VALIDATED\", \"TEL-DUP-PROC\": \"WARNING\", \"TEL-DUP-RX\": \"VALIDATED\", \"TEL-TIEMPO\": \"VALIDATED\", \"TEL-INCOMP\": \"VALIDATED\", \"TEL-DECOD\": \"WARNING\"}",
+   "tolerancia": "—",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_variables_no_emitidas_son_no_disponibles_y_no_cero",
+   "estado": "VALIDATED",
+   "duracion_s": 0.181,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_contraste_con_satnogs",
+   "estado": "VALIDATED",
+   "duracion_s": 2.395,
+   "categoria": "integración · SatNOGS (implementación independiente)",
+   "esperado": "\"elevación máxima y azimuts publicados por SatNOGS para la misma observación\"",
+   "obtenido": "{\"observaciones\": 1129, \"elevacion\": {\"mediana_abs\": 0.24800000000000466, \"p95_abs\": 0.5386, \"max_abs\": 86.918, \"fraccion_en_tolerancia\": 0.9867139061116031}, \"azimut\": {\"mediana_abs\": 0.2740000000000009, \"p95_abs\": 0.61099999999999, \"max_abs\": 156.237, \"fraccion_en_tolerancia\": 0.9818423383525243}, \"atipicas\": {\"n\": 15, \"marcadas_bad_por_satnogs\": 15, \"con_azimut_tambien_discrepante\": 15, \"bad_en",
+   "tolerancia": "±1.5° en al menos el 95 % de las observaciones",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_api_satnogs_en_vivo_coincide_con_el_archivo",
+   "estado": "NOT_VERIFIED",
+   "duracion_s": 0.0,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": "prueba en vivo: SATNOGS_EN_VIVO=1"
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2016-11-30T16:39:41Z]",
+   "estado": "VALIDATED",
+   "duracion_s": 3.618,
+   "categoria": "integración · sincronización",
+   "esperado": "\"sin FAILED\"",
+   "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2019-06-15T00:00:00Z]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.009,
+   "categoria": "integración · sincronización",
+   "esperado": "\"sin FAILED\"",
+   "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2021-03-01T12:00:00Z]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.009,
+   "categoria": "integración · sincronización",
+   "esperado": "\"sin FAILED\"",
+   "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2023-01-28T02:58:36Z]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.008,
+   "categoria": "integración · sincronización",
+   "esperado": "\"sin FAILED\"",
+   "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2026-01-01T00:00:00Z]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.009,
+   "categoria": "integración · sincronización",
+   "esperado": "\"sin FAILED\"",
+   "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"VALIDATED\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2010-01-01T00:00:00Z]",
+   "estado": "VALIDATED",
+   "duracion_s": 0.003,
+   "categoria": "integración · sincronización",
+   "esperado": "\"sin FAILED\"",
+   "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"NOT_AVAILABLE\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_sincronizacion_global",
+   "estado": "VALIDATED",
+   "duracion_s": 0.2,
+   "categoria": "integración · sincronización",
+   "esperado": "\"SYNC-1…7 sin fallos\"",
+   "obtenido": "{\"instantes\": 25, \"fallos\": []}",
+   "tolerancia": "0 fallos",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_estados_discretos_nunca_se_interpolan",
+   "estado": "VALIDATED",
+   "duracion_s": 0.008,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_instante_anterior_al_archivo_no_inventa_datos",
+   "estado": "VALIDATED",
+   "duracion_s": 0.003,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_modelo_3d_del_gemelo_coincide_con_la_reconstruccion",
+   "estado": "VALIDATED",
+   "duracion_s": 3.865,
+   "categoria": "integración · modelo 3D",
+   "esperado": "\"sin diferencias\"",
+   "obtenido": "[]",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_indice_del_gemelo_es_el_de_la_reconstruccion",
+   "estado": "VALIDATED",
+   "duracion_s": 3.439,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_manifest_contiene_lo_necesario_y_se_reproduce",
+   "estado": "VALIDATED",
+   "duracion_s": 0.017,
+   "categoria": "integración · expediente",
+   "esperado": "\"todo VALIDATED\"",
+   "obtenido": "{\"REP-DATOS\": \"VALIDATED\", \"REP-INTEG\": \"VALIDATED\", \"REP-VERS\": \"VALIDATED\", \"REP-RESULT\": \"VALIDATED\"}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_manifest_alterado_se_detecta",
+   "estado": "VALIDATED",
+   "duracion_s": 0.017,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_informe_pdf_y_json",
+   "estado": "VALIDATED",
+   "duracion_s": 3.636,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_api_validacion",
+   "estado": "VALIDATED",
+   "duracion_s": 0.303,
+   "categoria": null,
+   "esperado": null,
+   "obtenido": null,
+   "tolerancia": null,
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_regresion_reconstruccion_conocida",
+   "estado": "VALIDATED",
+   "duracion_s": 0.009,
+   "categoria": "regresión · reconstrucción",
+   "esperado": "{\"evento_utc\": \"2021-02-28T19:30:25.000000Z\", \"battery_voltage\": 9.7488, \"estado_cubesat\": \"INSTRUMENTACION_PERDIDA\"}",
+   "obtenido": "{\"evento_utc\": \"2021-02-28T19:30:25.000000Z\", \"battery_voltage\": 9.7488, \"estado_cubesat\": \"INSTRUMENTACION_PERDIDA\"}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_regresion_valor_procesado_validado",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": "regresión · valores procesados",
+   "esperado": "{\"raw_hex\": \"C0800206022C03020000\", \"battery_0_voltage\": 9.7488, \"battery_0_voltage_adc\": 0}",
+   "obtenido": "{\"battery_0_voltage\": 9.7488, \"battery_0_voltage_adc\": 0}",
+   "tolerancia": "exacta",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_regresion_orbital_frente_a_implementacion_independiente",
+   "estado": "VALIDATED",
+   "duracion_s": 0.001,
+   "categoria": "regresión · órbita",
+   "esperado": "[2847.4724533877925, 1209.2765124249795, 6426.840860743515]",
+   "obtenido": "[2847.4724533877893, 1209.2765124249765, 6426.840860743517]",
+   "tolerancia": "1e-6 km",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_regresion_diagnostico_estable",
+   "estado": "VALIDATED",
+   "duracion_s": 0.633,
+   "categoria": "regresión · diagnóstico",
+   "esperado": "\"clasificación idéntica en dos ejecuciones\"",
+   "obtenido": "{\"lecturas\": 5269, \"identicas\": true, \"sha256\": \"24c41a84681e91c74c7c5bf1adb5ebf0029a923bb55765a1433de0acfd7648d4\"}",
+   "tolerancia": "0 (z con NaN tratados como iguales)",
+   "mensaje": ""
+  },
+  {
+   "id": "tests.test_validacion_cientifica::test_reconstruccion_no_depende_del_catalogo_vivo",
+   "estado": "VALIDATED",
+   "duracion_s": 0.048,
+   "categoria": "regresión · reproducibilidad",
+   "esperado": "\"d16ec409511f3d381f12a77ffceed6214fb431919b911383ecef923555a5fd4b\"",
+   "obtenido": "\"d16ec409511f3d381f12a77ffceed6214fb431919b911383ecef923555a5fd4b\"",
+   "tolerancia": "igualdad exacta",
+   "mensaje": ""
+  }
+ ]
+}

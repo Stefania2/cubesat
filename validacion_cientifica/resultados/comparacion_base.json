@@ -1,0 +1,83 @@
+{
+  "PostgreSQL local (copia de trabajo)": {
+    "ejecutado_utc": "2026-11-17T17:44:40Z",
+    "resultados": [
+      {
+        "id": "PROV-BD-tramas_originales",
+        "modulo": "procedencia",
+        "nombre": "PostgreSQL local (copia de trabajo) = archivo sellado · tramas_originales",
+        "estado": "VALIDATED",
+        "esperado": {
+          "sha256": "dafeb4bb249890a164054aa66ab1be9834f9d7ab668202557df8d248acc21a50",
+          "filas": 36641
+        },
+        "obtenido": {
+          "sha256": "dafeb4bb249890a164054aa66ab1be9834f9d7ab668202557df8d248acc21a50",
+          "filas": 36641
+        },
+        "tolerancia": "igualdad exacta",
+        "detalle": "La tabla de la base coincide fila a fila con el archivo.",
+        "referencia": "FIPS 180-4 (SHA-256)",
+        "ejecutado_utc": "2026-11-17T17:44:35Z",
+        "datos": {}
+      },
+      {
+        "id": "PROV-BD-observaciones",
+        "modulo": "procedencia",
+        "nombre": "PostgreSQL local (copia de trabajo) = archivo sellado · observaciones",
+        "estado": "VALIDATED",
+        "esperado": {
+          "sha256": "f6a2998984bae2b7e83097b2c5f4a8c20e16c8c4bfbebb2cb971e04be46b25f0",
+          "filas": 3049
+        },
+        "obtenido": {
+          "sha256": "f6a2998984bae2b7e83097b2c5f4a8c20e16c8c4bfbebb2cb971e04be46b25f0",
+          "filas": 3049
+        },
+        "tolerancia": "igualdad exacta",
+        "detalle": "La tabla de la base coincide fila a fila con el archivo.",
+        "referencia": "FIPS 180-4 (SHA-256)",
+        "ejecutado_utc": "2026-11-17T17:44:36Z",
+        "datos": {}
+      },
+      {
+        "id": "PROV-BD-tramas_clasificacion",
+        "modulo": "procedencia",
+        "nombre": "PostgreSQL local (copia de trabajo) = archivo sellado · tramas_clasificacion",
+        "estado": "VALIDATED",
+        "esperado": {
+          "sha256": "3a0e52b7487b979e57567bf9c51f65e2daa82b878a460923474ba9a481ebf425",
+          "filas": 36641
+        },
+        "obtenido": {
+          "sha256": "3a0e52b7487b979e57567bf9c51f65e2daa82b878a460923474ba9a481ebf425",
+          "filas": 36641
+        },
+        "tolerancia": "igualdad exacta",
+        "detalle": "La tabla de la base coincide fila a fila con el archivo.",
+        "referencia": "FIPS 180-4 (SHA-256)",
+        "ejecutado_utc": "2026-11-17T17:44:36Z",
+        "datos": {}
+      },
+      {
+        "id": "PROV-BD-campos_decodificados",
+        "modulo": "procedencia",
+        "nombre": "PostgreSQL local (copia de trabajo) = archivo sellado · campos_decodificados",
+        "estado": "VALIDATED",
+        "esperado": {
+          "sha256": "e739bafa2c6bc84e7ce725151fd10f7e0d315d36fe4fc47792912ab99ce3d95b",
+          "filas": 198349
+        },
+        "obtenido": {
+          "sha256": "e739bafa2c6bc84e7ce725151fd10f7e0d315d36fe4fc47792912ab99ce3d95b",
+          "filas": 198349
+        },
+        "tolerancia": "igualdad exacta",
+        "detalle": "La tabla de la base coincide fila a fila con el archivo.",
+        "referencia": "FIPS 180-4 (SHA-256)",
+        "ejecutado_utc": "2026-11-17T17:44:40Z",
+        "datos": {}
+      }
+    ]
+  }
+}

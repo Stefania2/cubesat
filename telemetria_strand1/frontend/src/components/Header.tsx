@@ -11,6 +11,7 @@ const NAV = [
   { to: '/simulacion', label: 'Simulación' },
   { to: '/analytics', label: 'Análisis' },
   { to: '/advanced', label: 'Avanzado' },
+  { to: '/validacion', label: 'Validación' },
   { to: '/docs', label: 'Documentación' },
 ]
 
@@ -28,7 +29,7 @@ export function Header({ status }: { status: Status | null }) {
 
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-panel/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1400px] items-center gap-4 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-3 sm:px-6">
         <NavLink to="/" className="flex items-center gap-3" onClick={() => setAbierto(false)}>
           <Logo />
           <div className="leading-tight">
@@ -48,7 +49,7 @@ export function Header({ status }: { status: Status | null }) {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `whitespace-nowrap rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors ${
+                `whitespace-nowrap rounded-md px-2 py-1.5 text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-navy text-on-accent'
                     : 'text-ink-soft hover:bg-blue-light hover:text-navy'
@@ -60,7 +61,7 @@ export function Header({ status }: { status: Status | null }) {
           ))}
         </nav>
 
-        <div className="ml-auto flex items-center gap-3 lg:ml-4">
+        <div className="ml-auto flex items-center gap-3 lg:ml-3">
           <div className="hidden items-center gap-1.5 sm:flex">
             <StatusDot tono={activo ? 'normal' : 'critical'} />
             <span
