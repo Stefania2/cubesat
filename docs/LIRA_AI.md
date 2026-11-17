@@ -167,7 +167,7 @@ que conviene configurar.
 ### Motor conversacional
 
 `claude-sonnet-5-5` por la Messages API con herramientas propias y el bucle en nuestro backend
-(máx. 6 llamadas, 40 s por turno para no rozar los 60 s de Vercel), esfuerzo `medium`,
+(máx. 6 llamadas y 45 s por turno; cada llamada se corta con el tiempo que queda, para no pasar de los 60 s de Vercel, ni en frío, cuando cargar el archivo cuesta unos 20 s), esfuerzo `medium`,
 `tool_choice` automático (Sonnet 5.5 no admite forzar una herramienta) y **fallback del servidor
 activado** (`fallbacks: "default"`): si el modelo rechaza una petición por sus filtros de
 seguridad, la API la reintenta con un modelo alternativo dentro de la misma llamada.
@@ -202,8 +202,8 @@ panel muestra los estados: en espera, escuchando, procesando, respondiendo, ejec
 
 ## 6. Pruebas (etapa 4)
 
-**Automáticas, sin red ni gasto** (`tests/test_lira.py`, 100 pruebas, todas aprobadas el 2026-11-17;
-suite completa del repositorio 378 aprobadas, 1 omitida):
+**Automáticas, sin red ni gasto** (`tests/test_lira.py`, 102 pruebas, todas aprobadas el 2026-11-17;
+suite completa del repositorio 380 aprobadas, 1 omitida):
 
 | Grupo | Qué demuestra |
 | --- | --- |

@@ -26,7 +26,8 @@ from . import registro, seguridad, verificador
 from .interprete import interpretar
 
 MAX_ITERACIONES = 6
-PRESUPUESTO_S = 40.0            # la funcion de Vercel corta a los 60 s
+PRESUPUESTO_S = 45.0            # la funcion de Vercel corta a los 60 s; en frio, cargar el archivo cuesta ~20 s
+MARGEN_LLAMADA_S = 6.0          # no se empieza una llamada a Claude con menos tiempo que este
 MAX_HISTORIAL = 6
 ESFUERZO = "medium"
 
@@ -253,10 +254,14 @@ def _con_ia(texto: str, contexto: dict, historial: list[dict], salida: dict) -> 
     uso = {"entrada": 0, "salida": 0, "cache_lectura": 0, "cache_escritura": 0, "llamadas": 0}
     respuesta = None
     for _ in range(MAX_ITERACIONES):
-        if time.monotonic() - inicio > PRESUPUESTO_S:
+        restante = PRESUPUESTO_S - (time.monotonic() - inicio)
+        if restante < MARGEN_LLAMADA_S:
             salida["texto"] = "Se me acabó el tiempo para responder. Prueba con una pregunta más concreta."
             break
+        # Cada llamada se corta con el tiempo que queda: una llamada empezada tarde no
+        # puede arrastrar la funcion mas alla del limite de Vercel.
         respuesta = cliente.beta.messages.create(
+            timeout=restante,
             model=MODELO, max_tokens=4000, system=SISTEMA, tools=tools, messages=mensajes,
             output_config={"effort": ESFUERZO}, cache_control={"type": "ephemeral"},
             betas=["server-side-fallback-2026-07-01"], fallbacks="default",

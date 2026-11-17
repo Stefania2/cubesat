@@ -472,3 +472,17 @@ def test_ia_cifras_de_acciones_validadas_cuentan_como_respaldadas(con_ia):
             ("end_turn", [_texto("Listo: reproducción a velocidad 0,25.")])])
     s = motor.turno("déjalo corriendo muy despacio, ¿por qué no?", CTX, sesion={"sid": "s"})
     assert s["acciones"] and s["verificacion"]["ok"]
+
+
+def test_ia_cada_llamada_tiene_el_tiempo_restante(con_ia, monkeypatch):
+    c = con_ia([("tool_use", [_tool("t1", "limites", {})]), ("end_turn", [_texto("Hecho.")])])
+    motor.turno("¿por qué …?", CTX, sesion={"sid": "s"})
+    assert all(0 < p["timeout"] <= motor.PRESUPUESTO_S for p in c.peticiones)
+
+
+def test_ia_sin_tiempo_no_empieza_otra_llamada(con_ia, monkeypatch):
+    c = con_ia([("tool_use", [_tool("t1", "limites", {})]), ("end_turn", [_texto("no debería llegar")])])
+    reloj = iter([0.0, 1.0, motor.PRESUPUESTO_S, motor.PRESUPUESTO_S, motor.PRESUPUESTO_S])
+    monkeypatch.setattr(motor.time, "monotonic", lambda: next(reloj, motor.PRESUPUESTO_S))
+    s = motor.turno("¿por qué …?", CTX, sesion={"sid": "s"})
+    assert len(c.peticiones) == 1 and "tiempo" in s["texto"]
