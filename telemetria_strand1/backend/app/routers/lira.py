@@ -98,8 +98,19 @@ def turno(datos: Turno, x_lira_ficha: str | None = Header(default=None)) -> dict
     except Exception as exc:  # noqa: BLE001 - un fallo de la IA no debe tumbar la interfaz
         import anthropic
 
+        if isinstance(exc, anthropic.APIStatusError):
+            mensaje = str(getattr(exc, "message", "")).lower()
+            if "credit balance" in mensaje:
+                detalle = "La cuenta de la IA no tiene saldo. Las órdenes directas siguen funcionando."
+            elif exc.status_code in (401, 403):
+                detalle = "La credencial de la IA no es válida. Las órdenes directas siguen funcionando."
+            elif exc.status_code == 429:
+                detalle = "La IA ha alcanzado su límite de peticiones. Prueba en un minuto."
+            else:
+                detalle = "El servicio de IA no respondió. Prueba de nuevo o usa órdenes directas."
+            raise HTTPException(status_code=503, detail=detalle) from exc
         if isinstance(exc, anthropic.APIError):
-            raise HTTPException(status_code=502, detail="El servicio de IA no respondió. Prueba de nuevo "
+            raise HTTPException(status_code=503, detail="El servicio de IA no respondió. Prueba de nuevo "
                                                         "o usa órdenes directas.") from exc
         raise
 

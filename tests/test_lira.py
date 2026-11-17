@@ -443,3 +443,24 @@ def test_la_evaluacion_con_ia_no_la_resuelve_el_interprete():
 
     cubiertas = [f for f, e, _ in CASOS if interpretar(f, {**CTX_EVAL, **e}).cubierta]
     assert cubiertas == []
+
+
+@pytest.mark.parametrize("codigo, mensaje, esperado", [
+    (400, "Your credit balance is too low to access the Anthropic API.", "no tiene saldo"),
+    (401, "invalid x-api-key", "credencial de la IA no es válida"),
+    (429, "rate limited", "límite de peticiones"),
+])
+def test_api_errores_de_anthropic_se_explican(cliente, monkeypatch, codigo, mensaje, esperado):
+    """El 2026-11-17 producción decía «no respondió» cuando la cuenta no tenía saldo."""
+    import anthropic
+    import httpx2
+
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-prueba")
+    clase = {400: anthropic.BadRequestError, 401: anthropic.AuthenticationError, 429: anthropic.RateLimitError}[codigo]
+    respuesta = httpx2.Response(codigo, request=httpx2.Request("POST", "https://api.anthropic.com/v1/messages"))
+
+    def falla(**_):
+        raise clase(mensaje, response=respuesta, body=None)
+    monkeypatch.setattr(motor, "CLIENTE", lambda: NS(beta=NS(messages=NS(create=falla))))
+    r = cliente.post("/api/lira/turno", json={"texto": "¿por qué el voltaje es tan alto?", "contexto": CTX})
+    assert r.status_code == 503 and esperado in r.json()["detail"]

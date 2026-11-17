@@ -186,6 +186,10 @@ vercel env add ANTHROPIC_API_KEY production
 vercel env add LIRA_CLAVE production
 ```
 
+La API de Anthropic es **de prepago** y aparte de cualquier suscripción de claude.ai: sin créditos en
+la organización de la clave, cada pregunta a la IA responde «La cuenta de la IA no tiene saldo»
+(503) y las órdenes directas siguen funcionando.
+
 Sin `LIRA_CLAVE`, en Vercel la IA queda **desactivada** (nunca abierta por omisión). En local, sin
 `LIRA_CLAVE`, la IA se permite sin contraseña. Cambiar `LIRA_CLAVE` invalida todas las sesiones.
 
@@ -198,8 +202,8 @@ panel muestra los estados: en espera, escuchando, procesando, respondiendo, ejec
 
 ## 6. Pruebas (etapa 4)
 
-**Automáticas, sin red ni gasto** (`tests/test_lira.py`, 96 pruebas, todas aprobadas el 2026-11-17;
-suite completa del repositorio 374 aprobadas, 1 omitida):
+**Automáticas, sin red ni gasto** (`tests/test_lira.py`, 99 pruebas, todas aprobadas el 2026-11-17;
+suite completa del repositorio 377 aprobadas, 1 omitida):
 
 | Grupo | Qué demuestra |
 | --- | --- |
