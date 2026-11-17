@@ -57,6 +57,16 @@ FICHEROS = {
     "catalogo_tle": "ORIGINAL",
 }
 
+# Complemento para servir la plataforma web sin PostgreSQL (`app/archivo_sqlite.py`).
+# Se sella aparte: no son entradas de ninguna reconstruccion, asi que no entran en
+# `huella_conjunto` y los manifests ya emitidos siguen siendo reproducibles.
+FICHEROS_PLATAFORMA = {
+    "tramas_analisis": "PROCESADA",       # frames.analysis (evidencia estructural AX.25)
+    "observaciones_id": "ORIGINAL",       # clave primaria de observations
+    "reglas_anomalias": "CONFIGURACION",  # anomaly_rules
+    "protocolos": "CONFIGURACION",        # protocol_definitions
+}
+
 
 # ── Serializacion canonica y huellas ────────────────────────────────────────
 
@@ -116,7 +126,7 @@ def _contenido(nombre: str) -> bytes:
 
 def cargar(nombre: str) -> list[dict]:
     """Filas de un fichero del archivo, tal como se sellaron."""
-    if nombre not in FICHEROS:
+    if nombre not in FICHEROS and nombre not in FICHEROS_PLATAFORMA:
         raise KeyError(nombre)
     return [json.loads(linea) for linea in _contenido(nombre).splitlines() if linea]
 
@@ -173,6 +183,27 @@ def ultima_comparacion_base() -> dict | None:
     if not COMPARACION_BASE.exists():
         return None
     return json.loads(COMPARACION_BASE.read_text(encoding="utf-8"))
+
+
+def verificar_plataforma() -> list[E.Resultado]:
+    """Huellas del complemento de plataforma frente a su sello."""
+    sello = (leer_sello() or {}).get("plataforma")
+    if not sello:
+        return [E.no_disponible("PROV-PLAT", "procedencia", "Complemento de plataforma",
+                                "El sello no incluye el complemento de plataforma.")]
+    fuera = []
+    for nombre, capa in FICHEROS_PLATAFORMA.items():
+        meta = sello.get(nombre)
+        rid = f"PROV-PLAT-{nombre}"
+        if meta is None or not _ruta(nombre).exists():
+            fuera.append(E.no_disponible(rid, "procedencia", f"Plataforma · {nombre}", "Fichero ausente."))
+            continue
+        obtenido = sha256(_contenido(nombre))
+        fuera.append(E.ejecutado(rid, "procedencia", f"Integridad SHA-256 · {nombre} ({capa})",
+                                 obtenido == meta["sha256_contenido"],
+                                 esperado=meta["sha256_contenido"], obtenido=obtenido,
+                                 tolerancia="igualdad exacta", referencia="FIPS 180-4 (SHA-256)"))
+    return fuera
 
 
 def huella_conjunto() -> str | None:

@@ -170,3 +170,5 @@ class StatusOut(BaseModel):
     observaciones: int
     protocolos_validados: int
     satnogs_token_configurado: bool
+    # Solo en modo archivo: sello, fecha y huella de los datos que se sirven.
+    fuente_datos: dict | None = None

@@ -41,11 +41,18 @@ CONSULTAS = {
     "campos_decodificados": ("decoded_fields", "id, frame_id, protocol_name, field_name, value_numeric, "
                              "value_text, unit, timestamp", "id"),
 }
+CONSULTAS_PLATAFORMA = {
+    "tramas_analisis": ("frames", "id, analysis", "id"),
+    "observaciones_id": ("observations", "id, observation_id", "id"),
+    "reglas_anomalias": ("anomaly_rules", "id, key, label, description, enabled, severity, params", "id"),
+    "protocolos": ("protocol_definitions", "id, name, norad_id, description, reference, validated, "
+                                           "field_spec, created_at", "id"),
+}
 PAGINA = 10_000
 REINTENTOS = 4
 
 # Columnas de fecha: se escriben siempre en la forma de `tiempo.iso`.
-FECHAS = {"timestamp", "ingested_at", "start", "end", "fetched_at"}
+FECHAS = {"timestamp", "ingested_at", "start", "end", "fetched_at", "created_at"}
 
 
 def _normalizar(fila: dict) -> dict:
@@ -84,7 +91,7 @@ def filas_de_base(nombre: str):
 
     from gemelo_digital import datos
 
-    tabla, columnas, clave = CONSULTAS[nombre]
+    tabla, columnas, clave = {**CONSULTAS, **CONSULTAS_PLATAFORMA}[nombre]
     sql = text(f"select {columnas} from {tabla} where {clave} > :ultimo order by {clave} limit {PAGINA}")
     motor = create_engine(datos.dsn(), pool_pre_ping=True,
                           connect_args={"connect_timeout": 30})
@@ -156,6 +163,14 @@ def sellar(forzar: bool = False) -> dict:
                             "sha256_gz": P.sha256(gz), "bytes_gz": len(gz),
                             "bytes_contenido": len(contenido)}
         print(f"{nombre:24s} {n:7d} filas  {len(gz)/1e6:6.2f} MB  {huella[:16]}…")
+    plataforma = {}
+    for nombre, capa in P.FICHEROS_PLATAFORMA.items():
+        huella, n, contenido = P.huella_filas(filas_de_base(nombre))
+        gz = P.comprimir_determinista(contenido)
+        (P.DIR_ARCHIVO / f"{nombre}.jsonl.gz").write_bytes(gz)
+        plataforma[nombre] = {"capa": capa, "filas": n, "sha256_contenido": huella,
+                              "sha256_gz": P.sha256(gz), "bytes_gz": len(gz)}
+        print(f"{nombre:24s} {n:7d} filas  {len(gz)/1e6:6.2f} MB  {huella[:16]}…  (plataforma)")
     sello = {
         "mision": "STRaND-1", "norad_id": 39090,
         "sellado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
@@ -166,8 +181,31 @@ def sellar(forzar: bool = False) -> dict:
                    "microsegundos; null = dato ausente. gzip sin fecha ni nombre.",
         "huella": "SHA-256 del contenido sin comprimir (sha256_contenido) y del .gz (sha256_gz)",
         "ficheros": ficheros,
+        "plataforma": plataforma,
+        "nota_plataforma": "Complemento para servir la web sin PostgreSQL; no entra en huella_conjunto.",
         "versiones_al_sellar": P.versiones(),
     }
+    P.SELLO.write_text(json.dumps(sello, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return sello
+
+
+def sellar_plataforma() -> dict:
+    """Escribe solo el complemento de plataforma y lo añade al sello vigente, sin tocar el resto."""
+    sello = P.leer_sello()
+    if sello is None:
+        raise SystemExit("No hay sello: ejecute primero el sellado completo.")
+    plataforma = {}
+    for nombre, capa in P.FICHEROS_PLATAFORMA.items():
+        huella, n, contenido = P.huella_filas(filas_de_base(nombre))
+        gz = P.comprimir_determinista(contenido)
+        (P.DIR_ARCHIVO / f"{nombre}.jsonl.gz").write_bytes(gz)
+        plataforma[nombre] = {"capa": capa, "filas": n, "sha256_contenido": huella,
+                              "sha256_gz": P.sha256(gz), "bytes_gz": len(gz)}
+        print(f"{nombre:24s} {n:7d} filas  {len(gz)/1e6:6.2f} MB  {huella[:16]}…")
+    sello["plataforma"] = plataforma
+    sello["plataforma_sellado_utc"] = E.ahora_utc()
+    sello["plataforma_origen"] = origen_base()
+    sello["nota_plataforma"] = "Complemento para servir la web sin PostgreSQL; no entra en huella_conjunto."
     P.SELLO.write_text(json.dumps(sello, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return sello
 
@@ -176,7 +214,12 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--comparar", action="store_true", help="solo comparar la base con el sello")
     ap.add_argument("--forzar", action="store_true", help="sellar aunque el contenido haya cambiado")
+    ap.add_argument("--solo-plataforma", action="store_true",
+                    help="añadir o renovar solo el complemento de plataforma")
     args = ap.parse_args()
+    if args.solo_plataforma:
+        sellar_plataforma()
+        return
     if args.comparar:
         resultados = comparar_con_base()
         for r in resultados:

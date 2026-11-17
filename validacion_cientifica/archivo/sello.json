@@ -88,5 +88,38 @@
         "sha256": "a8862e45a47a2ad283b4b6d1c8a787486699da369b4e177fdf314ff1a4f0db8b"
       }
     }
-  }
+  },
+  "plataforma": {
+    "tramas_analisis": {
+      "capa": "PROCESADA",
+      "filas": 36641,
+      "sha256_contenido": "51f293a9cfef6f84424fe5a548c16e531f8a6d2288f59206066b4572dae470dd",
+      "sha256_gz": "e524491cfff57191f6fbead5c10b06d0da874a218306b86e96900bfa80843a65",
+      "bytes_gz": 460867
+    },
+    "observaciones_id": {
+      "capa": "ORIGINAL",
+      "filas": 3049,
+      "sha256_contenido": "aeec545c54bdb6a5615bcb4f57c7b73b20e96c3feb340a815be6becbdb039cd4",
+      "sha256_gz": "bbd5405fe8f569ba5705133cb8f1e16696f2c51341b79398321d18ee5e4d299a",
+      "bytes_gz": 18850
+    },
+    "reglas_anomalias": {
+      "capa": "CONFIGURACION",
+      "filas": 6,
+      "sha256_contenido": "01bc721f959dbd4a46a293a077df4bcecee3802097b133225e690cb59e2241e7",
+      "sha256_gz": "87e559865e55a042853ef84906964531b9a00b8f78e3d3d9e5a2ddd525004d6a",
+      "bytes_gz": 536
+    },
+    "protocolos": {
+      "capa": "CONFIGURACION",
+      "filas": 1,
+      "sha256_contenido": "76551589c91394ab2255888bdb4003e03b2c190278e59c124751bc901179b41a",
+      "sha256_gz": "5a319862df044f8ce84747bf232a9d8a60fd1d1607b9de89a2aaa2400b24017b",
+      "bytes_gz": 652
+    }
+  },
+  "plataforma_sellado_utc": "2026-11-17T21:28:27Z",
+  "plataforma_origen": "PostgreSQL local (copia de trabajo)",
+  "nota_plataforma": "Complemento para servir la web sin PostgreSQL; no entra en huella_conjunto."
 }

@@ -19,7 +19,7 @@ router = APIRouter(prefix="/api/anomalies", tags=["anomalies"])
 
 @router.get("", response_model=AnomalyReportOut)
 def informe(db: Session = Depends(get_db)):
-    frames = db.scalars(select(Frame)).all()
+    frames = db.scalars(select(Frame).order_by(Frame.id)).all()   # orden estable: no depende de la base
     reglas = db.scalars(select(AnomalyRule).order_by(AnomalyRule.id)).all()
     hallazgos = evaluar(frames, reglas)
 

@@ -9,7 +9,7 @@ haya, cada parametro se devuelve con estado `not_decoded` y el motivo.
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import func, select, tuple_
+from sqlalchemy import func, literal, select, tuple_
 from sqlalchemy.orm import Session
 
 from ..config import settings
@@ -64,7 +64,7 @@ def _parametro_entropia(db: Session) -> ParametroTelemetria:
     filas = db.execute(
         select(Frame.timestamp, Frame.entropy_bits_per_byte)
         .where(Frame.entropy_bits_per_byte.is_not(None))
-        .order_by(Frame.timestamp.desc())
+        .order_by(Frame.timestamp.desc(), Frame.id.desc())
         .limit(200)
     ).all()
 
@@ -148,7 +148,7 @@ def parametros(db: Session = Depends(get_db)):
         registros = db.scalars(
             select(DecodedField)
             .where(DecodedField.field_name == entrada["key"])
-            .order_by(DecodedField.timestamp.desc())
+            .order_by(DecodedField.timestamp.desc(), DecodedField.id.desc())
             .limit(200)
         ).all()
 
@@ -319,6 +319,11 @@ def campos_decodificados(db: Session = Depends(get_db)):
     porque un campo que nunca cambia no esta midiendo nada, y eso hay que poder
     verlo.
     """
+    # `percentile_cont` es de PostgreSQL. En SQLite (archivo sellado) los
+    # percentiles se calculan despues en Python con la misma interpolacion lineal.
+    en_sqlite = db.get_bind().dialect.name == "sqlite"
+    p05_sql = literal(None) if en_sqlite else func.percentile_cont(0.05).within_group(DecodedField.value_numeric)
+    p95_sql = literal(None) if en_sqlite else func.percentile_cont(0.95).within_group(DecodedField.value_numeric)
     filas = db.execute(
         select(
             DecodedField.field_name,
@@ -334,8 +339,8 @@ def campos_decodificados(db: Session = Depends(get_db)):
             # Rango tipico: acota la vista sin descartar nada. Cuando el maximo
             # queda muy lejos del percentil 95, el extremo viene de una trama con
             # bytes alterados, no del comportamiento del canal.
-            func.percentile_cont(0.05).within_group(DecodedField.value_numeric),
-            func.percentile_cont(0.95).within_group(DecodedField.value_numeric),
+            p05_sql,
+            p95_sql,
             # Lecturas por encima del fondo de escala de un ADC de 10 bits. Solo
             # significa algo en los campos `*_adc`, que son cuentas crudas.
             func.count(DecodedField.id).filter(DecodedField.value_numeric > 1023),
@@ -343,8 +348,18 @@ def campos_decodificados(db: Session = Depends(get_db)):
             func.max(DecodedField.timestamp),
         )
         .group_by(DecodedField.field_name)
-        .order_by(func.count(DecodedField.id).desc())
+        .order_by(func.count(DecodedField.id).desc(), DecodedField.field_name)
     ).all()
+
+    if en_sqlite:
+        import numpy as np
+
+        valores: dict[str, list[float]] = {}
+        for nombre, v in db.execute(select(DecodedField.field_name, DecodedField.value_numeric)
+                                    .where(DecodedField.value_numeric.is_not(None))).all():
+            valores.setdefault(nombre, []).append(v)
+        percentiles = {n: (float(np.percentile(v, 5)), float(np.percentile(v, 95))) for n, v in valores.items()}
+        filas = [(*f[:6], *percentiles.get(f[0], (None, None)), *f[8:]) for f in filas]
 
     tabla_cal = calibraciones()
 

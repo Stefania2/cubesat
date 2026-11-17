@@ -45,7 +45,7 @@ def _filas(db: Session, conjunto: str) -> tuple[list[str], list[dict]]:
         columnas = ["id", "timestamp", "norad_id", "observer", "observation_id", "raw_hex"]
         filas = [
             {c: getattr(f, c) for c in columnas}
-            for f in db.scalars(select(Frame).order_by(Frame.timestamp))
+            for f in db.scalars(select(Frame).order_by(Frame.timestamp, Frame.id))
         ]
     elif conjunto == "frames-processed":
         columnas = [
@@ -54,13 +54,13 @@ def _filas(db: Session, conjunto: str) -> tuple[list[str], list[dict]]:
         ]
         filas = [
             {c: getattr(f, c) for c in columnas}
-            for f in db.scalars(select(Frame).order_by(Frame.timestamp))
+            for f in db.scalars(select(Frame).order_by(Frame.timestamp, Frame.id))
         ]
     else:  # telemetry-decoded
         columnas = ["timestamp", "protocol_name", "field_name", "value_numeric", "value_text", "unit"]
         filas = [
             {c: getattr(d, c) for c in columnas}
-            for d in db.scalars(select(DecodedField).order_by(DecodedField.timestamp))
+            for d in db.scalars(select(DecodedField).order_by(DecodedField.timestamp, DecodedField.id))
         ]
     return columnas, filas
 

@@ -1,8 +1,22 @@
-"""Conexion a base de datos con caida a SQLite si PostgreSQL no responde."""
+"""Conexion a base de datos.
+
+Dos fuentes, elegidas de forma explicita con FUENTE_DATOS:
+
+    postgres  la base de la plataforma (local o Neon). Por omision fuera de Vercel.
+    archivo   SQLite de solo lectura construida desde el archivo sellado
+              (`archivo_sqlite.py`). Por omision en Vercel: la web publica no
+              depende de Neon ni de su cuota.
+
+En modo archivo no hay caida silenciosa: si el archivo no supera la
+verificacion SHA-256, la aplicacion no arranca. La antigua caida a una SQLite
+VACIA solo existe en modo postgres y fuera de Vercel.
+"""
 
 from __future__ import annotations
 
 import logging
+import math
+import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
@@ -17,8 +31,51 @@ class Base(DeclarativeBase):
     pass
 
 
+FUENTE_DATOS = (os.environ.get("FUENTE_DATOS") or ("archivo" if os.environ.get("VERCEL") else "postgres")).lower()
+FUENTE_INFO: dict | None = None
+
+
+def _mayor(*valores):
+    vals = [v for v in valores if v is not None]
+    return max(vals) if vals else None
+
+
+def _logaritmo(base, x):
+    if base is None or x is None or x <= 0 or base <= 0 or base == 1:
+        return None
+    return math.log(x, base)
+
+
+def _motor_archivo():
+    """SQLite del archivo sellado, de solo lectura, con las funciones que PostgreSQL trae y SQLite no."""
+    from sqlalchemy import event
+
+    from .archivo_sqlite import construir, verificar
+
+    global FUENTE_INFO
+    FUENTE_INFO = verificar()
+    ruta = construir()
+    url = f"sqlite:///file:{ruta}?mode=ro&uri=true"
+    engine = create_engine(url, connect_args={"check_same_thread": False}, future=True)
+
+    @event.listens_for(engine, "connect")
+    def _funciones(conexion, _registro):
+        conexion.create_function("greatest", -1, _mayor, deterministic=True)
+        conexion.create_function("log", 2, _logaritmo, deterministic=True)
+
+    # `gemelo_digital.datos` (gemelo y salud) abre su propia conexion: que lea la misma base.
+    os.environ["DATOS_DSN"] = url
+    FUENTE_INFO["base"] = str(ruta)
+    logger.info("Base de datos: archivo sellado (%s), sellado %s", ruta.name, FUENTE_INFO["sellado_utc"])
+    return engine, "archivo"
+
+
 def _build_engine():
-    """Intenta PostgreSQL; si no hay servidor utilizable, usa SQLite."""
+    """Fuente elegida con FUENTE_DATOS; en modo postgres, caida a SQLite si no responde."""
+    if FUENTE_DATOS == "archivo":
+        return _motor_archivo()
+    if FUENTE_DATOS != "postgres":
+        raise RuntimeError(f"FUENTE_DATOS={FUENTE_DATOS!r} no es valida: use «archivo» o «postgres».")
     try:
         engine = create_engine(
             settings.database_url,
@@ -34,7 +91,7 @@ def _build_engine():
         logger.info("Base de datos: PostgreSQL (%s)", engine.url.render_as_string(hide_password=True))
         return engine, "postgresql"
     except (OperationalError, ImportError, ModuleNotFoundError) as exc:
-        if settings.require_postgres:
+        if settings.require_postgres or os.environ.get("VERCEL"):
             raise RuntimeError(
                 f"No se pudo conectar a PostgreSQL ({type(exc).__name__}: {exc}).\n"
                 "REQUIRE_POSTGRES=true impide caer a SQLite. Crea el rol y la base:\n"

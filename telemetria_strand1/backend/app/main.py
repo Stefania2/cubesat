@@ -16,7 +16,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from .config import settings
-from .database import DB_BACKEND, SessionLocal, get_db, init_db
+from .database import DB_BACKEND, FUENTE_INFO, SessionLocal, get_db, init_db
 from .ingest import (
     crear_reglas_por_defecto,
     decodificar_frames_almacenados,
@@ -38,6 +38,11 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    if DB_BACKEND == "archivo":
+        # Base de solo lectura: las reglas y el protocolo ya vienen del archivo
+        # sellado; no hay nada que crear ni sembrar.
+        yield
+        return
     init_db()
     with SessionLocal() as db:
         crear_reglas_por_defecto(db)
@@ -99,6 +104,7 @@ def estado(db: Session = Depends(get_db)):
             )
         ) or 0,
         satnogs_token_configurado=bool(settings.satnogs_api_token),
+        fuente_datos=FUENTE_INFO and {k: v for k, v in FUENTE_INFO.items() if k != "base"},
     )
 
 

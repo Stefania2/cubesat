@@ -34,8 +34,13 @@ CAMPOS_PROTOCOLO = ("seq_no", "node_channel", "i2c_node_address")
 
 
 def dsn(env_file: Path = ENV_POR_DEFECTO) -> str:
-    """Cadena de conexion, del entorno o del .env de la plataforma."""
-    url = os.environ.get("DATABASE_URL", "")
+    """Cadena de conexion, del entorno o del .env de la plataforma.
+
+    DATOS_DSN manda sobre todo lo demas: la pone la plataforma cuando sirve el
+    archivo sellado (SQLite de solo lectura), para que el gemelo y la salud lean
+    exactamente la misma base que el resto de la API.
+    """
+    url = os.environ.get("DATOS_DSN") or os.environ.get("DATABASE_URL", "")
     if not url and env_file.exists():
         for linea in env_file.read_text(encoding="utf-8").splitlines():
             if linea.startswith("DATABASE_URL="):
@@ -53,13 +58,29 @@ def dsn(env_file: Path = ENV_POR_DEFECTO) -> str:
     return url
 
 
+# Todas las consultas desempatan por id. Dos balizas pueden llegar en el mismo
+# segundo (la resolucion de SatNOGS) y, ordenando solo por fecha, cada base
+# devolvia los empates en un orden distinto: el gemelo y la perdida de paquetes
+# del HMTA daban cifras distintas segun la base y la ejecucion (detectado el
+# 2026-11-17 al comparar PostgreSQL con el archivo sellado).
+
+
 def _leer(sql: str, env_file: Path) -> pd.DataFrame:
     # Via SQLAlchemy y no psycopg a pelo: pandas solo soporta oficialmente lo
     # primero, y con una conexion cruda avisa en cada llamada.
     from sqlalchemy import create_engine, text
 
-    with create_engine(dsn(env_file)).connect() as con:
-        return pd.read_sql_query(text(sql), con)
+    motor = create_engine(dsn(env_file))
+    with motor.connect() as con:
+        df = pd.read_sql_query(text(sql), con)
+    if motor.dialect.name == "sqlite":
+        # SQLite no tiene tipo fecha: las devuelve como texto en UTC sin zona.
+        # Se convierten a la misma forma que da PostgreSQL (datetime con zona UTC).
+        for col in ("timestamp", "start", "end"):
+            if col in df.columns:
+                df[col] = pd.to_datetime(df[col], utc=True, format="ISO8601")
+    motor.dispose()
+    return df
 
 
 def cargar_frames(env_file: Path = ENV_POR_DEFECTO) -> pd.DataFrame:
@@ -69,7 +90,7 @@ def cargar_frames(env_file: Path = ENV_POR_DEFECTO) -> pd.DataFrame:
         select id, timestamp, observation_id, station_id, observer,
                byte_count, entropy_bits_per_byte, distinct_bytes,
                status, frame_type, protocol
-        from frames order by timestamp
+        from frames order by timestamp, id
         """,
         env_file,
     )
@@ -89,7 +110,7 @@ def cargar_campos(env_file: Path = ENV_POR_DEFECTO, solo_fisicos: bool = True) -
         from decoded_fields d
         join frames f on f.id = d.frame_id
         where d.value_numeric is not null
-        order by d.timestamp
+        order by d.timestamp, d.id
         """,
         env_file,
     )
@@ -111,7 +132,7 @@ def cargar_estados(env_file: Path = ENV_POR_DEFECTO) -> pd.DataFrame:
         from decoded_fields d
         join frames f on f.id = d.frame_id
         where d.value_text is not null
-        order by d.timestamp
+        order by d.timestamp, d.id
         """,
         env_file,
     )
@@ -129,7 +150,7 @@ def cargar_secuencias(env_file: Path = ENV_POR_DEFECTO) -> pd.DataFrame:
         from decoded_fields d
         join frames f on f.id = d.frame_id
         where d.field_name = 'seq_no'
-        order by d.timestamp
+        order by d.timestamp, d.id
         """,
         env_file,
     )
@@ -141,7 +162,7 @@ def cargar_observaciones(env_file: Path = ENV_POR_DEFECTO) -> pd.DataFrame:
         """
         select observation_id, station_id, station_name, observer, status,
                frequency_hz, "start", "end", max_elevation_deg
-        from observations order by "start"
+        from observations order by "start", observation_id
         """,
         env_file,
     )

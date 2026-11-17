@@ -215,10 +215,14 @@ def distribucion(db: Session = Depends(get_db)):
         .order_by(Frame.byte_count)
     ).all()
     estados = db.execute(
+        # Orden fijo (de mas a menos tramas): sin el, cada base devuelve los grupos
+        # en el orden que le conviene y la grafica cambia de un despliegue a otro.
         select(Frame.status, func.count(Frame.id)).group_by(Frame.status)
+        .order_by(func.count(Frame.id).desc(), Frame.status)
     ).all()
     tipos = db.execute(
         select(Frame.frame_type, func.count(Frame.id)).group_by(Frame.frame_type)
+        .order_by(func.count(Frame.id).desc(), Frame.frame_type)
     ).all()
     return {
         "longitudes": [{"bytes": b, "frames": n} for b, n in longitudes],

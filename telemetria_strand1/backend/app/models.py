@@ -14,7 +14,7 @@ La separacion entre capas es deliberada y es la regla central del proyecto:
 from __future__ import annotations
 
 import enum
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import (
     DateTime,
@@ -28,8 +28,32 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.types import TypeDecorator
 
 from .database import Base
+
+
+class FechaUTC(TypeDecorator):
+    """Fecha con zona horaria que siempre vuelve en UTC, tambien desde SQLite.
+
+    PostgreSQL guarda la zona (`timestamptz`) y la devuelve; SQLite no tiene ese
+    tipo y devolveria fechas «ingenuas» que el navegador leeria como hora local
+    (5 h de desfase en Colombia). Aqui se guardan en UTC sin zona y se les
+    devuelve la zona al leerlas. En PostgreSQL el comportamiento no cambia.
+    """
+
+    impl = DateTime(timezone=True)
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if value is not None and dialect.name == "sqlite" and value.tzinfo is not None:
+            return value.astimezone(timezone.utc).replace(tzinfo=None)
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None and value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
+        return value
 
 
 class FrameStatus(str, enum.Enum):
@@ -66,12 +90,12 @@ class Observation(Base):
     mode: Mapped[str | None] = mapped_column(String(60))
     transmitter: Mapped[str | None] = mapped_column(String(160))
 
-    start: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    end: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    start: Mapped[datetime | None] = mapped_column(FechaUTC())
+    end: Mapped[datetime | None] = mapped_column(FechaUTC())
     max_elevation_deg: Mapped[float | None] = mapped_column(Float)
 
     source: Mapped[str] = mapped_column(String(40), default="satnogs")
-    fetched_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    fetched_at: Mapped[datetime | None] = mapped_column(FechaUTC())
 
     frames: Mapped[list["Frame"]] = relationship(back_populates="observation")
 
@@ -92,7 +116,7 @@ class Frame(Base):
     norad_id: Mapped[int] = mapped_column(Integer, index=True)
     sat_id: Mapped[str | None] = mapped_column(String(80))
     observer: Mapped[str | None] = mapped_column(String(160), index=True)
-    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    timestamp: Mapped[datetime] = mapped_column(FechaUTC(), nullable=False)
     app_source: Mapped[str | None] = mapped_column(String(40))
     transmitter: Mapped[str | None] = mapped_column(String(160))
     version: Mapped[str | None] = mapped_column(String(20))
@@ -120,7 +144,7 @@ class Frame(Base):
     # descriptiva: registra que se busco y que se encontro, no una interpretacion.
     analysis: Mapped[dict | None] = mapped_column(JSON)
 
-    ingested_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    ingested_at: Mapped[datetime | None] = mapped_column(FechaUTC())
 
     decoded_fields: Mapped[list["DecodedField"]] = relationship(
         back_populates="frame", cascade="all, delete-orphan"
@@ -146,7 +170,7 @@ class ProtocolDefinition(Base):
     validated: Mapped[bool] = mapped_column(default=False)
     # Lista de campos: nombre, offset, longitud, tipo, escala, unidad.
     field_spec: Mapped[list | None] = mapped_column(JSON)
-    created_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime | None] = mapped_column(FechaUTC())
 
 
 class DecodedField(Base):
@@ -163,7 +187,7 @@ class DecodedField(Base):
     value_numeric: Mapped[float | None] = mapped_column(Float)
     value_text: Mapped[str | None] = mapped_column(String(255))
     unit: Mapped[str | None] = mapped_column(String(30))
-    timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    timestamp: Mapped[datetime] = mapped_column(FechaUTC(), index=True)
 
 
 class AnomalyRule(Base):

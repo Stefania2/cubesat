@@ -309,10 +309,17 @@ export function ErrorState({ mensaje, onReintentar }: { mensaje: string; onReint
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-danger">No se pudieron cargar los datos</p>
           <p className="mt-1 break-words text-sm text-ink-soft">{mensaje}</p>
-          <p className="mt-2 text-xs text-ink-soft">
-            Comprueba que el backend esté en marcha:{' '}
-            <code className="font-mono">uvicorn app.main:app --reload</code>
-          </p>
+          {import.meta.env.DEV ? (
+            <p className="mt-2 text-xs text-ink-soft">
+              Comprueba que el backend esté en marcha:{' '}
+              <code className="font-mono">uvicorn app.main:app --reload</code>
+            </p>
+          ) : (
+            <p className="mt-2 text-xs text-ink-soft">
+              El servidor no pudo leer los datos. Prueba de nuevo en unos segundos; si persiste, el
+              problema está en el servidor, no en tu conexión.
+            </p>
+          )}
         </div>
         {onReintentar && (
           <Button variante="secondary" onClick={onReintentar}>
