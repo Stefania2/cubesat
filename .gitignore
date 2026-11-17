@@ -37,3 +37,6 @@ health_monitor/_datos/
 
 # Avance de la descarga de geometría de SatNOGS (se retoma desde aquí)
 telemetria_strand1/backend/app/data/.geometria_avance.json
+
+# Registro de auditoria de LIRA (solo local)
+lira/_registro/

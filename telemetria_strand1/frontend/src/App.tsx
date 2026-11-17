@@ -2,6 +2,7 @@ import { Component, Suspense, lazy } from 'react'
 import type { ErrorInfo, ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Header } from './components/Header'
+import { Lira } from './components/lira/Lira'
 import { Dashboard } from './pages/Dashboard'
 import { Observations } from './pages/Observations'
 import { Telemetry } from './pages/Telemetry'
@@ -96,6 +97,7 @@ export default function App() {
           </Routes>
         </main>
         <Footer />
+        <Lira />
       </div>
     </BrowserRouter>
   )

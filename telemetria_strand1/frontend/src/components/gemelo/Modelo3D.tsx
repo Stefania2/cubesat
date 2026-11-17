@@ -46,6 +46,8 @@ interface Props {
   etiquetas: boolean
   seleccion: string | null
   onSeleccion: (id: string | null) => void
+  /** Contador: cada incremento devuelve la cámara a su posición y al centro, aunque no cambie de vista. */
+  reinicio?: number
 }
 
 /* ── Paleta: neutra por omisión, color solo con dato ──────────────────────── */
@@ -383,14 +385,19 @@ const POSICIONES: Record<Camara, [number, number, number]> = {
   superior: [0, 8.5, 0.001],
 }
 
-function ControlCamara({ camara }: { camara: Camara }) {
+function ControlCamara({ camara, reinicio = 0 }: { camara: Camara; reinicio?: number }) {
   const { camera } = useThree()
-  // Solo al cambiar de vista: no pisa lo que el usuario haya orbitado después.
+  const controles = useThree((s) => s.controls) as { target?: { set(x: number, y: number, z: number): void }; update?(): void } | null
+  // Solo al cambiar de vista (o al pedir recentrar): no pisa lo que el usuario
+  // haya orbitado después.
   useEffect(() => {
     const [x, y, z] = POSICIONES[camara]
     camera.position.set(x, y, z)
     camera.lookAt(0, 0, 0)
-  }, [camara, camera])
+    controles?.target?.set(0, 0, 0)
+    controles?.update?.()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [camara, camera, reinicio])
   return null
 }
 
@@ -445,7 +452,7 @@ export function Modelo3D(props: Props) {
       <directionalLight position={[6, 7, 8]} intensity={2.4} />
       <directionalLight position={[-7, 3, 6]} intensity={1.1} />
       <directionalLight position={[-4, -3, -6]} intensity={0.7} color="#7dd3fc" />
-      <ControlCamara camara={props.camara} />
+      <ControlCamara camara={props.camara} reinicio={props.reinicio} />
       <Satelite {...props} />
       <OrbitControls enablePan minDistance={3} maxDistance={22} makeDefault />
       <GizmoHelper alignment="bottom-left" margin={[58, 58]}>

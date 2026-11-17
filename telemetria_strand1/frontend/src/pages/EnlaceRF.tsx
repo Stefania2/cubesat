@@ -13,6 +13,7 @@
  */
 import { useEffect, useReducer, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { suscribir } from '../lib/lira'
 import {
   LineChart,
   Line,
@@ -287,6 +288,19 @@ export function EnlaceRF() {
 
   const [snr, setSnr] = useState<number | null>(null)
   const snrElegida = snr ?? config?.snr_default_db ?? 8
+
+  // LIRA AI: la acción llega validada (SNR dentro de 0-12 dB) y, si es crítica,
+  // ya confirmada por el usuario. Se ejecuta con el mismo `simular` que los botones,
+  // así que el backend vuelve a validar la petición.
+  const simularRef = useRef(simular)
+  simularRef.current = simular
+  useEffect(() => suscribir('enlace', (a) => {
+    const p = a.parametros
+    const accion = ({ iniciar: 'start', detener: 'stop', reiniciar: 'reset' } as Record<string, string>)[p.accion]
+    if (!accion) return
+    if (typeof p.snr_db === 'number') setSnr(p.snr_db)
+    void simularRef.current(accion, typeof p.snr_db === 'number' ? p.snr_db : undefined)
+  }), [])
   const numpy = config?.motor === 'numpy'
   const enMarcha = status?.sim_status === 'RUNNING'
   // undefined mientras carga la configuracion: no se habilita ni se niega nada.

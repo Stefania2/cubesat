@@ -11,6 +11,9 @@
 # Validacion cientifica: el archivo sellado viaja con el despliegue para que
 # las reconstrucciones no dependan de la base ni de SatNOGS.
 !/validacion_cientifica
+# LIRA AI: copiloto (su registro de auditoria es solo local).
+!/lira
+/lira/_registro
 !/tle
 !/parametros_enlace.py
 !/orbita_sgp4.py

@@ -28,7 +28,7 @@ from .ingest import (
 )
 from .models import Frame, Observation, ProtocolDefinition
 from .permisos import exigir_escritura
-from .routers import anomalies, decoder, export, frames, gemelo, monitor, observations, salud, telemetry, validacion
+from .routers import anomalies, decoder, export, frames, gemelo, monitor, lira, observations, salud, telemetry, validacion
 from .schemas import IngestResultOut, StatusOut
 from .services.satnogs import SatnogsError
 
@@ -78,6 +78,7 @@ app.include_router(export.router)
 app.include_router(gemelo.router)
 app.include_router(salud.router)
 app.include_router(validacion.router)
+app.include_router(lira.router)
 app.include_router(monitor.router)
 app.include_router(monitor.ws_router)
 

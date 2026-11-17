@@ -33,6 +33,7 @@ import {
 import { ErrorState, Skeleton } from '../components/ui'
 import { COMPONENTES, FUENTE_MISION, NO_DISPONIBLES, SUBSISTEMAS } from '../data/referenciaStrand1'
 import { api, useApi } from '../lib/api'
+import { actualizarContexto, suscribir } from '../lib/lira'
 import type { EstadoGemelo, EtiquetaAnomalia, EventoGemelo, LecturaGemelo } from '../lib/api'
 
 const VELOCIDADES = [1, 2, 5, 10, 25, 60]
@@ -183,6 +184,32 @@ export function GemeloDigital() {
   const [giro, setGiro] = useState(false)
   const [etiquetas, setEtiquetas] = useState(true)
   const [seleccion, setSeleccion] = useState<string | null>(null)
+  const [reinicioCamara, setReinicioCamara] = useState(0)
+
+  /* ── LIRA AI: acciones ya validadas por el backend, ejecutadas con los mismos setters ── */
+  useEffect(() => suscribir('gemelo', (a) => {
+    const p = a.parametros
+    switch (a.nombre) {
+      case 'gemelo_vista': setModo(p.modo as ModoVista); break
+      case 'gemelo_camara': setCamara(p.camara as Camara); setReinicioCamara((n) => n + 1); break
+      case 'gemelo_pestana': setPestana(p.pestana as Pestana); break
+      case 'gemelo_reproduccion': setReproduciendo(p.estado === 'reproducir'); break
+      case 'gemelo_velocidad': setVelocidad(Number(p.valor)); break
+      case 'gemelo_ir_a_fecha': irA(String(p.fecha)); break
+      case 'gemelo_magnitud': setCampo(String(p.campo)); break
+      case 'restablecer_vista':
+        setModo('exterior'); setCamara('isometrica'); setReinicioCamara((n) => n + 1)
+        setReproduciendo(false); setVelocidad(10); setIndice(0); setCampo('battery_voltage')
+        setPestana('monitor'); setSeleccion(null)
+        break
+    }
+  }), [irA])
+
+  // Lo que LIRA sabe de la pantalla: el instante y la magnitud del gemelo.
+  useEffect(() => {
+    actualizarContexto({ momento_utc: estado?.momento ?? null, campo, vista: modo, camara, reproduciendo })
+  }, [estado?.momento, campo, modo, camara, reproduciendo])
+  useEffect(() => () => actualizarContexto({ momento_utc: null }), [])
 
   const lecturas = useMemo(() => {
     const m = new Map<string, LecturaGemelo>()
@@ -296,7 +323,7 @@ export function GemeloDigital() {
                 <small>configuración general según {FUENTE_MISION.clave} · interior esquemático</small>
               </h2>
               <div className="gd-lienzo">
-                <Modelo3D lecturas={estado?.lecturas ?? []} modo={modo} camara={camara}
+                <Modelo3D lecturas={estado?.lecturas ?? []} modo={modo} camara={camara} reinicio={reinicioCamara}
                           desplegado={desplegado} giro={giro} etiquetas={etiquetas}
                           seleccion={seleccion} onSeleccion={setSeleccion} />
                 <div className="gd-sobre gd-sobre-arriba">
