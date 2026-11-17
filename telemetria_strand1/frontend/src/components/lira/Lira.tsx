@@ -248,7 +248,7 @@ export function Lira() {
 
   const iaAbierta = estado?.ia_configurada && (!estado.requiere_clave || ficha)
   const etiquetaIA = !estado ? '…' : !estado.ia_configurada ? 'IA no configurada'
-    : iaAbierta ? `IA activa · ${estado.modelo?.replace('claude-', '').replace(/-/g, ' ')}` : 'IA bloqueada'
+    : iaAbierta ? `IA activa · ${(estado.modelo ?? '').replace('claude-', '').replace(/-(\d+)-(\d+)$/, ' $1.$2')}` : 'IA bloqueada'
 
   return (
     <>
