@@ -8,6 +8,8 @@
 !/gemelo_digital
 !/health_monitor
 /health_monitor/validacion_matlab
+# Registro de eventos local del HMTA: nunca se publica (y en Vercel no se puede escribir).
+/health_monitor/_datos
 # Validacion cientifica: el archivo sellado viaja con el despliegue para que
 # las reconstrucciones no dependan de la base ni de SatNOGS.
 !/validacion_cientifica

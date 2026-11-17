@@ -383,3 +383,29 @@ def test_api_base_caida_es_503_no_satelite_sin_datos(cliente, monkeypatch):
     salud._evaluacion_real.cache_clear()
     r = c.get("/api/salud/resumen")
     assert r.status_code == 503 and "no un estado del satélite" in r.json()["detail"]
+
+
+
+def test_registro_en_disco_de_solo_lectura_pasa_a_memoria(tmp_path):
+    """Regresion 2026-11-17: en Vercel un registro existente se abria pero no se podia escribir."""
+    import os
+    import stat
+
+    from health_monitor.alerts import RegistroEventos
+
+    ruta = tmp_path / "eventos.sqlite"
+    RegistroEventos(ruta)                      # crea el fichero con su esquema
+    os.chmod(ruta, stat.S_IRUSR)               # ahora solo lectura
+    try:
+        r = RegistroEventos(ruta)
+        assert r.persistente                   # abrir si funciona...
+        from health_monitor.alerts import Alerta
+        alerta = Alerta(subsistema="eps", componente="bateria", variable="battery_voltage",
+                        nivel="ADVERTENCIA", mecanismo="prueba", procedencia="SIMULADO",
+                        que_ocurrio="prueba", inicio="2020-01-01T00:00:00Z", fin="2020-01-01T00:00:00Z",
+                        valor_registrado=None, unidad=None, valor_referencia=None, referencia="prueba",
+                        por_que_importa="prueba", informacion_adicional="prueba")
+        assert r.guardar([alerta]) == 1        # ...escribir no, y no debe fallar
+        assert not r.persistente and r.total() == 1
+    finally:
+        os.chmod(ruta, stat.S_IRUSR | stat.S_IWUSR)

@@ -143,8 +143,32 @@ class RegistroEventos:
             self._con.execute(self.ESQUEMA)
         self.ruta = str(ruta) if self.persistente else ":memory:"
 
+    def _a_memoria(self, motivo: Exception) -> None:
+        """Pasa el registro a memoria conservando lo ya guardado."""
+        log.warning("Registro HMTA en memoria: no se puede escribir en %s (%s)", self.ruta, motivo)
+        nueva = sqlite3.connect(":memory:", check_same_thread=False)
+        self._con.backup(nueva)
+        self._con.close()
+        self._con = nueva
+        self.persistente = False
+        self.ruta = ":memory:"
+
     def guardar(self, alertas: list[Alerta]) -> int:
-        """Inserta las alertas nuevas. Devuelve cuantas lo eran."""
+        """Inserta las alertas nuevas. Devuelve cuantas lo eran.
+
+        Un fichero que se puede abrir pero no escribir (un disco de solo lectura
+        con un registro ya existente, como en Vercel) no tumba la evaluacion: el
+        registro pasa a memoria y `persistente` lo dice.
+        """
+        try:
+            return self._guardar(alertas)
+        except sqlite3.OperationalError as exc:
+            if not self.persistente:
+                raise
+            self._a_memoria(exc)
+            return self._guardar(alertas)
+
+    def _guardar(self, alertas: list[Alerta]) -> int:
         antes = self.total()
         self._con.executemany(
             "insert or ignore into eventos (id, inicio, fin, subsistema, variable, nivel, "
