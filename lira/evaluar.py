@@ -60,7 +60,7 @@ CASOS: list[tuple[str, dict, dict]] = [
     ("¿Qué tan fiable es la posición orbital que me muestras para marzo de 2021?", {},
      {"herramientas": [["posicion_orbital"]], "contiene": ["no disponible", "tle", "no hay"]}),
     ("¿Dónde estaba STRaND-1 el 1 de junio de 2025 a medianoche UTC?", {},
-     {"herramientas": [["posicion_orbital"]], "contiene": ["latitud"]}),
+     {"herramientas": [["posicion_orbital"]], "contiene": ["latitud", "norte", "sur"]}),
     ("Resúmeme en dos frases cómo estaba el satélite en este momento", {},
      {"herramientas": [["estado_en_instante", "consultar_variable"]], "sin_acciones": True}),
     ("¿Qué paneles solares generaban más corriente justo antes del fallo?", {"momento_utc": "2020-10-15T00:00:00Z"},
@@ -132,13 +132,18 @@ def main() -> int:
         print(f"{'OK   ' if r['ok'] else 'FALLA'} {r['segundos']:5.1f}s  {frase[:70]}")
         for f in r["fallos"]:
             print(f"        - {f}")
-    entrada = sum((r["uso"] or {}).get("entrada", 0) for r in resultados)
-    salida = sum((r["uso"] or {}).get("salida", 0) for r in resultados)
+    def total(k):
+        return sum((r["uso"] or {}).get(k, 0) for r in resultados)
+    entrada, salida = total("entrada"), total("salida")
+    lectura, escritura = total("cache_lectura"), total("cache_escritura")
     resumen = {"modelo": MODELO, "fecha_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                "casos": len(resultados), "aprobados": sum(r["ok"] for r in resultados),
                "tokens_entrada": entrada, "tokens_salida": salida,
-               "coste_estimado_usd": round(entrada * 2e-6 + salida * 10e-6, 4),
-               "nota_coste": "Estimación a precio de lista sin descontar caché.", "resultados": resultados}
+               "tokens_cache_lectura": lectura, "tokens_cache_escritura": escritura,
+               # Precio de lista de claude-sonnet-5-5: $2 entrada, $10 salida, $0,10 lectura de caché, ×1,25 escritura (5 min).
+               "coste_estimado_usd": round(entrada * 2e-6 + salida * 10e-6 + lectura * 0.1e-6 + escritura * 2.5e-6, 4),
+               "nota_coste": "Estimación a precio de lista; el importe facturado está en la consola de Anthropic.",
+               "resultados": resultados}
     registro.DIR.mkdir(parents=True, exist_ok=True)
     salida_f = registro.DIR / f"evaluacion_{resumen['fecha_utc'][:10]}.json"
     salida_f.write_text(json.dumps(resumen, ensure_ascii=False, indent=1), encoding="utf-8")

@@ -202,8 +202,8 @@ panel muestra los estados: en espera, escuchando, procesando, respondiendo, ejec
 
 ## 6. Pruebas (etapa 4)
 
-**Automáticas, sin red ni gasto** (`tests/test_lira.py`, 99 pruebas, todas aprobadas el 2026-11-17;
-suite completa del repositorio 377 aprobadas, 1 omitida):
+**Automáticas, sin red ni gasto** (`tests/test_lira.py`, 100 pruebas, todas aprobadas el 2026-11-17;
+suite completa del repositorio 378 aprobadas, 1 omitida):
 
 | Grupo | Qué demuestra |
 | --- | --- |
@@ -223,16 +223,29 @@ confirmar, abre Enlace RF y ejecuta la cadena GNU Radio con SNR 8 dB (BER 5,3·1
 Esa prueba encontró y permitió corregir dos fallos: una orden nueva descartaba la anterior en vuelo,
 y las acciones del enlace no abrían su página.
 
-**Con Claude real: NO EJECUTADA.** No había clave configurada. `lira/evaluar.py` tiene 24 casos con
-criterios comprobables sin juicio humano (herramientas consultadas, acciones propuestas o
-pendientes, frases obligatorias, verificador de cifras); cuesta del orden de 0,5 USD y se ejecuta
-solo con aprobación. Construirla destapó siete errores del intérprete determinista (p. ej. «para»
-tomado por «parar», «reproducibilidad» por «reproducir», «apaga las ruedas» tratado como consulta),
-todos corregidos y cubiertos por pruebas.
+**Con Claude real (`lira/evaluar.py`, 24 casos, 2026-11-17): 23 de 24 aprobados** en la tercera
+pasada; coste estimado de las tres pasadas, en torno a 1 USD. Los casos no los resuelve el intérprete
+(una prueba lo vigila), así que todos miden a Claude. Turno más lento: 14,7 s.
+
+| Pasada | Aprobados | Qué se cambió después |
+| --- | --- | --- |
+| 1 | 18/24 | Ninguna cifra inventada. Fallos: cifras correctas en otra forma (magnitud de una diferencia, «88,5° oeste», «16 horas»), que el verificador no reconocía; y `anomalias` solo devolvía los 10 eventos más largos, no el primero. Se añadieron esas formas a los resultados de las herramientas (no se relajó el verificador), el primer y el último evento, y una regla general: resolver referencias con herramientas antes de preguntar. |
+| 2 | 21/24 | El verificador del modo IA no incluía los parámetros de las acciones validadas («velocidad 0,25»); un criterio de la prueba exigía la palabra «latitud» cuando la respuesta decía «27,30° norte». Ambos corregidos (el segundo es un error de la prueba, no del modelo). |
+| 3 | 23/24 | — |
+
+Fallo que se mantiene: «¿Qué paneles solares generaban más corriente justo antes del fallo?». Claude
+consulta las anomalías, explica que ninguna está confirmada como falla y pregunta qué instante usar,
+en lugar de elegir uno y consultar las corrientes. Es coherente con la regla de no declarar fallas,
+pero no cumple el criterio; no se ha ajustado la prueba para que pase.
+
+La construcción de la evaluación destapó además siete errores del intérprete determinista (p. ej.
+«para» tomado por «parar», «reproducibilidad» por «reproducir», «apaga las ruedas» tratado como
+consulta), todos corregidos y cubiertos por pruebas.
 
 ## 7. Limitaciones y mejoras posibles
 
-* La calidad de las respuestas de Claude no está medida hasta ejecutar `lira/evaluar.py`.
+* La evaluación con Claude real tiene 24 casos: es una muestra, no una garantía. Conviene ampliarla
+  con frases reales del registro local.
 * El intérprete determinista es un conjunto de reglas: lo que no reconoce pasa a la IA (o, sin
   contraseña, se dice qué sí se puede pedir). Puede crecer con las frases reales del registro.
 * El reconocimiento de voz depende del navegador y de servicios externos.

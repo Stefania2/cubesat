@@ -464,3 +464,11 @@ def test_api_errores_de_anthropic_se_explican(cliente, monkeypatch, codigo, mens
     monkeypatch.setattr(motor, "CLIENTE", lambda: NS(beta=NS(messages=NS(create=falla))))
     r = cliente.post("/api/lira/turno", json={"texto": "¿por qué el voltaje es tan alto?", "contexto": CTX})
     assert r.status_code == 503 and esperado in r.json()["detail"]
+
+
+def test_ia_cifras_de_acciones_validadas_cuentan_como_respaldadas(con_ia):
+    """Regresion (evaluacion 2026-11-17): «velocidad 0,25» se marcaba sin respaldo."""
+    con_ia([("tool_use", [_tool("a1", "proponer_accion", {"nombre": "gemelo_velocidad", "parametros": {"valor": 0.25}})]),
+            ("end_turn", [_texto("Listo: reproducción a velocidad 0,25.")])])
+    s = motor.turno("déjalo corriendo muy despacio, ¿por qué no?", CTX, sesion={"sid": "s"})
+    assert s["acciones"] and s["verificacion"]["ok"]

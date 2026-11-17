@@ -137,6 +137,11 @@ def _lectura(campo: str, t: pd.Timestamp) -> dict:
     l = R._lectura(campo, s, t)
     out = {k: l.get(k) for k in ("campo", "valor", "unidad", "medida_utc", "desfase_s", "frescura",
                                  "asociacion", "trama_id")}
+    if l.get("desfase_s") is not None:
+        # La misma cantidad en las unidades en que se dice: el verificador de cifras
+        # solo acepta numeros que aparezcan en los resultados.
+        out["desfase_horas"] = round(l["desfase_s"] / 3600, 2)
+        out["desfase_dias"] = round(l["desfase_s"] / 86400, 2)
     out["naturaleza"] = REAL if l["valor"] is not None else NO_DISPONIBLE
     aviso = _validez(campo, l["valor"])
     if aviso:
@@ -214,6 +219,7 @@ def estado_en_instante(fecha: str | None = None) -> dict:
         "orbita": {"estado": orb["estado"], "antiguedad_tle_dias": orb.get("antiguedad_dias"),
                    "latitud_deg": terrestre.get("latitud_deg"), "longitud_deg": terrestre.get("longitud_deg"),
                    "altura_km": terrestre.get("altura_km"), "rapidez_km_s": prop.get("rapidez_km_s"),
+                   "hemisferios": _hemisferios(terrestre.get("latitud_deg"), terrestre.get("longitud_deg")),
                    "naturaleza": CALCULADO,
                    "nota": orb["evaluacion_antiguedad"]["detalle"]},
         "no_disponible": ["temperaturas (nunca emitidas)", "actitud y velocidad angular (no se transmiten)",
@@ -313,6 +319,7 @@ def comparar_intervalos(campo: str, a_desde: str, a_hasta: str, b_desde: str, b_
     if ra.get("lecturas") and rb.get("lecturas"):
         dif = round(rb["mediana"] - ra["mediana"], 4)
     return {"campo": a.name, "intervalo_a": ra, "intervalo_b": rb, "diferencia_de_medianas": dif,
+            "diferencia_absoluta": None if dif is None else abs(dif),
             "naturaleza": DERIVADO,
             "nota": "Comparación de medianas; no implica causa. Revise «lecturas_en_la_ordenada»: esas "
                     "lecturas no son medidas."}
@@ -334,9 +341,16 @@ def anomalias(campo: str = "battery_voltage", desde: str | None = None, hasta: s
         t1 = instante_utc(hasta, exigir_zona=False) if hasta else None
         evs = [e for e in evs if (t0 is None or pd.Timestamp(e.fin) >= t0)
                and (t1 is None or pd.Timestamp(e.inicio) <= t1)]
+    cronologico = sorted(evs, key=lambda e: e.inicio)
     evs.sort(key=lambda e: e.duracion_s, reverse=True)
+
+    def ficha(e):
+        return {**e.dict(), "interpretacion": D.INTERPRETACION.get(e.etiqueta)} if e else None
     return {
         "campo": s.name, "eventos_total": len(evs), "naturaleza": DERIVADO,
+        "primer_evento": ficha(cronologico[0] if cronologico else None),
+        "ultimo_evento": ficha(cronologico[-1] if cronologico else None),
+        "nota_lista": f"«eventos» son los {limite} más largos; «primer_evento» y «ultimo_evento», los extremos en el tiempo.",
         "reglas": {"z_robusto": f"|z| ≥ {A.UMBRAL_ADVERTENCIA:g} comportamiento inusual (Iglewicz y Hoaglin, "
                                 f"1993); |z| ≥ {A.UMBRAL_ANOMALIA:g} anomalía estadística (umbral del proyecto)",
                    "canal_enrielado": f"{A.MIN_ENRIELADO} lecturas con amplitud ≤ {A.TOLERANCIA_ENRIELADO:g} "
@@ -345,6 +359,13 @@ def anomalias(campo: str = "battery_voltage", desde: str | None = None, hasta: s
         "eventos": [{**e.dict(), "interpretacion": D.INTERPRETACION.get(e.etiqueta)} for e in evs[:limite]],
         "falla_confirmada": D.FALLA_CONFIRMADA["detalle"],
     }
+
+
+def _hemisferios(lat: float | None, lon: float | None) -> dict | None:
+    if lat is None or lon is None:
+        return None
+    return {"latitud": {"grados": round(abs(lat), 4), "hemisferio": "N" if lat >= 0 else "S"},
+            "longitud": {"grados": round(abs(lon), 4), "hemisferio": "E" if lon >= 0 else "O"}}
 
 
 def posicion_orbital(fecha: str | None = None) -> dict:
@@ -358,6 +379,8 @@ def posicion_orbital(fecha: str | None = None) -> dict:
             "tle_epoca_utc": (p.get("tle") or {}).get("epoca_utc"), "antiguedad_tle_dias": p.get("antiguedad_dias"),
             "posicion_teme_km": prop.get("posicion_km"), "velocidad_teme_km_s": prop.get("velocidad_km_s"),
             "rapidez_km_s": prop.get("rapidez_km_s"), "terrestre": prop.get("terrestre"),
+            "hemisferios": _hemisferios((prop.get("terrestre") or {}).get("latitud_deg"),
+                                        (prop.get("terrestre") or {}).get("longitud_deg")),
             "nota": p["evaluacion_antiguedad"]["detalle"]}
 
 
@@ -398,7 +421,8 @@ HERRAMIENTAS: dict[str, tuple[Any, dict]] = {
                        "b_desde": _FECHA, "b_hasta": _FECHA},
         "required": ["campo", "a_desde", "a_hasta", "b_desde", "b_hasta"]}),
     "anomalias": (anomalias, {
-        "description": "Tramos anómalos de una magnitud según las reglas documentadas (z robusto, canal enrielado).",
+        "description": "Tramos anómalos de una magnitud según las reglas documentadas (z robusto, canal enrielado): "
+                       "los más largos y, aparte, el primero y el último en el tiempo.",
         "properties": {"campo": {"type": "string"}, "desde": _FECHA, "hasta": _FECHA}, "required": ["campo"]}),
     "posicion_orbital": (posicion_orbital, {
         "description": "Posición y velocidad SGP4 en un instante con el TLE histórico más cercano, o por qué no.",

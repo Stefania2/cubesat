@@ -47,7 +47,9 @@ Si una herramienta marca «validez» (canal sin medida), dilo antes que el valor
 desviación estadística nunca es una falla confirmada.
 5. Para cambiar la interfaz usa solo `proponer_accion`. No puedes ejecutar código ni enviar nada \
 al satelite: no existe canal de comandos. Si te lo piden, explícalo.
-6. Si la orden es ambigua, pregunta antes de proponer acciones.
+6. Antes de pedir una aclaración, intenta resolver la referencia con las herramientas («el fallo» → \
+`anomalias`; «ahora» o «este momento» → el instante del gemelo). Pregunta solo si sigue siendo ambigua, \
+y nunca propongas una acción ambigua.
 7. Tus respuestas se leen en voz alta: español claro, frases cortas, como máximo unas 90 palabras \
 salvo que pidan detalle. Fechas en UTC. Sin markdown ni listas largas."""
 
@@ -248,7 +250,7 @@ def _con_ia(texto: str, contexto: dict, historial: list[dict], salida: dict) -> 
     mensajes = _mensajes(texto, contexto, historial)
     fuentes: list[Any] = []
     inicio = time.monotonic()
-    uso = {"entrada": 0, "salida": 0, "cache_lectura": 0, "llamadas": 0}
+    uso = {"entrada": 0, "salida": 0, "cache_lectura": 0, "cache_escritura": 0, "llamadas": 0}
     respuesta = None
     for _ in range(MAX_ITERACIONES):
         if time.monotonic() - inicio > PRESUPUESTO_S:
@@ -264,6 +266,7 @@ def _con_ia(texto: str, contexto: dict, historial: list[dict], salida: dict) -> 
             uso["entrada"] += getattr(u, "input_tokens", 0) or 0
             uso["salida"] += getattr(u, "output_tokens", 0) or 0
             uso["cache_lectura"] += getattr(u, "cache_read_input_tokens", 0) or 0
+            uso["cache_escritura"] += getattr(u, "cache_creation_input_tokens", 0) or 0
         uso["llamadas"] += 1
         if respuesta.stop_reason == "refusal":
             salida["texto"] = "No puedo ayudar con esa petición."
@@ -329,7 +332,11 @@ def turno(texto: str, contexto: dict | None = None, historial: list[dict] | None
         salida["modo"] = "ia"
         seguridad.consumir_turno_ia(sesion["sid"])
         fuentes = _con_ia(texto, contexto, historial or [], salida)
-        salida["verificacion"] = verificador.verificar(salida["texto"], [*fuentes, texto, contexto])
+        # Fuentes: resultados de herramientas, la pregunta, el contexto y lo que el backend
+        # valido (parametros de acciones aceptadas, accion pendiente, motivos de rechazo).
+        salida["verificacion"] = verificador.verificar(salida["texto"], [
+            *fuentes, texto, contexto, [a["parametros"] for a in salida["acciones"]],
+            (salida["pendiente"] or {}).get("descripcion", ""), [r["motivo"] for r in salida["rechazadas"]]])
     else:
         salida["modo"] = "sin_acceso"
         partes = _determinista(interp, contexto, salida)
