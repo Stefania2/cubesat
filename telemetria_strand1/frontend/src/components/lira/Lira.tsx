@@ -73,6 +73,16 @@ export function Lira() {
   const [entrada, setEntrada] = useState('')
   const [parcial, setParcial] = useState('')
   const [hablarActivo, setHablarActivo] = useState(true)
+  // Las voces del navegador llegan de forma asíncrona (evento «voiceschanged»).
+  const [voces, setVoces] = useState<SpeechSynthesisVoice[]>(() => voz.voces())
+  const [vozElegida, setVozElegida] = useState<string>(() => voz.vozActual()?.name ?? '')
+  useEffect(() => {
+    if (!voz.sintesis()) return
+    const actualizar = () => { setVoces(voz.voces()); setVozElegida(voz.vozActual()?.name ?? '') }
+    actualizar()
+    window.speechSynthesis.addEventListener('voiceschanged', actualizar)
+    return () => window.speechSynthesis.removeEventListener('voiceschanged', actualizar)
+  }, [])
   const [ficha, setFicha] = useState<string | null>(() => leerFicha())
   const [pidiendoClave, setPidiendoClave] = useState(false)
   const [clave, setClave] = useState('')
@@ -304,6 +314,16 @@ export function Lira() {
               </form>
             )}
             {errorClave && <p className="mt-1.5 text-xs text-danger">{errorClave}</p>}
+            {voces.length > 1 && (
+              <label className="mt-2 flex items-center gap-2 text-[11px] text-ink-soft">
+                <span className="label-caps">Voz</span>
+                <select value={vozElegida} aria-label="Voz de LIRA"
+                  onChange={(e) => { voz.elegirVoz(e.target.value); setVozElegida(e.target.value); voz.hablar('Hola, soy LIRA.') }}
+                  className="min-w-0 flex-1 rounded border border-line bg-canvas px-1.5 py-1 text-[11px] text-ink">
+                  {voces.map((v) => <option key={v.name} value={v.name}>{v.name} · {v.lang}</option>)}
+                </select>
+              </label>
+            )}
           </header>
 
           {/* Conversación */}

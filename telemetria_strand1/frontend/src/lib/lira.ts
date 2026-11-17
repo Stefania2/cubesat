@@ -139,6 +139,38 @@ export function leerContexto() {
 
 /* ── Voz ──────────────────────────────────────────────────────────────────── */
 
+/*
+ * La Web Speech API no dice si una voz es de hombre o de mujer: solo da su
+ * nombre y su idioma. Se reconocen por el nombre las voces femeninas en
+ * español más comunes (Windows/Edge, macOS/iOS, Android, Chrome) y se
+ * prefieren las de Colombia y Latinoamérica. Si el sistema no tiene ninguna,
+ * se usa la primera en español; el panel deja elegir cualquiera.
+ */
+const FEMENINAS = /(salom[eé]|dalia|sabina|helena|laura|elvira|paloma|elena|ximena|catalina|luc[ií]a|camila|paula|m[oó]nica|paulina|marisol|isabela|valentina|abril|larissa|triana|irene|estrella|vera|lupe|pen[eé]lope|conchita|google espa[nñ]ol|female|mujer)/i
+const MASCULINAS = /(gonzalo|jorge|pablo|ra[uú]l|alvaro|álvaro|jos[eé]|diego|carlos|juan|enrique|miguel|male\b|hombre)/i
+const CLAVE_VOZ = 'lira:voz'
+let vozEnMemoria: string | null = null
+
+function puntuar(v: SpeechSynthesisVoice): number {
+  let p = 0
+  if (FEMENINAS.test(v.name)) p += 100
+  if (MASCULINAS.test(v.name)) p -= 100
+  const lang = v.lang.toLowerCase()
+  if (lang === 'es-co') p += 12
+  else if (/^es-(419|mx|us|ar|cl|pe|ve|ec)/.test(lang)) p += 8
+  else if (lang === 'es-es') p += 4
+  if (/natural|online|neural/i.test(v.name)) p += 3   // voces de mayor calidad en Edge
+  return p
+}
+
+function leerPreferencia(): string | null {
+  try {
+    return localStorage.getItem(CLAVE_VOZ) ?? vozEnMemoria
+  } catch {
+    return vozEnMemoria
+  }
+}
+
 type Reconocedor = {
   lang: string
   interimResults: boolean
@@ -195,6 +227,30 @@ export const voz = {
     return () => r.abort()
   },
 
+  /** Voces en español del navegador, la preferida primero. */
+  voces(): SpeechSynthesisVoice[] {
+    if (!voz.sintesis()) return []
+    return window.speechSynthesis.getVoices()
+      .filter((v) => v.lang.toLowerCase().startsWith('es'))
+      .sort((a, b) => puntuar(b) - puntuar(a))
+  },
+
+  /** La voz elegida por el usuario si existe; si no, la mejor femenina disponible. */
+  vozActual(): SpeechSynthesisVoice | null {
+    const lista = voz.voces()
+    const guardada = leerPreferencia()
+    return lista.find((v) => v.name === guardada) ?? lista[0] ?? null
+  },
+
+  elegirVoz(nombre: string) {
+    try {
+      localStorage.setItem(CLAVE_VOZ, nombre)
+    } catch {
+      /* sin almacenamiento: la elección dura lo que la página */
+    }
+    vozEnMemoria = nombre
+  },
+
   hablar(texto: string, fin?: () => void) {
     if (!voz.sintesis()) {
       fin?.()
@@ -202,9 +258,9 @@ export const voz = {
     }
     window.speechSynthesis.cancel()
     const u = new SpeechSynthesisUtterance(texto)
-    u.lang = 'es-ES'
-    const es = window.speechSynthesis.getVoices().find((v) => v.lang.startsWith('es'))
-    if (es) u.voice = es
+    const elegida = voz.vozActual()
+    u.lang = elegida?.lang ?? 'es-ES'
+    if (elegida) u.voice = elegida
     u.rate = 1.03
     u.onend = () => fin?.()
     u.onerror = () => fin?.()
