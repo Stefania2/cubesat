@@ -1,6 +1,6 @@
 {
- "ejecutado_utc": "2026-11-17T18:02:33Z",
- "commit": "370d0de1c9e9a348b1a348f8d0d1283126298c25",
+ "ejecutado_utc": "2026-11-17T18:12:31Z",
+ "commit": "78638fca3442e9bce3dfe08c1bd4b369767f0d06",
  "cambios_sin_confirmar": true,
  "alcance": "tests/test_validacion_cientifica.py",
  "python": "3.14.4",
@@ -37,7 +37,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_checksum_cuenta_el_signo_menos_como_uno",
    "estado": "VALIDATED",
-   "duracion_s": 0.001,
+   "duracion_s": 0.0,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -57,7 +57,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_catalogo_historico_integro",
    "estado": "VALIDATED",
-   "duracion_s": 0.073,
+   "duracion_s": 0.07,
    "categoria": "unitaria · TLE",
    "esperado": "\"1671 TLE válidos\"",
    "obtenido": "{\"validos\": 1671, \"invalidos\": []}",
@@ -67,7 +67,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sgp4_reproduce_los_vectores_de_vallado[0]",
    "estado": "VALIDATED",
-   "duracion_s": 0.018,
+   "duracion_s": 0.019,
    "categoria": "unitaria · SGP4 (referencia independiente)",
    "esperado": "\"vectores r, v de tcppver.out (Vallado et al. 2006)\"",
    "obtenido": "{\"puntos_comparados\": 666, \"max_diff_posicion_km\": 1.1545034794835374e-07, \"max_diff_velocidad_km_s\": 4.996953961722284e-10, \"peor_caso\": [\"20413\", 1844335.0]}",
@@ -87,7 +87,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sgp4_cpp_y_python_puro_coinciden_en_strand1",
    "estado": "VALIDATED",
-   "duracion_s": 0.015,
+   "duracion_s": 0.014,
    "categoria": "unitaria · SGP4",
    "esperado": "\"misma posición\"",
    "obtenido": "{\"propagaciones\": 248, \"max_diff_posicion_km\": 1.256605670213462e-11}",
@@ -117,7 +117,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_transformaciones_de_coordenadas[ORB-D1]",
    "estado": "VALIDATED",
-   "duracion_s": 0.05,
+   "duracion_s": 0.065,
    "categoria": "unitaria · coordenadas",
    "esperado": "{\"r_itrf_km\": [-1033.479383, 7901.2952754, 6380.3565958], \"v_itrf_km_s\": [-3.22563652, -2.87245145, 5.531924446]}",
    "obtenido": "{\"r_itrf_km\": [-1033.4793830375102, 7901.295275388602, 6380.356595751133], \"v_itrf_km_s\": [-3.2256365212613622, -2.8724514495263254, 5.531924446303698], \"max_diff_pos_km\": 4.8867150326259434e-08, \"max_diff_vel_km_s\": 1.2613621258594776e-09}",
@@ -127,7 +127,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_transformaciones_de_coordenadas[ORB-D2]",
    "estado": "VALIDATED",
-   "duracion_s": 0.054,
+   "duracion_s": 0.085,
    "categoria": "unitaria · coordenadas",
    "esperado": "\"error ≤ cota analítica 0.553 km\"",
    "obtenido": "{\"error_km\": 0.26175427391232603}",
@@ -137,7 +137,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_transformaciones_de_coordenadas[ORB-D3]",
    "estado": "VALIDATED",
-   "duracion_s": 0.05,
+   "duracion_s": 0.077,
    "categoria": "unitaria · coordenadas",
    "esperado": "\"misma latitud y altura\"",
    "obtenido": "{\"puntos\": 571, \"max_diff_lat_deg\": 4.999645413050757e-05, \"max_diff_altura_km\": 0.0004995760430119844, \"max_diff_ecef_km\": 0.000499980537256306}",
@@ -157,7 +157,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_conversion_bateria_0_segun_amsat[0-9.7488]",
    "estado": "VALIDATED",
-   "duracion_s": 0.004,
+   "duracion_s": 0.005,
    "categoria": "unitaria · unidades",
    "esperado": "9.7488",
    "obtenido": "[9.7488, \"V\"]",
@@ -207,7 +207,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_ventanas_incompletas",
    "estado": "VALIDATED",
-   "duracion_s": 0.004,
+   "duracion_s": 0.008,
    "categoria": "unitaria · estadística",
    "esperado": "\"NaN con < 25 lecturas; mediana de las disponibles con 25-50\"",
    "obtenido": "{\"nan_hasta_lectura\": 24, \"mediana_lectura_25\": 3.0}",
@@ -217,7 +217,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_canal_enrielado_con_dos_valores_alternos",
    "estado": "VALIDATED",
-   "duracion_s": 0.001,
+   "duracion_s": 0.003,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -227,7 +227,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sha256_vector_fips",
    "estado": "VALIDATED",
-   "duracion_s": 0.0,
+   "duracion_s": 0.001,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -247,7 +247,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_tiempo_sin_zona_se_rechaza",
    "estado": "VALIDATED",
-   "duracion_s": 0.0,
+   "duracion_s": 0.001,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -257,7 +257,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_archivo_sellado_integro",
    "estado": "VALIDATED",
-   "duracion_s": 0.163,
+   "duracion_s": 0.182,
    "categoria": "integración · procedencia",
    "esperado": "\"VALIDATED ×4\"",
    "obtenido": "[\"VALIDATED\", \"VALIDATED\", \"VALIDATED\", \"VALIDATED\", \"VALIDATED\"]",
@@ -267,7 +267,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_archivo_conserva_los_tipos_originales",
    "estado": "VALIDATED",
-   "duracion_s": 0.186,
+   "duracion_s": 0.184,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -277,7 +277,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_procesamiento_de_telemetria_reproduce_la_capa_procesada",
    "estado": "VALIDATED",
-   "duracion_s": 2.354,
+   "duracion_s": 3.071,
    "categoria": "integración · telemetría",
    "esperado": "\"cada valor almacenado = valor recalculado desde raw_hex con el código vigente\"",
    "obtenido": "{\"valores_comparados\": 198349, \"distintos\": 0, \"sin_equivalente\": 0, \"ejemplos\": []}",
@@ -287,7 +287,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_controles_de_telemetria_sin_fallos",
    "estado": "VALIDATED",
-   "duracion_s": 0.094,
+   "duracion_s": 0.112,
    "categoria": "integración · telemetría",
    "esperado": "\"ningún FAILED\"",
    "obtenido": "{\"TEL-CONV\": \"VALIDATED\", \"TEL-DUP-PROC\": \"WARNING\", \"TEL-DUP-RX\": \"VALIDATED\", \"TEL-TIEMPO\": \"VALIDATED\", \"TEL-INCOMP\": \"VALIDATED\", \"TEL-DECOD\": \"WARNING\"}",
@@ -297,7 +297,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_variables_no_emitidas_son_no_disponibles_y_no_cero",
    "estado": "VALIDATED",
-   "duracion_s": 0.181,
+   "duracion_s": 0.2,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -307,7 +307,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_contraste_con_satnogs",
    "estado": "VALIDATED",
-   "duracion_s": 2.395,
+   "duracion_s": 3.22,
    "categoria": "integración · SatNOGS (implementación independiente)",
    "esperado": "\"elevación máxima y azimuts publicados por SatNOGS para la misma observación\"",
    "obtenido": "{\"observaciones\": 1129, \"elevacion\": {\"mediana_abs\": 0.24800000000000466, \"p95_abs\": 0.5386, \"max_abs\": 86.918, \"fraccion_en_tolerancia\": 0.9867139061116031}, \"azimut\": {\"mediana_abs\": 0.2740000000000009, \"p95_abs\": 0.61099999999999, \"max_abs\": 156.237, \"fraccion_en_tolerancia\": 0.9818423383525243}, \"atipicas\": {\"n\": 15, \"marcadas_bad_por_satnogs\": 15, \"con_azimut_tambien_discrepante\": 15, \"bad_en",
@@ -327,7 +327,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2016-11-30T16:39:41Z]",
    "estado": "VALIDATED",
-   "duracion_s": 3.618,
+   "duracion_s": 4.008,
    "categoria": "integración · sincronización",
    "esperado": "\"sin FAILED\"",
    "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
@@ -337,7 +337,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2019-06-15T00:00:00Z]",
    "estado": "VALIDATED",
-   "duracion_s": 0.009,
+   "duracion_s": 0.013,
    "categoria": "integración · sincronización",
    "esperado": "\"sin FAILED\"",
    "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
@@ -347,7 +347,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2021-03-01T12:00:00Z]",
    "estado": "VALIDATED",
-   "duracion_s": 0.009,
+   "duracion_s": 0.01,
    "categoria": "integración · sincronización",
    "esperado": "\"sin FAILED\"",
    "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
@@ -357,7 +357,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2023-01-28T02:58:36Z]",
    "estado": "VALIDATED",
-   "duracion_s": 0.008,
+   "duracion_s": 0.009,
    "categoria": "integración · sincronización",
    "esperado": "\"sin FAILED\"",
    "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
@@ -367,7 +367,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2026-01-01T00:00:00Z]",
    "estado": "VALIDATED",
-   "duracion_s": 0.009,
+   "duracion_s": 0.01,
    "categoria": "integración · sincronización",
    "esperado": "\"sin FAILED\"",
    "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"VALIDATED\", \"SYNC-3\": \"VALIDATED\", \"SYNC-4\": \"VALIDATED\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
@@ -377,7 +377,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sincronizacion_temporal[2010-01-01T00:00:00Z]",
    "estado": "VALIDATED",
-   "duracion_s": 0.003,
+   "duracion_s": 0.006,
    "categoria": "integración · sincronización",
    "esperado": "\"sin FAILED\"",
    "obtenido": "{\"SYNC-1\": \"VALIDATED\", \"SYNC-2\": \"NOT_AVAILABLE\", \"SYNC-4\": \"NOT_AVAILABLE\", \"SYNC-5\": \"VALIDATED\", \"SYNC-6\": \"VALIDATED\", \"SYNC-7\": \"VALIDATED\"}",
@@ -387,7 +387,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_sincronizacion_global",
    "estado": "VALIDATED",
-   "duracion_s": 0.2,
+   "duracion_s": 0.28,
    "categoria": "integración · sincronización",
    "esperado": "\"SYNC-1…7 sin fallos\"",
    "obtenido": "{\"instantes\": 25, \"fallos\": []}",
@@ -397,7 +397,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_estados_discretos_nunca_se_interpolan",
    "estado": "VALIDATED",
-   "duracion_s": 0.008,
+   "duracion_s": 0.012,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -407,7 +407,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_instante_anterior_al_archivo_no_inventa_datos",
    "estado": "VALIDATED",
-   "duracion_s": 0.003,
+   "duracion_s": 0.005,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -417,7 +417,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_modelo_3d_del_gemelo_coincide_con_la_reconstruccion",
    "estado": "VALIDATED",
-   "duracion_s": 3.865,
+   "duracion_s": 5.097,
    "categoria": "integración · modelo 3D",
    "esperado": "\"sin diferencias\"",
    "obtenido": "[]",
@@ -427,7 +427,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_indice_del_gemelo_es_el_de_la_reconstruccion",
    "estado": "VALIDATED",
-   "duracion_s": 3.439,
+   "duracion_s": 3.646,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -437,7 +437,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_manifest_contiene_lo_necesario_y_se_reproduce",
    "estado": "VALIDATED",
-   "duracion_s": 0.017,
+   "duracion_s": 0.025,
    "categoria": "integración · expediente",
    "esperado": "\"todo VALIDATED\"",
    "obtenido": "{\"REP-DATOS\": \"VALIDATED\", \"REP-INTEG\": \"VALIDATED\", \"REP-VERS\": \"VALIDATED\", \"REP-RESULT\": \"VALIDATED\"}",
@@ -447,7 +447,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_manifest_alterado_se_detecta",
    "estado": "VALIDATED",
-   "duracion_s": 0.017,
+   "duracion_s": 0.02,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -457,7 +457,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_informe_pdf_y_json",
    "estado": "VALIDATED",
-   "duracion_s": 3.636,
+   "duracion_s": 4.22,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -467,7 +467,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_api_validacion",
    "estado": "VALIDATED",
-   "duracion_s": 0.303,
+   "duracion_s": 0.327,
    "categoria": null,
    "esperado": null,
    "obtenido": null,
@@ -477,7 +477,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_regresion_reconstruccion_conocida",
    "estado": "VALIDATED",
-   "duracion_s": 0.009,
+   "duracion_s": 0.01,
    "categoria": "regresión · reconstrucción",
    "esperado": "{\"evento_utc\": \"2021-02-28T19:30:25.000000Z\", \"battery_voltage\": 9.7488, \"estado_cubesat\": \"INSTRUMENTACION_PERDIDA\"}",
    "obtenido": "{\"evento_utc\": \"2021-02-28T19:30:25.000000Z\", \"battery_voltage\": 9.7488, \"estado_cubesat\": \"INSTRUMENTACION_PERDIDA\"}",
@@ -507,7 +507,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_regresion_diagnostico_estable",
    "estado": "VALIDATED",
-   "duracion_s": 0.633,
+   "duracion_s": 0.835,
    "categoria": "regresión · diagnóstico",
    "esperado": "\"clasificación idéntica en dos ejecuciones\"",
    "obtenido": "{\"lecturas\": 5269, \"identicas\": true, \"sha256\": \"24c41a84681e91c74c7c5bf1adb5ebf0029a923bb55765a1433de0acfd7648d4\"}",
@@ -517,7 +517,7 @@
   {
    "id": "tests.test_validacion_cientifica::test_reconstruccion_no_depende_del_catalogo_vivo",
    "estado": "VALIDATED",
-   "duracion_s": 0.048,
+   "duracion_s": 0.047,
    "categoria": "regresión · reproducibilidad",
    "esperado": "\"d16ec409511f3d381f12a77ffceed6214fb431919b911383ecef923555a5fd4b\"",
    "obtenido": "\"d16ec409511f3d381f12a77ffceed6214fb431919b911383ecef923555a5fd4b\"",
