@@ -308,6 +308,7 @@ export function Lira() {
             {pidiendoClave && (
               <form className="mt-2.5 flex gap-2" onSubmit={(e) => { e.preventDefault(); void desbloquear() }}>
                 <input type="password" value={clave} onChange={(e) => setClave(e.target.value)} autoFocus
+                  autoCapitalize="off" autoCorrect="off" spellCheck={false} autoComplete="current-password"
                   placeholder="Contraseña de la IA" aria-label="Contraseña de la IA"
                   className="min-w-0 flex-1 rounded-md border border-line bg-canvas px-2.5 py-1.5 text-sm text-ink" />
                 <button className="rounded-md bg-navy px-3 py-1.5 text-sm font-medium text-on-accent" disabled={!clave}>Entrar</button>

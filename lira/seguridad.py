@@ -115,8 +115,11 @@ def comprobar_clave(clave: str, ip: str) -> str | None:
     huella = _huella_clave()
     if huella is None:
         return None if en_vercel() else crear_sesion()
-    dada = hashlib.sha256((clave or "").encode()).hexdigest()
-    if not hmac.compare_digest(dada, huella):
+    # Los teclados del móvil añaden espacios al final y cambian mayúsculas: se
+    # aceptan la contraseña tal cual, sin espacios y sin espacios en mayúsculas.
+    limpia = "".join((clave or "").split())
+    candidatas = {clave or "", limpia, limpia.upper()}
+    if not any(hmac.compare_digest(hashlib.sha256(c.encode()).hexdigest(), huella) for c in candidatas):
         cola.append(time.time())
         return None
     cola.clear()

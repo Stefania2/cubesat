@@ -275,6 +275,14 @@ def test_contrasena_y_bloqueo(monkeypatch):
     assert seguridad.sesion_valida(f[:-1] + ("0" if f[-1] != "0" else "1")) is None
 
 
+def test_contrasena_tolera_teclado_movil(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-prueba")
+    monkeypatch.setenv("LIRA_CLAVE", "4455XY")
+    for variante in ("4455XY", "4455XY ", " 4455xy", "4455 XY\n", "4455Xy"):
+        assert seguridad.comprobar_clave(variante, "9.9.9.9"), variante
+    assert seguridad.comprobar_clave("4455", "9.9.9.9") is None
+
+
 def test_limite_de_turnos(monkeypatch):
     for _ in range(seguridad.MAX_TURNOS_IA_HORA):
         seguridad.consumir_turno_ia("s1")
